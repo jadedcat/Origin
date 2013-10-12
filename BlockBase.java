@@ -1,14 +1,13 @@
 package CountryGamer_Core;
 
-import CountryGamer_Oceanic.Client.OceanicMain;
-import CountryGamer_XPMod.ExperienceMod.ExperienceMod;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+
 
 
 public class BlockBase extends Block {
