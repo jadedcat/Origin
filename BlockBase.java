@@ -11,19 +11,23 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 
 public class BlockBase extends Block {
-
-	public BlockBase(int id, Material mat, String name) {
+	
+	public String modid;
+	
+	public BlockBase(int id, Material mat, String modid, String name) {
 		super(id, mat);
 		this.setUnlocalizedName(name);
-		GameRegistry.registerBlock(this,this.getUnlocalizedName());
-		LanguageRegistry.addName(this,	this.getUnlocalizedName());
+		GameRegistry.registerBlock(this,name);
+		LanguageRegistry.addName(this,	name);
 		
+		this.modid = modid;
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
-		this.blockIcon = iconRegister.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf(".") + 1));
+		this.blockIcon = iconRegister.registerIcon(this.modid + ":" +
+					this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf(".") + 1));
 	}
 	
 }

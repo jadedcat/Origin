@@ -16,7 +16,7 @@ public class ItemBase extends Item {
 		super(id);
 		this.modid = modid.toLowerCase();
 		this.setUnlocalizedName(name);
-		GameRegistry.registerItem(this,this.getUnlocalizedName());
+		GameRegistry.registerItem(this, this.getUnlocalizedName());
 		LanguageRegistry.addName(this,	name);
 	}
 
