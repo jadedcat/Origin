@@ -1,6 +1,6 @@
 package CountryGamer_Core;
 
-import CountryGamer_XPMod.ExperienceMod.lib.Reference;
+import CountryGamer_XPMod.lib.Reference;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;
 import cpw.mods.fml.common.registry.GameRegistry;
