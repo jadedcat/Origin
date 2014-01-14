@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import CountryGamer_Core.CG_Core;
+import CountryGamer_Core.Client.ParticleEffects;
 import cpw.mods.fml.common.Loader;
 
 public class CoreUtil {
@@ -95,8 +96,8 @@ public class CoreUtil {
 				double d9 = d5 + (player.posZ - d5) * d6
 						+ (rand.nextDouble() - 0.5D) * (double) player.width
 						* 2D;
-				player.worldObj.spawnParticle("portal", d7, d8 - 1, d9, f, f1,
-						f2);
+				player.worldObj.spawnParticle("portal", d3, d4, d5, d7, d8, d9);
+
 			}
 		}
 	}
