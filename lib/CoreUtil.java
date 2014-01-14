@@ -2,6 +2,7 @@ package CountryGamer_Core.lib;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -104,7 +105,7 @@ public class CoreUtil {
 			int maximumRange, boolean fallDamage, boolean particles) {
 		double[] newPos = CoreUtil.teleportBase(player.worldObj, player,
 				minimumRange, maximumRange);
-		newPos[1] -= 2;
+		// newPos[1] -= 2;
 		CoreUtil.teleportPlayer(player, newPos[0], newPos[1], newPos[2],
 				fallDamage, particles);
 	}
@@ -112,7 +113,6 @@ public class CoreUtil {
 	private static double[] teleportBase(World world, EntityPlayer player,
 			int minimumRange, int maximumRange) {
 		Random rand = new Random();
-
 		int rangeDifference = 2 * (maximumRange - minimumRange);
 		int offsetX = rand.nextInt(rangeDifference) - rangeDifference / 2
 				+ minimumRange;
@@ -132,7 +132,7 @@ public class CoreUtil {
 		double bbMaxY = newY - player.yOffset + player.ySize + player.height;
 		double bbMaxZ = newZ + player.width / 2.0;
 
-		// FMLLog.info("Teleporting from: "+(int)entity.posX+" "+(int)entity.posY+" "+(int)entity.posZ);
+		// FMLLog.info("Teleporting from: "+(int)player.posX+" "+(int)player.posY+" "+(int)player.posZ);
 		// FMLLog.info("Teleporting with offsets: "+offsetX+" "+newY+" "+offsetZ);
 		// FMLLog.info("Starting BB Bounds: "+bbMinX+" "+bbMinY+" "+bbMinZ+" "+bbMaxX+" "+bbMaxY+" "+bbMaxZ);
 
@@ -149,7 +149,7 @@ public class CoreUtil {
 					teleportChunk.zPosition);
 		}
 
-		// Move up, until nothing intersects the entity anymore
+		// Move up, until nothing intersects the player anymore
 		while (newY > 0
 				&& newY < 128
 				&& !world.getCollidingBoundingBoxes(player, boundingBox)
@@ -167,6 +167,7 @@ public class CoreUtil {
 
 		// If we could place it, could we have placed it lower? To prevent
 		// teleports really high up.
+
 		do {
 			--newY;
 
@@ -176,11 +177,12 @@ public class CoreUtil {
 			boundingBox.setBounds(bbMinX, bbMinY, bbMinZ, bbMaxX, bbMaxY,
 					bbMaxZ);
 
-			// FMLLog.info("Trying a lower teleport at height: "+(int)newY);
+			// FMLLog.info("Trying a lower teleport at height: "+(int)newY); }
 		} while (newY > 0
 				&& newY < 128
 				&& world.getCollidingBoundingBoxes(player, boundingBox)
 						.isEmpty());
+
 		// Set Y one higher, as the last lower placing test failed.
 		++newY;
 
@@ -193,10 +195,14 @@ public class CoreUtil {
 		// with air underneath, but gladly lava spreads ;)
 		int blockId = world.getBlockId(MathHelper.floor_double(newX),
 				MathHelper.floor_double(newY), MathHelper.floor_double(newZ));
-		if (blockId == 10 || blockId == 11) {
-			return CoreUtil.teleportBase(world, player, minimumRange, maximumRange);
-		}
+		if (blockId == Block.lavaStill.blockID
+				|| blockId == Block.lavaMoving.blockID
+				|| blockId == Block.waterStill.blockID
+				|| blockId == Block.waterMoving.blockID) {
+			return CoreUtil.teleportBase(world, player, minimumRange,
+					maximumRange);
 
+		}
 		return new double[] { newX, newY, newZ };
 	}
 }
