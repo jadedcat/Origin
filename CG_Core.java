@@ -31,7 +31,7 @@ public class CG_Core {
 	@SidedProxy(clientSide = CoreReference.CLIENT_PROXY_CLASS, serverSide = CoreReference.SERVER_PROXY_CLASS)
 	public static ServerProxy proxy;
 
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 
 	public static HashMap<String, Integer> dimensions = new HashMap<String, Integer>();
 	public static HashMap<Integer, String> dimensions1 = new HashMap<Integer, String>();
