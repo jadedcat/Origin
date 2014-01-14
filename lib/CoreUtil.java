@@ -1,9 +1,8 @@
 package CountryGamer_Core.lib;
 
-import java.util.ArrayList;
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.AxisAlignedBB;
@@ -15,6 +14,14 @@ import CountryGamer_Core.CG_Core;
 import cpw.mods.fml.common.Loader;
 
 public class CoreUtil {
+
+	public static int getUniqueEntityId() {
+		int entityid = 0;
+		do {
+			entityid += 1;
+		} while (EntityList.getStringFromID(entityid) != null);
+		return entityid;
+	}
 
 	public static boolean isModLoaded(String sourceModid, String targetModid) {
 		if (Loader.isModLoaded(targetModid)) {
@@ -112,8 +119,8 @@ public class CoreUtil {
 		int offsetZ = rand.nextInt(rangeDifference) - rangeDifference / 2
 				+ minimumRange;
 
-		// Center the values on a block, to make the boundingbox
-		// calculations match less.
+		// Center the values on a block, to make the boundingbox calculations
+		// match less.
 		double newX = MathHelper.floor_double(player.posX) + offsetX + 0.5;
 		double newY = rand.nextInt(128);
 		double newZ = MathHelper.floor_double(player.posZ) + offsetZ + 0.5;
@@ -125,12 +132,12 @@ public class CoreUtil {
 		double bbMaxY = newY - player.yOffset + player.ySize + player.height;
 		double bbMaxZ = newZ + player.width / 2.0;
 
-		// FMLLog.info("Teleporting from: "+(int)player.posX+" "+(int)player.posY+" "+(int)player.posZ);
+		// FMLLog.info("Teleporting from: "+(int)entity.posX+" "+(int)entity.posY+" "+(int)entity.posZ);
 		// FMLLog.info("Teleporting with offsets: "+offsetX+" "+newY+" "+offsetZ);
 		// FMLLog.info("Starting BB Bounds: "+bbMinX+" "+bbMinY+" "+bbMinZ+" "+bbMaxX+" "+bbMaxY+" "+bbMaxZ);
 
-		// Use a testing boundingBox, so we don't have to move the player
-		// around to test if it is a valid location
+		// Use a testing boundingBox, so we don't have to move the player around
+		// to test if it is a valid location
 		AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(bbMinX,
 				bbMinY, bbMinZ, bbMaxX, bbMaxY, bbMaxZ);
 
@@ -142,7 +149,7 @@ public class CoreUtil {
 					teleportChunk.zPosition);
 		}
 
-		// Move up, until nothing intersects the player anymore
+		// Move up, until nothing intersects the entity anymore
 		while (newY > 0
 				&& newY < 128
 				&& !world.getCollidingBoundingBoxes(player, boundingBox)
@@ -178,35 +185,18 @@ public class CoreUtil {
 		++newY;
 
 		// Check for placement in lava
-		// NOTE: This can potentially hang the game indefinitely, due to
-		// random recursion
+		// NOTE: This can potentially hang the game indefinitely, due to random
+		// recursion
 		// However this situation is highly unlikelely
 		// My advice: Dont encounter Weeping Angels in seas of lava
-		// NOTE: This can theoretically still teleport you to a block of
-		// lava with air underneath, but gladly lava spreads ;)
-		int blockIdUnder = world.getBlockId(MathHelper.floor_double(newX),
+		// NOTE: This can theoretically still teleport you to a block of lava
+		// with air underneath, but gladly lava spreads ;)
+		int blockId = world.getBlockId(MathHelper.floor_double(newX),
 				MathHelper.floor_double(newY), MathHelper.floor_double(newZ));
-		int blockIdAt = world.getBlockId(MathHelper.floor_double(newX),
-				MathHelper.floor_double(newY + 1),
-				MathHelper.floor_double(newZ));
-		int blockIdAbove = world.getBlockId(MathHelper.floor_double(newX),
-				MathHelper.floor_double(newY + 2),
-				MathHelper.floor_double(newZ));
-		ArrayList<Integer> blocks = new ArrayList<Integer>();
-		blocks.add(Block.lavaStill.blockID);
-		blocks.add(Block.lavaMoving.blockID);
-		blocks.add(Block.waterStill.blockID);
-		blocks.add(Block.waterMoving.blockID);
-		if (blocks.contains(blockIdUnder) || blocks.contains(blockIdAt)
-				|| blocks.contains(blockIdAbove)) {
-			return CoreUtil.teleportBase(world, player, minimumRange,
-					maximumRange);
+		if (blockId == 10 || blockId == 11) {
+			return CoreUtil.teleportBase(world, player, minimumRange, maximumRange);
 		}
-		// if (world.getBlockId((int)newX, (int)newY, (int)newZ) == 0 ||
-		// world.getBlockId((int)newX, (int)newY + 1, (int)newZ) != 0) {
-		// return Util.teleportBase(world, player);
-		// }
+
 		return new double[] { newX, newY, newZ };
 	}
-
 }

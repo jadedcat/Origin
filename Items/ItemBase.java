@@ -1,4 +1,4 @@
-package CountryGamer_Core;
+package CountryGamer_Core.Items;
 
 import CountryGamer_XPMod.lib.Reference;
 import net.minecraft.client.renderer.texture.IconRegister;

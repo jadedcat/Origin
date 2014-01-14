@@ -1,4 +1,4 @@
-package CountryGamer_Core;
+package CountryGamer_Core.Items;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;

@@ -1,4 +1,4 @@
-package CountryGamer_Core;
+package CountryGamer_Core.Items;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemFood;
