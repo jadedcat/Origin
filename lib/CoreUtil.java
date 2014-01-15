@@ -11,12 +11,42 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.Property;
 import CountryGamer_Core.CG_Core;
-import CountryGamer_Core.Client.ParticleEffects;
 import cpw.mods.fml.common.Loader;
 
 public class CoreUtil {
 
+	public static int getAndComment(Configuration config, String cate,
+			String name, String comment, int value) {
+		Property property = config.get(cate, name, value);
+		if (!comment.equals(""))
+			property.comment = comment;
+		return property.getInt();
+	}
+
+	public static String getAndComment(Configuration config, String cate,
+			String name, String comment, String value) {
+		Property property = config.get(cate, name, value);
+		if (!comment.equals(""))
+			property.comment = comment;
+		return property.getString();
+	}
+
+	public static boolean getAndComment(Configuration config, String cate,
+			String name, String comment, boolean value) {
+		Property property = config.get(cate, name, value);
+		if (!comment.equals(""))
+			property.comment = comment;
+		return property.getBoolean(false);
+	}
+
+	/**
+	 * Find new id
+	 * 
+	 * @return
+	 */
 	public static int getUniqueEntityId() {
 		int entityid = 0;
 		do {
@@ -25,6 +55,13 @@ public class CoreUtil {
 		return entityid;
 	}
 
+	/**
+	 * Check for loaded mod
+	 * 
+	 * @param sourceModid
+	 * @param targetModid
+	 * @return
+	 */
 	public static boolean isModLoaded(String sourceModid, String targetModid) {
 		if (Loader.isModLoaded(targetModid)) {
 			try {
@@ -40,6 +77,7 @@ public class CoreUtil {
 		return false;
 	}
 
+	// Teleportation
 	public static void teleportPlayerToDimension(EntityPlayer player,
 			int dimensionID) {
 		if (player.dimension != dimensionID) {
@@ -206,4 +244,20 @@ public class CoreUtil {
 		}
 		return new double[] { newX, newY, newZ };
 	}
+	
+	/**
+	 * Is int positive or negative
+	 * @param i
+	 * @return
+	 */
+	public static int posOrNeg(int i) {
+		if (i == 0) {
+			System.err.print("Parameter is neither positive nor negative");
+			return 1;
+		} else if (i >> 31 != 0)
+			return -1;
+		else
+			return 1;
+	}
+
 }
