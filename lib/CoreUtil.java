@@ -11,9 +11,11 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 import CountryGamer_Core.CG_Core;
+import WeepingAngels.World.Structure.ComponentAngelDungeon;
 import cpw.mods.fml.common.Loader;
 
 public class CoreUtil {
@@ -244,9 +246,79 @@ public class CoreUtil {
 		}
 		return new double[] { newX, newY, newZ };
 	}
-	
+
+	// World set and Component Setting methods for block placement
+	public static void placeBlock(World world, int x, int y, int z,
+			int blockID, int meta, ComponentAngelDungeon com,
+			StructureBoundingBox box) {
+		boolean normalWorld = com == null || box == null;
+		if (normalWorld) { // regular
+			world.setBlock(x, y, z, blockID, meta, 3);
+		} else { // component
+			if (blockID == Block.stairsCobblestone.blockID
+					|| blockID == Block.ladder.blockID
+					|| blockID == Block.trapdoor.blockID) {
+				com.placeBlockAtCurrentPosition(world, blockID,
+						com.getMetadataWithOffset(blockID, meta), x, y, z, box);
+			} else
+				com.placeBlockAtCurrentPosition(world, blockID, meta, x, y, z,
+						box);
+		}
+	}
+
+	public static void fillBlocks(World world, int minX, int minY, int minZ,
+			int maxX, int maxY, int maxZ, int blockID, int meta,
+			ComponentAngelDungeon com, StructureBoundingBox box) {
+		boolean normalWorld = com == null || box == null;
+		for (int k2 = minY; k2 <= maxY; ++k2) {
+			for (int l2 = minX; l2 <= maxX; ++l2) {
+				for (int i3 = minZ; i3 <= maxZ; ++i3) {
+					if (normalWorld) { // regular
+						world.setBlock(l2, k2, i3, blockID, meta, 3);
+					} else { // component
+						com.placeBlockAtCurrentPosition(world, blockID, meta,
+								l2, k2, i3, box);
+					}
+				}
+			}
+		}
+	}
+
+	public static void fillVariedStoneBlocks(World world, int minX, int minY,
+			int minZ, int maxX, int maxY, int maxZ, ComponentAngelDungeon com,
+			StructureBoundingBox box) {
+		boolean normalWorld = com == null || box == null;
+		int blockID = Block.stoneBrick.blockID;
+		for (int k2 = minY; k2 <= maxY; ++k2) {
+			for (int l2 = minX; l2 <= maxX; ++l2) {
+				for (int i3 = minZ; i3 <= maxZ; ++i3) {
+					int meta = CoreUtil.getStoneBrickMeta();
+					if (normalWorld) { // regular
+						world.setBlock(l2, k2, i3, blockID, meta, 3);
+					} else { // component
+						com.placeBlockAtCurrentPosition(world, blockID, meta,
+								l2, k2, i3, box);
+					}
+				}
+			}
+		}
+	}
+
+	public static int getStoneBrickMeta() {
+		int meta = 0;
+		int chance = (new Random()).nextInt(100);
+		if (chance <= 45) {
+			meta = 1;
+			if (chance <= 10)
+				meta = 2;
+		}
+		return meta;
+	}
+
+	// OTHER
 	/**
 	 * Is int positive or negative
+	 * 
 	 * @param i
 	 * @return
 	 */
@@ -258,6 +330,18 @@ public class CoreUtil {
 			return -1;
 		else
 			return 1;
+	}
+
+	/**
+	 * Get direction player is facing. Returns an integer representing the
+	 * cardinal direction and axis. 0 = +Z; 1 = -X; 2 = -Z; 3 = +X;
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public static int getDirection(EntityPlayer player) {
+		return MathHelper
+				.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 	}
 
 }
