@@ -12,6 +12,7 @@ import CountryGamer_Core.Handler.CorePacketHandler;
 import CountryGamer_Core.Handler.Command.TeleportCommand;
 import CountryGamer_Core.Proxy.ServerProxy;
 import CountryGamer_Core.lib.CoreReference;
+import CountryGamer_Core.lib.CoreUtil;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
@@ -57,6 +58,32 @@ public class CG_Core {
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
+		boolean misc = CoreUtil.isModLoaded(CoreReference.MOD_ID,
+				"CountryGamer_Misc");
+		boolean pepc = CoreUtil.isModLoaded(CoreReference.MOD_ID,
+				"CountryGamer_PEforPC");
+		boolean pvz = CoreUtil.isModLoaded(CoreReference.MOD_ID,
+				"CountryGamer_PlantsVsZombies");
+		boolean wam = CoreUtil.isModLoaded(CoreReference.MOD_ID,
+				"WeepingAngels");
+		if (!(misc || pepc || pvz || wam)) {
+			CG_Core.log
+					.info("Why do you have me installed? I dont do anything!");
+		} else {
+			CG_Core.log.info("Hey look! I have friends! Who's all here?");
+			if (misc)
+				CountryGamer_Misc.CG_Misc.log
+						.info("Im here with random things!");
+			if (pepc)
+				CountryGamer_PEforPC.PEforPC.log
+						.info("I have all things pockity");
+			if (wam)
+				WeepingAngels.WeepingAngelsMod.log.info("ROAR!");
+			if (pvz)
+				CountryGamer_PlantsVsZombies.PvZ_Main.log
+						.info("NO! Bad angel!");
+
+		}
 	}
 
 	public void dimLoad() {

@@ -3,9 +3,13 @@ package CountryGamer_Core.lib;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -67,12 +71,12 @@ public class CoreUtil {
 	public static boolean isModLoaded(String sourceModid, String targetModid) {
 		if (Loader.isModLoaded(targetModid)) {
 			try {
-				System.out.println(sourceModid + ": " + targetModid
-						+ " mod is loaded");
+				// System.out.println(sourceModid + ": " + targetModid
+				// + " mod is loaded");
 				return true;
 			} catch (Exception e) {
-				System.err.println(sourceModid + ": Could not load "
-						+ targetModid + " mod");
+				// System.err.println(sourceModid + ": Could not load "
+				// + targetModid + " mod");
 				e.printStackTrace(System.err);
 			}
 		}
@@ -313,6 +317,22 @@ public class CoreUtil {
 				meta = 2;
 		}
 		return meta;
+	}
+
+	public static boolean breakBlockAsPlayer(World world, EntityPlayer player,
+			int x, int y, int z, int blockID) {
+		if (player == null || world == null)
+			return false;
+		WorldClient worldclient = Minecraft.getMinecraft().theWorld;
+		worldclient.playAuxSFX(2001, x, y, z,
+				blockID + (worldclient.getBlockMetadata(x, y, z) << 12));
+
+		int meta = world.getBlockMetadata(x, y, z);
+		Block block = Block.blocksList[blockID];
+		world.setBlockToAir(x, y, z);
+		block.onBlockDestroyedByPlayer(world, x, y, z, meta);
+
+		return true;
 	}
 
 	// OTHER
