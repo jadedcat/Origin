@@ -5,6 +5,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
@@ -108,5 +109,8 @@ public class CG_Core {
 		event.registerServerCommand(new TeleportCommand());
 		this.dimLoad();
 	}
+	
+	// Rain; Minecraft.getMinecraft().theWorld.setRainStrength(0.0F);
 
+	
 }
