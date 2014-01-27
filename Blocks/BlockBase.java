@@ -1,4 +1,4 @@
-package CountryGamer_Core;
+package CountryGamer_Core.Blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -20,15 +20,14 @@ public class BlockBase extends Block {
 		GameRegistry.registerBlock(this,name);
 		LanguageRegistry.addName(this,	name);
 		
-		this.modid = modid;
-		this.textureName = name;
+		this.modid = modid.toLowerCase();
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
-		this.blockIcon = iconRegister.registerIcon(this.modid + ":" +
-					this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf(".") + 1));
+		this.blockIcon = iconRegister.registerIcon(this.modid + 
+				":" + this.getUnlocalizedName().substring(5));
 	}
 	
 }

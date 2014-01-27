@@ -1,15 +1,14 @@
 package CountryGamer_Core.lib;
 
+import java.awt.Component;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -23,6 +22,12 @@ import WeepingAngels.World.Structure.ComponentAngelDungeon;
 import cpw.mods.fml.common.Loader;
 
 public class CoreUtil {
+
+	public static String configGeneral = "General";
+	public static String configItemId = "Item IDs";
+	public static String configBlockId = "Block IDs";
+	public static String configAchievement = "Achievement IDs";
+	public static String configAddon = "Addons";
 
 	public static int getAndComment(Configuration config, String cate,
 			String name, String comment, int value) {
@@ -252,6 +257,7 @@ public class CoreUtil {
 	}
 
 	// World set and Component Setting methods for block placement
+
 	public static void placeBlock(World world, int x, int y, int z,
 			int blockID, int meta, ComponentAngelDungeon com,
 			StructureBoundingBox box) {

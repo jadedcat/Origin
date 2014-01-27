@@ -1,4 +1,4 @@
-package CountryGamer_Core;
+package CountryGamer_Core.Blocks;
 
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.material.Material;

@@ -1,19 +1,18 @@
-package CountryGamer_Core;
+package CountryGamer_Core.Blocks;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockContainerBase extends BlockContainer {
 	
 	public String modid;
-	public TileEntity tileEnt;
 	
 	public BlockContainerBase(int id, Material mat,
 			String modid, String name) {
@@ -23,7 +22,6 @@ public class BlockContainerBase extends BlockContainer {
 		LanguageRegistry.addName(this,	name);
 		
 		this.modid = modid;
-		this.tileEnt = null;
 	}
 	
 	@Override
@@ -35,7 +33,7 @@ public class BlockContainerBase extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-		return this.tileEnt;
+		return new TileEntityInventoryBase("", 0, 0);
 	}
 	
 	
