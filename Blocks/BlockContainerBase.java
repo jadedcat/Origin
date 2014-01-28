@@ -12,14 +12,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockContainerBase extends BlockContainer {
 	
-	public String modid;
+	public String	modid;
 	
-	public BlockContainerBase(int id, Material mat,
-			String modid, String name) {
+	public BlockContainerBase(int id, Material mat, String modid, String name) {
 		super(id, mat);
 		this.setUnlocalizedName(name);
-		GameRegistry.registerBlock(this,name);
-		LanguageRegistry.addName(this,	name);
+		GameRegistry.registerBlock(this, name);
+		LanguageRegistry.addName(this, name);
 		
 		this.modid = modid;
 	}
@@ -27,14 +26,19 @@ public class BlockContainerBase extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
-		this.blockIcon = iconRegister.registerIcon(this.modid + ":" +
-					this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf(".") + 1));
+		this.blockIcon = iconRegister.registerIcon(this.modid
+				+ ":"
+				+ this.getUnlocalizedName().substring(
+						this.getUnlocalizedName().indexOf(".") + 1));
 	}
-
+	
 	@Override
 	public TileEntity createNewTileEntity(World world) {
 		return new TileEntityInventoryBase("", 0, 0);
 	}
 	
+	public boolean hasTileEntity(int metadata) {
+		return true;
+	}
 	
 }

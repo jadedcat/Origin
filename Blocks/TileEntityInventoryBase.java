@@ -15,8 +15,8 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 
 	public TileEntityInventoryBase(String name, int inventorySize,
 			int maxStackSize) {
-		this.inv = new ItemStack[inventorySize];
 		this.name = name;
+		this.inv = new ItemStack[inventorySize];
 		this.maxStackSize = maxStackSize;
 	}
 
@@ -92,12 +92,14 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 			if (b0 >= 0 && b0 < this.inv.length) {
 				this.inv[b0] = ItemStack.loadItemStackFromNBT(tagCom1);
 			}
+			//System.out.println("Loaded stack at slot " + b0);
 		}
 
 	}
 
 	public void writeToNBT(NBTTagCompound tagCom) {
 		super.writeToNBT(tagCom);
+		System.out.println("Writing");
 		NBTTagList tagList = new NBTTagList();
 		for (int i = 0; i < this.inv.length; i++) {
 			if (this.inv[i] != null) {
@@ -105,6 +107,7 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 				tagCom1.setByte("Slot", (byte) i);
 				this.inv[i].writeToNBT(tagCom1);
 				tagList.appendTag(tagCom1);
+				//System.out.println("Wrote stack at slot " + i);
 			}
 		}
 		tagCom.setTag("Items", tagList);
