@@ -9,9 +9,9 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityInventoryBase extends TileEntity implements IInventory {
 
-	private ItemStack[] inv;
-	private String name;
-	private int maxStackSize;
+	protected ItemStack[] inv;
+	protected String name;
+	protected int maxStackSize;
 
 	public TileEntityInventoryBase(String name, int inventorySize,
 			int maxStackSize) {

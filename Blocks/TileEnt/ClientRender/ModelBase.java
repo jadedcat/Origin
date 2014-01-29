@@ -7,7 +7,7 @@ import net.minecraft.entity.Entity;
 
 public class ModelBase extends net.minecraft.client.model.ModelBase {
 
-	protected ArrayList<ModelRenderer> modelList = new ArrayList();
+	public ArrayList<ModelRenderer> modelList = new ArrayList();
 
 	public ModelBase(int textureWidth, int textureHeight) {
 		this.textureWidth = textureWidth;
