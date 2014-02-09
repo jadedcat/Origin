@@ -1,5 +1,7 @@
 package CountryGamer_Core.lib;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -10,15 +12,26 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.RecipeFireworks;
+import net.minecraft.item.crafting.RecipesArmorDyes;
+import net.minecraft.item.crafting.RecipesMapCloning;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import CountryGamer_Core.CG_Core;
 import WeepingAngels.World.Structure.ComponentAngelDungeon;
 import cpw.mods.fml.common.Loader;
@@ -308,6 +321,33 @@ public class CoreUtil {
 		return new double[] { newX, newY, newZ };
 	}
 	
+	/**
+	 * Teleports player based on where their crosshair lays. WIP
+	 * 
+	 * @param world
+	 * @param player
+	 */
+	private static void teleportVector(World world, EntityPlayer player) {
+		if (!world.isRemote) {
+			Vec3 vec3 = player.getPosition(1.0F);
+			vec3.yCoord += 1.0D;
+			Vec3 lookVec = player.getLook(1.0F);
+			Vec3 addedVector = vec3.addVector(lookVec.xCoord * 1000.0D,
+					lookVec.yCoord * 1000.0D, lookVec.zCoord * 1000.0D);
+			MovingObjectPosition movingObjPos = world.rayTraceBlocks_do_do(
+					vec3, addedVector, true, true);
+			
+			if ((movingObjPos != null)
+					&& (movingObjPos.typeOfHit == EnumMovingObjectType.TILE)) {
+				int x = movingObjPos.blockX;
+				int y = movingObjPos.blockY;
+				int z = movingObjPos.blockZ;
+				CoreUtil.teleportPlayer(player, x + 0.5, y + 1, z + 0.5, false,
+						false);
+			}
+		}
+	}
+	
 	// World set and Component Setting methods for block placement
 	
 	public static void placeBlock(World world, int x, int y, int z,
@@ -452,21 +492,139 @@ public class CoreUtil {
 		Random rand = new Random();
 		float f = rand.nextFloat() * 0.8F + 0.1F;
 		float f1 = rand.nextFloat() * 0.8F + 0.1F;
-		EntityItem entityitem = new EntityItem(world, (double) ((float) x + f),
-				(double) ((float) y + f1), (double) ((float) z
-						+ rand.nextFloat() * 0.8F + 0.1F), itemStack);
-		float f3 = 0.05F;
-		entityitem.motionX = (double) ((float) rand.nextGaussian() * f3);
-		entityitem.motionY = (double) ((float) rand.nextGaussian() * f3 + 0.2F);
-		entityitem.motionZ = (double) ((float) rand.nextGaussian() * f3);
-		if (tagCom != null)
-			entityitem.getEntityItem().setTagCompound(tagCom);
-		if (!world.isRemote)
-			world.spawnEntityInWorld(entityitem);
+		EntityItem entityitem;
+		
+		for (float f2 = rand.nextFloat() * 0.8F + 0.1F; itemStack.stackSize > 0; world
+				.spawnEntityInWorld(entityitem)) {
+			int k1 = rand.nextInt(21) + 10;
+			
+			if (k1 > itemStack.stackSize) {
+				k1 = itemStack.stackSize;
+			}
+			
+			itemStack.stackSize -= k1;
+			entityitem = new EntityItem(world, (double) ((float) x + f),
+					(double) ((float) y + f1), (double) ((float) z + f2),
+					new ItemStack(itemStack.itemID, k1,
+							itemStack.getItemDamage()));
+			float f3 = 0.05F;
+			entityitem.motionX = (double) ((float) rand.nextGaussian() * f3);
+			entityitem.motionY = (double) ((float) rand.nextGaussian() * f3 + 0.2F);
+			entityitem.motionZ = (double) ((float) rand.nextGaussian() * f3);
+			
+			if (itemStack.hasTagCompound()) {
+				entityitem.getEntityItem().setTagCompound(
+						(NBTTagCompound) itemStack.getTagCompound().copy());
+			}
+		}
 	}
 	
 	public static boolean chance(int percent) {
 		return (new Random()).nextInt(100) < percent;
+	}
+	
+	public static class InversedRecipe {
+		public ItemStack[]	itemsOutput;
+		public ItemStack	input;
+		public int			u, v;
+		public boolean		shapelessRecipe;
+		public boolean		forgeRecipe;
+		
+		public InversedRecipe(int u, int v, ItemStack input,
+				ItemStack[] craftingOutput, boolean isShapeless,
+				boolean isForgeRecipe) {
+			this.u = u;
+			this.v = v;
+			this.input = input;
+			this.itemsOutput = craftingOutput;
+			this.shapelessRecipe = isShapeless;
+			this.forgeRecipe = isForgeRecipe;
+		}
+	}
+	
+	public static List getInversedRecipies() {
+		List inversedRecipes = new ArrayList();
+		// ShapedRecipes recipe = new ShapedRecipes(u, v, input, output);
+		List recipeList = CraftingManager.getInstance().getRecipeList();
+		for (int rIndex = 0; rIndex < recipeList.size(); rIndex++) {
+			if (recipeList.get(rIndex) instanceof ShapedRecipes) {
+				ShapedRecipes recipe = (ShapedRecipes) recipeList.get(rIndex);
+				CoreUtil.addRecipeToList(recipeList,
+						new CoreUtil.InversedRecipe(recipe.recipeWidth,
+								recipe.recipeHeight, recipe.getRecipeOutput(),
+								recipe.recipeItems, false, false));
+			}
+			if (recipeList.get(rIndex) instanceof ShapedOreRecipe) {
+				ShapedOreRecipe recipe = (ShapedOreRecipe) recipeList
+						.get(rIndex);
+				Object[] recipeInput = recipe.getInput();
+				ItemStack[] newOutput = new ItemStack[recipe.getRecipeSize()];
+				for (int i = 0; i < recipeInput.length; i++) {
+					if (recipeInput[i] instanceof ItemStack) {
+						newOutput[i] = (ItemStack) recipeInput[i];
+					} else {
+						ArrayList<ItemStack> oreDicStacks = (ArrayList<ItemStack>) recipeInput[i];
+						if (oreDicStacks != null)
+							newOutput[i] = oreDicStacks.get(0);
+					}
+				}
+				CoreUtil.addRecipeToList(
+						recipeList,
+						new CoreUtil.InversedRecipe(0, 0, recipe
+								.getRecipeOutput(), newOutput, false, true));
+			}
+			if (recipeList.get(rIndex) instanceof ShapelessRecipes) {
+				ShapelessRecipes recipe = (ShapelessRecipes) recipeList
+						.get(rIndex);
+				ItemStack[] craftingOutput = new ItemStack[recipe.recipeItems
+						.size()];
+				for (int itemIndex = 0; itemIndex < recipe.recipeItems.size(); itemIndex++) {
+					craftingOutput[itemIndex] = (ItemStack) recipe.recipeItems
+							.get(itemIndex);
+				}
+				CoreUtil.addRecipeToList(
+						recipeList,
+						new CoreUtil.InversedRecipe(0, 0, recipe
+								.getRecipeOutput(), craftingOutput, true, false));
+			}
+			if (recipeList.get(rIndex) instanceof ShapelessOreRecipe) {
+				ShapelessOreRecipe recipe = (ShapelessOreRecipe) recipeList
+						.get(rIndex);
+				ArrayList recipeInput = recipe.getInput();
+				ItemStack[] newOutput = new ItemStack[recipe.getRecipeSize()];
+				for (int i = 0; i < recipeInput.size(); i++) {
+					if (recipeInput.get(i) instanceof ItemStack) {
+						newOutput[i] = (ItemStack) recipeInput.get(i);
+					} else {
+						ArrayList<ItemStack> oreDicStacks = (ArrayList<ItemStack>) recipeInput
+								.get(i);
+						if (oreDicStacks != null)
+							newOutput[i] = oreDicStacks.get(0);
+					}
+				}
+				CoreUtil.addRecipeToList(
+						recipeList,
+						new CoreUtil.InversedRecipe(0, 0, recipe
+								.getRecipeOutput(), newOutput, true, true));
+			}
+			if (recipeList.get(rIndex) instanceof RecipesArmorDyes) {
+				
+			}
+			if (recipeList.get(rIndex) instanceof RecipeFireworks) {
+				
+			}
+			if (recipeList.get(rIndex) instanceof RecipesMapCloning) {
+				
+			}
+		}
+		return inversedRecipes;
+	}
+	
+	private static void addRecipeToList(List recipeList,
+			CoreUtil.InversedRecipe recipe) {
+		if (recipe.input.stackSize == 1) {
+			recipeList.add(recipe);
+		}
 	}
 	
 }

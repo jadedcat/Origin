@@ -23,40 +23,50 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
+/**
+ * Mod class for the basic mod CountryGamer_Core
+ * 
+ * @author Country Gamer
+ * 
+ */
 @Mod(modid = CoreReference.MOD_ID, name = CoreReference.MOD_NAME, version = CoreReference.VERSION)
 @NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { "CGC_Teleport" }, packetHandler = CorePacketHandler.class)
 public class CG_Core {
-
-	public static final Logger log = Logger.getLogger(CoreReference.MOD_ID);
+	
+	public static final Logger				log			= Logger.getLogger(CoreReference.MOD_ID);
 	@Instance(CoreReference.MOD_ID)
-	public static CG_Core instance;
+	public static CG_Core					instance;
 	@SidedProxy(clientSide = CoreReference.CLIENT_PROXY_CLASS, serverSide = CoreReference.SERVER_PROXY_CLASS)
-	public static ServerProxy proxy;
-
-	public static boolean DEBUG = true;
-
-	public static HashMap<String, Integer> dimensions = new HashMap<String, Integer>();
-	public static HashMap<Integer, String> dimensions1 = new HashMap<Integer, String>();
-
+	public static ServerProxy				proxy;
+	
+	public static boolean					DEBUG		= true;
+	
+	public static HashMap<String, Integer>	dimensions	= new HashMap<String, Integer>();
+	public static HashMap<Integer, String>	dimensions1	= new HashMap<Integer, String>();
+	
+	// Mods Loaded
+	private static boolean					neiLoaded	= false;
+	private static boolean					morphLoaded	= false;
+	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		proxy.preInit();
-
+		
 		Configuration config = new Configuration(
 				event.getSuggestedConfigurationFile());
 		config.load(); // load configs from its file
-
+		
 		config.save();
-
+		
 	}
-
+	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
 		proxy.registerRender();
 		proxy.registerHandler();
-
+		
 	}
-
+	
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		boolean misc = CoreUtil.isModLoaded(CoreReference.MOD_ID,
@@ -83,10 +93,13 @@ public class CG_Core {
 			if (pvz)
 				CountryGamer_PlantsVsZombies.PvZ_Main.log
 						.info("NO! Bad angel!");
-
+			
 		}
+		
+		this.modCompatibility();
+		
 	}
-
+	
 	public void dimLoad() {
 		WorldServer[] allWS = DimensionManager.getWorlds();
 		HashMap<String, Integer> temp = new HashMap<String, Integer>();
@@ -103,14 +116,38 @@ public class CG_Core {
 			this.dimensions1.put(id, key);
 		}
 	}
-
+	
 	@Mod.EventHandler
 	public void serverLoad(FMLServerStartingEvent event) {
 		event.registerServerCommand(new TeleportCommand());
 		this.dimLoad();
 	}
 	
+	private void modCompatibility() {
+		if (CoreUtil.isModLoaded(CoreReference.MOD_ID, "NotEnoughItems"))
+			this.neiLoaded = true;
+		if (CoreUtil.isModLoaded(CoreReference.MOD_ID, "Morph"))
+			this.morphLoaded = true;
+	}
+	
+	/**
+	 * Must be called in post init
+	 * 
+	 * @return
+	 */
+	public static boolean isNEILoaded() {
+		return neiLoaded;
+	}
+	
+	/**
+	 * Must be called in post init
+	 * 
+	 * @return
+	 */
+	public static boolean isMorphLoaded() {
+		return morphLoaded;
+	}
+	
 	// Rain; Minecraft.getMinecraft().theWorld.setRainStrength(0.0F);
-
 	
 }
