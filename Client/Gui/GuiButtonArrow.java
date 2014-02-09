@@ -1,4 +1,4 @@
-package CountryGamer_Core.Client.Gui;
+package com.countrygamer.countrygamer_core.Client.Gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -37,7 +37,7 @@ public class GuiButtonArrow extends GuiButton {
 	 * Draws this button to the screen.
 	 */
 	public void drawButton(Minecraft par1Minecraft, int par2, int par3) {
-		if (this.drawButton) {
+		if (true){//this.drawButton) { TODO
 			par1Minecraft.getTextureManager().bindTexture(
 					new ResourceLocation("countrygamer_core",
 							"textures/gui/arrows.png"));

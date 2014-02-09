@@ -1,6 +1,5 @@
-package CountryGamer_Core.Client;
+package com.countrygamer.countrygamer_core.Client;
 
-import CountryGamer_Core.CG_Core;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.texture.TextureManager;

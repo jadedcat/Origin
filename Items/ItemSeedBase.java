@@ -1,29 +1,29 @@
-package CountryGamer_Core.Items;
+package com.countrygamer.countrygamer_core.Items;
 
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class ItemSeedBase extends ItemBase implements IPlantable {
 	/**
 	 * The type of block this seed turns into (wheat or pumpkin stems for
 	 * instance)
 	 */
-	private int plantBlockiD;
+	private Block plantBlock;
 
 	/** BlockID of the block the seeds can be planted on. */
-	private int soilBlockID;
+	private Block soilBlock;
 
-	public ItemSeedBase(int id, String modid, String name, int plantBlockiD,
-			int soilID) {
-		super(id, modid, name);
-		this.plantBlockiD = plantBlockiD;
-		this.soilBlockID = soilID;
+	public ItemSeedBase(int id, String modid, String name, Block plantBlock,
+			Block soil) {
+		super(modid, name);
+		this.plantBlock = plantBlock;
+		this.soilBlock = soil;
 	}
 
 	/**
@@ -40,14 +40,14 @@ public class ItemSeedBase extends ItemBase implements IPlantable {
 				par1ItemStack)
 				&& par2EntityPlayer.canPlayerEdit(par4, par5 + 1, par6, par7,
 						par1ItemStack)) {
-			int i1 = par3World.getBlockId(par4, par5, par6);
-			Block soil = Block.blocksList[i1];
+			Block soil = par3World.getBlock(par4, par5, par6);
+			//Block  = Block.blocksList[i1];
 
 			if (soil != null
 					&& soil.canSustainPlant(par3World, par4, par5, par6,
 							ForgeDirection.UP, this)
 					&& par3World.isAirBlock(par4, par5 + 1, par6)) {
-				par3World.setBlock(par4, par5 + 1, par6, this.plantBlockiD);
+				par3World.setBlock(par4, par5 + 1, par6, this.plantBlock);
 				--par1ItemStack.stackSize;
 				return true;
 			} else {
@@ -59,18 +59,18 @@ public class ItemSeedBase extends ItemBase implements IPlantable {
 	}
 
 	@Override
-	public EnumPlantType getPlantType(World world, int x, int y, int z) {
-		return (plantBlockiD == Block.netherStalk.blockID ? EnumPlantType.Nether
-				: EnumPlantType.Crop);
+	public EnumPlantType getPlantType(IBlockAccess world,
+			int x, int y, int z) {
+		return EnumPlantType.Crop;
 	}
 
 	@Override
-	public int getPlantID(World world, int x, int y, int z) {
-		return plantBlockiD;
+	public Block getPlant(IBlockAccess world, int x, int y, int z) {
+		return this.plantBlock;
 	}
 
 	@Override
-	public int getPlantMetadata(World world, int x, int y, int z) {
+	public int getPlantMetadata(IBlockAccess world, int x, int y, int z) {
 		return 0;
 	}
 }

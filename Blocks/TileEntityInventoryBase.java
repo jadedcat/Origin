@@ -1,4 +1,4 @@
-package CountryGamer_Core.Blocks;
+package com.countrygamer.countrygamer_core.Blocks;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -43,16 +43,16 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemStack) {
 		this.inv[i] = itemStack;
-		this.onInventoryChanged();
+		// this.onInventoryChanged();
 	}
 
 	@Override
-	public String getInvName() {
+	public String getInventoryName() {
 		return this.name;
 	}
 
 	@Override
-	public boolean isInvNameLocalized() {
+	public boolean hasCustomInventoryName() {
 		return false;
 	}
 
@@ -67,12 +67,12 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public void openChest() {
+	public void openInventory() {
 
 	}
 
 	@Override
-	public void closeChest() {
+	public void closeInventory() {
 
 	}
 
@@ -83,16 +83,16 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 
 	public void readFromNBT(NBTTagCompound tagCom) {
 		super.readFromNBT(tagCom);
-		NBTTagList tagList = tagCom.getTagList("Items");
+		NBTTagList tagList = tagCom.getTagList("Items", 10);
 		this.inv = new ItemStack[this.getSizeInventory()];
 		for (int i = 0; i < tagList.tagCount(); ++i) {
-			NBTTagCompound tagCom1 = (NBTTagCompound) tagList.tagAt(i);
-			byte b0 = tagCom1.getByte("Slot");
+			NBTTagCompound nbttagcompound1 = tagList.getCompoundTagAt(i);
+			int j = nbttagcompound1.getByte("Slot") & 255;
 
-			if (b0 >= 0 && b0 < this.inv.length) {
-				this.inv[b0] = ItemStack.loadItemStackFromNBT(tagCom1);
+			if (j >= 0 && j < this.inv.length) {
+				this.inv[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
 			}
-			//System.out.println("Loaded stack at slot " + b0);
+			// System.out.println("Loaded stack at slot " + b0);
 		}
 
 	}
@@ -101,15 +101,16 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 		super.writeToNBT(tagCom);
 		System.out.println("Writing");
 		NBTTagList tagList = new NBTTagList();
-		for (int i = 0; i < this.inv.length; i++) {
+
+		for (int i = 0; i < this.inv.length; ++i) {
 			if (this.inv[i] != null) {
-				NBTTagCompound tagCom1 = new NBTTagCompound();
-				tagCom1.setByte("Slot", (byte) i);
-				this.inv[i].writeToNBT(tagCom1);
-				tagList.appendTag(tagCom1);
-				//System.out.println("Wrote stack at slot " + i);
+				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+				nbttagcompound1.setByte("Slot", (byte) i);
+				this.inv[i].writeToNBT(nbttagcompound1);
+				tagList.appendTag(nbttagcompound1);
 			}
 		}
+
 		tagCom.setTag("Items", tagList);
 
 	}

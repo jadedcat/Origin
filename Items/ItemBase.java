@@ -1,7 +1,5 @@
-package CountryGamer_Core.Items;
+package com.countrygamer.countrygamer_core.Items;
 
-import CountryGamer_XPMod.lib.Reference;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,20 +15,14 @@ public class ItemBase extends Item {
 	
 	public String	modid;
 	
-	public ItemBase(int id, String modid, String name) {
-		super(id);
+	public ItemBase(String modid, String name) {
+		super();
 		this.modid = modid.toLowerCase();
 		this.setUnlocalizedName(name);
 		GameRegistry.registerItem(this, this.getUnlocalizedName());
-		LanguageRegistry.addName(this, name);
+		//LanguageRegistry.addName(this, name);
 		this.setTextureName(this.modid + ":"
 				+ this.getUnlocalizedName().substring(5));
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconReg) {
-		this.itemIcon = iconReg.registerIcon(this.getIconString());
 	}
 	
 	@Override

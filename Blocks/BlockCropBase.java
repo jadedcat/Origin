@@ -1,14 +1,12 @@
-package CountryGamer_Core.Blocks;
+package com.countrygamer.countrygamer_core.Blocks;
 
 import net.minecraft.block.BlockCrops;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -16,15 +14,15 @@ public class BlockCropBase extends BlockCrops {
 
 	public String modid;
 	@SideOnly(Side.CLIENT)
-	private Icon[] iconArray;
+	private IIcon[] iconArray;
 	private final Item seedItem, cropItem;
-	
-	
-	public BlockCropBase(int id, String modid, String name, Item seedItem, Item cropItem) {
-		super(id);
-		this.setUnlocalizedName(name);
+
+	public BlockCropBase(int id, String modid, String name, Item seedItem,
+			Item cropItem) {
+		super();
+		// this.setUnlocalizedName(name);
 		GameRegistry.registerBlock(this, name);
-		LanguageRegistry.addName(this, name);
+		// LanguageRegistry.addName(this, name);
 
 		this.modid = modid;
 		this.textureName = name;
@@ -34,23 +32,22 @@ public class BlockCropBase extends BlockCrops {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegister) {
+	public void registerBlockIcons(IIconRegister iconRegister) {
 		/*
-		this.blockIcon = iconRegister.registerIcon(this.modid
-				+ ":"
-				+ this.getUnlocalizedName().substring(
-						this.getUnlocalizedName().indexOf(".") + 1));
-		*/
-		this.iconArray = new Icon[4];
+		 * this.blockIcon = iconRegister.registerIcon(this.modid + ":" +
+		 * this.getUnlocalizedName().substring(
+		 * this.getUnlocalizedName().indexOf(".") + 1));
+		 */
+		this.iconArray = new IIcon[4];
 
-        for (int i = 0; i < this.iconArray.length; ++i)
-        {
-            this.iconArray[i] = iconRegister.registerIcon(this.modid + ":" + this.getTextureName() + "_" + i);
-        }
-		
+		for (int i = 0; i < this.iconArray.length; ++i) {
+			this.iconArray[i] = iconRegister.registerIcon(this.modid + ":"
+					+ this.getTextureName() + "_" + i);
+		}
+
 	}
 
-	public Icon getIcon(int par1, int par2) {
+	public IIcon getIcon(int par1, int par2) {
 		if (par2 < 7) {
 			if (par2 == 6) {
 				par2 = 5;
@@ -65,15 +62,17 @@ public class BlockCropBase extends BlockCrops {
 	/**
 	 * Generate a seed ItemStack for this crop.
 	 */
-	protected int getSeedItem() {
-		return this.seedItem.itemID;
+	@Override
+	protected Item func_149866_i() {
+		return this.seedItem;
 	}
 
 	/**
 	 * Generate a crop produce ItemStack for this crop.
 	 */
-	protected int getCropItem() {
-		return this.cropItem.itemID;
+	@Override
+	protected Item func_149865_P() {
+		return this.cropItem;
 	}
 
 	/**
@@ -87,12 +86,10 @@ public class BlockCropBase extends BlockCrops {
 
 		if (!par1World.isRemote) {
 			if (par5 >= 7 && par1World.rand.nextInt(50) == 0) {
-				this.dropBlockAsItem_do(par1World, par2, par3, par4,
-						new ItemStack(Item.poisonousPotato));
+				this.dropBlockAsItem(par1World, par2, par3, par4,
+						new ItemStack(Item.getItemById(394)));
 			}
 		}
 	}
-	
-	
 
 }

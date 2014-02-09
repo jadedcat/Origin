@@ -1,4 +1,4 @@
-package CountryGamer_Core.Client;
+package com.countrygamer.countrygamer_core.Client;
 
 import java.util.Random;
 
@@ -7,14 +7,16 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import CountryGamer_Core.lib.CoreReference;
+
+import com.countrygamer.countrygamer_core.lib.CoreReference;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ParticleTeleport extends EntityFX {
 
 	private ResourceLocation texture = new ResourceLocation(
-			CoreReference.MOD_ID_LOWERCASE, "textures/particle/particle.png");
+			CoreReference.MOD_ID, "textures/particle/particle.png");
 
 	public ParticleTeleport(World par1World, double par2, double par4,
 			double par6, float par8, float par9, float par10) {

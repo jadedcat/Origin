@@ -1,4 +1,4 @@
-package CountryGamer_Core.Blocks.TileEnt.ClientRender;
+package com.countrygamer.countrygamer_core.Blocks.TileEnt.ClientRender;
 
 import java.util.ArrayList;
 

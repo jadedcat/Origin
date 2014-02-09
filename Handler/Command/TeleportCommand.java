@@ -1,4 +1,4 @@
-package CountryGamer_Core.Handler.Command;
+package com.countrygamer.countrygamer_core.Handler.Command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,9 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatMessageComponent;
-import CountryGamer_Core.CG_Core;
-import CountryGamer_Core.lib.CoreUtil;
+
+import com.countrygamer.countrygamer_core.Core;
+import com.countrygamer.countrygamer_core.lib.CoreUtil;
 
 public class TeleportCommand implements ICommand {
 
@@ -38,8 +38,9 @@ public class TeleportCommand implements ICommand {
 	@Override
 	public void processCommand(ICommandSender icommandsender, String[] astring) {
 		if (astring.length == 0) {
-			icommandsender.sendChatToPlayer((new ChatMessageComponent())
-					.addText("Invalid Arguments"));
+			// TODO
+			// icommandsender.sendChatToPlayer((new ChatMessageComponent())
+			// .addText("Invalid Arguments"));
 			return;
 		}
 		String playerName = astring[0];
@@ -50,24 +51,27 @@ public class TeleportCommand implements ICommand {
 			y = Double.parseDouble(astring[3]);
 			z = Double.parseDouble(astring[4]);
 		} catch (NumberFormatException e) {
-			icommandsender.sendChatToPlayer((new ChatMessageComponent())
-					.addText("Invalid Arguments"));
-			if (CG_Core.DEBUG) {
-				CG_Core.log.info("Cannot parse arguments");
+			// TODO
+			// icommandsender.sendChatToPlayer((new ChatMessageComponent())
+			// .addText("Invalid Arguments"));
+			if (Core.DEBUG) {
+				Core.log.info("Cannot parse arguments");
 				System.err.println(e.getStackTrace());
 			}
 			return;
 		}
 		EntityPlayerMP playerMP = MinecraftServer.getServer()
 				.getConfigurationManager().getPlayerForUsername(playerName);
-		//CG_Core.instance.dimLoad();
-		if (playerMP != null && CG_Core.dimensions.get(dimensionName) != null) {
+		// CG_Core.instance.dimLoad();
+		if (playerMP != null && Core.dimensions.get(dimensionName) != null) {
 			CoreUtil.teleportPlayerToDimension(playerMP,
-					CG_Core.dimensions.get(dimensionName));
+					Core.dimensions.get(dimensionName));
 			CoreUtil.teleportPlayer(playerMP, x, y, z, false, false);
-		} else
-			icommandsender.sendChatToPlayer((new ChatMessageComponent())
-					.addText("Player " + playerName + " is not availible."));
+		} else {
+			// TODO
+			// icommandsender.sendChatToPlayer((new ChatMessageComponent())
+			// .addText("Player " + playerName + " is not availible."));
+		}
 	}
 
 	@Override
