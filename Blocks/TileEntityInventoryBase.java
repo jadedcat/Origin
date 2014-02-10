@@ -99,7 +99,7 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 
 	public void writeToNBT(NBTTagCompound tagCom) {
 		super.writeToNBT(tagCom);
-		System.out.println("Writing");
+		//System.out.println("Writing");
 		NBTTagList tagList = new NBTTagList();
 
 		for (int i = 0; i < this.inv.length; ++i) {

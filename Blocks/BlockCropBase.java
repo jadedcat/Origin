@@ -20,7 +20,7 @@ public class BlockCropBase extends BlockCrops {
 	public BlockCropBase(int id, String modid, String name, Item seedItem,
 			Item cropItem) {
 		super();
-		// this.setUnlocalizedName(name);
+		this.setBlockName(name);
 		GameRegistry.registerBlock(this, name);
 		// LanguageRegistry.addName(this, name);
 

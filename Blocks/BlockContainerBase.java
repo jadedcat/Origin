@@ -16,7 +16,7 @@ public class BlockContainerBase extends BlockContainer {
 	
 	public BlockContainerBase(Material mat, String modid, String name) {
 		super(mat);
-		//this.setUnlocalizedName(name);
+		this.setBlockName(name);
 		GameRegistry.registerBlock(this, name);
 		//LanguageRegistry.addName(this, name);
 		

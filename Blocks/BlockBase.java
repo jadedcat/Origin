@@ -19,7 +19,7 @@ public class BlockBase extends Block {
 	
 	public BlockBase(Material mat, String modid, String name) {
 		super(mat);
-		//this.setUnlocalizedName(name);
+		this.setBlockName(name);
 		
 		GameRegistry.registerBlock(this, name);
 		//LanguageRegistry.addName(this, name);
