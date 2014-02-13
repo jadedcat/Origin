@@ -19,8 +19,8 @@ public class GuiButtonArrow extends GuiButton {
 		UP, DOWN, LEFT, RIGHT
 	}
 	
-	public GuiButtonArrow(int par1, int par2, int par3, ButtonType type) {
-		super(par1, par2, par3, 0, 0, "");
+	public GuiButtonArrow(int id, int x, int y, ButtonType type) {
+		super(id, x, y, 0, 0, "");
 		this.buttonType = type;
 		if (this.buttonType == ButtonType.LEFT
 				|| this.buttonType == ButtonType.RIGHT) {

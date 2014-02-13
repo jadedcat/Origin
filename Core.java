@@ -47,7 +47,7 @@ public class Core {
 			+ CoreReference.SERVER_PROXY_CLASS)
 	public static ServerProxy proxy;
 
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 
 	public static HashMap<String, Integer> dimensions = new HashMap<String, Integer>();
 	public static HashMap<Integer, String> dimensions1 = new HashMap<Integer, String>();

@@ -32,6 +32,12 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
+		if ((i >= 0) && (i < this.inv.length)) {
+			ItemStack itemStack = this.inv[i];
+			this.inv[i] = null;
+			this.markDirty();
+			return itemStack;
+		}
 		return null;
 	}
 
@@ -43,7 +49,7 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemStack) {
 		this.inv[i] = itemStack;
-		// this.onInventoryChanged();
+		this.markDirty();
 	}
 
 	@Override

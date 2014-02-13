@@ -50,4 +50,8 @@ public class ItemBase extends Item {
 		return false;
 	}
 	
+	public int getMaxStackSize() {
+		return this.maxStackSize;
+	}
+	
 }

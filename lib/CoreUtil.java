@@ -7,11 +7,13 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.RecipeFireworks;
@@ -485,6 +487,51 @@ public class CoreUtil {
 	public static boolean chance(int percent) {
 		return (new Random()).nextInt(100) < percent;
 	}
+	
+	/**
+	 * Used for rendering items in block renders
+	 * @param itemRender
+	 * @param itemStack
+	 * @return
+	 */
+	public static float getGhostItemScaleFactor(RenderItem itemRender, ItemStack itemStack) {
+		float scaleFactor = 1.0F;
+
+		if (itemStack != null) {
+			if (itemStack.getItem() instanceof ItemBlock) {
+				switch (itemRender.getMiniBlockCount(itemStack, (byte) 0)) {
+				case 1:
+					return 0.90F;
+				case 2:
+					return 0.90F;
+				case 3:
+					return 0.90F;
+				case 4:
+					return 0.90F;
+				case 5:
+					return 0.80F;
+				default:
+					return 0.90F;
+				}
+			} else {
+				switch (itemRender.getMiniItemCount(itemStack, (byte) 0)) {
+				case 1:
+					return 0.65F;
+				case 2:
+					return 0.65F;
+				case 3:
+					return 0.65F;
+				case 4:
+					return 0.65F;
+				default:
+					return 0.65F;
+				}
+			}
+		}
+
+		return scaleFactor;
+	}
+	
 	/*
 	public static class InversedRecipe {
 		public ItemStack[] itemsOutput;
