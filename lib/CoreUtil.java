@@ -456,7 +456,7 @@ public class CoreUtil {
 		float f = rand.nextFloat() * 0.8F + 0.1F;
 		float f1 = rand.nextFloat() * 0.8F + 0.1F;
 		EntityItem entityitem;
-
+		
 		for (float f2 = rand.nextFloat() * 0.8F + 0.1F; itemStack.stackSize > 0; world
 				.spawnEntityInWorld(entityitem)) {
 			int k1 = rand.nextInt(21) + 10;
@@ -475,9 +475,9 @@ public class CoreUtil {
 			entityitem.motionY = (double) ((float) rand.nextGaussian() * f3 + 0.2F);
 			entityitem.motionZ = (double) ((float) rand.nextGaussian() * f3);
 
-			if (itemStack.hasTagCompound()) {
+			if (tagCom != null) {
 				entityitem.getEntityItem().setTagCompound(
-						(NBTTagCompound) itemStack.getTagCompound().copy());
+						(NBTTagCompound) tagCom.copy());
 			}
 		}
 	}

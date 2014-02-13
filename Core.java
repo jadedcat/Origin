@@ -1,10 +1,15 @@
 package com.countrygamer.countrygamer_core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
@@ -22,8 +27,8 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.FMLEventChannel;
-import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Mod class for the basic mod CountryGamer_Core
@@ -34,7 +39,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 @Mod(modid = CoreReference.MOD_ID, name = CoreReference.MOD_NAME, version = CoreReference.MC_VERSION)
 public class Core {
 
-	public static final Logger log = Logger.getLogger("countrygamer_core");
+	public static final Logger log = Logger.getLogger(CoreReference.MOD_ID);
 	@Instance("countrygamer_core")
 	public static Core instance;
 	@SidedProxy(clientSide = "com.countrygamer."
@@ -46,6 +51,9 @@ public class Core {
 
 	public static HashMap<String, Integer> dimensions = new HashMap<String, Integer>();
 	public static HashMap<Integer, String> dimensions1 = new HashMap<Integer, String>();
+
+	private static ArrayList<Item> tabItems = new ArrayList<Item>();
+	private static ArrayList<Block> tabBlocks = new ArrayList<Block>();
 
 	// Mods Loaded
 	private static boolean neiLoaded = false;
@@ -85,7 +93,7 @@ public class Core {
 		boolean pvz = CoreUtil.isModLoaded(CoreReference.MOD_ID,
 				"CountryGamer_PlantsVsZombies");
 		boolean wam = CoreUtil.isModLoaded(CoreReference.MOD_ID,
-				"WeepingAngels");
+				"weepingangels");
 		if (!(misc || pepc || pvz || wam)) {
 			Core.log.info("Why do you have me installed? I dont do anything!");
 		} else {
@@ -100,7 +108,8 @@ public class Core {
 				// .info("I have all things pockity");
 			}
 			if (wam) {
-				// WeepingAngels.WeepingAngelsMod.log.info("ROAR!");
+				com.countrygamer.weepingangels.WeepingAngelsMod.log
+						.info("ROAR!");
 			}
 			if (pvz) {
 				// CountryGamer_PlantsVsZombies.PvZ_Main.log
@@ -109,7 +118,25 @@ public class Core {
 		}
 
 		this.modCompatibility();
-
+		
+		if ((!tabItems.isEmpty() || !tabBlocks.isEmpty()) && true) {
+			CreativeTabs coreTab = new CreativeTabs("CountryGamer") {
+				@Override
+				@SideOnly(Side.CLIENT)
+				public Item getTabIconItem() {
+					return Items.iron_pickaxe;
+				}
+			};
+			for (Item item : tabItems) {
+				item.setCreativeTab(CreativeTabs.tabAllSearch);
+				item.setCreativeTab(coreTab);
+			}
+			for (Block item : tabBlocks) {
+				item.setCreativeTab(CreativeTabs.tabAllSearch);
+				item.setCreativeTab(coreTab);
+			}
+		}
+		
 	}
 
 	public void dimLoad() {
@@ -161,16 +188,13 @@ public class Core {
 	}
 
 	// Rain; Minecraft.getMinecraft().theWorld.setRainStrength(0.0F);
-	public static Item getItemFromName(String name) {
-		if (Item.itemRegistry.containsKey(name)) {
-			return (Item) Item.itemRegistry.getObject(name);
-		} else {
-			try {
-				return (Item) Item.itemRegistry.getObjectById(Integer
-						.parseInt(name));
-			} catch (NumberFormatException numberformatexception) {
-				return null;
-			}
-		}
+
+	public static void addItemToTab(Item item) {
+		tabItems.add(item);
 	}
+
+	public static void addBlockToTab(Block block) {
+		tabBlocks.add(block);
+	}
+
 }
