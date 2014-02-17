@@ -91,7 +91,7 @@ public class CoreUtil {
 	 * @param targetModid
 	 * @return
 	 */
-	public static boolean isModLoaded(String sourceModid, String targetModid) {
+	public static boolean isModLoaded( String targetModid) {
 		if (Loader.isModLoaded(targetModid)) {
 			try {
 				// System.out.println(sourceModid + ": " + targetModid
