@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.Client;
+package com.countrygamer.countrygamer_core.client;
 
 import java.util.Random;
 

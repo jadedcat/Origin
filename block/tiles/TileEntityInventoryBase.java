@@ -1,13 +1,12 @@
-package com.countrygamer.countrygamer_core.Blocks;
+package com.countrygamer.countrygamer_core.block.tiles;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityInventoryBase extends TileEntity implements IInventory {
+public class TileEntityInventoryBase extends TileEntityBase implements IInventory {
 
 	protected ItemStack[] inv;
 	protected String name;
@@ -15,6 +14,7 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 
 	public TileEntityInventoryBase(String name, int inventorySize,
 			int maxStackSize) {
+		super();
 		this.name = name;
 		this.inv = new ItemStack[inventorySize];
 		this.maxStackSize = maxStackSize;
@@ -86,7 +86,8 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return false;
 	}
-
+	
+	@Override
 	public void readFromNBT(NBTTagCompound tagCom) {
 		super.readFromNBT(tagCom);
 		NBTTagList tagList = tagCom.getTagList("Items", 10);
@@ -102,7 +103,8 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 		}
 
 	}
-
+	
+	@Override
 	public void writeToNBT(NBTTagCompound tagCom) {
 		super.writeToNBT(tagCom);
 		//System.out.println("Writing");

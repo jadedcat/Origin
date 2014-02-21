@@ -1,10 +1,12 @@
-package com.countrygamer.countrygamer_core.Client.Gui;
+package com.countrygamer.countrygamer_core.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
+
+import com.countrygamer.countrygamer_core.lib.CoreReference;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -37,10 +39,10 @@ public class GuiButtonArrow extends GuiButton {
 	 * Draws this button to the screen.
 	 */
 	public void drawButton(Minecraft par1Minecraft, int par2, int par3) {
-		if (true){//this.drawButton) { TODO
+		if (this.visible) {
 			par1Minecraft.getTextureManager().bindTexture(
-					new ResourceLocation("countrygamer_core",
-							"textures/gui/arrows.png"));
+					new ResourceLocation(CoreReference.MOD_ID,
+							"textures/gui/buttons.png"));
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			boolean flag = par2 >= this.xPosition && par3 >= this.yPosition
 					&& par2 < this.xPosition + this.width
@@ -65,6 +67,8 @@ public class GuiButtonArrow extends GuiButton {
 				k = this.shortSide + 1;
 				break;
 			}
+			
+			k += 60;
 
 			this.drawTexturedModalRect(this.xPosition, this.yPosition, l, k,
 					this.width, this.height);

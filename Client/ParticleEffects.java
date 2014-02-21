@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.Client;
+package com.countrygamer.countrygamer_core.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;

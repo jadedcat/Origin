@@ -1,5 +1,7 @@
 package com.countrygamer.countrygamer_core.Items;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,38 +22,43 @@ public class ItemBase extends Item {
 		this.modid = modid.toLowerCase();
 		this.setUnlocalizedName(name);
 		GameRegistry.registerItem(this, this.getUnlocalizedName());
-		//LanguageRegistry.addName(this, name);
-		this.setTextureName(this.modid + ":"
-				+ this.getUnlocalizedName().substring(5));
+		// LanguageRegistry.addName(this, name);
+		this.setTextureName(this.modid + ":" + this.getUnlocalizedName().substring(5));
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStack, World world,
-			EntityPlayer player) {
+	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
 		return itemStack;
 	}
 	
 	@Override
-	public boolean onItemUse(ItemStack itemStack, EntityPlayer player,
-			World world, int x, int y, int z, int side, float par8, float par9,
-			float par10) {
+	public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y,
+			int z, int side, float par8, float par9, float par10) {
 		return false;
 	}
 	
 	@Override
-	public boolean itemInteractionForEntity(ItemStack itemStack,
-			EntityPlayer player, EntityLivingBase entity) {
+	public boolean itemInteractionForEntity(ItemStack itemStack, EntityPlayer player,
+			EntityLivingBase entity) {
 		return false;
 	}
 	
 	@Override
-	public boolean onLeftClickEntity(ItemStack itemStack, EntityPlayer player,
-			Entity entity) {
+	public boolean onLeftClickEntity(ItemStack itemStack, EntityPlayer player, Entity entity) {
 		return false;
 	}
 	
 	public int getMaxStackSize() {
 		return this.maxStackSize;
+	}
+	
+	@Override
+	public void onUpdate(ItemStack itemStack, World world, Entity entity, int par4,
+			boolean isCurrentItem) {
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
 	}
 	
 }

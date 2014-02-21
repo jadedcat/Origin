@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.Blocks;
+package com.countrygamer.countrygamer_core.block;
 
 import net.minecraft.block.BlockCrops;
 import net.minecraft.client.renderer.texture.IIconRegister;

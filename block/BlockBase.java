@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.Blocks;
+package com.countrygamer.countrygamer_core.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

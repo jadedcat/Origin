@@ -1,8 +1,11 @@
-package com.countrygamer.countrygamer_core.Blocks;
+package com.countrygamer.countrygamer_core.block;
+
+import com.countrygamer.countrygamer_core.block.tiles.TileEntityInventoryBase;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -48,5 +51,11 @@ public class BlockContainerBase extends BlockContainer {
 	public boolean hasTileEntity(int metadata) {
 		return true;
 	}
-
+	
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z,
+			EntityPlayer player, int side, float x1, float y1, float z1) {
+		return false;
+	}
+	
 }
