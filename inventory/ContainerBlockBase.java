@@ -44,15 +44,41 @@ public class ContainerBlockBase extends Container {
 	}
 	
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotiD) {
-		ItemStack itemstack = null;
+		ItemStack itemStack = null;
 		Slot slot = (Slot) this.inventorySlots.get(slotiD);
 		
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemstack1 = slot.getStack();
-			itemstack = itemstack1.copy();
+			itemStack = itemstack1.copy();
+			
+			if (slotiD < this.tileEnt.getSizeInventory()) {
+				if (!this.mergeItemStack(itemstack1, this.tileEnt.getSizeInventory(),
+						inventorySlots.size(), true)) return null;
+				slot.onSlotChange(itemstack1, itemStack);
+			}
+			else {
+				if (!this.shiftClick(itemstack1, slotiD)) {
+					return null;
+				}
+			}
+			if (itemstack1.stackSize == 0) {
+				slot.putStack((ItemStack) null);
+			}
+			else {
+				slot.onSlotChanged();
+			}
+			
+			if (itemstack1.stackSize == itemStack.stackSize) {
+				return null;
+			}
+			
+			slot.onPickupFromSlot(player, itemstack1);
 		}
-		
-		return itemstack;
+		return itemStack;
+	}
+	
+	protected boolean shiftClick(ItemStack itemStack, int slotiD) {
+		return false;
 	}
 	
 }

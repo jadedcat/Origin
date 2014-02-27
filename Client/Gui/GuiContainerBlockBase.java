@@ -30,9 +30,9 @@ public class GuiContainerBlockBase extends GuiContainer {
 	protected final int					grayTextColor	= 4210752;
 	protected String					title			= "";
 	protected int						titleX, titleY;
-	private ResourceLocation			bkgdTex			= null;
+	protected ResourceLocation			bkgdTex			= null;
 	
-	protected final EntityPlayer				thePlayer;
+	protected final EntityPlayer		thePlayer;
 	protected ArrayList<GuiTextField>	textFieldList	= new ArrayList<GuiTextField>();
 	
 	public GuiContainerBlockBase(EntityPlayer player, TileEntityInventoryBase tileEnt) {
@@ -77,16 +77,16 @@ public class GuiContainerBlockBase extends GuiContainer {
 	}
 	
 	@Override
-	protected void keyTyped(char letter, int par2) {
+	protected void keyTyped(char letter, int keycode) {
 		boolean wasField = false;
 		for (GuiTextField field : this.textFieldList) {
-			if (field.textboxKeyTyped(letter, par2)) {
+			if (field.textboxKeyTyped(letter, keycode)) {
 				this.sendKeyPacket(field);
 				wasField = true;
 			}
 		}
 		if (!wasField) {
-			super.keyTyped(letter, par2);
+			super.keyTyped(letter, keycode);
 		}
 	}
 	
@@ -98,7 +98,7 @@ public class GuiContainerBlockBase extends GuiContainer {
 		}
 	}
 	
-	private void sendKeyPacket(GuiTextField txtField) {
+	protected void sendKeyPacket(GuiTextField txtField) {
 		PacketBuffer packetbuffer = new PacketBuffer(Unpooled.buffer());
 		try {
 			packetbuffer.writeStringToBuffer(txtField.getText());
@@ -151,10 +151,10 @@ public class GuiContainerBlockBase extends GuiContainer {
 		this.backgroundObjects();
 	}
 	
-	public void foregroundText() {
+	protected void foregroundText() {
 	}
 	
-	public void backgroundObjects() {
+	protected void backgroundObjects() {
 		for (GuiTextField field : this.textFieldList) {
 			field.drawTextBox();
 		}
