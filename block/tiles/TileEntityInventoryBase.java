@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.block.tiles;
+package com.countrygamer.core.block.tiles;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;

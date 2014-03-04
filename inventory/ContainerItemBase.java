@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.inventory;
+package com.countrygamer.core.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -7,7 +7,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.countrygamer.misc.inventory.SlotInventorySack;
+import com.countrygamer.auxiliaryobjects.inventory.SlotInventorySack;
 
 public class ContainerItemBase extends Container {
 	/** The Item Inventory for this Container */

@@ -1,8 +1,8 @@
-package com.countrygamer.countrygamer_core.proxy;
+package com.countrygamer.core.proxy;
 
 import net.minecraftforge.common.MinecraftForge;
 
-import com.countrygamer.countrygamer_core.Handler.CoreEventHandler;
+import com.countrygamer.core.Handler.CoreEventHandler;
 
 public class ServerProxy {
 	

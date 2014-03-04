@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.lib;
+package com.countrygamer.core.lib;
 
 public class CoreReference {
 	/* Mod constants */

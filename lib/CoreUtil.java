@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.lib;
+package com.countrygamer.core.lib;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ import net.minecraftforge.common.config.Property;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import com.countrygamer.countrygamer_core.Core;
+import com.countrygamer.core.Core;
 
 import cpw.mods.fml.common.Loader;
 

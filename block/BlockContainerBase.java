@@ -1,6 +1,6 @@
-package com.countrygamer.countrygamer_core.block;
+package com.countrygamer.core.block;
 
-import com.countrygamer.countrygamer_core.block.tiles.TileEntityInventoryBase;
+import com.countrygamer.core.block.tiles.TileEntityInventoryBase;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

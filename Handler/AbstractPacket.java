@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.Handler;
+package com.countrygamer.core.Handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

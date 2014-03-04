@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.Items;
+package com.countrygamer.core.Items;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.client.gui;
+package com.countrygamer.core.client.gui;
 
 import io.netty.buffer.Unpooled;
 
@@ -15,8 +15,8 @@ import org.apache.logging.log4j.LogManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import com.countrygamer.countrygamer_core.block.tiles.TileEntityBase;
-import com.countrygamer.countrygamer_core.lib.CoreReference;
+import com.countrygamer.core.block.tiles.TileEntityBase;
+import com.countrygamer.core.lib.CoreReference;
 
 public class GuiScreenBlockBase extends GuiScreen {
 	

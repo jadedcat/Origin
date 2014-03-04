@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.proxy;
+package com.countrygamer.core.proxy;
 
 
 public class ClientProxy extends ServerProxy {

@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.Handler.Command;
+package com.countrygamer.core.Handler.Command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,8 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
-import com.countrygamer.countrygamer_core.Core;
-import com.countrygamer.countrygamer_core.lib.CoreUtil;
+import com.countrygamer.core.Core;
+import com.countrygamer.core.lib.CoreUtil;
 
 public class TeleportCommand implements ICommand {
 

@@ -1,11 +1,9 @@
-package com.countrygamer.countrygamer_core.lib;
+package com.countrygamer.core.lib;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
-import net.minecraft.item.Item;
-
-import com.countrygamer.multidye.MultiMod;
+import net.minecraft.item.ItemStack;
 
 public class CoreUtilHex {
 	
@@ -15,11 +13,27 @@ public class CoreUtilHex {
 	 * @param item
 	 * @return
 	 */
-	public static double[] getColorFromDye(Item item) {
-		// TODO
-		String testColor = "ffffff";
+	public static double[] getColorFromDye(ItemStack itemStack) {
+		HashMap<Integer, String> hexFromMeta = new HashMap();
+		hexFromMeta.put(0, "000000");
+		hexFromMeta.put(1, "ff0000");
+		hexFromMeta.put(2, "00ff00");
+		hexFromMeta.put(3, "502800");
+		hexFromMeta.put(4, "000064");
+		hexFromMeta.put(5, "640064");
+		hexFromMeta.put(6, "006464");
+		hexFromMeta.put(7, "bababa");
+		hexFromMeta.put(8, "6b6b6b");
+		hexFromMeta.put(9, "ff00ff");
+		hexFromMeta.put(10, "006400");
+		hexFromMeta.put(11, "ffff00");
+		hexFromMeta.put(12, "00aaff");
+		hexFromMeta.put(13, "e600e6");
+		hexFromMeta.put(14, "ff9000");
+		hexFromMeta.put(15, "ffffff");
 		
-		double[] sums = getSumHex(testColor);
+		double[] sums = getSumHex(hexFromMeta.containsKey(itemStack.getItemDamage()) ? hexFromMeta
+				.get(itemStack.getItemDamage()) : "");
 		// MultiDye.log.info(sums[0] + ":" + sums[1] + ":" + sums[2]);
 		return sums;
 	}

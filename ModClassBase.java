@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core;
+package com.countrygamer.core;
 
 import java.util.logging.Logger;
 

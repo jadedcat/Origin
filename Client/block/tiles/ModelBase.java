@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.client.block.tiles;
+package com.countrygamer.core.client.block.tiles;
 
 import java.util.ArrayList;
 

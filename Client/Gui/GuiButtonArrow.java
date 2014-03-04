@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.client.gui;
+package com.countrygamer.core.client.gui;
 
 import java.awt.Button;
 
@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import com.countrygamer.countrygamer_core.lib.CoreReference;
+import com.countrygamer.core.lib.CoreReference;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

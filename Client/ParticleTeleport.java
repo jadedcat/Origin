@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.client;
+package com.countrygamer.core.client;
 
 import java.util.Random;
 
@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import com.countrygamer.countrygamer_core.lib.CoreReference;
+import com.countrygamer.core.lib.CoreReference;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

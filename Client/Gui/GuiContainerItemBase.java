@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.client.gui;
+package com.countrygamer.core.client.gui;
 
 import io.netty.buffer.Unpooled;
 
@@ -17,9 +17,9 @@ import org.apache.logging.log4j.LogManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import com.countrygamer.countrygamer_core.inventory.ContainerItemBase;
-import com.countrygamer.countrygamer_core.inventory.InventoryItemBase;
-import com.countrygamer.countrygamer_core.lib.CoreReference;
+import com.countrygamer.core.inventory.ContainerItemBase;
+import com.countrygamer.core.inventory.InventoryItemBase;
+import com.countrygamer.core.lib.CoreReference;
 
 public class GuiContainerItemBase extends GuiContainer {
 	

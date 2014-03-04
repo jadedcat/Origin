@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamer_core.client.gui;
+package com.countrygamer.core.client.gui;
 
 import io.netty.buffer.Unpooled;
 
@@ -17,9 +17,9 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.util.ResourceLocation;
 
-import com.countrygamer.countrygamer_core.block.tiles.TileEntityInventoryBase;
-import com.countrygamer.countrygamer_core.inventory.ContainerBlockBase;
-import com.countrygamer.countrygamer_core.lib.CoreReference;
+import com.countrygamer.core.block.tiles.TileEntityInventoryBase;
+import com.countrygamer.core.inventory.ContainerBlockBase;
+import com.countrygamer.core.lib.CoreReference;
 
 public class GuiContainerBlockBase extends GuiContainer {
 	
@@ -145,9 +145,9 @@ public class GuiContainerBlockBase extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.getTextureManager().bindTexture(this.bkgdTex);
-		this.leftOfGui = (this.width - this.xSize) / 2;
-		this.topOfGui = (this.height - this.ySize) / 2;
-		drawTexturedModalRect(this.leftOfGui, this.topOfGui, 0, 0, this.xSize, this.ySize);
+		this.guiLeft = (this.width - this.xSize) / 2;
+		this.guiTop = (this.height - this.ySize) / 2;
+		drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 		this.backgroundObjects();
 	}
 	
