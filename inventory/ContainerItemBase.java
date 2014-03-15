@@ -7,8 +7,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.countrygamer.auxiliaryobjects.inventory.SlotInventorySack;
-
 public class ContainerItemBase extends Container {
 	/** The Item Inventory for this Container */
 	public final InventoryItemBase	inventory;
@@ -111,7 +109,7 @@ public class ContainerItemBase extends Container {
 			// If item is in our custom Inventory or armor slot
 			if (i < INV_START) {
 				// try to place in player inventory / action bar
-				if (((SlotInventorySack) slot).isItemValid(itemstack1))
+				if (((Slot) slot).isItemValid(itemstack1))
 					if (!this.mergeItemStack(itemstack1, INV_START, HOTBAR_END + 1, true)) {
 						return null;
 					}

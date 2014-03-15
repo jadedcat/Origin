@@ -148,6 +148,11 @@ public class GuiContainerBlockBase extends GuiContainer {
 		this.guiLeft = (this.width - this.xSize) / 2;
 		this.guiTop = (this.height - this.ySize) / 2;
 		drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+		
+		for (GuiTextField field : this.textFieldList) {
+			field.drawTextBox();
+		}
+		
 		this.backgroundObjects();
 	}
 	
@@ -155,9 +160,7 @@ public class GuiContainerBlockBase extends GuiContainer {
 	}
 	
 	protected void backgroundObjects() {
-		for (GuiTextField field : this.textFieldList) {
-			field.drawTextBox();
-		}
+		
 	}
 	
 	protected void string(String str, int x, int y) {

@@ -19,7 +19,7 @@ public class CoreUtilHex {
 		hexFromMeta.put(1, "ff0000");
 		hexFromMeta.put(2, "00ff00");
 		hexFromMeta.put(3, "502800");
-		hexFromMeta.put(4, "000064");
+		hexFromMeta.put(4, "0000ff");
 		hexFromMeta.put(5, "640064");
 		hexFromMeta.put(6, "006464");
 		hexFromMeta.put(7, "bababa");

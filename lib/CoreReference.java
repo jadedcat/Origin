@@ -2,7 +2,7 @@ package com.countrygamer.core.lib;
 
 public class CoreReference {
 	/* Mod constants */
-	public static final String MOD_ID = "countrygamer_core";
+	public static final String MOD_ID = "core";
 	public static final String BASE_TEX = CoreReference.MOD_ID + ":";
 	public static final String MOD_NAME = "CountryGamer Core";
 	public static final String VERSION = "2.0.0";

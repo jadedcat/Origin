@@ -7,8 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import com.countrygamer.auxiliaryobjects.items.ItemInventorySack;
-
 public class InventoryItemBase implements IInventory {
 	private String							name	= "";
 	
