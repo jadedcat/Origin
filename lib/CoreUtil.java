@@ -1,7 +1,7 @@
 package com.countrygamer.core.lib;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -13,14 +13,9 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.RecipeFireworks;
-import net.minecraft.item.crafting.RecipesArmorDyes;
-import net.minecraft.item.crafting.RecipesMapCloning;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -32,8 +27,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
+import net.minecraftforge.oredict.OreDictionary;
 
 import com.countrygamer.core.Core;
 
@@ -46,6 +40,47 @@ public class CoreUtil {
 	public static String	configBlockId		= "Block IDs";
 	public static String	configAchievement	= "Achievement IDs";
 	public static String	configAddon			= "Addons";
+
+	public static final float oneSixteenth = 1.0F/16.0F;
+
+	public static HashMap<ItemStack, ItemStack> getBasicOreDict() {
+		HashMap<ItemStack, ItemStack> oreDict = new HashMap<ItemStack, ItemStack>();
+		String[] oreNames = new String[] {
+				"Coal", "Iron", "Gold", "Lapis", "Redstone",
+				"Diamond", "Emerald", "Copper", "Silver",
+				"Tin", "Bronze", "Lead"
+		};
+		oreDict.put(new ItemStack(Blocks.coal_ore, 1), new ItemStack(Items.coal, 1));
+		oreDict.put(new ItemStack(Blocks.iron_ore, 1), new ItemStack(Items.iron_ingot, 1));
+		oreDict.put(new ItemStack(Blocks.gold_ore, 1), new ItemStack(Items.gold_ingot, 1));
+		oreDict.put(new ItemStack(Blocks.diamond_ore, 1), new ItemStack(Items.diamond, 1));
+		oreDict.put(new ItemStack(Blocks.lapis_ore, 1), new ItemStack(Items.dye, 1, 4));
+		oreDict.put(new ItemStack(Blocks.redstone_ore, 1), new ItemStack(Items.redstone, 1));
+		oreDict.put(new ItemStack(Blocks.emerald_ore, 1), new ItemStack(Items.emerald, 1));
+
+		for (String oreName : oreNames) {
+			ArrayList<ItemStack> ores = OreDictionary.getOres("ore" + oreName);
+			for (ItemStack ore : ores) {
+				ArrayList<ItemStack> ingots = OreDictionary.getOres("ingot" + oreName);
+				if (!ingots.isEmpty()) {
+					oreDict.put(ore, ingots.get(0));
+				}
+			}
+		}
+
+		return oreDict;
+	}
+
+	public static HashMap<String, Integer> getCardinalByBlockSide() {
+		HashMap<String, Integer> ret = new HashMap<String, Integer>();
+		ret.put("bottom", 0);
+		ret.put("top", 1);
+		ret.put("north", 2);
+		ret.put("south", 3);
+		ret.put("west", 4);
+		ret.put("east", 5);
+		return ret;
+	}
 	
 	public static int getAndComment(Configuration config, String cate, String name, String comment,
 			int value) {
@@ -84,7 +119,6 @@ public class CoreUtil {
 	/**
 	 * Check for loaded mod
 	 * 
-	 * @param sourceModid
 	 * @param targetModid
 	 * @return
 	 */
@@ -431,7 +465,8 @@ public class CoreUtil {
 		float f = rand.nextFloat() * 0.8F + 0.1F;
 		float f1 = rand.nextFloat() * 0.8F + 0.1F;
 		EntityItem entityitem;
-		
+
+		if (!world.isRemote)
 		for (float f2 = rand.nextFloat() * 0.8F + 0.1F; itemStack.stackSize > 0; world
 				.spawnEntityInWorld(entityitem)) {
 			int k1 = rand.nextInt(21) + 10;

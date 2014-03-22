@@ -1,5 +1,6 @@
 package com.countrygamer.core.Handler;
 
+import com.countrygamer.core.Base.packet.AbstractPacket;
 import com.countrygamer.core.lib.CoreUtil;
 
 import io.netty.buffer.ByteBuf;

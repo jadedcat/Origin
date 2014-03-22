@@ -8,16 +8,22 @@ import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.config.Configuration;
 
-import com.countrygamer.core.Handler.PacketPipeline;
+import com.countrygamer.core.Base.packet.PacketPipeline;
 import com.countrygamer.core.Handler.PacketTeleport;
+import com.countrygamer.core.blocks.tile.TileEntityDiagramer;
+import com.countrygamer.core.inventory.ContainerDiagramer;
+import com.countrygamer.core.inventory.GuiDiagramer;
 import com.countrygamer.core.lib.CoreReference;
 import com.countrygamer.core.lib.CoreUtil;
 import com.countrygamer.core.proxy.ServerProxy;
@@ -29,6 +35,8 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -41,10 +49,10 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @Mod(modid = CoreReference.MOD_ID, name = CoreReference.MOD_NAME,
 		version = CoreReference.MC_VERSION)
-public class Core {
+public class Core implements IGuiHandler {
 
-	public static final Logger				log						= Logger.getLogger(CoreReference.MOD_ID);
-	@Instance("countrygamer_core")
+	public static final Logger log = Logger.getLogger(CoreReference.MOD_ID);
+	@Instance(CoreReference.MOD_ID)
 	public static Core						instance;
 	@SidedProxy(clientSide = CoreReference.CLIENT_PROXY_CLASS,
 			serverSide = CoreReference.SERVER_PROXY_CLASS)
@@ -58,11 +66,10 @@ public class Core {
 	private static ArrayList<Item>			tabItems				= new ArrayList<Item>();
 	private static ArrayList<Block>			tabBlocks				= new ArrayList<Block>();
 
-	/** Craft Smelt */
+	// Craft Smelt
 	public static boolean					netherStar;
 	public static boolean					lead;
 	public static boolean					string;
-	public static boolean					dirtCobble;
 	public static boolean					smeltFlesh;
 	public static boolean					blazeRod;
 	public static boolean					cobbleGravel, gravelSand, gsDirt;
@@ -72,6 +79,13 @@ public class Core {
 	public static boolean					spiderEye, rottenFlesh, fermSpiderEye;
 	public static boolean					sapling;
 	public static boolean					carrot, potato;
+
+	// 3D Crafter
+	public static Block diagramer;
+	public static Item moldedClay;
+	public static Item diagram;
+	public static Block diagramBlock;
+
 
 	// Mods Loaded
 	private static boolean					neiLoaded				= false;
@@ -94,6 +108,35 @@ public class Core {
 
 		proxy.registerRender();
 		proxy.registerHandler();
+		NetworkRegistry.INSTANCE.registerGuiHandler(Core.instance, Core.instance);
+
+		/*
+		TileEntity.addMapping(TileEntityDiagramer.class, CoreReference.MOD_ID + "_Diagramer");
+		Core.diagramer = new BlockDiagramer(
+				Material.rock, CoreReference.MOD_ID, "Diagramer", TileEntityDiagramer.class);
+		Core.diagramer.setHarvestLevel("pickaxe", 0);
+		Core.addBlockToTab(Core.diagramer);
+		GameRegistry.addRecipe(new ItemStack(Core.diagramer),
+				"ccc", "cwc", "ccc",
+				'c', Blocks.cobblestone,
+				'w', Blocks.crafting_table
+		);
+
+		//Core.moldedClay = new ItemMoldedClay(CoreReference.MOD_ID, "MoldedClay");
+
+		Core.diagram = new ItemDiagram(CoreReference.MOD_ID, "Diagram");
+		Core.addItemToTab(Core.diagram);
+
+		TileEntity.addMapping(TileEntityDiagram.class, CoreReference.MOD_ID + "_Diagram");
+		Core.diagramBlock = new BlockDiagram(
+				Material.rock, CoreReference.MOD_ID, "Diagram", TileEntityDiagram.class);
+		Core.diagramBlock.setHardness(0.6F);
+		Core.diagramBlock.setHarvestLevel("pickaxe", 0);
+		*/
+
+
+
+
 	}
 
 	public void config(FMLPreInitializationEvent event) {
@@ -152,9 +195,11 @@ public class Core {
 				"  x", " x ", "x  ", 'x', Items.string
 		);
 		if (Core.string) {
-			GameRegistry.addShapelessRecipe(new ItemStack(Items.string, 4),
-					Blocks.wool
-			);
+			for (int i = 0; i < 16; i++) {
+				GameRegistry.addShapelessRecipe(new ItemStack(Items.string, 4),
+						new ItemStack(Blocks.wool, 1, i)
+				);
+			}
 		}
 		if (Core.smeltFlesh)
 			GameRegistry.addSmelting(Items.rotten_flesh, new ItemStack(Items.leather, 1), 50.0F);
@@ -235,6 +280,25 @@ public class Core {
 
 					Items.spider_eye, Items.sugar, Items.redstone
 			);
+	}
+
+	@Override
+	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		TileEntity tileEnt = world.getTileEntity(x, y, z);
+		if (ID == CoreReference.diagramerGui && tileEnt instanceof TileEntityDiagramer) {
+			return new ContainerDiagramer(player.inventory, (TileEntityDiagramer)tileEnt);
+		}
+		return null;
+	}
+
+	@Override
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		TileEntity tileEnt = world.getTileEntity(x, y, z);
+		if (ID == CoreReference.diagramerGui && tileEnt instanceof TileEntityDiagramer) {
+			return new GuiDiagramer(
+					player, new ContainerDiagramer(player.inventory, (TileEntityDiagramer)tileEnt));
+		}
+		return null;
 	}
 
 	@Mod.EventHandler
@@ -357,7 +421,7 @@ public class Core {
 	 *
 	 * @version Minecraft 1.6.4
 	 * @author coolAlias
-	 * @see http://www.minecraftforum.net/topic/1891579-using-potions-in-crafting-recipes/
+	 * @see 'http://www.minecraftforum.net/topic/1891579-using-potions-in-crafting-recipes/'
 	 *
 	 */
 	public enum EnumPotionID {

@@ -14,7 +14,7 @@ public class CoreUtilHex {
 	 * @return
 	 */
 	public static double[] getColorFromDye(ItemStack itemStack) {
-		HashMap<Integer, String> hexFromMeta = new HashMap();
+		HashMap<Integer, String> hexFromMeta = new HashMap<Integer, String>();
 		hexFromMeta.put(0, "000000");
 		hexFromMeta.put(1, "ff0000");
 		hexFromMeta.put(2, "00ff00");

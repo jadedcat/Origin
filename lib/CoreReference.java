@@ -12,4 +12,7 @@ public class CoreReference {
 			+ MOD_ID + ".proxy.ServerProxy";
 	public static final String CLIENT_PROXY_CLASS = "com.countrygamer."
 			+ MOD_ID + ".proxy.ClientProxy";
+
+	public static final int diagramerGui = 0;
+
 }

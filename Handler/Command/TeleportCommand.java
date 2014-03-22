@@ -13,10 +13,10 @@ import com.countrygamer.core.lib.CoreUtil;
 
 public class TeleportCommand implements ICommand {
 
-	private List aliases;
+	private List<String> aliases;
 
 	public TeleportCommand() {
-		this.aliases = new ArrayList();
+		this.aliases = new ArrayList<String>();
 		this.aliases.add("cgctp");
 	}
 
@@ -30,6 +30,7 @@ public class TeleportCommand implements ICommand {
 		return "cgctp <playername> <dimension name> <x> <y> <z>";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List getCommandAliases() {
 		return this.aliases;
@@ -79,6 +80,7 @@ public class TeleportCommand implements ICommand {
 		return true;
 	}
 
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public List addTabCompletionOptions(ICommandSender icommandsender,
 			String[] astring) {
