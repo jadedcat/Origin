@@ -10,8 +10,17 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityBase extends TileEntity {
 
 	private Class<? extends TileEntitySpecialRenderer> specialRendererClass = null;
+	private boolean hasPower = false; 
 
 	public TileEntityBase() {
+	}
+
+	public void setPowered(boolean hasPower) {
+		this.hasPower = hasPower;
+	}
+	
+	public boolean isPowered() {
+		return this.hasPower;
 	}
 	
 	@Override
@@ -33,16 +42,19 @@ public class TileEntityBase extends TileEntity {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tagCom) {
-		super.readFromNBT(tagCom);
+	public void writeToNBT(NBTTagCompound tagCom) {
+		super.writeToNBT(tagCom);
+		tagCom.setBoolean("base_hasPower", this.hasPower);
 		
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound tagCom) {
-		super.writeToNBT(tagCom);
+	public void readFromNBT(NBTTagCompound tagCom) {
+		super.readFromNBT(tagCom);
+		this.hasPower = tagCom.getBoolean("base_hasPower");
 		
 	}
+	
 
 	protected void setSpecialRendererClass(Class<? extends TileEntitySpecialRenderer> clazz) {
 		this.specialRendererClass = clazz;
