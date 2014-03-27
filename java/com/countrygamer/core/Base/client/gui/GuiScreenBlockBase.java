@@ -20,17 +20,17 @@ import com.countrygamer.core.lib.CoreReference;
 
 public class GuiScreenBlockBase extends GuiScreen {
 	
-	public TileEntityBase			tileEnt;
+	public TileEntityBase tileEnt;
 	
-	protected int					xSize			= 176;
-	protected int					ySize			= 166;
-	protected int					leftOfGui		= (this.width - this.xSize) / 2;
-	protected int					topOfGui		= (this.height - this.ySize) / 2;
-	protected final int				grayTextColor	= 4210752;
-	private String					title			= "";
-	private ResourceLocation		bkgdTex			= null;
+	protected int xSize = 176;
+	protected int ySize = 166;
+	protected int leftOfGui = (this.width - this.xSize) / 2;
+	protected int topOfGui = (this.height - this.ySize) / 2;
+	protected final int grayTextColor = 4210752;
+	private String title = "";
+	private ResourceLocation bkgdTex = null;
 	
-	private ArrayList<GuiTextField>	textFieldList	= new ArrayList<GuiTextField>();
+	private ArrayList<GuiTextField> textFieldList = new ArrayList<GuiTextField>();
 	
 	public GuiScreenBlockBase(TileEntityBase tileEnt) {
 		super();
@@ -52,6 +52,11 @@ public class GuiScreenBlockBase extends GuiScreen {
 	@Override
 	protected void actionPerformed(GuiButton gB) {
 		int id = gB.id;
+		this.buttonPress(id);
+	}
+	
+	protected void buttonPress(int id) {
+		
 	}
 	
 	protected void setupTextField(GuiTextField textField, int maxStrLength) {
@@ -106,7 +111,7 @@ public class GuiScreenBlockBase extends GuiScreen {
 	public boolean doesGuiPauseGame() {
 		return false;
 	}
-
+	
 	@Override
 	public void onGuiClosed() {
 		super.onGuiClosed();
