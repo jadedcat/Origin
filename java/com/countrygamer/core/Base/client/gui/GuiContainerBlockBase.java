@@ -22,17 +22,17 @@ import com.countrygamer.core.lib.CoreReference;
 
 public class GuiContainerBlockBase extends GuiContainer {
 	
-	public TileEntityInventoryBase		tileEnt;
+	public TileEntityInventoryBase tileEnt;
 	
-	protected int						leftOfGui		= (this.width - this.xSize) / 2;
-	protected int						topOfGui		= (this.height - this.ySize) / 2;
-	protected final int					grayTextColor	= 4210752;
-	protected String					title			= "";
-	protected int						titleX, titleY;
-	protected ResourceLocation			bkgdTex			= null;
+	protected int leftOfGui = (this.width - this.xSize) / 2;
+	protected int topOfGui = (this.height - this.ySize) / 2;
+	protected final int grayTextColor = 4210752;
+	protected String title = "";
+	protected int titleX, titleY;
+	protected ResourceLocation bkgdTex = null;
 	
-	protected final EntityPlayer		thePlayer;
-	protected ArrayList<GuiTextField>	textFieldList	= new ArrayList<GuiTextField>();
+	protected final EntityPlayer thePlayer;
+	protected ArrayList<GuiTextField> textFieldList = new ArrayList<GuiTextField>();
 	
 	public GuiContainerBlockBase(EntityPlayer player, TileEntityInventoryBase tileEnt) {
 		this(player, new ContainerBlockBase(player.inventory, tileEnt));
@@ -42,12 +42,13 @@ public class GuiContainerBlockBase extends GuiContainer {
 		super(container);
 		this.thePlayer = player;
 		this.tileEnt = container.tileEnt;
-		this.setupGui("", new ResourceLocation(CoreReference.MOD_ID, "textures/gui/blank.png"));
+		this.setupGui("", null);
 	}
 	
 	protected void setupGui(String title, ResourceLocation backgroundTexture) {
 		this.title = title;
-		this.bkgdTex = backgroundTexture;
+		this.bkgdTex = backgroundTexture != null ? backgroundTexture : new ResourceLocation(
+				CoreReference.MOD_ID, "textures/gui/blank.png");
 	}
 	
 	@Override
