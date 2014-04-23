@@ -15,8 +15,8 @@ import org.apache.logging.log4j.LogManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import com.countrygamer.core.Base.block.tiles.TileEntityBase;
-import com.countrygamer.core.lib.CoreReference;
+import com.countrygamer.core.Base.common.tileentity.TileEntityBase;
+import com.countrygamer.core.common.lib.CoreReference;
 
 public class GuiScreenBlockBase extends GuiScreen {
 	

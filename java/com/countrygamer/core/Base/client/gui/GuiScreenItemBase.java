@@ -15,8 +15,8 @@ import org.apache.logging.log4j.LogManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import com.countrygamer.core.Base.inventory.InventoryItemBase;
-import com.countrygamer.core.lib.CoreReference;
+import com.countrygamer.core.Base.common.inventory.InventoryItemBase;
+import com.countrygamer.core.common.lib.CoreReference;
 
 public class GuiScreenItemBase extends GuiScreen {
 	

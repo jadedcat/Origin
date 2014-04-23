@@ -15,10 +15,10 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-import com.countrygamer.core.Core;
 import com.countrygamer.core.Base.client.Render.TileEntityRendererBase;
-import com.countrygamer.core.CraftingSystem.DiagramRecipes;
-import com.countrygamer.core.blocks.tile.TileEntityDiagram;
+import com.countrygamer.core.common.Core;
+import com.countrygamer.core.common.craftingsystem.DiagramRecipes;
+import com.countrygamer.core.common.tileentity.TileEntityDiagram;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

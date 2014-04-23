@@ -16,9 +16,9 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.util.ResourceLocation;
 
-import com.countrygamer.core.Base.block.tiles.TileEntityInventoryBase;
-import com.countrygamer.core.Base.inventory.ContainerBlockBase;
-import com.countrygamer.core.lib.CoreReference;
+import com.countrygamer.core.Base.common.inventory.ContainerBlockBase;
+import com.countrygamer.core.Base.common.tileentity.TileEntityInventoryBase;
+import com.countrygamer.core.common.lib.CoreReference;
 
 public class GuiContainerBlockBase extends GuiContainer {
 	
