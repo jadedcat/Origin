@@ -66,6 +66,7 @@ public class GuiContainerItemBase extends GuiContainer {
 	@Override
 	protected void actionPerformed(GuiButton gB) {
 		int id = gB.id;
+		
 	}
 	
 	protected void setupTextField(GuiTextField textField, int maxStrLength) {

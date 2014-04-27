@@ -2,6 +2,8 @@ package com.countrygamer.core.Base.common.item;
 
 import java.util.List;
 
+import com.countrygamer.core.common.lib.UtilString;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,7 +16,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBase extends Item {
 	
-	public String	modid;
+	public String modid;
 	
 	public ItemBase(String modid, String name) {
 		super();
@@ -50,19 +52,29 @@ public class ItemBase extends Item {
 	public int getMaxStackSize() {
 		return this.maxStackSize;
 	}
-
+	
 	@Override
 	public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
 	}
-
+	
 	@Override
 	public void onUpdate(ItemStack itemStack, World world, Entity entity, int par4,
 			boolean isCurrentItem) {
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("rawtypes")
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
+		if (UtilString.isShiftKeyDown()) {
+			list = this.addInformationWithShift(itemStack, player, list, par4);
+		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@SideOnly(Side.CLIENT)
+	public List addInformationWithShift(ItemStack itemStack, EntityPlayer player, List list,
+			boolean par4) {
+		return list;
 	}
 	
 }

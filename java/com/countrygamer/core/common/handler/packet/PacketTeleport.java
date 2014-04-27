@@ -33,6 +33,7 @@ public class PacketTeleport extends AbstractPacket {
 		buffer.writeDouble(coords[0]);
 		buffer.writeDouble(coords[1]);
 		buffer.writeDouble(coords[2]);
+		buffer.writeBoolean(this.particles);
 		
 	}
 
@@ -42,17 +43,18 @@ public class PacketTeleport extends AbstractPacket {
 		this.coords[0] = buffer.readDouble();
 		this.coords[1] = buffer.readDouble();
 		this.coords[2] = buffer.readDouble();
+		this.particles = buffer.readBoolean();
 		
 	}
 
 	@Override
 	public void handleClientSide(EntityPlayer player) {
-		System.out.println("Client PacketTeleport Recieved");
+		//System.out.println("Client PacketTeleport Recieved");
 	}
 
 	@Override
 	public void handleServerSide(EntityPlayer player) {
-		System.out.println("Server PacketTeleport Recieved");
+		//System.out.println("Server PacketTeleport Recieved");
 		CoreUtil.teleportPlayerToDimension(player, this.dimId);
 		CoreUtil.teleportPlayer(player, coords[0], coords[1], coords[2], fallDamage, particles);
 	}

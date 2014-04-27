@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 
 import com.countrygamer.core.Base.common.tileentity.TileEntityBase;
 import com.countrygamer.core.Base.common.tileentity.TileEntityInventoryBase;
-import com.countrygamer.core.common.Core;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;

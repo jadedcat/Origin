@@ -51,7 +51,7 @@ public class GuiScreenItemBase extends GuiScreen {
 	
 	@Override
 	protected void actionPerformed(GuiButton gB) {
-		int id = gB.id;
+		//int id = gB.id;
 	}
 	
 	protected void setupTextField(GuiTextField textField, int maxStrLength) {

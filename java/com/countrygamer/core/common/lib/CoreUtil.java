@@ -25,52 +25,57 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.oredict.OreDictionary;
-
-import com.countrygamer.core.common.Core;
-
 import cpw.mods.fml.common.Loader;
 
 public class CoreUtil {
 	
-	public static String	configGeneral		= "General";
-	public static String	configItemId		= "Item IDs";
-	public static String	configBlockId		= "Block IDs";
-	public static String	configAchievement	= "Achievement IDs";
-	public static String	configAddon			= "Addons";
-
-	public static final float oneSixteenth = 1.0F/16.0F;
-
+	public static String configGeneral = "General";
+	public static String configItemId = "Item IDs";
+	public static String configBlockId = "Block IDs";
+	public static String configAchievement = "Achievement IDs";
+	public static String configAddon = "Addons";
+	
+	public static final float oneSixteenth = 1.0F / 16.0F;
+	
 	public static HashMap<ItemStack, ItemStack> getBasicOreDict() {
 		HashMap<ItemStack, ItemStack> oreDict = new HashMap<ItemStack, ItemStack>();
 		String[] oreNames = new String[] {
-				"Coal", "Iron", "Gold", "Lapis", "Redstone",
-				"Diamond", "Emerald", "Copper", "Silver",
-				"Tin", "Bronze", "Lead"
+				"Coal", "Iron", "Gold", "Lapis", "Redstone", "Diamond", "Emerald",
+				"Copper", "Silver", "Tin", "Bronze", "Lead"
 		};
 		oreDict.put(new ItemStack(Blocks.coal_ore, 1), new ItemStack(Items.coal, 1));
-		oreDict.put(new ItemStack(Blocks.iron_ore, 1), new ItemStack(Items.iron_ingot, 1));
-		oreDict.put(new ItemStack(Blocks.gold_ore, 1), new ItemStack(Items.gold_ingot, 1));
-		oreDict.put(new ItemStack(Blocks.diamond_ore, 1), new ItemStack(Items.diamond, 1));
-		oreDict.put(new ItemStack(Blocks.lapis_ore, 1), new ItemStack(Items.dye, 1, 4));
-		oreDict.put(new ItemStack(Blocks.redstone_ore, 1), new ItemStack(Items.redstone, 1));
-		oreDict.put(new ItemStack(Blocks.emerald_ore, 1), new ItemStack(Items.emerald, 1));
-
+		oreDict.put(new ItemStack(Blocks.iron_ore, 1), new ItemStack(
+				Items.iron_ingot, 1));
+		oreDict.put(new ItemStack(Blocks.gold_ore, 1), new ItemStack(
+				Items.gold_ingot, 1));
+		oreDict.put(new ItemStack(Blocks.diamond_ore, 1), new ItemStack(
+				Items.diamond, 1));
+		oreDict.put(new ItemStack(Blocks.lapis_ore, 1), new ItemStack(Items.dye, 1,
+				4));
+		oreDict.put(new ItemStack(Blocks.redstone_ore, 1), new ItemStack(
+				Items.redstone, 1));
+		oreDict.put(new ItemStack(Blocks.emerald_ore, 1), new ItemStack(
+				Items.emerald, 1));
+		
 		for (String oreName : oreNames) {
 			ArrayList<ItemStack> ores = OreDictionary.getOres("ore" + oreName);
 			for (ItemStack ore : ores) {
-				ArrayList<ItemStack> ingots = OreDictionary.getOres("ingot" + oreName);
+				ArrayList<ItemStack> ingots = OreDictionary.getOres("ingot"
+						+ oreName);
 				if (!ingots.isEmpty()) {
 					oreDict.put(ore, ingots.get(0));
 				}
 			}
 		}
-
+		
 		return oreDict;
 	}
-
+	
 	public static HashMap<String, Integer> getCardinalByBlockSide() {
 		HashMap<String, Integer> ret = new HashMap<String, Integer>();
 		ret.put("bottom", 0);
@@ -82,22 +87,22 @@ public class CoreUtil {
 		return ret;
 	}
 	
-	public static int getAndComment(Configuration config, String cate, String name, String comment,
-			int value) {
+	public static int getAndComment(Configuration config, String cate, String name,
+			String comment, int value) {
 		Property property = config.get(cate, name, value);
 		if (!comment.equals("")) property.comment = comment;
 		return property.getInt();
 	}
 	
-	public static String getAndComment(Configuration config, String cate, String name,
-			String comment, String value) {
+	public static String getAndComment(Configuration config, String cate,
+			String name, String comment, String value) {
 		Property property = config.get(cate, name, value);
 		if (!comment.equals("")) property.comment = comment;
 		return property.getString();
 	}
 	
-	public static boolean getAndComment(Configuration config, String cate, String name,
-			String comment, boolean value) {
+	public static boolean getAndComment(Configuration config, String cate,
+			String name, String comment, boolean value) {
 		Property property = config.get(cate, name, value);
 		if (!comment.equals("")) property.comment = comment;
 		return property.getBoolean(false);
@@ -145,25 +150,38 @@ public class CoreUtil {
 	 * @param player
 	 * @param dimensionID
 	 */
-	public static boolean teleportPlayerToDimension(EntityPlayer player, int dimensionID) {
+	public static boolean teleportPlayerToDimension(EntityPlayer player,
+			int dimensionID) {
 		if (player.dimension != dimensionID) {
+			
 			// Side side = FMLCommonHandler.instance().getEffectiveSide();
 			// if (side == Side.SERVER) {
 			if (player instanceof EntityPlayerMP) {
 				WorldServer ws = (WorldServer) player.worldObj;
 				EntityPlayerMP playerMP = (EntityPlayerMP) player;
 				if (player.ridingEntity == null && player.riddenByEntity == null) {
-					playerMP.mcServer.getConfigurationManager().transferPlayerToDimension(playerMP,
-							dimensionID, new TeleporterCore(ws));
+					EnderTeleportEvent event = new EnderTeleportEvent(playerMP,
+							playerMP.posX, playerMP.posY, playerMP.posZ, 0.0F);
+					if (MinecraftForge.EVENT_BUS.post(event)) return false;
+					
+					playerMP.mcServer.getConfigurationManager()
+							.transferPlayerToDimension(playerMP, dimensionID,
+									new TeleporterCore(ws));
 					if (player.dimension == dimensionID) return true;
 				}
-				else if (Core.DEBUG) Core.log.info("Riding entity stuff");
+				else {
+					// if (Core.DEBUG) Core.log.info("Riding entity stuff");
+				}
 			}
-			else if (Core.DEBUG) Core.log.info("Not PlayerMP");
+			else {
+				// if (Core.DEBUG) Core.log.info("Not PlayerMP");
+			}
 			// } else if (WeepingAngelsMod.DEBUG)
 			// WeepingAngelsMod.log.info("Side Not Server");
 		}
-		else if (Core.DEBUG) Core.log.info("Player and destination dim are equal");
+		else {
+			// if (Core.DEBUG) Core.log.info("Player and destination dim are equal");
+		}
 		return false;
 	}
 	
@@ -180,9 +198,12 @@ public class CoreUtil {
 	 * @param fallDamage
 	 * @param particles
 	 */
-	public static void teleportPlayer(EntityPlayer player, double x, double y, double z,
-			boolean fallDamage, boolean particles) {
+	public static void teleportPlayer(EntityPlayer player, double x, double y,
+			double z, boolean fallDamage, boolean particles) {
 		if (!fallDamage) player.fallDistance = 0.0F;
+		
+		EnderTeleportEvent event = new EnderTeleportEvent(player, x, y, z, 0.0F);
+		if (MinecraftForge.EVENT_BUS.post(event)) return;
 		
 		// Set the location of the player, on the final position.
 		player.setPositionAndUpdate(x, y, z);
@@ -200,12 +221,12 @@ public class CoreUtil {
 				float f = (rand.nextFloat() - 0.5F) * 0.2F;
 				float f1 = (rand.nextFloat() - 0.5F) * 0.2F;
 				float f2 = (rand.nextFloat() - 0.5F) * 0.2F;
-				double d7 = d3 + (player.posX - d3) * d6 + (rand.nextDouble() - 0.5D)
-						* (double) player.width * 2D;
+				double d7 = d3 + (player.posX - d3) * d6
+						+ (rand.nextDouble() - 0.5D) * (double) player.width * 2D;
 				double d8 = d4 + (player.posY - d4) * d6 + rand.nextDouble()
 						* (double) player.height;
-				double d9 = d5 + (player.posZ - d5) * d6 + (rand.nextDouble() - 0.5D)
-						* (double) player.width * 2D;
+				double d9 = d5 + (player.posZ - d5) * d6
+						+ (rand.nextDouble() - 0.5D) * (double) player.width * 2D;
 				player.worldObj.spawnParticle("portal", d3, d4, d5, d7, d8, d9);
 				
 			}
@@ -225,12 +246,14 @@ public class CoreUtil {
 	 * @param fallDamage
 	 * @param particles
 	 */
-	public static void teleportPlayer(EntityPlayer player, int minimumRange, int maximumRange,
-			double centerX, double centerZ, boolean fallDamage, boolean particles) {
-		double[] newPos = CoreUtil.teleportBase(player.worldObj, player, minimumRange,
-				maximumRange, centerX, centerZ);
+	public static void teleportPlayer(EntityPlayer player, int minimumRange,
+			int maximumRange, double centerX, double centerZ, boolean fallDamage,
+			boolean particles) {
+		double[] newPos = CoreUtil.teleportBase(player.worldObj, player,
+				minimumRange, maximumRange, centerX, centerZ);
 		// newPos[1] -= 2;
-		CoreUtil.teleportPlayer(player, newPos[0], newPos[1], newPos[2], fallDamage, particles);
+		CoreUtil.teleportPlayer(player, newPos[0], newPos[1], newPos[2], fallDamage,
+				particles);
 	}
 	
 	/**
@@ -247,12 +270,14 @@ public class CoreUtil {
 	 * @param z
 	 * @return
 	 */
-	public static double[] teleportBase(World world, EntityPlayer player, int minimumRange,
-			int maximumRange, double x, double z) {
+	public static double[] teleportBase(World world, EntityPlayer player,
+			int minimumRange, int maximumRange, double x, double z) {
 		Random rand = new Random();
 		int rangeDifference = 2 * (maximumRange - minimumRange);
-		int offsetX = rand.nextInt(rangeDifference) - rangeDifference / 2 + minimumRange;
-		int offsetZ = rand.nextInt(rangeDifference) - rangeDifference / 2 + minimumRange;
+		int offsetX = rand.nextInt(rangeDifference) - rangeDifference / 2
+				+ minimumRange;
+		int offsetZ = rand.nextInt(rangeDifference) - rangeDifference / 2
+				+ minimumRange;
 		
 		// Center the values on a block, to make the boundingbox calculations
 		// match less.
@@ -273,13 +298,14 @@ public class CoreUtil {
 		
 		// Use a testing boundingBox, so we don't have to move the player around
 		// to test if it is a valid location
-		AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(bbMinX, bbMinY, bbMinZ, bbMaxX,
-				bbMaxY, bbMaxZ);
+		AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(bbMinX, bbMinY,
+				bbMinZ, bbMaxX, bbMaxY, bbMaxZ);
 		
 		// Make sure you are trying to teleport to a loaded chunk.
 		Chunk teleportChunk = world.getChunkFromBlockCoords((int) newX, (int) newZ);
 		if (!teleportChunk.isChunkLoaded) {
-			world.getChunkProvider().loadChunk(teleportChunk.xPosition, teleportChunk.zPosition);
+			world.getChunkProvider().loadChunk(teleportChunk.xPosition,
+					teleportChunk.zPosition);
 		}
 		
 		// Move up, until nothing intersects the player anymore
@@ -320,11 +346,12 @@ public class CoreUtil {
 		// My advice: Dont encounter Weeping Angels in seas of lava
 		// NOTE: This can theoretically still teleport you to a block of lava
 		// with air underneath, but gladly lava spreads ;)
-		Block block = world.getBlock(MathHelper.floor_double(newX), MathHelper.floor_double(newY),
-				MathHelper.floor_double(newZ));
-		if (block == Blocks.lava || block == Blocks.flowing_lava || block == Blocks.water
-				|| block == Blocks.flowing_water) {
-			return CoreUtil.teleportBase(world, player, minimumRange, maximumRange, x, z);
+		Block block = world.getBlock(MathHelper.floor_double(newX),
+				MathHelper.floor_double(newY), MathHelper.floor_double(newZ));
+		if (block == Blocks.lava || block == Blocks.flowing_lava
+				|| block == Blocks.water || block == Blocks.flowing_water) {
+			return CoreUtil.teleportBase(world, player, minimumRange, maximumRange,
+					x, z);
 			
 		}
 		return new double[] {
@@ -343,16 +370,18 @@ public class CoreUtil {
 			Vec3 vec3 = player.getPosition(1.0F);
 			vec3.yCoord += 1.0D;
 			Vec3 lookVec = player.getLook(1.0F);
-			Vec3 addedVector = vec3.addVector(lookVec.xCoord * 1000.0D, lookVec.yCoord * 1000.0D,
-					lookVec.zCoord * 1000.0D);
-			MovingObjectPosition movingObjPos = world.func_147447_a(vec3, addedVector, true, true,
-					false);
+			Vec3 addedVector = vec3.addVector(lookVec.xCoord * 1000.0D,
+					lookVec.yCoord * 1000.0D, lookVec.zCoord * 1000.0D);
+			MovingObjectPosition movingObjPos = world.func_147447_a(vec3,
+					addedVector, true, true, false);
 			
-			if ((movingObjPos != null) && (movingObjPos.typeOfHit == MovingObjectType.BLOCK)) {
+			if ((movingObjPos != null)
+					&& (movingObjPos.typeOfHit == MovingObjectType.BLOCK)) {
 				int x = movingObjPos.blockX;
 				int y = movingObjPos.blockY;
 				int z = movingObjPos.blockZ;
-				CoreUtil.teleportPlayer(player, x + 0.5, y + 1, z + 0.5, false, false);
+				CoreUtil.teleportPlayer(player, x + 0.5, y + 1, z + 0.5, false,
+						false);
 			}
 		}
 	}
@@ -393,12 +422,12 @@ public class CoreUtil {
 	 * Random()).nextInt(100); if (chance <= 45) { meta = 1; if (chance <= 10)
 	 * meta = 2; } return meta; }
 	 */
-	public static boolean breakBlockAsPlayer(World world, EntityPlayer player, int x, int y, int z,
-			Block block) {
+	public static boolean breakBlockAsPlayer(World world, EntityPlayer player,
+			int x, int y, int z, Block block) {
 		if (player == null || world == null) return false;
 		WorldClient worldclient = Minecraft.getMinecraft().theWorld;
-		worldclient.playAuxSFX(2001, x, y, z,
-				Block.getIdFromBlock(block) + (worldclient.getBlockMetadata(x, y, z) << 12));
+		worldclient.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block)
+				+ (worldclient.getBlockMetadata(x, y, z) << 12));
 		
 		int meta = world.getBlockMetadata(x, y, z);
 		world.setBlockToAir(x, y, z);
@@ -433,7 +462,8 @@ public class CoreUtil {
 	 * @return
 	 */
 	public static int getDirection(EntityPlayer player) {
-		return MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		return MathHelper
+				.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 	}
 	
 	/**
@@ -445,7 +475,8 @@ public class CoreUtil {
 	 * @param y
 	 * @param z
 	 */
-	public static void dropItemStack(World world, ItemStack itemStack, int x, int y, int z) {
+	public static void dropItemStack(World world, ItemStack itemStack, int x, int y,
+			int z) {
 		dropItemStack(world, itemStack, x, y, z, null);
 	}
 	
@@ -459,34 +490,36 @@ public class CoreUtil {
 	 * @param z
 	 * @param tagCom
 	 */
-	public static void dropItemStack(World world, ItemStack itemStack, int x, int y, int z,
-			NBTTagCompound tagCom) {
+	public static void dropItemStack(World world, ItemStack itemStack, int x, int y,
+			int z, NBTTagCompound tagCom) {
 		Random rand = new Random();
 		float f = rand.nextFloat() * 0.8F + 0.1F;
 		float f1 = rand.nextFloat() * 0.8F + 0.1F;
 		EntityItem entityitem;
-
+		
 		if (!world.isRemote)
-		for (float f2 = rand.nextFloat() * 0.8F + 0.1F; itemStack.stackSize > 0; world
-				.spawnEntityInWorld(entityitem)) {
-			int k1 = rand.nextInt(21) + 10;
-			
-			if (k1 > itemStack.stackSize) {
-				k1 = itemStack.stackSize;
+			for (float f2 = rand.nextFloat() * 0.8F + 0.1F; itemStack.stackSize > 0; world
+					.spawnEntityInWorld(entityitem)) {
+				int k1 = rand.nextInt(21) + 10;
+				
+				if (k1 > itemStack.stackSize) {
+					k1 = itemStack.stackSize;
+				}
+				
+				itemStack.stackSize -= k1;
+				ItemStack itemstack = new ItemStack(itemStack.getItem(), k1,
+						itemStack.getItemDamage());
+				if (tagCom != null) {
+					itemstack.setTagCompound((NBTTagCompound) tagCom.copy());
+				}
+				entityitem = new EntityItem(world, (double) ((float) x + f),
+						(double) ((float) y + f1), (double) ((float) z + f2),
+						itemstack);
+				float f3 = 0.05F;
+				entityitem.motionX = (double) ((float) rand.nextGaussian() * f3);
+				entityitem.motionY = (double) ((float) rand.nextGaussian() * f3 + 0.2F);
+				entityitem.motionZ = (double) ((float) rand.nextGaussian() * f3);
 			}
-			
-			itemStack.stackSize -= k1;
-			ItemStack itemstack = new ItemStack(itemStack.getItem(), k1, itemStack.getItemDamage());
-			if (tagCom != null) {
-				itemstack.setTagCompound((NBTTagCompound) tagCom.copy());
-			}
-			entityitem = new EntityItem(world, (double) ((float) x + f), (double) ((float) y + f1),
-					(double) ((float) z + f2), itemstack);
-			float f3 = 0.05F;
-			entityitem.motionX = (double) ((float) rand.nextGaussian() * f3);
-			entityitem.motionY = (double) ((float) rand.nextGaussian() * f3 + 0.2F);
-			entityitem.motionZ = (double) ((float) rand.nextGaussian() * f3);
-		}
 	}
 	
 	public static boolean chance(int percent) {
@@ -500,7 +533,8 @@ public class CoreUtil {
 	 * @param itemStack
 	 * @return
 	 */
-	public static float getGhostItemScaleFactor(RenderItem itemRender, ItemStack itemStack) {
+	public static float getGhostItemScaleFactor(RenderItem itemRender,
+			ItemStack itemStack) {
 		float scaleFactor = 1.0F;
 		
 		if (itemStack != null) {

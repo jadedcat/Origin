@@ -57,7 +57,7 @@ public class GuiButtonArrow extends GuiButton {
 			if (this.buttonType == ButtonType.LEFT) v += 20;
 			if (this.buttonType == ButtonType.RIGHT) v += 35;
 			
-			int offset = this.getHoverState(flag);
+			//int offset = this.getHoverState(flag);
 			// 0 disabled
 			// 1 not hover
 			// 2 hover
@@ -66,4 +66,5 @@ public class GuiButtonArrow extends GuiButton {
 					u + (this.getHoverState(flag) * 15), v, this.width, this.height);
 		}
 	}
+	
 }

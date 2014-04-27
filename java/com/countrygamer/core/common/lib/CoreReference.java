@@ -9,9 +9,9 @@ public class CoreReference {
 	public static final String MC_VERSION = "1.7.2";
 	public static final String CHANNEL_NAME = MOD_ID;
 	public static final String SERVER_PROXY_CLASS = "com.countrygamer."
-			+ MOD_ID + ".proxy.ServerProxy";
+			+ MOD_ID + ".common.ServerProxy";
 	public static final String CLIENT_PROXY_CLASS = "com.countrygamer."
-			+ MOD_ID + ".proxy.ClientProxy";
+			+ MOD_ID + ".client.ClientProxy";
 
 	public static final int diagramerGui = 0;
 

@@ -3,6 +3,7 @@ package com.countrygamer.core.Base.client.gui;
 import io.netty.buffer.Unpooled;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.lwjgl.input.Keyboard;
@@ -14,6 +15,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 
 import com.countrygamer.core.Base.common.inventory.ContainerBlockBase;
@@ -169,6 +171,17 @@ public class GuiContainerBlockBase extends GuiContainer {
 	
 	protected void string(String str, int x, int y, int color) {
 		this.fontRendererObj.drawString(str, x, y, color);
+	}
+	
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected void renderHoverTip(List hoverInfo, int mouseX, int mouseY) {
+		for (int k = 0; k < hoverInfo.size(); ++k) {
+			hoverInfo.set(k, EnumChatFormatting.GRAY + (String) hoverInfo.get(k));
+		}
+		
+		this.func_146283_a(hoverInfo, mouseX, mouseY);
+		drawHoveringText(hoverInfo, mouseX, mouseY, this.fontRendererObj);
 	}
 	
 }

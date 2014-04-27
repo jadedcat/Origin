@@ -21,18 +21,17 @@ import net.minecraftforge.common.config.Configuration;
 
 import com.countrygamer.core.Base.common.packet.PacketPipeline;
 import com.countrygamer.core.common.handler.packet.PacketTeleport;
+import com.countrygamer.core.common.handler.packet.PacketUpdateRedstoneState;
 import com.countrygamer.core.common.inventory.ContainerDiagramer;
 import com.countrygamer.core.common.inventory.GuiDiagramer;
 import com.countrygamer.core.common.lib.CoreReference;
 import com.countrygamer.core.common.lib.CoreUtil;
 import com.countrygamer.core.common.tileentity.TileEntityDiagramer;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
@@ -41,7 +40,6 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import cpw.mods.fml.server.FMLServerHandler;
 
 /**
  * Mod class for the basic mod CountryGamer_Core
@@ -94,7 +92,7 @@ public class Core implements IGuiHandler {
 	private static boolean morphLoaded = false;
 	
 	// Packet
-	public static final PacketPipeline packetPipelineTeleport = new PacketPipeline();
+	public static final PacketPipeline packetChannel = new PacketPipeline();
 	
 	@Mod.EventHandler
 	public void onServerStarting(FMLServerStartingEvent event) {
@@ -284,8 +282,9 @@ public class Core implements IGuiHandler {
 	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		Core.packetPipelineTeleport.initalise("CountryGamerCore");
-		Core.packetPipelineTeleport.registerPacket(PacketTeleport.class);
+		Core.packetChannel.initalise("CountryGamerCore");
+		Core.packetChannel.registerPacket(PacketTeleport.class);
+		Core.packetChannel.registerPacket(PacketUpdateRedstoneState.class);
 		
 		// Ignore all missing blocks and items
 		// FMLClientHandler.instance().setDefaultMissingAction(FMLMissingMappingsEvent.Action.WARN);
@@ -297,7 +296,7 @@ public class Core implements IGuiHandler {
 	
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		Core.packetPipelineTeleport.postInitialise();
+		Core.packetChannel.postInitialise();
 		
 		boolean misc = CoreUtil.isModLoaded("misc");
 		boolean pepc = CoreUtil.isModLoaded("CountryGamer_PEforPC");
