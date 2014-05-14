@@ -1,4 +1,4 @@
-package com.countrygamer.core.common.lib;
+package com.countrygamer.countrygamercore.lib;
 
 import com.countrygamer.core.Base.common.tileentity.TileEntityInventoryBase;
 

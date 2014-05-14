@@ -2,7 +2,7 @@ package com.countrygamer.core.Base.common.item;
 
 import java.util.List;
 
-import com.countrygamer.core.common.lib.UtilString;
+import com.countrygamer.countrygamercore.lib.UtilString;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

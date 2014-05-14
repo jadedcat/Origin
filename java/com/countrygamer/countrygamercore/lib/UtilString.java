@@ -1,4 +1,4 @@
-package com.countrygamer.core.common.lib;
+package com.countrygamer.countrygamercore.lib;
 
 import org.lwjgl.input.Keyboard;
 

@@ -1,7 +1,7 @@
-package com.countrygamer.core.common.handler.packet;
+package com.countrygamer.countrygamercore.common.handler.packet;
 
 import com.countrygamer.core.Base.common.packet.AbstractPacket;
-import com.countrygamer.core.common.lib.CoreUtil;
+import com.countrygamer.countrygamercore.lib.CoreUtil;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

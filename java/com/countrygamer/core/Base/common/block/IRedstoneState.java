@@ -1,6 +1,6 @@
 package com.countrygamer.core.Base.common.block;
 
-import com.countrygamer.core.common.lib.RedstoneState;
+import com.countrygamer.countrygamercore.lib.RedstoneState;
 
 public interface IRedstoneState {
 		

@@ -1,4 +1,4 @@
-package com.countrygamer.core.common.handler.packet;
+package com.countrygamer.countrygamercore.common.handler.packet;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -8,8 +8,8 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.countrygamer.core.Base.common.block.IRedstoneState;
 import com.countrygamer.core.Base.common.packet.AbstractPacket;
-import com.countrygamer.core.common.Core;
-import com.countrygamer.core.common.lib.RedstoneState;
+import com.countrygamer.countrygamercore.common.Core;
+import com.countrygamer.countrygamercore.lib.RedstoneState;
 
 public class PacketUpdateRedstoneState extends AbstractPacket {
 	
@@ -56,11 +56,11 @@ public class PacketUpdateRedstoneState extends AbstractPacket {
 	}
 	
 	private void passStateToIRedstoneState(EntityPlayer player) {
-		Core.log.info("Recieved Redstone packet on " + (player.worldObj.isRemote ? "Client" : "Server"));
+		Core.logger.info("Recieved Redstone packet on " + (player.worldObj.isRemote ? "Client" : "Server"));
 		TileEntity tileEnt = player.worldObj.getTileEntity(x, y, z);
 		
 		if (tileEnt != null && tileEnt instanceof IRedstoneState) {
-			Core.log.info("Succesfully saved redstone");
+			Core.logger.info("Succesfully saved redstone");
 			((IRedstoneState)tileEnt).setRedstoneState(this.redstoneState);
 			
 			Block block = player.worldObj.getBlock(x, y, z);

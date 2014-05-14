@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import com.countrygamer.core.common.lib.CoreReference;
-import com.countrygamer.core.common.lib.RedstoneState;
+import com.countrygamer.countrygamercore.lib.RedstoneState;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

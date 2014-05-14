@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.countrygamer.core.Base.common.item.ItemBase;
-import com.countrygamer.core.common.Core;
+import com.countrygamer.core.common.Core_Depreciated;
 import com.countrygamer.core.common.tileentity.TileEntityDiagram;
 
 /**
@@ -21,7 +21,7 @@ public class ItemDiagram extends ItemBase {
 
 	public ItemDiagram (String modid, String name) {
 		super(modid, name);
-		this.block = Core.diagramBlock;
+		this.block = Core_Depreciated.diagramBlock;
 	}
 
 	@Override
@@ -127,7 +127,7 @@ public class ItemDiagram extends ItemBase {
 
 						}
 					}
-					else Core.log.info(tEnt == null ? "Null tile ent" : "Not TileEntityDiagram");
+					else Core_Depreciated.log.info(tEnt == null ? "Null tile ent" : "Not TileEntityDiagram");
 
 					--itemStack.stackSize;
 				}

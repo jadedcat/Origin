@@ -8,8 +8,8 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
-import com.countrygamer.core.common.Core;
-import com.countrygamer.core.common.lib.CoreUtil;
+import com.countrygamer.core.common.Core_Depreciated;
+import com.countrygamer.countrygamercore.lib.CoreUtil;
 
 public class TeleportCommand implements ICommand {
 
@@ -55,8 +55,8 @@ public class TeleportCommand implements ICommand {
 			// TODO
 			// icommandsender.sendChatToPlayer((new ChatMessageComponent())
 			// .addText("Invalid Arguments"));
-			if (Core.DEBUG) {
-				Core.log.info("Cannot parse arguments");
+			if (Core_Depreciated.DEBUG) {
+				Core_Depreciated.log.info("Cannot parse arguments");
 				System.err.println(e.getStackTrace());
 			}
 			return;
@@ -64,9 +64,9 @@ public class TeleportCommand implements ICommand {
 		EntityPlayerMP playerMP = MinecraftServer.getServer()
 				.getConfigurationManager().getPlayerForUsername(playerName);
 		// CG_Core.instance.dimLoad();
-		if (playerMP != null && Core.dimensions.get(dimensionName) != null) {
+		if (playerMP != null && Core_Depreciated.dimensions.get(dimensionName) != null) {
 			CoreUtil.teleportPlayerToDimension(playerMP,
-					Core.dimensions.get(dimensionName));
+					Core_Depreciated.dimensions.get(dimensionName));
 			CoreUtil.teleportPlayer(playerMP, x, y, z, false, false);
 		} else {
 			// TODO

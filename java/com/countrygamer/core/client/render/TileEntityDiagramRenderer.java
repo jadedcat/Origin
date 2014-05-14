@@ -16,9 +16,9 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import com.countrygamer.core.Base.client.Render.TileEntityRendererBase;
-import com.countrygamer.core.common.Core;
 import com.countrygamer.core.common.craftingsystem.DiagramRecipes;
 import com.countrygamer.core.common.tileentity.TileEntityDiagram;
+import com.countrygamer.countrygamercore.common.Core;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -45,7 +45,7 @@ public class TileEntityDiagramRenderer extends TileEntitySpecialRenderer {
 
 			DiagramRecipes.Recipe recipe = tileEnt.getRecipe();
 			if (recipe == null) {
-				Core.log.info("Null recipe");
+				Core.logger.info("Null recipe");
 				return;
 			}
 

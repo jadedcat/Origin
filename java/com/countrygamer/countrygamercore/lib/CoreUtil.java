@@ -1,4 +1,4 @@
-package com.countrygamer.core.common.lib;
+package com.countrygamer.countrygamercore.lib;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -477,7 +477,8 @@ public class CoreUtil {
 	 */
 	public static void dropItemStack(World world, ItemStack itemStack, int x, int y,
 			int z) {
-		dropItemStack(world, itemStack, x, y, z, null);
+		dropItemStack(world, itemStack, x, y, z,
+				itemStack.hasTagCompound() ? itemStack.getTagCompound() : null);
 	}
 	
 	/**

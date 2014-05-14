@@ -1,15 +1,15 @@
 package com.countrygamer.core.common.tileentity;
 
-import com.countrygamer.core.Base.common.tileentity.TileEntityInventoryBase;
-import com.countrygamer.core.common.Core;
-import com.countrygamer.core.common.item.ItemDiagram;
-import com.countrygamer.core.common.item.ItemMoldedClay;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import com.countrygamer.core.Base.common.tileentity.TileEntityInventoryBase;
+import com.countrygamer.core.common.Core_Depreciated;
+import com.countrygamer.core.common.item.ItemDiagram;
+import com.countrygamer.core.common.item.ItemMoldedClay;
 
 /**
  * Created by dustinyost on 3/21/14.
@@ -55,7 +55,7 @@ public class TileEntityDiagramer extends TileEntityInventoryBase {
 			this.setInventorySlotContents(1, cobbleStack);
 			this.setInventorySlotContents(2, clayStack);
 
-			newMold = new ItemStack(Core.diagram);
+			newMold = new ItemStack(Core_Depreciated.diagram);
 			String recipeKey = "IotaTable";
 			if (currentMold != null) {
 				NBTTagCompound currentMoldTag =

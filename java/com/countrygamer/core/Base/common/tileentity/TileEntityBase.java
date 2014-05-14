@@ -8,7 +8,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 import com.countrygamer.core.Base.common.block.IRedstoneState;
-import com.countrygamer.core.common.lib.RedstoneState;
+import com.countrygamer.countrygamercore.lib.RedstoneState;
 
 public class TileEntityBase extends TileEntity implements IRedstoneState {
 	

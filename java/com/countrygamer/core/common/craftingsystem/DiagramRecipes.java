@@ -8,7 +8,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.countrygamer.core.common.Core;
+import com.countrygamer.core.common.Core_Depreciated;
 
 /**
  * Created by Country_Gamer on 3/18/14.
@@ -210,7 +210,7 @@ public class DiagramRecipes {
 						+ this.outputBlock.getUnlocalizedName()
 						+ " with metadata of "
 						+ this.blockMetadata;
-			Core.log.info(output);
+			Core_Depreciated.log.info(output);
 		}
 
 		public void writeToNBT(NBTTagCompound tagCom) {

@@ -14,9 +14,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.countrygamer.core.Base.common.block.BlockContainerBase;
-import com.countrygamer.core.common.Core;
+import com.countrygamer.core.common.Core_Depreciated;
 import com.countrygamer.core.common.craftingsystem.DiagramRecipes;
 import com.countrygamer.core.common.tileentity.TileEntityDiagram;
+import com.countrygamer.countrygamercore.common.Core;
 
 /**
  * Created by Country_Gamer on 3/18/14.
@@ -49,12 +50,12 @@ public class BlockDiagram extends BlockContainerBase {
 
 	@Override
 	public Item getItem (World world, int x, int y, int z) {
-		return Core.diagram;
+		return Core_Depreciated.diagram;
 	}
 
 	@Override
 	public Item getItemDropped (int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
-		return Core.diagram;
+		return Core_Depreciated.diagram;
 	}
 
 	@Override
@@ -113,7 +114,7 @@ public class BlockDiagram extends BlockContainerBase {
 			}
 			String mcSide = world.isRemote ? "Client" : "Server";
 			textToLog += mcSide + ": " + sum;
-			Core.log.info(textToLog);
+			Core_Depreciated.log.info(textToLog);
 			return false;
 		}
 
@@ -199,7 +200,7 @@ public class BlockDiagram extends BlockContainerBase {
 									player.setCurrentItemOrArmor(0, itemStack);
 
 									// log before returning
-									if (!world.isRemote) Core.log.info(textToLog);
+									if (!world.isRemote) Core_Depreciated.log.info(textToLog);
 									return true;
 
 								}
@@ -216,7 +217,7 @@ public class BlockDiagram extends BlockContainerBase {
 			}
 		}
 		// log before returning
-		if (!world.isRemote) Core.log.info(textToLog);
+		if (!world.isRemote) Core_Depreciated.log.info(textToLog);
 		return false;
 	}
 

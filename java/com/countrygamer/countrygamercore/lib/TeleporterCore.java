@@ -1,4 +1,4 @@
-package com.countrygamer.core.common.lib;
+package com.countrygamer.countrygamercore.lib;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.world.Teleporter;

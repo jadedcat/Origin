@@ -2,7 +2,7 @@ package com.countrygamer.core.Base.client.gui;
 
 import java.util.List;
 
-import com.countrygamer.core.common.lib.RedstoneState;
+import com.countrygamer.countrygamercore.lib.RedstoneState;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
