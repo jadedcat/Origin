@@ -150,6 +150,12 @@ public abstract class PluginBase {
 							extendedClass);
 				}
 				
+				if (!event.entity.worldObj.isRemote) {
+					props = event.entity.getExtendedProperties(extendedProperties
+							.get(extendedClass)[0]);
+					ExtendedEntity extendedEnt = (ExtendedEntity) props;
+					extendedEnt.onPropertyChanged(extendedEnt);
+				}
 			}
 		}
 	}
