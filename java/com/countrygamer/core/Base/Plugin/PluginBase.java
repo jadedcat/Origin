@@ -5,14 +5,18 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import com.countrygamer.core.Base.common.packet.AbstractPacket;
 import com.countrygamer.core.Base.common.packet.PacketPipeline;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -89,17 +93,17 @@ public abstract class PluginBase {
 			this.entityReg.registerEntitySpawns();
 		}
 		
-		this.registerHandlers(null, this, null, null);
-		this.registerHandlers(null, new ExtendedSync(), null, null);
+		this.registerHandlers(this, null);
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 		this.registerPacketClass(PacketSyncExtendedProperties.class);
 	}
 	
-	protected void registerHandlers(Object plugin, Object eventHandler,
-			IFuelHandler fuelHandler, IGuiHandler guiHandler) {
-		if (eventHandler != null) MinecraftForge.EVENT_BUS.register(eventHandler);
+	protected void registerHandlers(Object eventHandler, IFuelHandler fuelHandler) {
+		if (eventHandler != null) {
+			MinecraftForge.EVENT_BUS.register(eventHandler);
+			FMLCommonHandler.instance().bus().register(eventHandler);
+		}
 		if (fuelHandler != null) GameRegistry.registerFuelHandler(fuelHandler);
-		if (plugin != null && guiHandler != null)
-			NetworkRegistry.INSTANCE.registerGuiHandler(plugin, guiHandler);
 	}
 	
 	protected void registerExtendedPlayer(String classKey,
@@ -135,6 +139,12 @@ public abstract class PluginBase {
 		
 	}
 	
+	/**
+	 * Control the creation of ExtendedEntities for each player (only if they do not already have
+	 * that EntendedEntity)
+	 * 
+	 * @param event
+	 */
 	@SubscribeEvent
 	public void onEntityConstructing(EntityConstructing event) {
 		if (event.entity != null && event.entity instanceof EntityPlayer) {
@@ -154,9 +164,87 @@ public abstract class PluginBase {
 					props = event.entity.getExtendedProperties(extendedProperties
 							.get(extendedClass)[0]);
 					ExtendedEntity extendedEnt = (ExtendedEntity) props;
-					extendedEnt.onPropertyChanged(extendedEnt);
+					extendedEnt.syncEntity();
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Handles the saving of ExtendedEntity data when an entity dies
+	 * 
+	 * @param event
+	 */
+	@SubscribeEvent
+	public void onLivingDeath(LivingDeathEvent event) {
+		if (event.entity == null || event.entity.worldObj.isRemote
+				|| !(event.entity instanceof EntityPlayer)) return;
+		EntityPlayer player = (EntityPlayer) event.entity;
+		
+		Map<Class<? extends ExtendedEntity>, String[]> propertyMap = ExtendedEntity
+				.getExtendedProperties();
+		// Get each and ever possible ExtendedEntity
+		for (Class<? extends ExtendedEntity> extendedClass : propertyMap.keySet()) {
+			// Get the boolean associated with each ExtendedEntity, regarding whether or not is
+			// should persist past a death event
+			String shouldPersist = propertyMap.get(extendedClass)[1];
+			// Check for persistance
+			if (Boolean.parseBoolean(shouldPersist)) {
+				// Get the player's ExtendedEntity instance for this ExtendedEntity class
+				ExtendedEntity extendedPlayer = (ExtendedEntity) ExtendedEntity
+						.getExtended(player, extendedClass);
+				
+				// Create a new tag compound for data storage
+				NBTTagCompound extPlayerData = new NBTTagCompound();
+				// Save the ExtendedEntity instance's data
+				extendedPlayer.saveNBTData(extPlayerData);
+				
+				// Store it for persistance
+				ExtendedSync.storeEntityData(extendedClass, player, extPlayerData);
+			}
+		}
+	}
+	
+	/**
+	 * Handles retrieving a player's ExtendedEntity data, after they have died.
+	 * 
+	 * @param event
+	 */
+	@SubscribeEvent
+	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+		if (event.entity == null || event.entity.worldObj.isRemote
+				|| !(event.entity instanceof EntityPlayer)) return;
+		EntityPlayer player = (EntityPlayer) event.entity;
+		
+		Map<Class<? extends ExtendedEntity>, String[]> propertyMap = ExtendedEntity
+				.getExtendedProperties();
+		// Get each and ever possible ExtendedEntity
+		for (Class<? extends ExtendedEntity> extendedClass : propertyMap.keySet()) {
+			// Get the boolean associated with each ExtendedEntity, regarding whether or not is
+			// should persist past a death event
+			String shouldPersist = propertyMap.get(extendedClass)[1];
+			
+			// Get the player's ExtendedEntity instance for this ExtendedEntity class
+			ExtendedEntity extendedPlayer = (ExtendedEntity) ExtendedEntity
+					.getExtended(player, extendedClass);
+			
+			// Check for persistance
+			if (Boolean.parseBoolean(shouldPersist)) {
+				// Get the any data from the persistance storage
+				NBTTagCompound extPlayerData = ExtendedSync.getEntityData(
+						extendedClass, player);
+				// Make sure it was stored
+				if (extPlayerData != null) {
+					
+					// Load the data back to the player
+					extendedPlayer.loadNBTData(extPlayerData);
+					
+				}
+			}
+			// Make sure to sync the player so that the data is not lost.
+			// This was all saved and loaded Server side, so now it must be loaded Client
+			// side
+			extendedPlayer.syncEntity();
 		}
 	}
 	

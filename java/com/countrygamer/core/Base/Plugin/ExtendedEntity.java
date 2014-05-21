@@ -15,6 +15,12 @@ import com.countrygamer.countrygamercore.common.Core;
 
 public abstract class ExtendedEntity implements IExtendedEntityProperties {
 	
+	/**
+	 * Holds data regarding IExtendedEntityProperties data and keys
+	 * Key: Class which extends ExtendedEntity (which implements IExtendedEntityProperties)
+	 * Valye: String array containing the key for that class in index 0, and whether or not to have
+	 * these properties persist past death in index 1
+	 */
 	private static Map<Class<? extends ExtendedEntity>, String[]> extendedProperties = new HashMap<Class<? extends ExtendedEntity>, String[]>();
 	
 	public static final void registerExtended(String classKey,
@@ -77,14 +83,19 @@ public abstract class ExtendedEntity implements IExtendedEntityProperties {
 	@Override
 	public abstract void init(Entity entity, World world);
 	
-	public void onPropertyChanged(ExtendedEntity extended) {
+	public void syncEntity() {
 		NBTTagCompound tagCom = new NBTTagCompound();
-		extended.saveNBTData(tagCom);
+		this.saveNBTData(tagCom);
 		
 		PacketSyncExtendedProperties packet = new PacketSyncExtendedProperties(
-				extended.getClass(), tagCom);
-		if (player instanceof EntityPlayerMP)
+				this.getClass(), tagCom);
+		if (player instanceof EntityPlayerMP) {
+			//System.out.println("Can sync from server to client");
 			Core.instance.packetChannel.sendTo(packet, (EntityPlayerMP) player);
+		}
+		else {
+			//System.out.println("Cannot sync from server, not EntityPlayerMP");
+		}
 		Core.instance.packetChannel.sendToServer(packet);
 	}
 	

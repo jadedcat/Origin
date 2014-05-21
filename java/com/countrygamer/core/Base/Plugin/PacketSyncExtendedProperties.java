@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.IExtendedEntityProperties;
 
 import com.countrygamer.core.Base.common.packet.AbstractPacket;
 
@@ -33,9 +34,8 @@ public class PacketSyncExtendedProperties extends AbstractPacket {
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 		this.data = ByteBufUtils.readTag(buffer);
-		String key = ByteBufUtils
-				.readUTF8String(buffer);
-		//System.out.println(key);
+		String key = ByteBufUtils.readUTF8String(buffer);
+		// System.out.println(key);
 		this.extendedClass = this.getClassWithKey(key);
 	}
 	
@@ -61,12 +61,14 @@ public class PacketSyncExtendedProperties extends AbstractPacket {
 	}
 	
 	void syncData(EntityPlayer player) {
-		// System.out.println("Recieved packet on "
-		// + (player.worldObj.isRemote ? "Client" : "Server"));
-		this.extendedClass.cast(
-				player.getExtendedProperties(ExtendedEntity.getExtendedProperties()
-						.get(this.extendedClass)[0])).loadNBTData(this.data);
-		;
+		//System.out.println("Recieved " + this.getClass().getSimpleName() + " on "
+		//		+ (player.worldObj.isRemote ? "Client" : "Server"));
+		String[] extendedClassKeys = ExtendedEntity.getExtendedProperties().get(
+				this.extendedClass);
+		String classKey = extendedClassKeys[0];
+		IExtendedEntityProperties props = player.getExtendedProperties(classKey);
+		ExtendedEntity extendedPlayer = this.extendedClass.cast(props);
+		extendedPlayer.loadNBTData(this.data);
 		
 	}
 	

@@ -59,7 +59,7 @@ public class Core extends PluginBase {
 	public void preInit(FMLPreInitializationEvent event) {
 		super.preInitialize(Core.pluginName, event, Core.proxy, new CoreOptions(), null, null,
 				null, null);
-		this.registerHandlers(this, this, null, null);
+		this.registerHandlers(this, null);
 		
 		((CoreOptions) this.options).vanillaCraftSmelt();
 		

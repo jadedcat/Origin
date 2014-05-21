@@ -18,6 +18,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
@@ -41,6 +42,10 @@ public class CoreUtil {
 	public static String configAddon = "Addons";
 	
 	public static final float oneSixteenth = 1.0F / 16.0F;
+	
+	public static void sendMessageToPlayer(EntityPlayer player, String message) {
+		player.addChatComponentMessage(new ChatComponentText(message));
+	}
 	
 	public static HashMap<ItemStack, ItemStack> getBasicOreDict() {
 		HashMap<ItemStack, ItemStack> oreDict = new HashMap<ItemStack, ItemStack>();
@@ -365,25 +370,35 @@ public class CoreUtil {
 	 * @param world
 	 * @param player
 	 */
-	private static void teleportVector(World world, EntityPlayer player) {
+	public static void teleportVector(World world, EntityPlayer player) {
 		if (!world.isRemote) {
-			Vec3 vec3 = player.getPosition(1.0F);
-			vec3.yCoord += 1.0D;
-			Vec3 lookVec = player.getLook(1.0F);
-			Vec3 addedVector = vec3.addVector(lookVec.xCoord * 1000.0D,
-					lookVec.yCoord * 1000.0D, lookVec.zCoord * 1000.0D);
-			MovingObjectPosition movingObjPos = world.func_147447_a(vec3,
-					addedVector, true, true, false);
-			
-			if ((movingObjPos != null)
-					&& (movingObjPos.typeOfHit == MovingObjectType.BLOCK)) {
-				int x = movingObjPos.blockX;
-				int y = movingObjPos.blockY;
-				int z = movingObjPos.blockZ;
-				CoreUtil.teleportPlayer(player, x + 0.5, y + 1, z + 0.5, false,
-						false);
+			int[] coords = CoreUtil.getCursorVector(world, player);
+			if (coords != null) {
+				CoreUtil.teleportPlayer(player, coords[0] + 0.5, coords[1] + 1,
+						coords[2] + 0.5, false, false);
 			}
 		}
+	}
+	
+	public static int[] getCursorVector(World world, EntityPlayer player) {
+		Vec3 vec3 = player.getPosition(1.0F);
+		vec3.yCoord += 1.0D;
+		Vec3 lookVec = player.getLook(1.0F);
+		Vec3 addedVector = vec3.addVector(lookVec.xCoord * 1000.0D,
+				lookVec.yCoord * 1000.0D, lookVec.zCoord * 1000.0D);
+		MovingObjectPosition movingObjPos = world.func_147447_a(vec3, addedVector,
+				true, true, false);
+		
+		if ((movingObjPos != null)
+				&& (movingObjPos.typeOfHit == MovingObjectType.BLOCK)) {
+			int x = movingObjPos.blockX;
+			int y = movingObjPos.blockY;
+			int z = movingObjPos.blockZ;
+			return new int[] {
+					x, y, z
+			};
+		}
+		return null;
 	}
 	
 	// World set and Component Setting methods for block placement
