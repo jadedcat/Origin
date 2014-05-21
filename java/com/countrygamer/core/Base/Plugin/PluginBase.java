@@ -24,7 +24,6 @@ import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -163,8 +162,7 @@ public abstract class PluginBase {
 				if (!event.entity.worldObj.isRemote) {
 					props = event.entity.getExtendedProperties(extendedProperties
 							.get(extendedClass)[0]);
-					ExtendedEntity extendedEnt = (ExtendedEntity) props;
-					extendedEnt.syncEntity();
+					//((ExtendedEntity) props).syncEntity();
 				}
 			}
 		}

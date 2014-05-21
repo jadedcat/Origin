@@ -36,8 +36,14 @@ public abstract class ExtendedEntity implements IExtendedEntityProperties {
 	
 	public static final IExtendedEntityProperties getExtended(EntityPlayer player,
 			Class<? extends ExtendedEntity> extendedClass) {
-		return player.getExtendedProperties(ExtendedEntity.getExtendedProperties()
-				.get(extendedClass)[0]);
+		if (ExtendedEntity.getExtendedProperties().containsKey(extendedClass))
+			return player.getExtendedProperties(ExtendedEntity
+					.getExtendedProperties().get(extendedClass)[0]);
+		else {
+			System.out.println("ERROR: No ExtendedEntity class with the name of "
+					+ extendedClass.getSimpleName() + " registered.");
+			return null;
+		}
 	}
 	
 	public final EntityPlayer player;
@@ -90,11 +96,11 @@ public abstract class ExtendedEntity implements IExtendedEntityProperties {
 		PacketSyncExtendedProperties packet = new PacketSyncExtendedProperties(
 				this.getClass(), tagCom);
 		if (player instanceof EntityPlayerMP) {
-			//System.out.println("Can sync from server to client");
+			// System.out.println("Can sync from server to client");
 			Core.instance.packetChannel.sendTo(packet, (EntityPlayerMP) player);
 		}
 		else {
-			//System.out.println("Cannot sync from server, not EntityPlayerMP");
+			// System.out.println("Cannot sync from server, not EntityPlayerMP");
 		}
 		Core.instance.packetChannel.sendToServer(packet);
 	}
