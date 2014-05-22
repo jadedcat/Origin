@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
 
+@Deprecated
 public class CoreUtilHex {
 	
 	/**

@@ -2,7 +2,7 @@ package com.countrygamer.core.Base.common.item;
 
 import java.util.List;
 
-import com.countrygamer.countrygamercore.lib.UtilString;
+import com.countrygamer.countrygamercore.lib.UtilKeys;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -65,7 +65,7 @@ public class ItemBase extends Item {
 	@SuppressWarnings("rawtypes")
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
-		if (UtilString.isShiftKeyDown()) {
+		if (UtilKeys.isShiftKeyDown()) {
 			list = this.addInformationWithShift(itemStack, player, list, par4);
 		}
 	}

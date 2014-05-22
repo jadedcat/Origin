@@ -2,7 +2,7 @@ package com.countrygamer.countrygamercore.lib;
 
 import org.lwjgl.input.Keyboard;
 
-public class UtilString {
+public class UtilKeys {
 	
 	/**
 	 * Used for Item addInformation, NOT game use (ex: player sneaking)

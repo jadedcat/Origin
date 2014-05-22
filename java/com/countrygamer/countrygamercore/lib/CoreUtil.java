@@ -20,9 +20,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -31,6 +28,9 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.oredict.OreDictionary;
+
+import com.countrygamer.countrygamercore.lib.UtilCursor.MovingObjectPositionTarget;
+
 import cpw.mods.fml.common.Loader;
 
 public class CoreUtil {
@@ -372,33 +372,17 @@ public class CoreUtil {
 	 */
 	public static void teleportVector(World world, EntityPlayer player) {
 		if (!world.isRemote) {
-			int[] coords = CoreUtil.getCursorVector(world, player);
+			MovingObjectPositionTarget coords = UtilCursor.getBlockFromCursor(world,
+					player, 500.0D);
+			int[] newCoords = UtilCursor.getNewCoordsFromSide(coords.x, coords.y,
+					coords.z, coords.side);
+			coords = new MovingObjectPositionTarget(newCoords[0], newCoords[1],
+					newCoords[2], coords.side);
 			if (coords != null) {
-				CoreUtil.teleportPlayer(player, coords[0] + 0.5, coords[1] + 1,
-						coords[2] + 0.5, false, false);
+				CoreUtil.teleportPlayer(player, coords.x + 0.5, coords.y + 1,
+						coords.z + 0.5, false, false);
 			}
 		}
-	}
-	
-	public static int[] getCursorVector(World world, EntityPlayer player) {
-		Vec3 vec3 = player.getPosition(1.0F);
-		vec3.yCoord += 1.0D;
-		Vec3 lookVec = player.getLook(1.0F);
-		Vec3 addedVector = vec3.addVector(lookVec.xCoord * 1000.0D,
-				lookVec.yCoord * 1000.0D, lookVec.zCoord * 1000.0D);
-		MovingObjectPosition movingObjPos = world.func_147447_a(vec3, addedVector,
-				true, true, false);
-		
-		if ((movingObjPos != null)
-				&& (movingObjPos.typeOfHit == MovingObjectType.BLOCK)) {
-			int x = movingObjPos.blockX;
-			int y = movingObjPos.blockY;
-			int z = movingObjPos.blockZ;
-			return new int[] {
-					x, y, z
-			};
-		}
-		return null;
 	}
 	
 	// World set and Component Setting methods for block placement
