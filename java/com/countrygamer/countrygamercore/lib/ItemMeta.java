@@ -21,32 +21,24 @@ public class ItemMeta {
 	
 	private Item item;
 	private int meta;
-	private boolean ignoreMeta;
 	
 	ItemMeta() {
 	}
 	
 	public ItemMeta(Item item, int metadata) {
-		this(item, metadata, false);
-	}
-	
-	public ItemMeta(Item item, int metadata, boolean ignoreMetadata) {
 		this.item = item;
 		this.meta = metadata;
-		this.ignoreMeta = ignoreMetadata;
 	}
 	
 	public void saveToNBT(NBTTagCompound compound) {
 		compound.setInteger("item_id", Item.getIdFromItem(this.item));
 		compound.setInteger("metadata", this.meta);
-		compound.setBoolean("ignoreMeta", this.ignoreMeta);
 		
 	}
 	
 	public void loadFromNBT(NBTTagCompound compound) {
 		this.item = Item.getItemById(compound.getInteger("item_id"));
 		this.meta = compound.getInteger("metadata");
-		this.ignoreMeta = compound.getBoolean("ignoreMeta");
 		
 	}
 	
@@ -65,7 +57,7 @@ public class ItemMeta {
 	}
 	
 	public ItemMeta copy() {
-		return new ItemMeta(this.item, this.meta, this.ignoreMeta);
+		return new ItemMeta(this.item, this.meta);
 	}
 	
 }
