@@ -1,6 +1,9 @@
 package com.countrygamer.core.Base.common.tileentity;
 
+import java.util.ArrayList;
+
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -94,6 +97,9 @@ public class TileEntityBase extends TileEntity implements IRedstoneState {
 	@Override
 	public RedstoneState getRedstoneState() {
 		return this.redstoneState;
+	}
+	
+	public void getTileEntityDrops(ArrayList<ItemStack> drops) {
 	}
 	
 }

@@ -64,8 +64,6 @@ public abstract class PluginBase {
 			}
 		}
 		
-		proxy.registerRender();
-		
 		if (this.itemReg != null) this.itemReg.registerItems();
 		if (this.blockReg != null) {
 			this.blockReg.registryTileEntities();
@@ -91,6 +89,8 @@ public abstract class PluginBase {
 			this.entityReg.addEntityMappings();
 			this.entityReg.registerEntitySpawns();
 		}
+		
+		proxy.registerRender();
 		
 		this.registerHandlers(this, null);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
@@ -225,6 +225,8 @@ public abstract class PluginBase {
 			// Get the player's ExtendedEntity instance for this ExtendedEntity class
 			ExtendedEntity extendedPlayer = (ExtendedEntity) ExtendedEntity
 					.getExtended(player, extendedClass);
+			
+			if (extendedPlayer == null) continue;
 			
 			// Check for persistance
 			if (Boolean.parseBoolean(shouldPersist)) {

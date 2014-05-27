@@ -22,16 +22,14 @@ public class UtilCursor {
 		
 	}
 	
-	public static MovingObjectPosition getMOPFromPlayer(World world,
-			EntityPlayer player, double reachLength) {
+	public static MovingObjectPosition getMOPFromPlayer(World world, EntityPlayer player,
+			double reachLength) {
 		float f = 1.0F;
-		float f1 = player.prevRotationPitch
-				+ (player.rotationPitch - player.prevRotationPitch) * f;
-		float f2 = player.prevRotationYaw
-				+ (player.rotationYaw - player.prevRotationYaw) * f;
+		float f1 = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * f;
+		float f2 = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * f;
 		double d0 = player.prevPosX + (player.posX - player.prevPosX) * (double) f;
-		double d1 = player.prevPosY + (player.posY - player.prevPosY) * (double) f
-				+ 1.62D - (double) player.yOffset;
+		double d1 = player.prevPosY + (player.posY - player.prevPosY) * (double) f + 1.62D
+				- (double) player.yOffset;
 		double d2 = player.prevPosZ + (player.posZ - player.prevPosZ) * (double) f;
 		Vec3 vec3 = world.getWorldVec3Pool().getVecFromPool(d0, d1, d2);
 		float f3 = MathHelper.cos(-f2 * 0.017453292F - (float) Math.PI);
@@ -41,11 +39,8 @@ public class UtilCursor {
 		float f7 = f4 * f5;
 		float f8 = f3 * f5;
 		double d3 = reachLength < 0 ? 200.0D : reachLength;
-		Vec3 vec31 = vec3.addVector((double) f7 * d3, (double) f6 * d3, (double) f8
-				* d3);
-		MovingObjectPosition movingobjectposition = world.rayTraceBlocks(vec3,
-				vec31, true);
-		return movingobjectposition;
+		Vec3 vec31 = vec3.addVector((double) f7 * d3, (double) f6 * d3, (double) f8 * d3);
+		return world.rayTraceBlocks(vec3, vec31, true);
 	}
 	
 	public static int[] getNewCoordsFromSide(int x, int y, int z, int side) {
@@ -78,10 +73,9 @@ public class UtilCursor {
 		};
 	}
 	
-	public static MovingObjectPositionTarget getBlockFromCursor(World world,
-			EntityPlayer player, double reachLength) {
-		MovingObjectPosition mop = UtilCursor.getMOPFromPlayer(world, player,
-				reachLength);
+	public static MovingObjectPositionTarget getBlockFromCursor(World world, EntityPlayer player,
+			double reachLength) {
+		MovingObjectPosition mop = UtilCursor.getMOPFromPlayer(world, player, reachLength);
 		if (mop == null) return null;
 		
 		int blockX, blockY, blockZ, side;
@@ -98,8 +92,7 @@ public class UtilCursor {
 			side = 1;
 		}
 		
-		return new UtilCursor.MovingObjectPositionTarget(blockX, blockY, blockZ,
-				side);
+		return new UtilCursor.MovingObjectPositionTarget(blockX, blockY, blockZ, side);
 	}
 	
 }

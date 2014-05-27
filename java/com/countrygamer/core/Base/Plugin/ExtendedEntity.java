@@ -21,7 +21,7 @@ public abstract class ExtendedEntity implements IExtendedEntityProperties {
 	 * Valye: String array containing the key for that class in index 0, and whether or not to have
 	 * these properties persist past death in index 1
 	 */
-	private static Map<Class<? extends ExtendedEntity>, String[]> extendedProperties = new HashMap<Class<? extends ExtendedEntity>, String[]>();
+	private static Map<Class<? extends ExtendedEntity>, String[]>	extendedProperties	= new HashMap<Class<? extends ExtendedEntity>, String[]>();
 	
 	public static final void registerExtended(String classKey,
 			Class<? extends ExtendedEntity> extendedClass, boolean persistPastDeath) {
@@ -37,8 +37,8 @@ public abstract class ExtendedEntity implements IExtendedEntityProperties {
 	public static final IExtendedEntityProperties getExtended(EntityPlayer player,
 			Class<? extends ExtendedEntity> extendedClass) {
 		if (ExtendedEntity.getExtendedProperties().containsKey(extendedClass))
-			return player.getExtendedProperties(ExtendedEntity
-					.getExtendedProperties().get(extendedClass)[0]);
+			return player.getExtendedProperties(ExtendedEntity.getExtendedProperties().get(
+					extendedClass)[0]);
 		else {
 			System.out.println("ERROR: No ExtendedEntity class with the name of "
 					+ extendedClass.getSimpleName() + " registered.");
@@ -46,7 +46,7 @@ public abstract class ExtendedEntity implements IExtendedEntityProperties {
 		}
 	}
 	
-	public final EntityPlayer player;
+	public final EntityPlayer	player;
 	
 	public ExtendedEntity(EntityPlayer player) {
 		this.player = player;
@@ -57,8 +57,7 @@ public abstract class ExtendedEntity implements IExtendedEntityProperties {
 			Class<? extends ExtendedEntity> extendedClass) {
 		ExtendedEntity ent = null;
 		try {
-			ent = extendedClass.getConstructor(EntityPlayer.class).newInstance(
-					player);
+			ent = extendedClass.getConstructor(EntityPlayer.class).newInstance(player);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
@@ -89,18 +88,22 @@ public abstract class ExtendedEntity implements IExtendedEntityProperties {
 	@Override
 	public abstract void init(Entity entity, World world);
 	
+	public static void syncEntity(ExtendedEntity player) {
+		player.syncEntity();
+	}
+	
 	public void syncEntity() {
 		NBTTagCompound tagCom = new NBTTagCompound();
 		this.saveNBTData(tagCom);
 		
-		PacketSyncExtendedProperties packet = new PacketSyncExtendedProperties(
-				this.getClass(), tagCom);
-		if (player instanceof EntityPlayerMP) {
-			// System.out.println("Can sync from server to client");
+		PacketSyncExtendedProperties packet = new PacketSyncExtendedProperties(this.getClass(),
+				tagCom);
+		if (!this.player.worldObj.isRemote) {
+			//System.out.println("Can sync from server to client");
 			Core.instance.packetChannel.sendTo(packet, (EntityPlayerMP) player);
 		}
 		else {
-			// System.out.println("Cannot sync from server, not EntityPlayerMP");
+			//System.out.println("Cannot sync from server, not EntityPlayerMP");
 		}
 		Core.instance.packetChannel.sendToServer(packet);
 	}

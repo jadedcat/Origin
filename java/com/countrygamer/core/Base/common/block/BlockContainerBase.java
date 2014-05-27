@@ -3,9 +3,8 @@ package com.countrygamer.core.Base.common.block;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,30 +14,16 @@ import net.minecraft.world.World;
 import com.countrygamer.core.Base.common.tileentity.TileEntityBase;
 import com.countrygamer.core.Base.common.tileentity.TileEntityInventoryBase;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-public class BlockContainerBase extends BlockContainer {
+public class BlockContainerBase extends BlockBase implements ITileEntityProvider {
 	
-	public String modid;
-	public Class<? extends TileEntity> tileEntityClass;
+	public Class<? extends TileEntity>	tileEntityClass;
 	
 	public BlockContainerBase(Material mat, String modid, String name,
 			Class<? extends TileEntity> tileEntityClass) {
-		super(mat);
-		this.setBlockName(name);
-		GameRegistry.registerBlock(this, name);
+		super(mat, modid, name);
+		this.isBlockContainer = true;
 		this.tileEntityClass = tileEntityClass;
 		
-		this.modid = modid;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		this.blockIcon = iconRegister.registerIcon(this.modid + ":"
-				+ this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf(".") + 1));
 	}
 	
 	@Override
@@ -59,6 +44,7 @@ public class BlockContainerBase extends BlockContainer {
 	
 	public void onBlockAdded(World world, int x, int y, int z) {
 		this.checkPower(world, x, y, z);
+		super.onBlockAdded(world, x, y, z);
 	}
 	
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
@@ -86,14 +72,13 @@ public class BlockContainerBase extends BlockContainer {
 	}
 	
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block par5,
-			int par6) {
+	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
 		TileEntity tEnt = (TileEntity) world.getTileEntity(x, y, z);
 		if (tEnt != null && tEnt instanceof TileEntityInventoryBase) {
-			TileEntityInventoryBase tileEnt = (TileEntityInventoryBase)tEnt;
+			TileEntityInventoryBase tileEnt = (TileEntityInventoryBase) tEnt;
 			Random rand = new Random();
-
-			if (tileEnt != null) {
+			
+			if (tileEnt != null && tileEnt.shouldDropInventory()) {
 				for (int j1 = 0; j1 < tileEnt.getSizeInventory(); j1++) {
 					ItemStack itemstack = tileEnt.getStackInSlot(j1);
 					if (itemstack != null) {
@@ -101,31 +86,35 @@ public class BlockContainerBase extends BlockContainer {
 						float f1 = rand.nextFloat() * 0.8F + 0.1F;
 						float f2 = rand.nextFloat() * 0.8F + 0.1F;
 						EntityItem entityitem;
-
-						entityitem = new EntityItem(world,
-								(double) ((float) x + f),
-								(double) ((float) y + f1),
-								(double) ((float) z + f2), itemstack.copy());
+						
+						entityitem = new EntityItem(world, (double) ((float) x + f),
+								(double) ((float) y + f1), (double) ((float) z + f2),
+								itemstack.copy());
 						float f3 = 0.05F;
 						entityitem.motionX = (double) ((float) rand.nextGaussian() * f3);
-						entityitem.motionY = (double) ((float) rand.nextGaussian()
-								* f3 + 0.2F);
+						entityitem.motionY = (double) ((float) rand.nextGaussian() * f3 + 0.2F);
 						entityitem.motionZ = (double) ((float) rand.nextGaussian() * f3);
-
+						
 						if (itemstack.hasTagCompound()) {
 							entityitem.getEntityItem().setTagCompound(
-									(NBTTagCompound) itemstack.getTagCompound()
-											.copy());
+									(NBTTagCompound) itemstack.getTagCompound().copy());
 						}
 						world.spawnEntityInWorld(entityitem);
-
 					}
 				}
-
-				world.func_147453_f(x, y, z, par5);
+				
+				world.func_147453_f(x, y, z, block);
 			}
 		}
-		super.breakBlock(world, x, y, z, par5, par6);
+		super.breakBlock(world, x, y, z, block, meta);
+		world.removeTileEntity(x, y, z);
+	}
+	
+	@Override
+	public boolean onBlockEventReceived(World world, int x, int y, int z, int var1, int var2) {
+		super.onBlockEventReceived(world, x, y, z, var1, var2);
+		TileEntity tileentity = world.getTileEntity(x, y, z);
+		return tileentity != null ? tileentity.receiveClientEvent(var1, var2) : false;
 	}
 	
 }

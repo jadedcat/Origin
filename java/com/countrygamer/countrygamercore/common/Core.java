@@ -28,12 +28,11 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = Core.pluginID, name = Core.pluginName, version = Core.pluginVersion)
+@Mod(modid = Core.pluginID, name = Core.pluginName, version = "@PLUGIN_VERSION@")
 public class Core extends PluginBase {
 	
 	public static final String pluginID = "countrygamercore";
 	public static final String pluginName = "CountryGamer Core";
-	public static final String pluginVersion = "2.0.4";
 	
 	public static final Logger logger = Logger.getLogger(Core.pluginName);
 	

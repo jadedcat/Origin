@@ -1,5 +1,6 @@
 package com.countrygamer.countrygamercore.lib;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,10 +20,14 @@ public class ItemMeta {
 		return im;
 	}
 	
-	private Item item;
-	private int meta;
+	private Item	item;
+	private int		meta;
 	
 	ItemMeta() {
+	}
+	
+	public ItemMeta(Block block, int metadata) {
+		this(Item.getItemFromBlock(block), metadata);
 	}
 	
 	public ItemMeta(Item item, int metadata) {
@@ -50,14 +55,21 @@ public class ItemMeta {
 	public boolean equals(Object obj, boolean ignoreMeta) {
 		if (obj instanceof ItemMeta) {
 			ItemMeta that = (ItemMeta) obj;
-			return this.item.equals(that.item)
-					&& (ignoreMeta ? true : this.meta == that.meta);
+			return this.item.equals(that.item) && (ignoreMeta ? true : this.meta == that.meta);
 		}
 		return false;
 	}
 	
 	public ItemMeta copy() {
 		return new ItemMeta(this.item, this.meta);
+	}
+	
+	public ItemStack getItemStack(int size) {
+		return new ItemStack(this.item, size < 1 ? 1 : (size > 64 ? 64 : size), this.meta);
+	}
+	
+	public void print() {
+		System.out.println(this.item.getUnlocalizedName() + " - " + this.meta);
 	}
 	
 }

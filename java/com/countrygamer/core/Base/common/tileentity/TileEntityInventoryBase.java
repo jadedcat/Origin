@@ -166,4 +166,8 @@ public class TileEntityInventoryBase extends TileEntityBase implements IInventor
 		
 	}
 	
+	public boolean shouldDropInventory() {
+		return true;
+	}
+	
 }

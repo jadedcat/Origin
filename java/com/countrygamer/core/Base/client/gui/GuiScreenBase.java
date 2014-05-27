@@ -3,39 +3,47 @@ package com.countrygamer.core.Base.client.gui;
 import io.netty.buffer.Unpooled;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 
 import org.apache.logging.log4j.LogManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import com.countrygamer.core.Base.common.inventory.InventoryItemBase;
 import com.countrygamer.core.common.lib.CoreReference;
 
-public class GuiScreenItemBase extends GuiScreen {
+public class GuiScreenBase extends GuiScreen {
 	
-	public InventoryItemBase		inventory;
+	protected final int			grayTextColor	= 4210752;
 	
-	protected int					xSize			= 176;
-	protected int					ySize			= 166;
-	protected int					leftOfGui		= (this.width - this.xSize) / 2;
-	protected int					topOfGui		= (this.height - this.ySize) / 2;
-	protected final int				grayTextColor	= 4210752;
-	private String					title			= "";
-	private ResourceLocation		bkgdTex			= null;
+	protected int				xSize			= 176;
+	protected int				ySize			= 166;
+	protected int				guiLeft;
+	protected int				guiTop;
 	
-	private ArrayList<GuiTextField>	textFieldList	= new ArrayList<GuiTextField>();
+	private String				title			= "";
+	private ResourceLocation	bkgdTex			= null;
 	
-	public GuiScreenItemBase(InventoryItemBase inventory) {
+	private List<GuiTextField>	textFieldList	= new ArrayList<GuiTextField>();
+	
+	public GuiScreenBase() {
+		this("");
+	}
+	
+	public GuiScreenBase(String title) {
+		this(title, new ResourceLocation(CoreReference.MOD_ID, "textures/gui/blank.png"));
+	}
+	
+	public GuiScreenBase(String title, ResourceLocation background) {
 		super();
-		this.inventory = inventory;
-		this.setupGui("", new ResourceLocation(CoreReference.MOD_ID, "textures/gui/blank.png"));
+		this.setupGui(title, background);
 	}
 	
 	protected void setupGui(String title, ResourceLocation backgroundTexture) {
@@ -46,12 +54,21 @@ public class GuiScreenItemBase extends GuiScreen {
 	@Override
 	public void initGui() {
 		super.initGui();
+		
+		this.guiLeft = (this.width - this.xSize) / 2;
+		this.guiTop = (this.height - this.ySize) / 2;
+		
 		Keyboard.enableRepeatEvents(true);
+		
 	}
 	
 	@Override
 	protected void actionPerformed(GuiButton gB) {
-		//int id = gB.id;
+		int id = gB.id;
+		this.buttonPress(id);
+	}
+	
+	protected void buttonPress(int id) {
 	}
 	
 	protected void setupTextField(GuiTextField textField, int maxStrLength) {
@@ -119,15 +136,23 @@ public class GuiScreenItemBase extends GuiScreen {
 		this.drawGuiContainerForegroundLayer(par1, par2);
 		
 		super.drawScreen(par1, par2, par3);
+		
+		this.drawHoverInfo(par1, par2);
+		
 	}
 	
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 		if (!this.title.equals(""))
-			this.fontRendererObj.drawString(this.title,
-					(this.width / 2) - (this.fontRendererObj.getStringWidth(this.title) / 2),
-					this.topOfGui, this.grayTextColor);
+			this.drawTitle(
+					this.guiLeft + (this.xSize / 2)
+							- (this.fontRendererObj.getStringWidth(this.title) / 2), this.guiTop);
+		
 		this.foregroundText();
 		
+	}
+	
+	protected void drawTitle(int titleX, int titleY) {
+		this.fontRendererObj.drawString(this.title, titleX, titleY, this.grayTextColor);
 	}
 	
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
@@ -135,6 +160,11 @@ public class GuiScreenItemBase extends GuiScreen {
 		this.mc.getTextureManager().bindTexture(this.bkgdTex);
 		drawTexturedModalRect((this.width - this.xSize) / 2, (this.height - this.ySize) / 2, 0, 0,
 				this.xSize, this.ySize);
+		
+		for (GuiTextField field : this.textFieldList) {
+			field.drawTextBox();
+		}
+		
 		this.backgroundObjects();
 		
 	}
@@ -143,9 +173,6 @@ public class GuiScreenItemBase extends GuiScreen {
 	}
 	
 	protected void backgroundObjects() {
-		for (GuiTextField field : this.textFieldList) {
-			field.drawTextBox();
-		}
 	}
 	
 	protected void string(String str, int x, int y) {
@@ -154,6 +181,44 @@ public class GuiScreenItemBase extends GuiScreen {
 	
 	protected void string(String str, int x, int y, int color) {
 		this.fontRendererObj.drawString(str, x, y, color);
+	}
+	
+	private void drawHoverInfo(int mouseX, int mouseY) {
+		List<String> hoverInfo = new ArrayList<String>();
+		
+		this.addHoverInfomation(mouseX, mouseY, hoverInfo);
+		
+		if (!hoverInfo.isEmpty()) this.renderHoverTip(hoverInfo, mouseX, mouseY);
+	}
+	
+	public void addHoverInfomation(int mouseX, int mouseY, List<String> currentInfomation) {
+	}
+	
+	/**
+	 * GuiContainer func_146978_c
+	 * 
+	 * @param x
+	 * @param y
+	 * @param w
+	 * @param h
+	 * @param mX
+	 * @param mY
+	 * @return
+	 */
+	protected boolean isMouseOver(int x, int y, int w, int h, int mX, int mY) {
+		return mX >= x && mX < x + w && mY >= y && mY < y + h;
+	}
+	
+	@SuppressWarnings({
+			"rawtypes", "unchecked"
+	})
+	protected void renderHoverTip(List hoverInfo, int mouseX, int mouseY) {
+		for (int k = 0; k < hoverInfo.size(); ++k) {
+			hoverInfo.set(k, EnumChatFormatting.GRAY + (String) hoverInfo.get(k));
+		}
+		
+		this.func_146283_a(hoverInfo, mouseX, mouseY);
+		drawHoveringText(hoverInfo, mouseX, mouseY, this.fontRendererObj);
 	}
 	
 }
