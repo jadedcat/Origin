@@ -145,7 +145,7 @@ public class GuiScreenBase extends GuiScreen {
 		if (!this.title.equals(""))
 			this.drawTitle(
 					this.guiLeft + (this.xSize / 2)
-							- (this.fontRendererObj.getStringWidth(this.title) / 2), this.guiTop);
+							- (this.fontRendererObj.getStringWidth(this.title) / 2), this.guiTop + 5);
 		
 		this.foregroundText();
 		
