@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -16,11 +17,17 @@ import com.countrygamer.core.Base.common.tileentity.TileEntityInventoryBase;
 
 public class BlockContainerBase extends BlockBase implements ITileEntityProvider {
 	
-	public Class<? extends TileEntity>	tileEntityClass;
+	public Class<? extends TileEntity> tileEntityClass;
 	
 	public BlockContainerBase(Material mat, String modid, String name,
 			Class<? extends TileEntity> tileEntityClass) {
-		super(mat, modid, name);
+		this(mat, modid, name, tileEntityClass, null);
+		
+	}
+	
+	public BlockContainerBase(Material mat, String modid, String name,
+			Class<? extends TileEntity> tileEntityClass, Class<? extends ItemBlock> item) {
+		super(mat, modid, name, item);
 		this.isBlockContainer = true;
 		this.tileEntityClass = tileEntityClass;
 		

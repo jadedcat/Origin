@@ -1,4 +1,4 @@
-package com.countrygamer.core.Base.Plugin;
+package com.countrygamer.core.Base.Plugin.extended;
 
 import java.util.HashMap;
 import java.util.Map;

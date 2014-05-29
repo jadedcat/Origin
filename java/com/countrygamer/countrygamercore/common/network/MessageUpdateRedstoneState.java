@@ -1,26 +1,24 @@
-package com.countrygamer.countrygamercore.common.handler.packet;
+package com.countrygamer.countrygamercore.common.network;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import com.countrygamer.core.Base.common.block.IRedstoneState;
-import com.countrygamer.core.Base.common.packet.AbstractPacket;
+import com.countrygamer.core.Base.common.network.AbstractMessage;
 import com.countrygamer.countrygamercore.common.Core;
 import com.countrygamer.countrygamercore.lib.RedstoneState;
 
-@Deprecated
-public class PacketUpdateRedstoneState extends AbstractPacket {
+public class MessageUpdateRedstoneState extends AbstractMessage {
 	
 	int x, y, z;
 	RedstoneState redstoneState;
 	
-	public PacketUpdateRedstoneState() {
+	public MessageUpdateRedstoneState() {
 	}
 	
-	public PacketUpdateRedstoneState(int x, int y, int z, RedstoneState state) {
+	public MessageUpdateRedstoneState(int x, int y, int z, RedstoneState state) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -29,7 +27,7 @@ public class PacketUpdateRedstoneState extends AbstractPacket {
 	}
 	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
+	public void writeTo(ByteBuf buffer) {
 		buffer.writeInt(x);
 		buffer.writeInt(y);
 		buffer.writeInt(z);
@@ -38,7 +36,7 @@ public class PacketUpdateRedstoneState extends AbstractPacket {
 	}
 	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
+	public void readFrom(ByteBuf buffer) {
 		x = buffer.readInt();
 		y = buffer.readInt();
 		z = buffer.readInt();
@@ -47,22 +45,23 @@ public class PacketUpdateRedstoneState extends AbstractPacket {
 	}
 	
 	@Override
-	public void handleClientSide(EntityPlayer player) {
+	public void handleOnClient(EntityPlayer player) {
 		this.passStateToIRedstoneState(player);
 	}
 	
 	@Override
-	public void handleServerSide(EntityPlayer player) {
+	public void handleOnServer(EntityPlayer player) {
 		this.passStateToIRedstoneState(player);
 	}
 	
 	private void passStateToIRedstoneState(EntityPlayer player) {
-		Core.logger.info("Recieved Redstone packet on " + (player.worldObj.isRemote ? "Client" : "Server"));
+		Core.logger.info("Recieved Redstone packet on "
+				+ (player.worldObj.isRemote ? "Client" : "Server"));
 		TileEntity tileEnt = player.worldObj.getTileEntity(x, y, z);
 		
 		if (tileEnt != null && tileEnt instanceof IRedstoneState) {
 			Core.logger.info("Succesfully saved redstone");
-			((IRedstoneState)tileEnt).setRedstoneState(this.redstoneState);
+			((IRedstoneState) tileEnt).setRedstoneState(this.redstoneState);
 			
 			Block block = player.worldObj.getBlock(x, y, z);
 			player.worldObj.notifyBlockOfNeighborChange(x + 1, y + 0, z + 0, block);
@@ -71,7 +70,6 @@ public class PacketUpdateRedstoneState extends AbstractPacket {
 			player.worldObj.notifyBlockOfNeighborChange(x + 0, y - 1, z + 0, block);
 			player.worldObj.notifyBlockOfNeighborChange(x + 0, y + 0, z + 1, block);
 			player.worldObj.notifyBlockOfNeighborChange(x + 0, y + 0, z - 1, block);
-			
 			
 		}
 	}

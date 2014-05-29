@@ -1,4 +1,4 @@
-package com.countrygamer.core.Base.Plugin;
+package com.countrygamer.core.Base.Plugin.registry;
 
 import net.minecraftforge.common.config.Configuration;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;

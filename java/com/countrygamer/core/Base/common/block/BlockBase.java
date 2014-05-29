@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -26,14 +27,20 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class BlockBase extends Block {
 	
-	public String	modid;
+	public String modid;
 	
 	public BlockBase(Material mat, String modid, String name) {
+		this(mat, modid, name, null);
+	}
+	
+	public BlockBase(Material mat, String modid, String name, Class<? extends ItemBlock> item) {
 		super(mat);
 		this.setBlockName(name);
 		
-		GameRegistry.registerBlock(this, name);
-		// LanguageRegistry.addName(this, name);
+		if (item == null)
+			GameRegistry.registerBlock(this, name);
+		else
+			GameRegistry.registerBlock(this, item, name);
 		
 		this.modid = modid.toLowerCase();
 	}
@@ -59,7 +66,7 @@ public class BlockBase extends Block {
 	
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-		//Core.logger.info("Break Block");
+		// Core.logger.info("Break Block");
 		if (this.hasTileEntityDrops()) {
 			ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 			TileEntity tileEntity = world.getTileEntity(x, y, z);
@@ -74,7 +81,7 @@ public class BlockBase extends Block {
 	
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		//Core.logger.info("Drops");
+		// Core.logger.info("Drops");
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		
 		if (!this.hasTileEntityDrops())

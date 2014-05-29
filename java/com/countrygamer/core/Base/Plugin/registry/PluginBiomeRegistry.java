@@ -1,4 +1,4 @@
-package com.countrygamer.core.Base.Plugin;
+package com.countrygamer.core.Base.Plugin.registry;
 
 
 public interface PluginBiomeRegistry {

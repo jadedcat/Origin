@@ -1,36 +1,34 @@
-package com.countrygamer.countrygamercore.common.handler.packet;
+package com.countrygamer.countrygamercore.common.network;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 
-import com.countrygamer.core.Base.common.packet.AbstractPacket;
+import com.countrygamer.core.Base.common.network.AbstractMessage;
 import com.countrygamer.countrygamercore.lib.CoreUtil;
 
-@Deprecated
-public class PacketTeleport extends AbstractPacket {
-
+public class MessageTeleport extends AbstractMessage {
+	
 	private int dimId = 0;
 	private double[] coords = new double[3];
 	private boolean fallDamage, particles;
-
-	public PacketTeleport() {
-
+	
+	public MessageTeleport() {
+		
 	}
-
-	public PacketTeleport(int dim, double[] coords) {
+	
+	public MessageTeleport(int dim, double[] coords) {
 		this(dim, coords, false, false);
 	}
 	
-	public PacketTeleport(int dim, double[] coords, boolean fall, boolean particles) {
+	public MessageTeleport(int dim, double[] coords, boolean fall, boolean particles) {
 		this.dimId = dim;
 		this.coords = coords;
 		this.fallDamage = fall;
 		this.particles = particles;
 	}
-
+	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
+	public void writeTo(ByteBuf buffer) {
 		buffer.writeInt(this.dimId);
 		buffer.writeDouble(coords[0]);
 		buffer.writeDouble(coords[1]);
@@ -38,9 +36,9 @@ public class PacketTeleport extends AbstractPacket {
 		buffer.writeBoolean(this.particles);
 		
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
+	public void readFrom(ByteBuf buffer) {
 		this.dimId = buffer.readInt();
 		this.coords[0] = buffer.readDouble();
 		this.coords[1] = buffer.readDouble();
@@ -48,17 +46,15 @@ public class PacketTeleport extends AbstractPacket {
 		this.particles = buffer.readBoolean();
 		
 	}
-
+	
 	@Override
-	public void handleClientSide(EntityPlayer player) {
-		//System.out.println("Client PacketTeleport Recieved");
+	public void handleOnClient(EntityPlayer player) {
 	}
-
+	
 	@Override
-	public void handleServerSide(EntityPlayer player) {
-		//System.out.println("Server PacketTeleport Recieved");
+	public void handleOnServer(EntityPlayer player) {
 		CoreUtil.teleportPlayerToDimension(player, this.dimId);
 		CoreUtil.teleportPlayer(player, coords[0], coords[1], coords[2], fallDamage, particles);
 	}
-
+	
 }

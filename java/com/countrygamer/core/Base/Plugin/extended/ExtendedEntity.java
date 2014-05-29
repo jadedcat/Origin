@@ -1,4 +1,4 @@
-package com.countrygamer.core.Base.Plugin;
+package com.countrygamer.core.Base.Plugin.extended;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -6,11 +6,11 @@ import java.util.Map;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
+import com.countrygamer.core.Base.common.network.PacketHandler;
 import com.countrygamer.countrygamercore.common.Core;
 
 public abstract class ExtendedEntity implements IExtendedEntityProperties {
@@ -21,7 +21,7 @@ public abstract class ExtendedEntity implements IExtendedEntityProperties {
 	 * Valye: String array containing the key for that class in index 0, and whether or not to have
 	 * these properties persist past death in index 1
 	 */
-	private static Map<Class<? extends ExtendedEntity>, String[]>	extendedProperties	= new HashMap<Class<? extends ExtendedEntity>, String[]>();
+	private static Map<Class<? extends ExtendedEntity>, String[]> extendedProperties = new HashMap<Class<? extends ExtendedEntity>, String[]>();
 	
 	public static final void registerExtended(String classKey,
 			Class<? extends ExtendedEntity> extendedClass, boolean persistPastDeath) {
@@ -46,14 +46,14 @@ public abstract class ExtendedEntity implements IExtendedEntityProperties {
 		}
 	}
 	
-	public final EntityPlayer	player;
+	public final EntityPlayer player;
 	
 	public ExtendedEntity(EntityPlayer player) {
 		this.player = player;
 		
 	}
 	
-	public static final boolean regsiterPlayer(EntityPlayer player,
+	public static final boolean registerPlayer(EntityPlayer player,
 			Class<? extends ExtendedEntity> extendedClass) {
 		ExtendedEntity ent = null;
 		try {
@@ -96,6 +96,7 @@ public abstract class ExtendedEntity implements IExtendedEntityProperties {
 		NBTTagCompound tagCom = new NBTTagCompound();
 		this.saveNBTData(tagCom);
 		
+		/*
 		PacketSyncExtendedProperties packet = new PacketSyncExtendedProperties(this.getClass(),
 				tagCom);
 		if (!this.player.worldObj.isRemote) {
@@ -106,6 +107,14 @@ public abstract class ExtendedEntity implements IExtendedEntityProperties {
 			//System.out.println("Cannot sync from server, not EntityPlayerMP");
 		}
 		Core.instance.packetChannel.sendToServer(packet);
+		 */
+		MessageSyncExtendedProperties message = new MessageSyncExtendedProperties(this.getClass(),
+				tagCom);
+		if (!this.player.worldObj.isRemote) {
+			PacketHandler.sendToPlayer(Core.pluginID, message, player);
+		}
+		PacketHandler.sendToServer(Core.pluginID, message);
+		
 	}
 	
 }

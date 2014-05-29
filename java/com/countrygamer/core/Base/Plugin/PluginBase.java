@@ -1,7 +1,6 @@
 package com.countrygamer.core.Base.Plugin;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,8 +12,14 @@ import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
-import com.countrygamer.core.Base.common.packet.AbstractPacket;
-import com.countrygamer.core.Base.common.packet.PacketPipeline;
+import com.countrygamer.core.Base.Plugin.extended.ExtendedEntity;
+import com.countrygamer.core.Base.Plugin.extended.ExtendedSync;
+import com.countrygamer.core.Base.Plugin.registry.PluginBiomeRegistry;
+import com.countrygamer.core.Base.Plugin.registry.PluginBlockRegistry;
+import com.countrygamer.core.Base.Plugin.registry.PluginEntityRegistry;
+import com.countrygamer.core.Base.Plugin.registry.PluginItemRegistry;
+import com.countrygamer.core.Base.Plugin.registry.PluginOptionRegistry;
+import com.countrygamer.core.Base.common.network.PacketHandler;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IFuelHandler;
@@ -29,8 +34,9 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public abstract class PluginBase {
 	
-	private String pluginName = "";
-	private ArrayList<Class<? extends AbstractPacket>> packets = new ArrayList<Class<? extends AbstractPacket>>();
+	private String pluginID = "", pluginName = "";
+	// private ArrayList<Class<? extends AbstractPacket>> packets = new ArrayList<Class<? extends
+	// AbstractPacket>>();
 	
 	protected PluginOptionRegistry options = null;
 	protected PluginItemRegistry itemReg = null;
@@ -38,12 +44,12 @@ public abstract class PluginBase {
 	protected PluginEntityRegistry entityReg = null;
 	protected PluginBiomeRegistry biomeReg = null;
 	
-	public final PacketPipeline packetChannel = new PacketPipeline();
-	
-	protected void preInitialize(String pluginName, FMLPreInitializationEvent event,
-			PluginCommonProxy proxy, PluginOptionRegistry optionRegistry,
-			PluginItemRegistry itemRegistry, PluginBlockRegistry blockRegistry,
-			PluginBiomeRegistry biomeRegistry, PluginEntityRegistry entityRegistry) {
+	protected void preInitialize(String pluginID, String pluginName,
+			FMLPreInitializationEvent event, PluginCommonProxy proxy,
+			PluginOptionRegistry optionRegistry, PluginItemRegistry itemRegistry,
+			PluginBlockRegistry blockRegistry, PluginBiomeRegistry biomeRegistry,
+			PluginEntityRegistry entityRegistry) {
+		this.pluginID = pluginID;
 		this.pluginName = pluginName;
 		this.options = optionRegistry;
 		this.itemReg = itemRegistry;
@@ -55,8 +61,8 @@ public abstract class PluginBase {
 			if (this.options.hasCustomConfiguration())
 				this.options.customizeConfiguration(event);
 			else {
-				File cfgFile = new File(event.getModConfigurationDirectory(),
-						this.pluginName + ".cfg");
+				File cfgFile = new File(event.getModConfigurationDirectory(), this.pluginName
+						+ ".cfg");
 				Configuration config = new Configuration(cfgFile, true);
 				config.load();
 				this.options.registerOptions(config);
@@ -94,7 +100,7 @@ public abstract class PluginBase {
 		
 		this.registerHandlers(this, null);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
-		this.registerPacketClass(PacketSyncExtendedProperties.class);
+		
 	}
 	
 	protected void registerHandlers(Object eventHandler, IFuelHandler fuelHandler) {
@@ -110,10 +116,6 @@ public abstract class PluginBase {
 		ExtendedEntity.registerExtended(classKey, extendedClass, persistPastDeath);
 	}
 	
-	protected void registerPacketClass(Class<? extends AbstractPacket> packetClass) {
-		this.packets.add(packetClass);
-	}
-	
 	@Mod.EventHandler
 	public void imcHandler(FMLInterModComms.IMCEvent event) {
 		for (final FMLInterModComms.IMCMessage imcMessage : event.getMessages()) {
@@ -126,15 +128,17 @@ public abstract class PluginBase {
 	}
 	
 	protected void initialize(FMLInitializationEvent event) {
+		/*
 		this.packetChannel.initalise(this.pluginName);
 		for (int i = 0; i < this.packets.size(); i++) {
 			this.packetChannel.registerPacket(this.packets.get(i));
 		}
+		 */
 		
 	}
 	
 	protected void postInitialize(FMLPostInitializationEvent event) {
-		this.packetChannel.postInitialise();
+		// this.packetChannel.postInitialise();
 		
 	}
 	
@@ -149,20 +153,18 @@ public abstract class PluginBase {
 		if (event.entity != null && event.entity instanceof EntityPlayer) {
 			Map<Class<? extends ExtendedEntity>, String[]> extendedProperties = ExtendedEntity
 					.getExtendedProperties();
-			for (Class<? extends ExtendedEntity> extendedClass : extendedProperties
-					.keySet()) {
+			for (Class<? extends ExtendedEntity> extendedClass : extendedProperties.keySet()) {
 				
 				IExtendedEntityProperties props = event.entity
 						.getExtendedProperties(extendedProperties.get(extendedClass)[0]);
 				if (props == null) {
-					ExtendedEntity.regsiterPlayer((EntityPlayer) event.entity,
-							extendedClass);
+					ExtendedEntity.registerPlayer((EntityPlayer) event.entity, extendedClass);
 				}
 				
 				if (!event.entity.worldObj.isRemote) {
 					props = event.entity.getExtendedProperties(extendedProperties
 							.get(extendedClass)[0]);
-					//((ExtendedEntity) props).syncEntity();
+					// ((ExtendedEntity) props).syncEntity();
 				}
 			}
 		}
@@ -189,8 +191,8 @@ public abstract class PluginBase {
 			// Check for persistance
 			if (Boolean.parseBoolean(shouldPersist)) {
 				// Get the player's ExtendedEntity instance for this ExtendedEntity class
-				ExtendedEntity extendedPlayer = (ExtendedEntity) ExtendedEntity
-						.getExtended(player, extendedClass);
+				ExtendedEntity extendedPlayer = (ExtendedEntity) ExtendedEntity.getExtended(player,
+						extendedClass);
 				
 				// Create a new tag compound for data storage
 				NBTTagCompound extPlayerData = new NBTTagCompound();
@@ -223,16 +225,15 @@ public abstract class PluginBase {
 			String shouldPersist = propertyMap.get(extendedClass)[1];
 			
 			// Get the player's ExtendedEntity instance for this ExtendedEntity class
-			ExtendedEntity extendedPlayer = (ExtendedEntity) ExtendedEntity
-					.getExtended(player, extendedClass);
+			ExtendedEntity extendedPlayer = (ExtendedEntity) ExtendedEntity.getExtended(player,
+					extendedClass);
 			
 			if (extendedPlayer == null) continue;
 			
 			// Check for persistance
 			if (Boolean.parseBoolean(shouldPersist)) {
 				// Get the any data from the persistance storage
-				NBTTagCompound extPlayerData = ExtendedSync.getEntityData(
-						extendedClass, player);
+				NBTTagCompound extPlayerData = ExtendedSync.getEntityData(extendedClass, player);
 				// Make sure it was stored
 				if (extPlayerData != null) {
 					

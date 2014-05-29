@@ -1,5 +1,6 @@
 package com.countrygamer.core.Base.common.packet;
 
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -25,6 +26,8 @@ import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+
+@Deprecated
 /**
  * Packet pipeline class. Directs all registered packet data to be handled by the packets themselves.
  * @author sirgingalot
