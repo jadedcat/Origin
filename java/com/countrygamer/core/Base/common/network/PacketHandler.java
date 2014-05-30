@@ -12,13 +12,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessage> {
 	
@@ -48,7 +48,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessa
 					.toLowerCase()).channels;
 			
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-					.set(FMLOutboundHandler.OutboundTarget.ALL);
+			.set(FMLOutboundHandler.OutboundTarget.ALL);
 			channels.get(Side.SERVER).writeAndFlush(packet);
 			
 			return true;
@@ -62,7 +62,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessa
 					.toLowerCase()).channels;
 			
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-					.set(FMLOutboundHandler.OutboundTarget.PLAYER);
+			.set(FMLOutboundHandler.OutboundTarget.PLAYER);
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
 			channels.get(Side.SERVER).writeAndFlush(packet);
 			
@@ -78,7 +78,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessa
 					.toLowerCase()).channels;
 			
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-					.set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+			.set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
 			channels.get(Side.SERVER).writeAndFlush(packet);
 			
@@ -93,7 +93,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessa
 					.toLowerCase()).channels;
 			
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-					.set(FMLOutboundHandler.OutboundTarget.DIMENSION);
+			.set(FMLOutboundHandler.OutboundTarget.DIMENSION);
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimension);
 			channels.get(Side.SERVER).writeAndFlush(packet);
 			
@@ -108,7 +108,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessa
 					.toLowerCase()).channels;
 			
 			channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-					.set(FMLOutboundHandler.OutboundTarget.TOSERVER);
+			.set(FMLOutboundHandler.OutboundTarget.TOSERVER);
 			channels.get(Side.CLIENT).writeAndFlush(packet);
 			
 			return true;
@@ -159,7 +159,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessa
 			player = ((NetHandlerPlayServer) netHandler).playerEntity;
 		}
 		else {
-			player = Minecraft.getMinecraft().thePlayer;
+			player = this.getClientPlayer();
 		}
 		
 		try {
@@ -168,6 +168,12 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessa
 			System.out.println("Error reading from packet for channel: " + channel);
 			e.printStackTrace();
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public EntityPlayer getClientPlayer()
+	{
+		return Minecraft.getMinecraft().thePlayer;
 	}
 	
 }

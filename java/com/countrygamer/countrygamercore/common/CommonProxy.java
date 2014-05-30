@@ -4,6 +4,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 import com.countrygamer.core.Base.Plugin.PluginCommonProxy;
+import com.countrygamer.core.Base.Plugin.extended.MessageSyncExtendedProperties;
+import com.countrygamer.core.Base.common.network.PacketHandler;
 
 public class CommonProxy implements PluginCommonProxy {
 	
@@ -12,6 +14,9 @@ public class CommonProxy implements PluginCommonProxy {
 		
 	}
 	
+	public void syncPacket(MessageSyncExtendedProperties message, EntityPlayer player) {
+		PacketHandler.sendToPlayer(Core.pluginID, message, player);
+	}
 	
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world,

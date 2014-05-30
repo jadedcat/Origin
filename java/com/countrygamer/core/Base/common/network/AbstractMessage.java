@@ -14,10 +14,10 @@ public abstract class AbstractMessage {
 	
 	public void readFrom_do(ByteBuf buffer, EntityPlayer player, Side side) {
 		this.readFrom(buffer);
-		if (side == Side.CLIENT) {
+		if (side.isClient()) {
 			this.handleOnClient(player);
 		}
-		else if (side == Side.SERVER) {
+		else if (side.isServer()) {
 			this.handleOnServer(player);
 		}
 	}

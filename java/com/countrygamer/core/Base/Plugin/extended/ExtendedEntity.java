@@ -10,7 +10,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
-import com.countrygamer.core.Base.common.network.PacketHandler;
 import com.countrygamer.countrygamercore.common.Core;
 
 public abstract class ExtendedEntity implements IExtendedEntityProperties {
@@ -110,11 +109,17 @@ public abstract class ExtendedEntity implements IExtendedEntityProperties {
 		 */
 		MessageSyncExtendedProperties message = new MessageSyncExtendedProperties(this.getClass(),
 				tagCom);
+		/*
+		// if (this.player instanceof EntityPlayerMP
+		// && ((EntityPlayerMP) this.player).playerNetServerHandler != null) {
 		if (!this.player.worldObj.isRemote) {
 			PacketHandler.sendToPlayer(Core.pluginID, message, player);
 		}
-		PacketHandler.sendToServer(Core.pluginID, message);
-		
+		else if (this.player.worldObj.isRemote) {
+			PacketHandler.sendToServer(Core.pluginID, message);
+		}
+		*/
+		Core.proxy.syncPacket(message, player);
 	}
 	
 }
