@@ -15,7 +15,6 @@ import net.minecraftforge.common.DimensionManager;
 
 import com.countrygamer.core.Base.Plugin.PluginBase;
 import com.countrygamer.core.Base.Plugin.extended.MessageSyncExtendedProperties;
-import com.countrygamer.core.Base.common.network.PacketHandler;
 import com.countrygamer.countrygamercore.common.network.MessageTeleport;
 import com.countrygamer.countrygamercore.common.network.MessageUpdateRedstoneState;
 
@@ -65,10 +64,8 @@ public class Core extends PluginBase {
 		
 		((CoreOptions) this.options).vanillaCraftSmelt();
 		
-		if (event.getSide() == Side.CLIENT)
-			PacketHandler.registerHandler(Core.pluginID,
-					MessageSyncExtendedProperties.class, MessageTeleport.class,
-					MessageUpdateRedstoneState.class);
+		this.regsiterPacketHandler(Core.pluginID, MessageSyncExtendedProperties.class,
+				MessageTeleport.class, MessageUpdateRedstoneState.class);
 		
 	}
 	

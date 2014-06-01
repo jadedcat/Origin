@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.common.handler.command;
+package com.countrygamer.countrygamercore.common.command;
 
 import java.util.ArrayList;
 import java.util.List;

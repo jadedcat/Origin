@@ -19,6 +19,7 @@ import com.countrygamer.core.Base.Plugin.registry.PluginBlockRegistry;
 import com.countrygamer.core.Base.Plugin.registry.PluginEntityRegistry;
 import com.countrygamer.core.Base.Plugin.registry.PluginItemRegistry;
 import com.countrygamer.core.Base.Plugin.registry.PluginOptionRegistry;
+import com.countrygamer.core.Base.common.network.AbstractMessage;
 import com.countrygamer.core.Base.common.network.PacketHandler;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -109,6 +110,13 @@ public abstract class PluginBase {
 			FMLCommonHandler.instance().bus().register(eventHandler);
 		}
 		if (fuelHandler != null) GameRegistry.registerFuelHandler(fuelHandler);
+	}
+	
+	protected void regsiterPacketHandler(String pluginID,
+			Class<? extends AbstractMessage>... messages) {
+		if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+			PacketHandler.registerHandler(pluginID, messages);
+		}
 	}
 	
 	protected void registerExtendedPlayer(String classKey,

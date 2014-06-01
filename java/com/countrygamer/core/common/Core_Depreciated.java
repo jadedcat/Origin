@@ -24,8 +24,6 @@ import com.countrygamer.core.common.inventory.ContainerDiagramer;
 import com.countrygamer.core.common.inventory.GuiDiagramer;
 import com.countrygamer.core.common.lib.CoreReference;
 import com.countrygamer.core.common.tileentity.TileEntityDiagramer;
-import com.countrygamer.countrygamercore.common.handler.packet.PacketTeleport;
-import com.countrygamer.countrygamercore.common.handler.packet.PacketUpdateRedstoneState;
 import com.countrygamer.countrygamercore.lib.CoreUtil;
 import com.countrygamer.countrygamercore.lib.CoreUtilConfig;
 
@@ -94,7 +92,7 @@ public class Core_Depreciated implements IGuiHandler {
 	private static boolean morphLoaded = false;
 	
 	// Packet
-	public static final PacketPipeline packetChannel = new PacketPipeline();
+	//public static final PacketPipeline packetChannel = new PacketPipeline();
 	
 	@Mod.EventHandler
 	public void onServerStarting(FMLServerStartingEvent event) {
@@ -303,9 +301,11 @@ public class Core_Depreciated implements IGuiHandler {
 	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
+		/*
 		Core_Depreciated.packetChannel.initalise("CountryGamerCore");
 		Core_Depreciated.packetChannel.registerPacket(PacketTeleport.class);
 		Core_Depreciated.packetChannel.registerPacket(PacketUpdateRedstoneState.class);
+		*/
 		
 		// Ignore all missing blocks and items
 		// FMLClientHandler.instance().setDefaultMissingAction(FMLMissingMappingsEvent.Action.WARN);
@@ -317,7 +317,7 @@ public class Core_Depreciated implements IGuiHandler {
 	
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		Core_Depreciated.packetChannel.postInitialise();
+		//Core_Depreciated.packetChannel.postInitialise();
 		
 		boolean misc = CoreUtil.isModLoaded("misc");
 		boolean pepc = CoreUtil.isModLoaded("CountryGamer_PEforPC");

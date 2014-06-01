@@ -9,12 +9,17 @@ import net.minecraft.nbt.NBTTagList;
 
 public class TileEntityInventoryBase extends TileEntityBase implements IInventory, ISidedInventory {
 	
-	protected ItemStack[]	inv;
-	protected String		name;
-	protected int			maxStackSize;
+	protected ItemStack[] inv;
+	protected String name;
+	protected int maxStackSize;
 	
 	public TileEntityInventoryBase(String name, int inventorySize, int maxStackSize) {
-		super();
+		this(name, inventorySize, maxStackSize, -1);
+	}
+	
+	public TileEntityInventoryBase(String name, int inventorySize, int maxStackSize,
+			int tankSize) {
+		super(tankSize);
 		this.name = name;
 		this.inv = new ItemStack[inventorySize];
 		this.maxStackSize = maxStackSize;
@@ -69,17 +74,14 @@ public class TileEntityInventoryBase extends TileEntityBase implements IInventor
 		this.inv[i] = itemStack;
 		this.markDirty();
 	}
-
+	
 	@Override
-	public void markDirty () {
+	public void markDirty() {
 		super.markDirty();
-		this.worldObj.scheduleBlockUpdate(
-				this.xCoord, this.yCoord, this.zCoord,
-				this.worldObj.getBlock(
-						this.xCoord, this.yCoord, this.zCoord)
-				, 10);
+		this.worldObj.scheduleBlockUpdate(this.xCoord, this.yCoord, this.zCoord,
+				this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord), 10);
 	}
-
+	
 	@Override
 	public String getInventoryName() {
 		return this.name;
@@ -114,22 +116,22 @@ public class TileEntityInventoryBase extends TileEntityBase implements IInventor
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return false;
 	}
-
+	
 	@Override
-	public int[] getAccessibleSlotsFromSide (int i) {
+	public int[] getAccessibleSlotsFromSide(int i) {
 		return null;
 	}
-
+	
 	@Override
-	public boolean canInsertItem (int i, ItemStack itemStack, int i2) {
+	public boolean canInsertItem(int i, ItemStack itemStack, int i2) {
 		return false;
 	}
-
+	
 	@Override
-	public boolean canExtractItem (int i, ItemStack itemStack, int i2) {
+	public boolean canExtractItem(int i, ItemStack itemStack, int i2) {
 		return false;
 	}
-
+	
 	@Override
 	public void readFromNBT(NBTTagCompound tagCom) {
 		super.readFromNBT(tagCom);
@@ -142,7 +144,7 @@ public class TileEntityInventoryBase extends TileEntityBase implements IInventor
 			if (j >= 0 && j < this.inv.length) {
 				this.inv[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
 			}
-			// System.out.println("Loaded stack at slot " + b0);
+			// System.out.println("Loaded stack at slot " + j);
 		}
 		
 	}
