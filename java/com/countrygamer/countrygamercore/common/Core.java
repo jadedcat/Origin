@@ -14,7 +14,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 
 import com.countrygamer.core.Base.Plugin.PluginBase;
-import com.countrygamer.core.Base.Plugin.extended.MessageSyncExtendedProperties;
+import com.countrygamer.core.Base.common.network.MessageSyncExtendedProperties;
 import com.countrygamer.countrygamercore.common.network.MessageTeleport;
 import com.countrygamer.countrygamercore.common.network.MessageUpdateRedstoneState;
 

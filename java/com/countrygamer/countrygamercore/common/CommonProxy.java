@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 import com.countrygamer.core.Base.Plugin.PluginCommonProxy;
-import com.countrygamer.core.Base.Plugin.extended.MessageSyncExtendedProperties;
+import com.countrygamer.core.Base.common.network.MessageSyncExtendedProperties;
 import com.countrygamer.core.Base.common.network.PacketHandler;
 
 public class CommonProxy implements PluginCommonProxy {

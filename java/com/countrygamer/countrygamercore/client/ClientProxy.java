@@ -2,7 +2,7 @@ package com.countrygamer.countrygamercore.client;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import com.countrygamer.core.Base.Plugin.extended.MessageSyncExtendedProperties;
+import com.countrygamer.core.Base.common.network.MessageSyncExtendedProperties;
 import com.countrygamer.core.Base.common.network.PacketHandler;
 import com.countrygamer.countrygamercore.common.CommonProxy;
 import com.countrygamer.countrygamercore.common.Core;

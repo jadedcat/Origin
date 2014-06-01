@@ -1,11 +1,11 @@
-package com.countrygamer.core.Base.Plugin.extended;
+package com.countrygamer.core.Base.common.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
-import com.countrygamer.core.Base.common.network.AbstractMessage;
+import com.countrygamer.core.Base.Plugin.extended.ExtendedEntity;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 

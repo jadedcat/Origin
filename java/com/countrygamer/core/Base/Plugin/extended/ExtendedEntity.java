@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
+import com.countrygamer.core.Base.common.network.MessageSyncExtendedProperties;
 import com.countrygamer.countrygamercore.common.Core;
 
 public abstract class ExtendedEntity implements IExtendedEntityProperties {

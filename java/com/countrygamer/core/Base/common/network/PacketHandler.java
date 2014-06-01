@@ -2,6 +2,7 @@ package com.countrygamer.core.Base.common.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -31,6 +32,14 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessa
 			
 			handler.channels = NetworkRegistry.INSTANCE.newChannel(pluginID.toLowerCase(), handler);
 			
+			PacketExecuter executer = new PacketExecuter();
+			
+			for (Map.Entry<Side, FMLEmbeddedChannel> e : handler.channels.entrySet()) {
+				FMLEmbeddedChannel channel = e.getValue();
+				String codec = channel.findChannelHandlerNameForType(PacketHandler.class);
+				channel.pipeline().addAfter(codec, "PacketExecuter", executer);
+			}
+			
 			PacketHandler.TRACKER.put(pluginID.toLowerCase(), handler);
 			
 			return true;
@@ -48,7 +57,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessa
 					.toLowerCase()).channels;
 			
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-			.set(FMLOutboundHandler.OutboundTarget.ALL);
+					.set(FMLOutboundHandler.OutboundTarget.ALL);
 			channels.get(Side.SERVER).writeAndFlush(packet);
 			
 			return true;
@@ -62,7 +71,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessa
 					.toLowerCase()).channels;
 			
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-			.set(FMLOutboundHandler.OutboundTarget.PLAYER);
+					.set(FMLOutboundHandler.OutboundTarget.PLAYER);
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
 			channels.get(Side.SERVER).writeAndFlush(packet);
 			
@@ -78,7 +87,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessa
 					.toLowerCase()).channels;
 			
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-			.set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+					.set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
 			channels.get(Side.SERVER).writeAndFlush(packet);
 			
@@ -93,7 +102,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessa
 					.toLowerCase()).channels;
 			
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-			.set(FMLOutboundHandler.OutboundTarget.DIMENSION);
+					.set(FMLOutboundHandler.OutboundTarget.DIMENSION);
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimension);
 			channels.get(Side.SERVER).writeAndFlush(packet);
 			
@@ -108,7 +117,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessa
 					.toLowerCase()).channels;
 			
 			channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-			.set(FMLOutboundHandler.OutboundTarget.TOSERVER);
+					.set(FMLOutboundHandler.OutboundTarget.TOSERVER);
 			channels.get(Side.CLIENT).writeAndFlush(packet);
 			
 			return true;
@@ -152,28 +161,46 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractMessa
 	
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf source, AbstractMessage msg) {
-		Side side = FMLCommonHandler.instance().getEffectiveSide();
-		EntityPlayer player = null;
-		if (side.isServer()) {
-			INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-			player = ((NetHandlerPlayServer) netHandler).playerEntity;
-		}
-		else {
-			player = this.getClientPlayer();
-		}
 		
 		try {
-			msg.readFrom_do(source, player, side);
+			msg.readFrom(source);// (source, player, side);
 		} catch (Exception e) {
 			System.out.println("Error reading from packet for channel: " + channel);
 			e.printStackTrace();
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)
-	public EntityPlayer getClientPlayer()
-	{
-		return Minecraft.getMinecraft().thePlayer;
+	// Execution of Packets
+	@Sharable
+	private static class PacketExecuter extends SimpleChannelInboundHandler<AbstractMessage> {
+		
+		@Override
+		protected void channelRead0(ChannelHandlerContext ctx, AbstractMessage msg)
+				throws Exception {
+			Side side = FMLCommonHandler.instance().getEffectiveSide();
+			EntityPlayer player = null;
+			if (side.isServer()) {
+				INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
+				player = ((NetHandlerPlayServer) netHandler).playerEntity;
+			}
+			else {
+				player = this.getClientPlayer();
+			}
+			
+			if (side.isClient()) {
+				msg.handleOnClient(player);
+			}
+			else if (side.isServer()) {
+				msg.handleOnServer(player);
+			}
+			
+		}
+		
+		@SideOnly(Side.CLIENT)
+		public EntityPlayer getClientPlayer() {
+			return Minecraft.getMinecraft().thePlayer;
+		}
+		
 	}
 	
 }

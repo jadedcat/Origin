@@ -2,7 +2,6 @@ package com.countrygamer.core.Base.common.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import cpw.mods.fml.relauncher.Side;
 
 public abstract class AbstractMessage {
 	
@@ -12,6 +11,7 @@ public abstract class AbstractMessage {
 	
 	public abstract void writeTo(ByteBuf buffer);
 	
+	/*
 	public void readFrom_do(ByteBuf buffer, EntityPlayer player, Side side) {
 		this.readFrom(buffer);
 		if (side.isClient()) {
@@ -21,6 +21,7 @@ public abstract class AbstractMessage {
 			this.handleOnServer(player);
 		}
 	}
+	*/
 	
 	public abstract void readFrom(ByteBuf buffer);
 	
