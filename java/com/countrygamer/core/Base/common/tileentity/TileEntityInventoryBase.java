@@ -1,11 +1,15 @@
 package com.countrygamer.core.Base.common.tileentity;
 
+import java.util.ArrayList;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
+import com.countrygamer.countrygamercore.lib.UtilDrops;
 
 public class TileEntityInventoryBase extends TileEntityBase implements IInventory, ISidedInventory {
 	
@@ -17,12 +21,19 @@ public class TileEntityInventoryBase extends TileEntityBase implements IInventor
 		this(name, inventorySize, maxStackSize, -1);
 	}
 	
-	public TileEntityInventoryBase(String name, int inventorySize, int maxStackSize,
-			int tankSize) {
+	public TileEntityInventoryBase(String name, int inventorySize, int maxStackSize, int tankSize) {
 		super(tankSize);
 		this.name = name;
 		this.inv = new ItemStack[inventorySize];
 		this.maxStackSize = maxStackSize;
+	}
+	
+	@Override
+	public void invalidate() {
+		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		this.getTileEntityDrops(drops);
+		UtilDrops.spawnDrops(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord, drops);
+		super.invalidate();
 	}
 	
 	@Override

@@ -7,6 +7,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+@Deprecated
 public class ContainerItemBase extends Container {
 	/** The Item Inventory for this Container */
 	public final InventoryItemBase	inventory;

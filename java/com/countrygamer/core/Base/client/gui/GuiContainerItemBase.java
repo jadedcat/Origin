@@ -21,6 +21,7 @@ import com.countrygamer.core.Base.common.inventory.ContainerItemBase;
 import com.countrygamer.core.Base.common.inventory.InventoryItemBase;
 import com.countrygamer.core.common.lib.CoreReference;
 
+@Deprecated
 public class GuiContainerItemBase extends GuiContainer {
 	
 	/** The inventory to render on screen */

@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 
 import com.countrygamer.core.Base.common.tileentity.TileEntityInventoryBase;
 
+@Deprecated
 public class ContainerBlockBase extends Container {
 	
 	public TileEntityInventoryBase	tileEnt;

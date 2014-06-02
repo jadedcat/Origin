@@ -1,4 +1,4 @@
-package com.countrygamer.core.Base.client;
+package com.countrygamer.countrygamercore.Base.client;
 
 import java.util.ArrayList;
 

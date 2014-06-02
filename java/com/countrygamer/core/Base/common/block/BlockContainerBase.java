@@ -5,10 +5,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -80,6 +77,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
 	
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+		/*
 		TileEntity tEnt = (TileEntity) world.getTileEntity(x, y, z);
 		if (tEnt != null && tEnt instanceof TileEntityInventoryBase) {
 			TileEntityInventoryBase tileEnt = (TileEntityInventoryBase) tEnt;
@@ -113,6 +111,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
 				world.func_147453_f(x, y, z, block);
 			}
 		}
+		 */
 		super.breakBlock(world, x, y, z, block, meta);
 		world.removeTileEntity(x, y, z);
 	}
