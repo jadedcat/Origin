@@ -1,5 +1,6 @@
 package com.countrygamer.core.common.lib;
 
+@Deprecated
 public class CoreReference {
 	/* Mod constants */
 	public static final String MOD_ID = "core";

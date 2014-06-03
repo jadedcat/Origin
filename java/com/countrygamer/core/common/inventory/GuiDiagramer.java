@@ -1,7 +1,7 @@
 package com.countrygamer.core.common.inventory;
 
-import com.countrygamer.core.Base.client.gui.GuiContainerBlockBase;
-import com.countrygamer.core.Base.common.inventory.ContainerBlockBase;
+import com.countrygamer.countrygamercore.Base.client.gui.GuiContainerBlockBase;
+import com.countrygamer.countrygamercore.Base.common.inventory.ContainerBlockBase;
 
 import net.minecraft.entity.player.EntityPlayer;
 

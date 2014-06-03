@@ -5,8 +5,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
-import com.countrygamer.core.Base.common.block.IRedstoneState;
-import com.countrygamer.core.Base.common.network.AbstractMessage;
+import com.countrygamer.countrygamercore.Base.common.block.IRedstoneState;
+import com.countrygamer.countrygamercore.Base.common.network.AbstractMessage;
 import com.countrygamer.countrygamercore.common.Core;
 import com.countrygamer.countrygamercore.lib.RedstoneState;
 

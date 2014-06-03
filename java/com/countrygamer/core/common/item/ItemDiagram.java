@@ -8,9 +8,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import com.countrygamer.core.Base.common.item.ItemBase;
 import com.countrygamer.core.common.Core_Depreciated;
 import com.countrygamer.core.common.tileentity.TileEntityDiagram;
+import com.countrygamer.countrygamercore.Base.common.item.ItemBase;
 
 /**
  * Created by Country_Gamer on 3/18/14.

@@ -1,8 +1,8 @@
 package com.countrygamer.core.common.inventory;
 
-import com.countrygamer.core.Base.common.inventory.ContainerBlockBase;
-import com.countrygamer.core.Base.common.tileentity.TileEntityInventoryBase;
 import com.countrygamer.core.common.item.ItemDiagram;
+import com.countrygamer.countrygamercore.Base.common.inventory.ContainerBlockBase;
+import com.countrygamer.countrygamercore.Base.common.tileentity.TileEntityInventoryBase;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;

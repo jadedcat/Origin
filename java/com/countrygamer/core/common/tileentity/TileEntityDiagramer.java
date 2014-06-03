@@ -6,10 +6,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.countrygamer.core.Base.common.tileentity.TileEntityInventoryBase;
 import com.countrygamer.core.common.Core_Depreciated;
 import com.countrygamer.core.common.item.ItemDiagram;
 import com.countrygamer.core.common.item.ItemMoldedClay;
+import com.countrygamer.countrygamercore.Base.common.tileentity.TileEntityInventoryBase;
 
 /**
  * Created by dustinyost on 3/21/14.

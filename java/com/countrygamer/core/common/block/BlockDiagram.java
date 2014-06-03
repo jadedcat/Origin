@@ -13,10 +13,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import com.countrygamer.core.Base.common.block.BlockContainerBase;
 import com.countrygamer.core.common.Core_Depreciated;
 import com.countrygamer.core.common.craftingsystem.DiagramRecipes;
 import com.countrygamer.core.common.tileentity.TileEntityDiagram;
+import com.countrygamer.countrygamercore.Base.common.block.BlockContainerBase;
 import com.countrygamer.countrygamercore.common.Core;
 
 /**

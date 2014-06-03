@@ -1,8 +1,8 @@
 package com.countrygamer.core.common.block;
 
-import com.countrygamer.core.Base.common.block.BlockContainerBase;
 import com.countrygamer.core.common.lib.CoreReference;
 import com.countrygamer.core.common.tileentity.TileEntityDiagramer;
+import com.countrygamer.countrygamercore.Base.common.block.BlockContainerBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

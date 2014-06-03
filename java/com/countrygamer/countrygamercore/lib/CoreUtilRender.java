@@ -1,6 +1,6 @@
 package com.countrygamer.countrygamercore.lib;
 
-import com.countrygamer.core.Base.common.tileentity.TileEntityInventoryBase;
+import com.countrygamer.countrygamercore.Base.common.tileentity.TileEntityInventoryBase;
 
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.item.EntityItem;

@@ -1,7 +1,7 @@
 package com.countrygamer.core.common.item;
 
-import com.countrygamer.core.Base.common.item.ItemBase;
 import com.countrygamer.core.common.lib.CoreReference;
+import com.countrygamer.countrygamercore.Base.common.item.ItemBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

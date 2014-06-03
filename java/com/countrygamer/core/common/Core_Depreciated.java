@@ -19,11 +19,11 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.config.Configuration;
 
-import com.countrygamer.core.Base.common.packet.PacketPipeline;
 import com.countrygamer.core.common.inventory.ContainerDiagramer;
 import com.countrygamer.core.common.inventory.GuiDiagramer;
 import com.countrygamer.core.common.lib.CoreReference;
 import com.countrygamer.core.common.tileentity.TileEntityDiagramer;
+import com.countrygamer.countrygamercore.Base.common.packet.PacketPipeline;
 import com.countrygamer.countrygamercore.lib.CoreUtil;
 import com.countrygamer.countrygamercore.lib.CoreUtilConfig;
 

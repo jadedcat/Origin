@@ -13,8 +13,8 @@ import net.minecraft.item.Item;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 
-import com.countrygamer.core.Base.Plugin.PluginBase;
-import com.countrygamer.core.Base.common.network.MessageSyncExtendedProperties;
+import com.countrygamer.countrygamercore.Base.Plugin.PluginBase;
+import com.countrygamer.countrygamercore.Base.common.network.MessageSyncExtendedProperties;
 import com.countrygamer.countrygamercore.common.network.MessageTeleport;
 import com.countrygamer.countrygamercore.common.network.MessageUpdateRedstoneState;
 

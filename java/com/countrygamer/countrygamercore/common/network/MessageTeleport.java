@@ -3,7 +3,7 @@ package com.countrygamer.countrygamercore.common.network;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 
-import com.countrygamer.core.Base.common.network.AbstractMessage;
+import com.countrygamer.countrygamercore.Base.common.network.AbstractMessage;
 import com.countrygamer.countrygamercore.lib.CoreUtil;
 
 public class MessageTeleport extends AbstractMessage {
