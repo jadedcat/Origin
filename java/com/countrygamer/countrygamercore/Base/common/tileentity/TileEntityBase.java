@@ -240,4 +240,13 @@ public class TileEntityBase extends TileEntity implements IRedstoneState, IFluid
 		this.tank.writeToNBT(tagCom);
 	}
 	
+	public boolean canHoldMoreFluid() {
+		if (this.tank != null) {
+			if (this.tank.getFluidAmount() < this.getTankCapacity()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }
