@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import com.countrygamer.countrygamercore.Base.common.block.IRedstoneState;
 import com.countrygamer.countrygamercore.lib.RedstoneState;
 
+@Deprecated
 public class TileEntityBase extends TileEntity implements IRedstoneState, IFluidHandler {
 	
 	private Class<? extends TileEntitySpecialRenderer> specialRendererClass = null;

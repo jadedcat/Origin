@@ -35,7 +35,9 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public abstract class PluginBase {
 	
-	private String pluginID = "", pluginName = "";
+	private String pluginName = "";
+	@SuppressWarnings("unused")
+	private String pluginID = "";
 	// private ArrayList<Class<? extends AbstractPacket>> packets = new ArrayList<Class<? extends
 	// AbstractPacket>>();
 	

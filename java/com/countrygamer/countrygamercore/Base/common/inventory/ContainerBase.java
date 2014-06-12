@@ -7,7 +7,8 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.countrygamer.countrygamercore.Base.common.tileentity.TileEntityInventoryBase;
+import com.countrygamer.countrygamercore.Base.common.item.ItemInvBase;
+import com.countrygamer.countrygamercore.Base.common.tile.TileEntityInventoryBase;
 
 /**
  * Base class for all Containers
@@ -94,6 +95,10 @@ public class ContainerBase extends Container {
 	protected void registerSlots() {
 	}
 	
+	protected void registerSlot(int slotID, int slotX, int slotY) {
+		this.addSlotToContainer(new Slot(this.inventory, slotID, slotX, slotY));
+	}
+	
 	/**
 	 * Method to auto-generate slots connected to this player's inventory
 	 * 
@@ -101,21 +106,48 @@ public class ContainerBase extends Container {
 	 * @param offsetY
 	 */
 	protected void registerPlayerSlots(int offsetX, int offsetY) {
+		this.registerPlayerSlots(offsetX, offsetY, new int[] {});
+	}
+	
+	protected void registerPlayerSlots(int offsetX, int offsetY, int[] finalSlotIDs) {
 		int i;
 		// PLAYER INVENTORY - uses default locations for standard inventory
 		// texture file
 		for (i = 0; i < 3; ++i) {
 			for (int j = 0; j < 9; ++j) {
-				this.addSlotToContainer(new Slot(this.player.inventory, j + i * 9 + 9, (8 + j * 18)
-						+ offsetX, (84 + i * 18) + offsetY));
+				int id = j + i * 9 + 9;
+				int x = (8 + j * 18) + offsetX;
+				int y = (84 + i * 18) + offsetY;
+				
+				boolean setSlot = false;
+				for (int slotIndex = 0; slotIndex < finalSlotIDs.length; slotIndex++) {
+					if (finalSlotIDs[slotIndex] == id) {
+						this.addSlotToContainer(new SlotFinal(this.player.inventory, id, x, y));
+						setSlot = true;
+						break;
+					}
+				}
+				if (!setSlot) this.addSlotToContainer(new Slot(this.player.inventory, id, x, y));
 			}
 		}
 		
 		// PLAYER ACTION BAR - uses default locations for standard action bar
 		// texture file
 		for (i = 0; i < 9; ++i) {
-			this.addSlotToContainer(new Slot(this.player.inventory, i, (8 + i * 18) + offsetX,
-					142 + offsetY));
+			int id = i;
+			int x = (8 + i * 18) + offsetX;
+			int y = 142 + offsetY;
+			
+			boolean setSlot = false;
+			for (int slotIndex = 0; slotIndex < finalSlotIDs.length; slotIndex++) {
+				if (finalSlotIDs[slotIndex] == id) {
+					this.addSlotToContainer(new SlotFinal(this.player.inventory, id, x, y));
+					setSlot = true;
+					break;
+				}
+			}
+			if (!setSlot) this.addSlotToContainer(new Slot(this.player.inventory, id, x, y));
+			
 		}
 	}
 	
@@ -140,7 +172,20 @@ public class ContainerBase extends Container {
 	
 	@Override
 	public ItemStack slotClick(int slotID, int buttonPressed, int flag, EntityPlayer player) {
-		if (this.isAttachedToItem()) this.needsUpdate = true;
+		if (this.isAttachedToItem()) {
+			this.needsUpdate = true;
+			/*
+			System.out.println();
+			if (slotID == this.thisItemIndex) {
+				System.out.println("Same index");
+				Slot slot = (Slot) this.inventorySlots.get(slotID);
+				if (slot != null
+						&& Container.func_94527_a(slot, player.inventory.getItemStack(), true)) {
+					System.out.println("Opener item slot");
+				}
+			}
+			 */
+		}
 		return super.slotClick(slotID, buttonPressed, flag, player);
 	}
 	
@@ -151,7 +196,9 @@ public class ContainerBase extends Container {
 				NBTTagCompound tagCom = heldStack.getTagCompound();
 				if (tagCom == null) tagCom = new NBTTagCompound();
 				
-				((InventoryItemBase) this.inventory).writeToNBT(tagCom);
+				NBTTagCompound invTagCom = new NBTTagCompound();
+				((InventoryItemBase) this.inventory).writeToNBT(invTagCom);
+				tagCom.setTag(ItemInvBase.inventoryDataKey, invTagCom);
 				
 				this.player.getHeldItem().setTagCompound(tagCom);
 			}

@@ -1,4 +1,6 @@
-package com.countrygamer.countrygamercore.Base.common.item;
+package com.countrygamer.countrygamercore.Base.common.item_old;
+
+import com.countrygamer.countrygamercore.Base.common.item.ItemBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;

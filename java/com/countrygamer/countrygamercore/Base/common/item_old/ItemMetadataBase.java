@@ -1,7 +1,9 @@
-package com.countrygamer.countrygamercore.Base.common.item;
+package com.countrygamer.countrygamercore.Base.common.item_old;
 
 import java.util.Arrays;
 import java.util.List;
+
+import com.countrygamer.countrygamercore.Base.common.item.ItemBase;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;

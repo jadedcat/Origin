@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.Base.common.item;
+package com.countrygamer.countrygamercore.Base.common.item_old;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;

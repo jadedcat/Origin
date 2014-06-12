@@ -9,8 +9,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import com.countrygamer.countrygamercore.Base.common.tileentity.TileEntityBase;
-import com.countrygamer.countrygamercore.Base.common.tileentity.TileEntityInventoryBase;
+import com.countrygamer.countrygamercore.Base.common.tile.TileEntityBase;
+import com.countrygamer.countrygamercore.Base.common.tile.TileEntityInventoryBase;
 
 /**
  * Basic Block class for tile entity blocks

@@ -1,5 +1,7 @@
 package com.countrygamer.countrygamercore.Base.common.inventory;
 
+import com.countrygamer.countrygamercore.Base.common.item.ItemInvBase;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -8,18 +10,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 public class InventoryItemBase implements IInventory {
-	private String							name	= "";
+	private String name = "";
 	
 	/** Defining your inventory size this way is handy */
-	public final int						INV_SIZE;
+	public final int INV_SIZE;
 	
 	/**
 	 * Inventory's size must be same as number of slots you add to the Container
 	 * class
 	 */
-	ItemStack[]								inventory;
+	ItemStack[] inventory;
 	
-	protected final Class<? extends Item>	itemClass;
+	protected final Class<? extends Item> itemClass;
 	
 	/**
 	 * @param itemstack
@@ -31,12 +33,13 @@ public class InventoryItemBase implements IInventory {
 		this.INV_SIZE = invSize;
 		this.inventory = new ItemStack[invSize];
 		this.itemClass = itemClass;
+		
 		// Just in case the itemstack doesn't yet have an NBT Tag Compound:
 		if (!itemstack.hasTagCompound()) {
 			itemstack.setTagCompound(new NBTTagCompound());
 		}
 		// Read the inventory contents from NBT
-		readFromNBT(itemstack.getTagCompound());
+		readFromNBT(itemstack.getTagCompound().getCompoundTag(ItemInvBase.inventoryDataKey));
 	}
 	
 	@Override

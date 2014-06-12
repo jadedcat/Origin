@@ -510,51 +510,7 @@ public class CoreUtil {
 		return (new Random()).nextInt(100) < percent;
 	}
 	
-	/**
-	 * Used for rendering items in block renders
-	 * 
-	 * @param itemRender
-	 * @param itemStack
-	 * @return
-	 */
-	public static float getGhostItemScaleFactor(RenderItem itemRender, ItemStack itemStack) {
-		float scaleFactor = 1.0F;
-		
-		if (itemStack != null) {
-			if (itemStack.getItem() instanceof ItemBlock) {
-				switch (itemRender.getMiniBlockCount(itemStack, (byte) 0)) {
-					case 1:
-						return 0.90F;
-					case 2:
-						return 0.90F;
-					case 3:
-						return 0.90F;
-					case 4:
-						return 0.90F;
-					case 5:
-						return 0.80F;
-					default:
-						return 0.90F;
-				}
-			}
-			else {
-				switch (itemRender.getMiniItemCount(itemStack, (byte) 0)) {
-					case 1:
-						return 0.65F;
-					case 2:
-						return 0.65F;
-					case 3:
-						return 0.65F;
-					case 4:
-						return 0.65F;
-					default:
-						return 0.65F;
-				}
-			}
-		}
-		
-		return scaleFactor;
-	}
+	
 	
 	/*
 	public static class InversedRecipe {

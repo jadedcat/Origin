@@ -20,12 +20,13 @@ import org.lwjgl.opengl.GL11;
 
 import com.countrygamer.countrygamercore.Base.common.inventory.ContainerBase;
 import com.countrygamer.countrygamercore.Base.common.inventory.InventoryItemBase;
-import com.countrygamer.countrygamercore.Base.common.tileentity.TileEntityInventoryBase;
+import com.countrygamer.countrygamercore.Base.common.tile.TileEntityInventoryBase;
 import com.countrygamer.countrygamercore.common.Core;
 
 /**
  * A base class for all GuiContainers
  * TODO, move {@link GuiContainer} to here so that this can extend {@link GuiScreenBase}
+ * 
  * @author Country_Gamer
  * 
  */
@@ -84,6 +85,7 @@ public abstract class GuiContainerBase extends GuiContainer {
 	public void onGuiClosed() {
 		super.onGuiClosed();
 		Keyboard.enableRepeatEvents(false);
+		
 	}
 	
 	@Override
@@ -182,9 +184,7 @@ public abstract class GuiContainerBase extends GuiContainer {
 	
 	@Override
 	protected final void drawGuiContainerForegroundLayer(int par1, int par2) {
-		if (!this.title.equals(""))
-			this.drawTitle(
-					(this.xSize / 2) - (this.fontRendererObj.getStringWidth(this.title) / 2), 5);
+		if (!this.title.equals("")) this.renderTitle();
 		
 		this.foregroundText();
 	}
@@ -193,6 +193,10 @@ public abstract class GuiContainerBase extends GuiContainer {
 	 * Used to draw foreground objects (like text)
 	 */
 	protected abstract void foregroundText();
+	
+	protected void renderTitle() {
+		this.drawTitle((this.xSize / 2) - (this.fontRendererObj.getStringWidth(this.title) / 2), 5);
+	}
 	
 	protected final void drawTitle(int titleX, int titleY) {
 		this.titleX = titleX;

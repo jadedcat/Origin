@@ -1,5 +1,7 @@
 package com.countrygamer.countrygamercore.Base.common.inventory;
 
+import com.countrygamer.countrygamercore.Base.common.item.ItemInvBase;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,10 +12,10 @@ import net.minecraft.nbt.NBTTagCompound;
 @Deprecated
 public class ContainerItemBase extends Container {
 	/** The Item Inventory for this Container */
-	public final InventoryItemBase	inventory;
-
-	public final EntityPlayer		player;
-
+	public final InventoryItemBase inventory;
+	
+	public final EntityPlayer player;
+	
 	/**
 	 * Stores ItemStack that was used to open the container; used for saving to
 	 * NBT
@@ -21,11 +23,11 @@ public class ContainerItemBase extends Container {
 	 * the
 	 * ItemStore whose inventory is currently in use
 	 */
-	private final ItemStack			containerstack;
-
+	private final ItemStack containerstack;
+	
 	/** Set to true when contents of container have changed and need to be saved */
-	public boolean					needsUpdate;
-
+	public boolean needsUpdate;
+	
 	/**
 	 * Using these will make transferStackInSlot easier to understand and
 	 * implement
@@ -38,24 +40,24 @@ public class ContainerItemBase extends Container {
 	 * InventoryItem.INV_SIZE and if we ever change it, the Container updates
 	 * automatically.
 	 */
-	private static final int		INV_START	= 36, INV_END = INV_START + 26,
-			HOTBAR_START = INV_END + 1, HOTBAR_END = HOTBAR_START + 8;
-
+	private static final int INV_START = 36, INV_END = INV_START + 26, HOTBAR_START = INV_END + 1,
+			HOTBAR_END = HOTBAR_START + 8;
+	
 	// If you're planning to add armor slots, put those first like this:
 	// ARMOR_START = InventoryItem.INV_SIZE, ARMOR_END = ARMOR_START+3,
 	// INV_START = ARMOR_END+1, and then carry on like above.
-
+	
 	public ContainerItemBase(EntityPlayer par1Player, InventoryPlayer inventoryPlayer,
-	                         InventoryItemBase inventoryItem) {
+			InventoryItemBase inventoryItem) {
 		this.inventory = inventoryItem;
 		this.player = par1Player;
 		this.containerstack = par1Player.getHeldItem();
 		this.registerSlots(inventoryPlayer);
 	}
-
+	
 	protected void registerSlots(InventoryPlayer inventoryPlayer) {
 	}
-
+	
 	protected void registerPlayerSlots(InventoryPlayer inventoryPlayer, int offsetX, int offsetY) {
 		int i;
 		// PLAYER INVENTORY - uses default locations for standard inventory
@@ -66,7 +68,7 @@ public class ContainerItemBase extends Container {
 						+ offsetX, (84 + i * 18) + offsetY));
 			}
 		}
-
+		
 		// PLAYER ACTION BAR - uses default locations for standard action bar
 		// texture file
 		for (i = 0; i < 9; ++i) {
@@ -74,7 +76,7 @@ public class ContainerItemBase extends Container {
 					142 + offsetY));
 		}
 	}
-
+	
 	/**
 	 * Writes contents of inventory to correct itemstack's NBT Tag Compound
 	 * This is the method we will call from our custom Item's onUpdate method
@@ -85,14 +87,15 @@ public class ContainerItemBase extends Container {
 			this.containerstack.setTagCompound(new NBTTagCompound());
 		}
 		// Cast to InventoryItem so we can call the method from that class:
-		((InventoryItemBase) inventory).writeToNBT(this.containerstack.getTagCompound());
+		((InventoryItemBase) inventory).writeToNBT(this.containerstack.getTagCompound()
+				.getCompoundTag(ItemInvBase.inventoryDataKey));
 	}
-
+	
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
 		return true;
 	}
-
+	
 	/**
 	 * Called when a player shift-clicks on a slot. You must override this or
 	 * you will crash when someone does that.
@@ -102,11 +105,11 @@ public class ContainerItemBase extends Container {
 	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int i) {
 		ItemStack itemstack = null;
 		Slot slot = (Slot) this.inventorySlots.get(i);
-
+		
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
-
+			
 			// If item is in our custom Inventory or armor slot
 			if (i < INV_START) {
 				// try to place in player inventory / action bar
@@ -114,7 +117,7 @@ public class ContainerItemBase extends Container {
 					if (!this.mergeItemStack(itemstack1, INV_START, HOTBAR_END + 1, true)) {
 						return null;
 					}
-
+				
 				slot.onSlotChange(itemstack1, itemstack);
 			}
 			// Item is in inventory / hotbar, try to place in custom inventory
@@ -123,7 +126,8 @@ public class ContainerItemBase extends Container {
 				if (((Slot) slot).isItemValid(itemstack1))
 					if (!this.mergeItemStack(itemstack1, 0, this.inventory.INV_SIZE, true)) {
 						return null;
-					}else{
+					}
+					else {
 						slot.putStack((ItemStack) null);
 					}
 				/* If your inventory only stores certain instances of Items,
@@ -157,41 +161,41 @@ public class ContainerItemBase extends Container {
 				// item is in player's inventory, but not in action bar
 				if (i >= INV_START && i < HOTBAR_START) {
 					// place in action bar
-
+					
 					if (!this.mergeItemStack(itemstack1, HOTBAR_START, HOTBAR_END + 1, false)) {
 						return null;
 					}
 				}
 				// item in action bar - place in player inventory
 				else if (i >= HOTBAR_START && i < HOTBAR_END + 1) {
-
+					
 					if (!this.mergeItemStack(itemstack1, INV_START, INV_END + 1, false)) {
 						return null;
 					}
 				}
 			}
-
+			
 			if (itemstack1.stackSize == 0) {
 				slot.putStack((ItemStack) null);
 			}
 			else {
 				slot.onSlotChanged();
 			}
-
+			
 			if (itemstack1.stackSize == itemstack.stackSize) {
 				return null;
 			}
-
+			
 			slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
 		}
-
+		
 		// This flag tells our custom Item to call ContainerItem's writeToNBT
 		// method
 		this.needsUpdate = true;
-
+		
 		return itemstack;
 	}
-
+	
 	/**
 	 * We only override this so that we can tell our InventoryItem to update
 	 */
@@ -200,5 +204,5 @@ public class ContainerItemBase extends Container {
 		this.needsUpdate = true;
 		return super.slotClick(slotID, buttonPressed, flag, player);
 	}
-
+	
 }

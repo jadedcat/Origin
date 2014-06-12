@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagList;
 
 import com.countrygamer.countrygamercore.lib.UtilDrops;
 
+@Deprecated
 public class TileEntityInventoryBase extends TileEntityBase implements IInventory, ISidedInventory {
 	
 	protected ItemStack[] inv;

@@ -8,14 +8,25 @@ import net.minecraft.nbt.NBTTagList;
 
 public class InventoryBase implements IInventory {
 	
-	protected String		name	= "";
-	public final int		INV_SIZE;
-	protected ItemStack[]	inventory;
+	protected String name = "";
+	public final int INV_SIZE;
+	protected ItemStack[] inventory;
+	private ItemStack ownerStack;
 	
 	public InventoryBase(String title, int inventorySize) {
+		this(title, inventorySize, null);
+	}
+	
+	public InventoryBase(String title, int inventorySize, ItemStack itemStack) {
 		this.name = title;
 		INV_SIZE = inventorySize;
 		this.inventory = new ItemStack[INV_SIZE];
+		this.ownerStack = itemStack;
+		
+		if (this.ownerStack != null && !this.ownerStack.hasTagCompound()) {
+			this.ownerStack.setTagCompound(new NBTTagCompound());
+		}
+		
 	}
 	
 	@Override

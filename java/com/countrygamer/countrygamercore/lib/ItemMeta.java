@@ -20,14 +20,16 @@ public class ItemMeta {
 		return im;
 	}
 	
-	private Item	item;
-	private int		meta;
+	private Item item;
+	private int meta;
+	private boolean isBlock = false;
 	
 	ItemMeta() {
 	}
 	
 	public ItemMeta(Block block, int metadata) {
 		this(Item.getItemFromBlock(block), metadata);
+		this.isBlock = true;
 	}
 	
 	public ItemMeta(Item item, int metadata) {
@@ -38,12 +40,14 @@ public class ItemMeta {
 	public void saveToNBT(NBTTagCompound compound) {
 		compound.setInteger("item_id", Item.getIdFromItem(this.item));
 		compound.setInteger("metadata", this.meta);
+		compound.setBoolean("isBlock", this.isBlock);
 		
 	}
 	
 	public void loadFromNBT(NBTTagCompound compound) {
 		this.item = Item.getItemById(compound.getInteger("item_id"));
 		this.meta = compound.getInteger("metadata");
+		this.isBlock = compound.getBoolean("isBlock");
 		
 	}
 	
@@ -70,6 +74,21 @@ public class ItemMeta {
 	
 	public void print() {
 		System.out.println(this.item.getUnlocalizedName() + " - " + this.meta);
+	}
+	
+	public Item getItem() {
+		return this.item;
+	}
+	
+	public Block getBlock() {
+		if (this.isBlock) {
+			return Block.getBlockFromItem(this.item);
+		}
+		return null;
+	}
+	
+	public int getMetadata() {
+		return this.meta;
 	}
 	
 }
