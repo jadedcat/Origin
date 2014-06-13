@@ -167,7 +167,92 @@ public class ContainerBase extends Container {
 	 */
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotiD) {
-		return null;
+		Slot slot = (Slot) this.inventorySlots.get(slotiD);
+		ItemStack stackInSlot = null;
+		
+		if (slot != null && slot.getHasStack()) {
+			ItemStack stackInSlotCopy = slot.getStack().copy();
+			stackInSlot = stackInSlotCopy.copy();
+			
+			int inventorySize = this.getIInventory().getSizeInventory();
+			int playerInventoryEnd = inventorySize + 36;
+			int playerHotBarStartID = playerInventoryEnd - 9;
+			
+			if (slotiD < inventorySize) {
+				// slot in this container's inventory
+				
+				if (!this.mergeItemStack(stackInSlotCopy, inventorySize, playerInventoryEnd, false)) {
+					return null;
+				}
+				
+				slot.onSlotChange(stackInSlotCopy, stackInSlot);
+			}
+			else {
+				// slot in player's inventory
+				/*
+				// try to put in this inventory
+				if (!this.mergeItemStack(stackInSlotCopy, 0, inventorySize , true)) {
+					return null;
+				}
+				// try to put in hotbar
+				else*/
+				
+				int targetSlotID = this.getSlotIDForItemStack(stackInSlotCopy);
+				if (targetSlotID >= 0) {
+					Slot targetSlot = (Slot) this.inventorySlots.get(targetSlotID);
+					if (this.isItemValidForSlot(targetSlot, stackInSlotCopy)) {
+						if (!this.mergeItemStack(stackInSlotCopy, targetSlotID,
+								this.getExcludedMaximumSlotIDForItemStack(stackInSlotCopy), false))
+							return null;
+					}
+				}
+				else {
+					if (slotiD < playerHotBarStartID) {
+						// slot not part of hotbar
+						if (!this.mergeItemStack(stackInSlotCopy, playerHotBarStartID,
+								playerHotBarStartID + 9, false)) {
+							return null;
+						}
+					}
+					// try to put in player inventory
+					else {
+						// slot is in hotbar
+						if (!this.mergeItemStack(stackInSlotCopy, inventorySize,
+								playerHotBarStartID, false)) {
+							return null;
+						}
+					}
+				}
+				
+			}
+			
+			if (stackInSlotCopy.stackSize == 0) {
+				slot.putStack((ItemStack) null);
+			}
+			else {
+				slot.onSlotChanged();
+			}
+			
+			if (stackInSlotCopy.stackSize == stackInSlot.stackSize) {
+				return null;
+			}
+			
+			slot.onPickupFromSlot(player, stackInSlotCopy);
+		}
+		
+		return stackInSlot;
+	}
+	
+	protected int getSlotIDForItemStack(ItemStack stackToProcess) {
+		return -1;
+	}
+	
+	protected int getExcludedMaximumSlotIDForItemStack(ItemStack stackToProcess) {
+		return this.getIInventory().getSizeInventory();
+	}
+	
+	protected boolean isItemValidForSlot(Slot slot, ItemStack stackToProcess) {
+		return slot.isItemValid(stackToProcess);
 	}
 	
 	@Override
@@ -177,12 +262,12 @@ public class ContainerBase extends Container {
 			/*
 			System.out.println();
 			if (slotID == this.thisItemIndex) {
-				System.out.println("Same index");
-				Slot slot = (Slot) this.inventorySlots.get(slotID);
-				if (slot != null
-						&& Container.func_94527_a(slot, player.inventory.getItemStack(), true)) {
-					System.out.println("Opener item slot");
-				}
+			System.out.println("Same index");
+			Slot slot = (Slot) this.inventorySlots.get(slotID);
+			if (slot != null
+					&& Container.func_94527_a(slot, player.inventory.getItemStack(), true)) {
+				System.out.println("Opener item slot");
+			}
 			}
 			 */
 		}
@@ -194,8 +279,6 @@ public class ContainerBase extends Container {
 			ItemStack heldStack = this.player.getHeldItem();
 			if (heldStack != null) {
 				NBTTagCompound tagCom = heldStack.getTagCompound();
-				if (tagCom == null) tagCom = new NBTTagCompound();
-				
 				NBTTagCompound invTagCom = new NBTTagCompound();
 				((InventoryItemBase) this.inventory).writeToNBT(invTagCom);
 				tagCom.setTag(ItemInvBase.inventoryDataKey, invTagCom);

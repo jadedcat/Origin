@@ -140,11 +140,11 @@ public class GuiScreenBase extends GuiScreen {
 	}
 	
 	@Override
-	public void drawScreen(int par1, int par2, float par3) {
-		this.drawGuiContainerBackgroundLayer(par3, par1, par2);
+	public void drawScreen(int par1, int par2, float renderPartialTicks) {
+		this.drawGuiContainerBackgroundLayer(renderPartialTicks, par1, par2);
 		this.drawGuiContainerForegroundLayer(par1, par2);
 		
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(par1, par2, renderPartialTicks);
 		
 		this.drawHoverInfo(par1, par2);
 		

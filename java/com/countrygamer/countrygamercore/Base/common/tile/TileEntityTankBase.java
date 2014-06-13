@@ -28,7 +28,7 @@ public class TileEntityTankBase extends TileEntityInventoryBase implements IFlui
 		this(name, tankSize, 0, 0);
 	}
 	
-	public TileEntityTankBase(String name, int tankSize, int inventorySize, int maxStackSize) {
+	public TileEntityTankBase(String name, int inventorySize, int maxStackSize, int tankSize) {
 		super(name, inventorySize, maxStackSize);
 		
 		if (tankSize > 0) {
@@ -97,7 +97,7 @@ public class TileEntityTankBase extends TileEntityInventoryBase implements IFlui
 	}
 	
 	public void clearTank() {
-		this.tank.setFluid(null);
+		if (this.tank != null) this.tank.setFluid(null);
 	}
 	
 	public boolean canHoldMoreFluid() {

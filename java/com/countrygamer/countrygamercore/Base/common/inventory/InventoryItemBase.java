@@ -34,12 +34,10 @@ public class InventoryItemBase implements IInventory {
 		this.inventory = new ItemStack[invSize];
 		this.itemClass = itemClass;
 		
-		// Just in case the itemstack doesn't yet have an NBT Tag Compound:
-		if (!itemstack.hasTagCompound()) {
-			itemstack.setTagCompound(new NBTTagCompound());
-		}
 		// Read the inventory contents from NBT
-		readFromNBT(itemstack.getTagCompound().getCompoundTag(ItemInvBase.inventoryDataKey));
+		NBTTagCompound tagCom = itemstack.getTagCompound();
+		NBTTagCompound invTagCom = tagCom.getCompoundTag(ItemInvBase.inventoryDataKey);
+		readFromNBT(invTagCom);
 	}
 	
 	@Override
@@ -141,44 +139,42 @@ public class InventoryItemBase implements IInventory {
 	 * A custom method to read our inventory from an ItemStack's NBT compound
 	 */
 	public void readFromNBT(NBTTagCompound compound) {
-		// now you must include the NBTBase type ID when getting the list;
-		// NBTTagCompound's ID is 10
-		NBTTagList items = compound.getTagList("ItemInventory", compound.getId());
-		for (int i = 0; i < items.tagCount(); ++i) {
-			// tagAt(int) has changed to getCompoundTagAt(int)
-			NBTTagCompound item = items.getCompoundTagAt(i);
-			byte slot = item.getByte("Slot");
-			if (slot >= 0 && slot < getSizeInventory()) {
-				setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(item));
+		// System.out.println("Reading");
+		NBTTagList stackList = compound.getTagList("Stacks", 10);
+		
+		// System.out.println("list has " + stackList.tagCount() + " tags");
+		
+		for (int i = 0; i < stackList.tagCount(); ++i) {
+			NBTTagCompound nbttagcompound1 = stackList.getCompoundTagAt(i);
+			int j = nbttagcompound1.getByte("Slot") & 255;
+			
+			if (j >= 0 && j < this.getSizeInventory()) {
+				this.setInventorySlotContents(j, ItemStack.loadItemStackFromNBT(nbttagcompound1));
 			}
 		}
+		
 	}
 	
 	/**
 	 * A custom method to write our inventory to an ItemStack's NBT compound
 	 */
-	public void writeToNBT(NBTTagCompound tagcompound) {
-		// Create a new NBT Tag List to store itemstacks as NBT Tags
-		NBTTagList nbttaglist = new NBTTagList();
+	public void writeToNBT(NBTTagCompound compound) {
+		// System.out.println("Writing");
+		NBTTagList stackList = new NBTTagList();
 		
 		for (int i = 0; i < this.getSizeInventory(); ++i) {
-			// Only write stacks that contain items
 			if (this.getStackInSlot(i) != null) {
-				// Make a new NBT Tag Compound to write the itemstack and slot
-				// index to
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setInteger("Slot", i);
-				// Writes the itemstack in slot(i) to the Tag Compound we just
-				// made
+				nbttagcompound1.setByte("Slot", (byte) i);
 				this.getStackInSlot(i).writeToNBT(nbttagcompound1);
-				
-				// add the tag compound to our tag list
-				nbttaglist.appendTag(nbttagcompound1);
+				stackList.appendTag(nbttagcompound1);
 			}
 		}
-		// Add the TagList to the ItemStack's Tag Compound with the name
-		// "ItemInventory"
-		tagcompound.setTag("ItemInventory", nbttaglist);
+		
+		// System.out.println("Saved list with " + stackList.tagCount() + " tags");
+		
+		compound.setTag("Stacks", stackList);
+		
 	}
 	
 }

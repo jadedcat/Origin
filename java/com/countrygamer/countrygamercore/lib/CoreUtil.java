@@ -7,14 +7,12 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -44,7 +42,8 @@ public class CoreUtil {
 	public static final float oneSixteenth = 1.0F / 16.0F;
 	
 	public static void sendMessageToPlayer(EntityPlayer player, String message) {
-		player.addChatComponentMessage(new ChatComponentText(message));
+		if (player.worldObj.isRemote)
+			player.addChatComponentMessage(new ChatComponentText(message));
 	}
 	
 	public static HashMap<ItemStack, ItemStack> getBasicOreDict() {
@@ -509,8 +508,6 @@ public class CoreUtil {
 	public static boolean chance(int percent) {
 		return (new Random()).nextInt(100) < percent;
 	}
-	
-	
 	
 	/*
 	public static class InversedRecipe {

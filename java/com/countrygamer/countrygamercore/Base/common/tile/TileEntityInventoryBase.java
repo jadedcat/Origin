@@ -43,6 +43,7 @@ public class TileEntityInventoryBase extends TileEntityBase implements IInventor
 	public void writeToNBT(NBTTagCompound tagCom) {
 		super.writeToNBT(tagCom);
 		
+		tagCom.setInteger("sizeInv", this.inv.length);
 		NBTTagList tagList = new NBTTagList();
 		for (int i = 0; i < this.inv.length; ++i) {
 			if (this.inv[i] != null) {
@@ -54,6 +55,8 @@ public class TileEntityInventoryBase extends TileEntityBase implements IInventor
 		}
 		tagCom.setTag("Items", tagList);
 		
+		tagCom.setInteger("maxStackSize", this.maxStackSize);
+		
 	}
 	
 	@Override
@@ -61,7 +64,7 @@ public class TileEntityInventoryBase extends TileEntityBase implements IInventor
 		super.readFromNBT(tagCom);
 		
 		NBTTagList tagList = tagCom.getTagList("Items", 10);
-		this.inv = new ItemStack[this.getSizeInventory()];
+		this.inv = new ItemStack[tagCom.getInteger("sizeInv")];
 		for (int i = 0; i < tagList.tagCount(); ++i) {
 			NBTTagCompound nbttagcompound1 = tagList.getCompoundTagAt(i);
 			int j = nbttagcompound1.getByte("Slot") & 255;
@@ -70,7 +73,7 @@ public class TileEntityInventoryBase extends TileEntityBase implements IInventor
 				this.inv[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
 			}
 		}
-		
+				
 	}
 	
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -137,7 +140,7 @@ public class TileEntityInventoryBase extends TileEntityBase implements IInventor
 	
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemStack) {
-		this.inv[i] = itemStack;
+		this.inv[i] = itemStack == null ? null : itemStack.copy();
 		this.markDirty();
 	}
 	
