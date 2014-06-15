@@ -40,6 +40,10 @@ public abstract class GuiContainerBase extends GuiContainer {
 	
 	protected ArrayList<GuiTextField> textFieldList = new ArrayList<GuiTextField>();
 	
+	public GuiContainerBase(ContainerBase container) {
+		this(176, 166, container);
+	}
+	
 	public GuiContainerBase(int xSize, int ySize, ContainerBase container) {
 		super(container);
 		this.xSize = xSize <= 0 ? 176 : xSize;
@@ -99,8 +103,7 @@ public abstract class GuiContainerBase extends GuiContainer {
 	 * Triggered when a button is pressed in this gui
 	 * 
 	 */
-	protected void buttonPress(int id) {
-	}
+	protected abstract void buttonPress(int id);
 	
 	/**
 	 * Save info about this gui.

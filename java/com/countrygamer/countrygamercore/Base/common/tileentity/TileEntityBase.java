@@ -16,7 +16,7 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import com.countrygamer.countrygamercore.Base.common.block.IRedstoneState;
+import com.countrygamer.countrygamercore.Base.common.tile.IRedstoneState;
 import com.countrygamer.countrygamercore.lib.RedstoneState;
 
 @Deprecated

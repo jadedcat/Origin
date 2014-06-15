@@ -43,8 +43,11 @@ public class BlockBase extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		this.blockIcon = iconRegister.registerIcon(this.modid + ":"
-				+ this.getUnlocalizedName().substring(5));
+		this.blockIcon = iconRegister.registerIcon(this.modid + ":" + this.getName());
+	}
+	
+	public String getName() {
+		return this.getUnlocalizedName().substring(5);
 	}
 	
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player,
@@ -74,7 +77,7 @@ public class BlockBase extends Block {
 		}
 		super.breakBlock(world, x, y, z, block, meta);
 	}
-	*/
+	 */
 	
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {

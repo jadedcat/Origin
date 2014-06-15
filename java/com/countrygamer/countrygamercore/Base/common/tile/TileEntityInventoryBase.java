@@ -73,7 +73,7 @@ public class TileEntityInventoryBase extends TileEntityBase implements IInventor
 				this.inv[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
 			}
 		}
-				
+		
 	}
 	
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -92,6 +92,7 @@ public class TileEntityInventoryBase extends TileEntityBase implements IInventor
 			}
 		}
 	}
+	
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// ~~~~~~~~~~~~~~~~~~~~ Inventory methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	@Override
@@ -130,6 +131,14 @@ public class TileEntityInventoryBase extends TileEntityBase implements IInventor
 		}
 		else {
 			return null;
+		}
+	}
+	
+	public void addToStack(int slotID, ItemStack itemStack) {
+		if (this.checkSlotAvailibility(slotID, itemStack)) {
+			ItemStack newItemStack = this.getStackInSlot(slotID).copy();
+			newItemStack.stackSize += itemStack.stackSize;
+			this.setInventorySlotContents(slotID, newItemStack);
 		}
 	}
 	
@@ -192,13 +201,32 @@ public class TileEntityInventoryBase extends TileEntityBase implements IInventor
 	}
 	
 	@Override
-	public boolean canInsertItem(int i, ItemStack itemStack, int i2) {
-		return false;
+	public boolean canInsertItem(int i, ItemStack itemStack, int side) {
+		return this.checkSlotAvailibility(i, itemStack);
+	}
+	
+	public boolean checkSlotAvailibility(int slotID, ItemStack itemStack) {
+		if (this.getStackInSlot(slotID) != null) {
+			ItemStack stackInSlot = this.getStackInSlot(slotID).copy();
+			
+			boolean sameItem = stackInSlot.getItem() == itemStack.getItem();
+			boolean sameMeta = stackInSlot.getItemDamage() == itemStack.getItemDamage();
+			boolean sameNBT = ItemStack.areItemStackTagsEqual(stackInSlot, itemStack);
+			
+			if (sameItem && sameMeta && sameNBT) {
+				if (stackInSlot.stackSize + itemStack.stackSize <= stackInSlot.getMaxStackSize()) {
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		return true;
 	}
 	
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemStack, int i2) {
-		return false;
+	public boolean canExtractItem(int i, ItemStack itemStack, int side) {
+		return true;
 	}
 	
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

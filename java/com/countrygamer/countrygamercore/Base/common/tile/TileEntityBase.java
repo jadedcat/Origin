@@ -10,7 +10,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
-import com.countrygamer.countrygamercore.Base.common.block.IRedstoneState;
+import com.countrygamer.countrygamercore.lib.Activity;
 import com.countrygamer.countrygamercore.lib.RedstoneState;
 import com.countrygamer.countrygamercore.lib.UtilDrops;
 
@@ -20,7 +20,7 @@ import com.countrygamer.countrygamercore.lib.UtilDrops;
  * @author Country_Gamer
  * 
  */
-public class TileEntityBase extends TileEntity implements IRedstoneState {
+public class TileEntityBase extends TileEntity implements IRedstoneState, IActivity {
 	
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// ~~~~~~~~~~~~~~~~~~~~ Global Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -34,6 +34,7 @@ public class TileEntityBase extends TileEntity implements IRedstoneState {
 	 * Holds the current state of this tile entity
 	 */
 	private RedstoneState redstoneState;
+	private Activity activityState;
 	/**
 	 * Hold whether or not this tile is recieving power
 	 */
@@ -47,7 +48,8 @@ public class TileEntityBase extends TileEntity implements IRedstoneState {
 		super();
 		this.name = name;
 		
-		this.setRedstoneState(RedstoneState.HIGH);
+		// this.setRedstoneState(RedstoneState.HIGH);
+		// this.setActivity(Activity.PULSE);
 		
 	}
 	
@@ -76,7 +78,10 @@ public class TileEntityBase extends TileEntity implements IRedstoneState {
 		tagCom.setString("teName", this.name);
 		
 		tagCom.setBoolean("base_hasPower", this.isRecievingPower);
+		if (this.redstoneState == null) this.redstoneState = RedstoneState.HIGH;
 		tagCom.setInteger("redstoneStateID", RedstoneState.getIntFromState(this.redstoneState));
+		if (this.activityState == null) this.activityState = Activity.PULSE;
+		tagCom.setInteger("activityState_ID", Activity.getInt(this.activityState));
 		
 	}
 	
@@ -88,6 +93,7 @@ public class TileEntityBase extends TileEntity implements IRedstoneState {
 		
 		this.isRecievingPower = tagCom.getBoolean("base_hasPower");
 		this.redstoneState = RedstoneState.getStateFromInt(tagCom.getInteger("redstoneStateID"));
+		this.activityState = Activity.getState(tagCom.getInteger("activityState_ID"));
 		
 	}
 	
@@ -117,6 +123,16 @@ public class TileEntityBase extends TileEntity implements IRedstoneState {
 	@Override
 	public RedstoneState getRedstoneState() {
 		return this.redstoneState;
+	}
+	
+	@Override
+	public void setActivity(Activity activity) {
+		this.activityState = activity;
+	}
+	
+	@Override
+	public Activity getActivity() {
+		return this.activityState;
 	}
 	
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -159,4 +175,5 @@ public class TileEntityBase extends TileEntity implements IRedstoneState {
 		drops.add(new ItemStack(block, 1, meta));
 	}
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
 }

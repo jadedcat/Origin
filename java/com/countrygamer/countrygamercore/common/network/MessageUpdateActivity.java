@@ -6,22 +6,22 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import com.countrygamer.countrygamercore.Base.common.network.AbstractMessage;
-import com.countrygamer.countrygamercore.Base.common.tile.IRedstoneState;
-import com.countrygamer.countrygamercore.lib.RedstoneState;
+import com.countrygamer.countrygamercore.Base.common.tile.IActivity;
+import com.countrygamer.countrygamercore.lib.Activity;
 
-public class MessageUpdateRedstoneState extends AbstractMessage {
+public class MessageUpdateActivity extends AbstractMessage {
 	
 	int x, y, z;
-	RedstoneState redstoneState;
+	Activity activityState;
 	
-	public MessageUpdateRedstoneState() {
+	public MessageUpdateActivity() {
 	}
 	
-	public MessageUpdateRedstoneState(int x, int y, int z, RedstoneState state) {
+	public MessageUpdateActivity(int x, int y, int z, Activity state) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.redstoneState = state;
+		this.activityState = state;
 		
 	}
 	
@@ -30,7 +30,7 @@ public class MessageUpdateRedstoneState extends AbstractMessage {
 		buffer.writeInt(x);
 		buffer.writeInt(y);
 		buffer.writeInt(z);
-		buffer.writeInt(RedstoneState.getIntFromState(this.redstoneState));
+		buffer.writeInt(Activity.getInt(this.activityState));
 		
 	}
 	
@@ -39,7 +39,7 @@ public class MessageUpdateRedstoneState extends AbstractMessage {
 		x = buffer.readInt();
 		y = buffer.readInt();
 		z = buffer.readInt();
-		this.redstoneState = RedstoneState.getStateFromInt(buffer.readInt());
+		this.activityState = Activity.getState(buffer.readInt());
 		
 	}
 	
@@ -54,13 +54,13 @@ public class MessageUpdateRedstoneState extends AbstractMessage {
 	}
 	
 	private void passStateToIRedstoneState(EntityPlayer player) {
-		//Core.logger.info("Recieved Redstone packet on "
-		//		+ (player.worldObj.isRemote ? "Client" : "Server"));
+		// Core.logger.info("Recieved Redstone packet on "
+		// + (player.worldObj.isRemote ? "Client" : "Server"));
 		TileEntity tileEnt = player.worldObj.getTileEntity(x, y, z);
 		
-		if (tileEnt != null && tileEnt instanceof IRedstoneState) {
-			//Core.logger.info("Succesfully saved redstone");
-			((IRedstoneState) tileEnt).setRedstoneState(this.redstoneState);
+		if (tileEnt != null && tileEnt instanceof IActivity) {
+			// Core.logger.info("Succesfully saved redstone");
+			((IActivity) tileEnt).setActivity(this.activityState);
 			
 			Block block = player.worldObj.getBlock(x, y, z);
 			player.worldObj.notifyBlockOfNeighborChange(x + 1, y + 0, z + 0, block);

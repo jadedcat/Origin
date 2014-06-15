@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.Base.common.block;
+package com.countrygamer.countrygamercore.Base.common.tile;
 
 import com.countrygamer.countrygamercore.lib.RedstoneState;
 

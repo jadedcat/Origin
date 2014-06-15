@@ -16,6 +16,7 @@ import net.minecraftforge.common.DimensionManager;
 import com.countrygamer.countrygamercore.Base.Plugin.PluginBase;
 import com.countrygamer.countrygamercore.Base.common.network.MessageSyncExtendedProperties;
 import com.countrygamer.countrygamercore.common.network.MessageTeleport;
+import com.countrygamer.countrygamercore.common.network.MessageUpdateActivity;
 import com.countrygamer.countrygamercore.common.network.MessageUpdateRedstoneState;
 
 import cpw.mods.fml.common.Mod;
@@ -65,7 +66,8 @@ public class Core extends PluginBase {
 		((CoreOptions) this.options).vanillaCraftSmelt();
 		
 		this.regsiterPacketHandler(Core.pluginID, MessageSyncExtendedProperties.class,
-				MessageTeleport.class, MessageUpdateRedstoneState.class);
+				MessageTeleport.class, MessageUpdateRedstoneState.class,
+				MessageUpdateActivity.class);
 		
 	}
 	

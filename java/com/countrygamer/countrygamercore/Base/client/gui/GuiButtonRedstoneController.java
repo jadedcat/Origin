@@ -21,7 +21,7 @@ public class GuiButtonRedstoneController {
 	}
 	
 	/**
-	 * Returns the button ID after adding the redstone buttons. int[] positions MUSt have a length
+	 * Returns the button ID after adding the redstone buttons. int[] positions MUST have a length
 	 * of 6 integers (x, y) x3 (for each button).
 	 * 
 	 * @param buttonList

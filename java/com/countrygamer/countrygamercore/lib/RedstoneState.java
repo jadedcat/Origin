@@ -14,18 +14,20 @@ public enum RedstoneState {
 	private RedstoneState(String[] desc) {
 		this.desc = desc;
 	}
-
+	
 	public static RedstoneState getStateFromInt(int stateID) {
-		switch (stateID) {
-			case 0:
-				return RedstoneState.IGNORE;
-			case 1:
-				return RedstoneState.LOW;
-			case 2:
-				return RedstoneState.HIGH;
-			default:
-				return null;
-		}
+		if (stateID < 0)
+			return RedstoneState.HIGH;
+		else if (stateID == 0)
+			return RedstoneState.IGNORE;
+		else if (stateID == 1)
+			return RedstoneState.LOW;
+		else if (stateID == 2)
+			return RedstoneState.HIGH;
+		else if (stateID > 2)
+			return RedstoneState.IGNORE;
+		else
+			return null;
 	}
 	
 	public static int getIntFromState(RedstoneState state) {
