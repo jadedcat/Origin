@@ -15,8 +15,9 @@ public class UtilDrops {
 		if (!drops.isEmpty()) {
 			Random random = new Random();
 			for (int i = 0; i < drops.size(); i++)
-				if (drops.get(i) != null)
+				if (drops.get(i) != null && drops.get(i).getItem() != null) {
 					UtilDrops.spawnItemStack(world, x, y, z, drops.get(i), random);
+				}
 		}
 	}
 	

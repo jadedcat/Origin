@@ -11,7 +11,6 @@ public class CommonProxy implements PluginCommonProxy {
 	
 	@Override
 	public void registerRender() {
-		
 	}
 	
 	public void syncPacket(MessageSyncExtendedProperties message, EntityPlayer player) {

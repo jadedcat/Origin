@@ -1,21 +1,25 @@
 package com.countrygamer.countrygamercore.Base.common.block;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.countrygamer.countrygamercore.Base.common.tile.TileEntityBase;
 import com.countrygamer.countrygamercore.Base.common.tile.TileEntityInventoryBase;
+import com.countrygamer.countrygamercore.lib.UtilDrops;
 
 /**
  * Basic Block class for tile entity blocks
+ * 
  * @author Country_Gamer
- *
+ * 
  */
 public class BlockContainerBase extends BlockBase implements ITileEntityProvider {
 	
@@ -82,43 +86,18 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
 	
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-		/*
-		TileEntity tEnt = (TileEntity) world.getTileEntity(x, y, z);
-		if (tEnt != null && tEnt instanceof TileEntityInventoryBase) {
-			TileEntityInventoryBase tileEnt = (TileEntityInventoryBase) tEnt;
-			Random rand = new Random();
-			
-			if (tileEnt != null && tileEnt.shouldDropInventory()) {
-				for (int j1 = 0; j1 < tileEnt.getSizeInventory(); j1++) {
-					ItemStack itemstack = tileEnt.getStackInSlot(j1);
-					if (itemstack != null) {
-						float f = rand.nextFloat() * 0.8F + 0.1F;
-						float f1 = rand.nextFloat() * 0.8F + 0.1F;
-						float f2 = rand.nextFloat() * 0.8F + 0.1F;
-						EntityItem entityitem;
-						
-						entityitem = new EntityItem(world, (double) ((float) x + f),
-								(double) ((float) y + f1), (double) ((float) z + f2),
-								itemstack.copy());
-						float f3 = 0.05F;
-						entityitem.motionX = (double) ((float) rand.nextGaussian() * f3);
-						entityitem.motionY = (double) ((float) rand.nextGaussian() * f3 + 0.2F);
-						entityitem.motionZ = (double) ((float) rand.nextGaussian() * f3);
-						
-						if (itemstack.hasTagCompound()) {
-							entityitem.getEntityItem().setTagCompound(
-									(NBTTagCompound) itemstack.getTagCompound().copy());
-						}
-						world.spawnEntityInWorld(entityitem);
-					}
-				}
-				
-				world.func_147453_f(x, y, z, block);
-			}
-		}
-		 */
 		super.breakBlock(world, x, y, z, block, meta);
 		world.removeTileEntity(x, y, z);
+	}
+	
+	@Override
+	public void onBlockPreDestroy(World world, int x, int y, int z, int meta) {
+		TileEntity tileEntity = world.getTileEntity(x, y, z);
+		if (tileEntity != null && tileEntity instanceof TileEntityBase) {
+			ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+			((TileEntityBase) tileEntity).getTileEntityDrops(drops);
+			UtilDrops.spawnDrops(world, x, y, z, drops);
+		}
 	}
 	
 	@Override

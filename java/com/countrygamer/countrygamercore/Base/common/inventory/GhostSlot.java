@@ -8,54 +8,60 @@ import net.minecraft.item.ItemStack;
 
 /**
  * A slot which holds a ghost version of whichever item is put into it
+ * 
  * @author Country_Gamer
- *
+ * 
  */
 public class GhostSlot extends Slot {
-
+	
+	int maxStackSize = -1;
+	
 	public GhostSlot(IInventory inv, int slotID, int x, int y) {
 		super(inv, slotID, x, y);
+	}
+	
+	public GhostSlot(IInventory inv, int slotID, int x, int y, int maxSize) {
+		this(inv, slotID, x, y);
+		this.maxStackSize = maxSize;
 	}
 	
 	public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
 		return false;
 	}
 	
-	public ItemStack ghostSlotClick(GhostSlot slot, int mouseButton, int modifier, EntityPlayer player) {
-		ItemStack stack = null;
-		
-		if (mouseButton == 0 || mouseButton == 1){
+	public ItemStack ghostSlotClick(int mouseButton, EntityPlayer player) {
+		if (mouseButton == 0 || mouseButton == 1) {
 			InventoryPlayer invPlayer = player.inventory;
-			slot.onSlotChanged();
-			ItemStack stackInSlot = slot.getStack();
+			
+			ItemStack stackInSlot = this.getStack();
 			ItemStack heldStack = invPlayer.getItemStack();
 			
-			if (stackInSlot != null) {
-				stack = stackInSlot.copy();
-			}
-			
-			if (stackInSlot != null)  {
-				slot.putStack(null);
-			}
-			
 			if (stackInSlot == null) {
-				if (heldStack != null && slot.isItemValid(heldStack)) {
+				if (heldStack != null && this.isItemValid(heldStack)) {
 					int stackSize = mouseButton == 0 ? heldStack.stackSize : 1;
-					if (stackSize > slot.getSlotStackLimit()) {
-						stackSize = slot.getSlotStackLimit();
+					
+					if (stackSize > this.getSlotStackLimit()) {
+						stackSize = this.getSlotStackLimit();
 					}
 					
 					ItemStack ghostStack = heldStack.copy();
 					ghostStack.stackSize = stackSize;
 					
-					slot.putStack(ghostStack);
+					this.putStack(ghostStack);
 				}
 			}
-		}
-		else {
+			else {
+				this.putStack(null);
+			}
 			
 		}
-		return stack;
+		
+		return this.getStack();
+	}
+	
+	@Override
+	public int getSlotStackLimit() {
+		return this.maxStackSize > 0 ? this.maxStackSize : this.inventory.getInventoryStackLimit();
 	}
 	
 }

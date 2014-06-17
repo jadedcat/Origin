@@ -65,6 +65,8 @@ public class ItemMeta {
 	}
 	
 	public ItemMeta copy() {
+		if (this.isBlock)
+			return new ItemMeta(Block.getBlockFromItem(this.item), this.meta);
 		return new ItemMeta(this.item, this.meta);
 	}
 	

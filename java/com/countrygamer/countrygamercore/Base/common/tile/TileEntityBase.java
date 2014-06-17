@@ -12,7 +12,6 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.countrygamer.countrygamercore.lib.Activity;
 import com.countrygamer.countrygamercore.lib.RedstoneState;
-import com.countrygamer.countrygamercore.lib.UtilDrops;
 
 /**
  * A very basic tile entity
@@ -47,9 +46,6 @@ public class TileEntityBase extends TileEntity implements IRedstoneState, IActiv
 	public TileEntityBase(String name) {
 		super();
 		this.name = name;
-		
-		// this.setRedstoneState(RedstoneState.HIGH);
-		// this.setActivity(Activity.PULSE);
 		
 	}
 	
@@ -139,6 +135,8 @@ public class TileEntityBase extends TileEntity implements IRedstoneState, IActiv
 	// ~~~~~~~~~~ Setting and Getting this tiles power ~~~~~~~~~~~~~~~~~~~~
 	public void setPowered(boolean hasPower) {
 		this.isRecievingPower = hasPower;
+		this.onPowerChanged();
+		
 	}
 	
 	public boolean isPowered() {
@@ -154,16 +152,17 @@ public class TileEntityBase extends TileEntity implements IRedstoneState, IActiv
 		return false;
 	}
 	
-	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	// ~~~~~~~~~~~~~~~~~ Override methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	@Override
-	public void invalidate() {
-		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		this.getTileEntityDrops(drops);
-		UtilDrops.spawnDrops(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord, drops);
-		super.invalidate();
+	public void onPowerChanged() {
 	}
 	
+	public boolean canRun() {
+		return (this.getRedstoneState() == RedstoneState.IGNORE)
+				|| (this.getRedstoneState() == RedstoneState.HIGH && this.isPowered())
+				|| (this.getRedstoneState() == RedstoneState.LOW && !this.isPowered());
+	}
+	
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// ~~~~~~~~~~~~~~~~~ Override methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	/**
 	 * Override this in order to modify what is dropped then this tile entity breaks
 	 * 

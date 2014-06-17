@@ -181,7 +181,11 @@ public class ContainerBase extends Container {
 			if (slotiD < inventorySize) {
 				// slot in this container's inventory
 				
-				if (!this.mergeItemStack(stackInSlotCopy, inventorySize, playerInventoryEnd, false)) {
+				if (slot instanceof GhostSlot) {
+					return null;
+				}
+				else if (!this.mergeItemStack(stackInSlotCopy, inventorySize, playerInventoryEnd,
+						false)) {
 					return null;
 				}
 				
@@ -270,6 +274,11 @@ public class ContainerBase extends Container {
 			}
 			}
 			 */
+		}
+		if (slotID >= 0 && slotID < this.inventorySlots.size()
+				&& this.inventorySlots.get(slotID) instanceof GhostSlot) {
+			return ((GhostSlot) this.inventorySlots.get(slotID)).ghostSlotClick(buttonPressed,
+					player);
 		}
 		return super.slotClick(slotID, buttonPressed, flag, player);
 	}
