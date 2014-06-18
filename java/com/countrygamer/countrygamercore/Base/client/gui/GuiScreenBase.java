@@ -29,6 +29,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.countrygamer.countrygamercore.Base.client.gui.advanced.ItemRenderHelper;
 import com.countrygamer.countrygamercore.Base.client.gui.advanced.RenderRotation;
+import com.countrygamer.countrygamercore.Base.client.gui.widget.IWidgetOwner;
 import com.countrygamer.countrygamercore.common.Core;
 
 import cpw.mods.fml.relauncher.Side;
@@ -41,7 +42,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * 
  */
 @SideOnly(Side.CLIENT)
-public class GuiScreenBase extends GuiScreen {
+public class GuiScreenBase extends GuiScreen implements IWidgetOwner {
 	
 	protected final int grayTextColor = 4210752;
 	
@@ -65,6 +66,7 @@ public class GuiScreenBase extends GuiScreen {
 	
 	public GuiScreenBase(String title, ResourceLocation background) {
 		super();
+		this.mc = Minecraft.getMinecraft();
 		this.setupGui(title, background);
 	}
 	
@@ -164,12 +166,12 @@ public class GuiScreenBase extends GuiScreen {
 	}
 	
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-		if (!this.title.equals(""))
+		if (!this.title.equals("")) {
 			this.drawTitle(
 					this.guiLeft + (this.xSize / 2)
 							- (this.fontRendererObj.getStringWidth(this.title) / 2),
 					this.guiTop + 5);
-		
+		}
 		this.foregroundText();
 		
 	}
@@ -180,9 +182,7 @@ public class GuiScreenBase extends GuiScreen {
 	
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.getTextureManager().bindTexture(this.bkgdTex);
-		drawTexturedModalRect((this.width - this.xSize) / 2, (this.height - this.ySize) / 2, 0, 0,
-				this.xSize, this.ySize);
+		this.drawBackground(i, j, f);
 		
 		for (GuiTextField field : this.textFieldList) {
 			field.drawTextBox();
@@ -192,7 +192,18 @@ public class GuiScreenBase extends GuiScreen {
 		
 	}
 	
+	protected ResourceLocation getBackground() {
+		return this.bkgdTex;
+	}
+	
+	protected void drawBackground(int mouseX, int mouseY, float renderPartialTicks) {
+		this.mc.getTextureManager().bindTexture(this.getBackground());
+		this.drawTexturedModalRect((this.width - this.xSize) / 2, (this.height - this.ySize) / 2, 0, 0,
+				this.xSize, this.ySize);
+	}
+	
 	protected void foregroundText() {
+		
 	}
 	
 	protected void backgroundObjects() {
@@ -242,6 +253,22 @@ public class GuiScreenBase extends GuiScreen {
 		
 		this.func_146283_a(hoverInfo, mouseX, mouseY);
 		drawHoveringText(hoverInfo, mouseX, mouseY, this.fontRendererObj);
+	}
+	
+	public int getXSize() {
+		return this.xSize;
+	}
+	
+	public int getYSize() {
+		return this.ySize;
+	}
+	
+	public int getGuiLeft() {
+		return this.guiLeft = (this.width - this.xSize) / 2;
+	}
+	
+	public int getGuiTop() {
+		return this.guiTop = (this.height - this.ySize) / 2;
 	}
 	
 	// ~~~~~~~~~~~ Start Cut Code! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
