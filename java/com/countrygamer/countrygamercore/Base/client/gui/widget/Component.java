@@ -26,6 +26,7 @@ public abstract class Component {
 		return this.row;
 	}
 	
-	public abstract void draw(GuiScreenBase gui, int x, int y);
+	public abstract void draw(GuiScreenBase gui, int x, int y, int leftOffset, int rightOffset,
+			int topOffset, int bottomOffset);
 	
 }

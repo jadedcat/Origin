@@ -1,17 +1,25 @@
 package com.countrygamer.countrygamercore.lib;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 import com.countrygamer.countrygamercore.Base.common.tile.TileEntityInventoryBase;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  * Created by Country_Gamer on 3/21/14.
  */
+
+@SideOnly(Side.CLIENT)
 public class UtilRender {
 	
 	public static RenderItem basicRender = new RenderItem() {
@@ -93,6 +101,20 @@ public class UtilRender {
 		}
 		
 		return scaleFactor;
+	}
+	
+	public static ResourceLocation getResource(String pluginID, String folder, String imgName) {
+		return new ResourceLocation(pluginID, "textures/" + folder + imgName + ".png");
+	}
+	
+	public static void bindResource(ResourceLocation rl) {
+		Minecraft.getMinecraft().getTextureManager().bindTexture(rl);
+	}
+	
+	public static void drawTextureWithOffsets(Gui gui, int x, int y, int u, int v, int w, int h,
+			int leftOffset, int rightOffset, int topOffset, int bottomOffset) {
+		gui.drawTexturedModalRect(x + leftOffset - rightOffset, y + topOffset, u + leftOffset
+				- rightOffset, v + topOffset, w - leftOffset, h - topOffset - bottomOffset);
 	}
 	
 }

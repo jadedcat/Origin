@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import com.countrygamer.countrygamercore.Base.client.gui.GuiScreenBase;
+import com.countrygamer.countrygamercore.lib.UtilRender;
 
 public class WidgetTree {
 	
@@ -21,7 +22,8 @@ public class WidgetTree {
 	int minColumn, maxColumn, minRow, maxRow;
 	int innerBoxLeft, innerBoxRight;
 	int innerBoxTop, innerBoxBottom;
-	int innerBoxW_Override = -1, innerBoxH_Override = -1;
+	int innerBoxWidth, innerBoxHeight;
+	int bufferW, bufferH;
 	
 	float scale = 1.0F;
 	final ResourceLocation background;
@@ -67,20 +69,21 @@ public class WidgetTree {
 		this.components.add(comp);
 	}
 	
-	public void overrideBoxBounds(int innerBoxWidth, int innerBoxHeight) {
-		this.innerBoxW_Override = innerBoxWidth;
-		this.innerBoxH_Override = innerBoxHeight;
-		this.updateBox(this.minColumn, this.maxColumn, this.minRow, this.maxRow);
-	}
-	
 	public void updateBox(int minCol, int maxCol, int minRow, int maxRow) {
-		int bufferWidth = 100;
-		this.innerBoxLeft = minCol * 24 - bufferWidth;
-		this.innerBoxRight = maxCol * 24 - this.boxW + 24 + bufferWidth;
+		int gridCols_Pixel = ((maxCol + 1) * 24);
+		this.bufferW = (256 - gridCols_Pixel) / 2;
+		int gridRows_Pixel = ((maxRow + 1) * 24);
+		this.bufferH = (256 - gridRows_Pixel) / 2;
 		
-		int bufferHeight = 77;
-		this.innerBoxTop = minRow * 24 - bufferHeight;
-		this.innerBoxBottom = maxRow * 24 - bufferHeight;
+		this.innerBoxLeft = minCol * 24 - this.bufferW;
+		this.innerBoxRight = maxCol * 24 + 24 + this.bufferW;
+		
+		this.innerBoxWidth = (this.bufferW * 2) + ((maxCol + 1) * 24);
+		
+		this.innerBoxTop = minRow * 24 - this.bufferH;
+		this.innerBoxBottom = maxRow * 24 + 24 + this.bufferH;
+		
+		this.innerBoxHeight = (maxRow * 24) + (this.bufferH * 2);
 		
 	}
 	
@@ -162,12 +165,10 @@ public class WidgetTree {
 		int currentMapPosY = MathHelper.floor_double(this.prevMapPosY
 				+ (this.mapPosY - this.prevMapPosY) * (double) rpt);
 		
-		currentMapPosX = this.getWithin(currentMapPosX, this.innerBoxLeft, this.innerBoxRight);
-		currentMapPosY = this.getWithin(currentMapPosY, this.innerBoxTop, this.innerBoxBottom);
-		
-		if (currentMapPosX >= this.innerBoxRight) {
-			currentMapPosX = (int) (this.innerBoxRight) - 1;
-		}
+		currentMapPosX = this.getWithin(currentMapPosX, this.innerBoxLeft, this.innerBoxRight
+				- (this.innerBoxWidth - (this.innerBoxWidth - this.boxW)));
+		currentMapPosY = this.getWithin(currentMapPosY, this.innerBoxTop, this.innerBoxBottom
+				- (this.innerBoxHeight - (this.innerBoxHeight - this.boxH)));
 		
 		GL11.glDepthFunc(GL11.GL_GEQUAL);
 		GL11.glPushMatrix();
@@ -182,18 +183,8 @@ public class WidgetTree {
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		
 		GL11.glPushMatrix();
-		this.parentScreen.mc.getTextureManager().bindTexture(this.background);
-		
-		// int texWidth = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0,
-		// GL11.GL_TEXTURE_WIDTH);
-		// int texHeight = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0,
-		// GL11.GL_TEXTURE_HEIGHT);
-		
-		float scaleW = 1.0F;
-		float scaleH = 1.0F;
-		
-		this.parentScreen.drawTexturedModalRect(0, 0, 0, 0, this.boxW, this.boxH);
-		
+		this.drawStaticBackground(currentMapPosX, currentMapPosY);
+		// this.drawMovingBackground(currentMapPosX, currentMapPosY);
 		GL11.glPopMatrix();
 		
 		int index;
@@ -201,18 +192,37 @@ public class WidgetTree {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-		int i5;
-		int j5;
+		int compX;
+		int compY;
 		
 		for (index = 0; index < this.components.size(); ++index) {
 			Component comp = this.components.get(index);
-			i5 = comp.getDisplayColumn() * 24 - currentMapPosX;
-			j5 = comp.getDisplayRow() * 24 - currentMapPosY;
+			compX = comp.getDisplayColumn() * 24 - currentMapPosX;
+			compY = comp.getDisplayRow() * 24 - currentMapPosY;
 			
-			if (i5 >= -24 && j5 >= -24 && (float) i5 <= (float) this.boxW
-					&& (float) j5 <= (float) this.boxH) {
+			if (compX >= -22 && compY >= -22 && (float) compX <= (float) this.boxW
+					&& (float) compY <= (float) this.boxH) {
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				comp.draw(this.parentScreen, i5 - 2, j5 - 2);
+				
+				int leftOffset = 0;
+				if ((float)(compX) <= 0) {
+					leftOffset = Math.abs(compX);
+				}
+				int rightOffset = 0;
+				if ((float) (compX + 24) >= (float) this.boxW) {
+					rightOffset = compX + 24 - this.boxW;
+				}
+				int topOffset = 0;
+				if ((float)(compY) <= 0) {
+					topOffset = Math.abs(compY);
+				}
+				int bottomOffset = 0;
+				if ((float) (compY + 24) >= (float) this.boxH) {
+					bottomOffset = compY + 24 - this.boxH;
+				}
+				
+				comp.draw(this.parentScreen, compX - 2, compY - 2, leftOffset, rightOffset,
+						topOffset, bottomOffset);
 				
 			}
 		}
@@ -241,6 +251,35 @@ public class WidgetTree {
 		}
 		
 		return pos;
+	}
+	
+	private void drawStaticBackground(int currentMapX, int currentMapY) {
+		UtilRender.bindResource(this.background);
+		
+		this.parentScreen.drawTexturedModalRect(0, 0, currentMapX + this.bufferW, currentMapY
+				+ this.bufferH, this.boxW, this.boxH);
+	}
+	
+	private void drawMovingBackground(int currentMapX, int currentMapY) {
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		int texWidth = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
+		int texHeight = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
+		
+		float scaleW = 1.0F;
+		float scaleH = 1.0F;
+		
+		int width = (this.innerBoxRight - this.innerBoxLeft);
+		int height = (this.innerBoxBottom - this.innerBoxTop);
+		int right = this.boxX + width;
+		int bottom = this.boxY + height;
+		int vx = (int) ((currentMapX - this.boxX) / Math.abs(this.boxX - bottom) * 288.0F);
+		int vy = (int) ((currentMapY - this.boxY) / Math.abs(this.boxY - right) * 316.0F);
+		GL11.glScalef(2.0F, 2.0F, 1.0F);
+		UtilRender.bindResource(this.background);
+		
+		this.parentScreen.drawTexturedModalRect(0, 0, vx / 2, vy / 2, this.boxW / 2, this.boxH / 2);
+		GL11.glScalef(0.5F, 0.5F, 1.0F);
+		
 	}
 	
 }
