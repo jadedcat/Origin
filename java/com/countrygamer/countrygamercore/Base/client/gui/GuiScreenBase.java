@@ -220,12 +220,12 @@ public class GuiScreenBase extends GuiScreen implements IWidgetOwner {
 	private void drawHoverInfo(int mouseX, int mouseY) {
 		List<String> hoverInfo = new ArrayList<String>();
 		
-		this.addHoverInfomation(mouseX, mouseY, hoverInfo);
+		this.addHoverInformation(mouseX, mouseY, hoverInfo);
 		
 		if (!hoverInfo.isEmpty()) this.renderHoverTip(hoverInfo, mouseX, mouseY);
 	}
 	
-	public void addHoverInfomation(int mouseX, int mouseY, List<String> currentInfomation) {
+	public void addHoverInformation(int mouseX, int mouseY, List<String> currentInfomation) {
 	}
 	
 	/**
@@ -239,7 +239,7 @@ public class GuiScreenBase extends GuiScreen implements IWidgetOwner {
 	 * @param mY
 	 * @return
 	 */
-	protected boolean isMouseOver(int x, int y, int w, int h, int mX, int mY) {
+	public boolean isMouseOver(int x, int y, int w, int h, int mX, int mY) {
 		return mX >= x && mX < x + w && mY >= y && mY < y + h;
 	}
 	

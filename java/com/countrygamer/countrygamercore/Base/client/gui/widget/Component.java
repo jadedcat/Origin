@@ -1,5 +1,7 @@
 package com.countrygamer.countrygamercore.Base.client.gui.widget;
 
+import java.util.List;
+
 import com.countrygamer.countrygamercore.Base.client.gui.GuiScreenBase;
 
 import cpw.mods.fml.relauncher.Side;
@@ -29,6 +31,10 @@ public abstract class Component {
 	public abstract void draw(GuiScreenBase gui, int x, int y, int leftOffset, int rightOffset,
 			int topOffset, int bottomOffset);
 	
-	public void onClick(){}
+	public void onClick() {
+	}
+	
+	public void onHover(List<String> hoverInfo) {
+	}
 	
 }

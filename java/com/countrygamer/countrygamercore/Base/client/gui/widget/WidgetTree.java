@@ -304,23 +304,36 @@ public class WidgetTree {
 	}
 	
 	public void onMouseClick(int mouseX, int mouseY, int mouseButton) {
-		int currentMapPosX = this.getCurrentMapPosX(0);
-		int currentMapPosY = this.getCurrentMapPosY(0);
-		int compX;
-		int compY;
-		for (int i = 0; i < this.components.size(); i++) {
-			Component comp = this.components.get(i);
-			compX = comp.getDisplayColumn() * 24 - currentMapPosX;
-			compY = comp.getDisplayRow() * 24 - currentMapPosY;
-			
-			if (this.isWithinArea(mouseX, mouseY, this.owner.getGuiLeft() + compX,
-					this.owner.getGuiLeft() + compX + 26, this.owner.getGuiTop() + compY,
-					this.owner.getGuiTop() + compY + 26)) {
-				comp.onClick();
-				return;
+		Component comp = this.getComponentAtMouse(mouseX, mouseY);
+		if (comp != null) comp.onClick();
+	}
+	
+	public void addHoverInformation(int mouseX, int mouseY, List<String> hoverInfo) {
+		Component comp = this.getComponentAtMouse(mouseX, mouseY);
+		if (comp != null) comp.onHover(hoverInfo);
+	}
+	
+	private Component getComponentAtMouse(int mouseX, int mouseY) {
+		if (this.isWithinArea(mouseX, mouseY, this.boxX, this.boxX + this.boxW, this.boxY,
+				this.boxY + this.boxH)) {
+			int currentMapPosX = this.getCurrentMapPosX(0);
+			int currentMapPosY = this.getCurrentMapPosY(0);
+			int compX;
+			int compY;
+			for (int i = 0; i < this.components.size(); i++) {
+				Component comp = this.components.get(i);
+				compX = comp.getDisplayColumn() * 24 - currentMapPosX;
+				compY = comp.getDisplayRow() * 24 - currentMapPosY;
+				
+				if (!this.isWithinArea(compX, compY, -22, this.boxW, -22, this.boxH)) continue;
+				
+				if (this.isWithinArea(mouseX, mouseY, this.boxX + compX, this.boxX + compX + 22,
+						this.boxY + compY, this.boxY + compY + 22)) {
+					return comp;
+				}
 			}
-			
 		}
+		return null;
 	}
 	
 }
