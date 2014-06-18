@@ -160,6 +160,7 @@ public class WidgetTree {
 	}
 	
 	protected void drawComponents(int mouseX, int mouseY, float rpt) {
+		/*
 		int currentMapPosX = MathHelper.floor_double(this.prevMapPosX
 				+ (this.mapPosX - this.prevMapPosX) * (double) rpt);
 		int currentMapPosY = MathHelper.floor_double(this.prevMapPosY
@@ -169,6 +170,9 @@ public class WidgetTree {
 				- (this.innerBoxWidth - (this.innerBoxWidth - this.boxW)));
 		currentMapPosY = this.getWithin(currentMapPosY, this.innerBoxTop, this.innerBoxBottom
 				- (this.innerBoxHeight - (this.innerBoxHeight - this.boxH)));
+		 */
+		int currentMapPosX = this.getCurrentMapPosX(rpt);
+		int currentMapPosY = this.getCurrentMapPosY(rpt);
 		
 		GL11.glDepthFunc(GL11.GL_GEQUAL);
 		GL11.glPushMatrix();
@@ -200,12 +204,11 @@ public class WidgetTree {
 			compX = comp.getDisplayColumn() * 24 - currentMapPosX;
 			compY = comp.getDisplayRow() * 24 - currentMapPosY;
 			
-			if (compX >= -22 && compY >= -22 && (float) compX <= (float) this.boxW
-					&& (float) compY <= (float) this.boxH) {
+			if (this.isWithinArea(compX, compY, -22, this.boxW, -22, this.boxH)) {
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 				
 				int leftOffset = 0;
-				if ((float)(compX) <= 0) {
+				if ((float) (compX) <= 0) {
 					leftOffset = Math.abs(compX);
 				}
 				int rightOffset = 0;
@@ -213,7 +216,7 @@ public class WidgetTree {
 					rightOffset = compX + 24 - this.boxW;
 				}
 				int topOffset = 0;
-				if ((float)(compY) <= 0) {
+				if ((float) (compY) <= 0) {
 					topOffset = Math.abs(compY);
 				}
 				int bottomOffset = 0;
@@ -235,6 +238,24 @@ public class WidgetTree {
 		
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
+	}
+	
+	private int getCurrentMapPosX(float rpt) {
+		return this.getWithin(
+				MathHelper.floor_double(this.prevMapPosX + (this.mapPosX - this.prevMapPosX)
+						* (double) rpt), this.innerBoxLeft, this.innerBoxRight
+						- (this.innerBoxWidth - (this.innerBoxWidth - this.boxW)));
+	}
+	
+	private int getCurrentMapPosY(float rpt) {
+		return this.getWithin(
+				MathHelper.floor_double(this.prevMapPosY + (this.mapPosY - this.prevMapPosY)
+						* (double) rpt), this.innerBoxTop, this.innerBoxBottom
+						- (this.innerBoxHeight - (this.innerBoxHeight - this.boxH)));
+	}
+	
+	private boolean isWithinArea(int x, int y, int left, int right, int top, int bottom) {
+		return x >= left && y >= top && (float) x <= (float) right && (float) y <= (float) bottom;
 	}
 	
 	private int getWithin(int pos, int min, int max) {
@@ -280,6 +301,26 @@ public class WidgetTree {
 		this.parentScreen.drawTexturedModalRect(0, 0, vx / 2, vy / 2, this.boxW / 2, this.boxH / 2);
 		GL11.glScalef(0.5F, 0.5F, 1.0F);
 		
+	}
+	
+	public void onMouseClick(int mouseX, int mouseY, int mouseButton) {
+		int currentMapPosX = this.getCurrentMapPosX(0);
+		int currentMapPosY = this.getCurrentMapPosY(0);
+		int compX;
+		int compY;
+		for (int i = 0; i < this.components.size(); i++) {
+			Component comp = this.components.get(i);
+			compX = comp.getDisplayColumn() * 24 - currentMapPosX;
+			compY = comp.getDisplayRow() * 24 - currentMapPosY;
+			
+			if (this.isWithinArea(mouseX, mouseY, this.owner.getGuiLeft() + compX,
+					this.owner.getGuiLeft() + compX + 26, this.owner.getGuiTop() + compY,
+					this.owner.getGuiTop() + compY + 26)) {
+				comp.onClick();
+				return;
+			}
+			
+		}
 	}
 	
 }
