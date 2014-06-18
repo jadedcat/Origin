@@ -192,7 +192,6 @@ public class WidgetTree {
 		float scaleW = 1.0F;
 		float scaleH = 1.0F;
 		
-		
 		this.parentScreen.drawTexturedModalRect(0, 0, 0, 0, this.boxW, this.boxH);
 		
 		GL11.glPopMatrix();
@@ -210,7 +209,8 @@ public class WidgetTree {
 			i5 = comp.getDisplayColumn() * 24 - currentMapPosX;
 			j5 = comp.getDisplayRow() * 24 - currentMapPosY;
 			
-			if (i5 >= -24 && j5 >= -24 && (float) i5 <= (float)this.boxW && (float) j5 <= (float)this.boxH) {
+			if (i5 >= -24 && j5 >= -24 && (float) i5 <= (float) this.boxW
+					&& (float) j5 <= (float) this.boxH) {
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 				comp.draw(this.parentScreen, i5 - 2, j5 - 2);
 				
