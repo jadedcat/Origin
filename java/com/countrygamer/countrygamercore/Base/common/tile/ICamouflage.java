@@ -1,6 +1,6 @@
-package com.countrygamer.countrygamercore.Base.common.tile;
+package com.countrygamer.countrygamercore.base.common.tile;
 
-import com.countrygamer.countrygamercore.lib.ItemMeta;
+import com.countrygamer.countrygamercore.common.lib.ItemMeta;
 
 public interface ICamouflage {
 

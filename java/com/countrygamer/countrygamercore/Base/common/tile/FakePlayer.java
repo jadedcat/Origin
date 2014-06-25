@@ -1,4 +1,6 @@
-package com.countrygamer.countrygamercore.Base.common.tile;
+package com.countrygamer.countrygamercore.base.common.tile;
+
+import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.ItemInWorldManager;
@@ -11,10 +13,9 @@ import cpw.mods.fml.common.FMLCommonHandler;
 public class FakePlayer extends EntityPlayerMP {
 	
 	public FakePlayer(WorldServer world) {
-		super(FMLCommonHandler.instance().getMinecraftServerInstance(), world, new GameProfile("",
-				"[CGCore]"), new ItemInWorldManager(world));
-		//new NetServerHandlerFake(FMLCommonHandler.instance().getMinecraftServerInstance(), this);
-		
+		super(FMLCommonHandler.instance().getMinecraftServerInstance(), world, new GameProfile(
+				UUID.fromString(""), "[CGCore]"), new ItemInWorldManager(world));
+		// new NetServerHandlerFake(FMLCommonHandler.instance().getMinecraftServerInstance(), this);
 	}
 	
 }

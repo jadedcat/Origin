@@ -1,7 +1,5 @@
 package com.countrygamer.countrygamercore.client;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -9,8 +7,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 
-import com.countrygamer.countrygamercore.Base.common.tile.ICamouflage;
-import com.countrygamer.countrygamercore.lib.ItemMeta;
+import org.lwjgl.opengl.GL11;
+
+import com.countrygamer.countrygamercore.base.common.tile.ICamouflage;
+import com.countrygamer.countrygamercore.common.lib.ItemMeta;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;

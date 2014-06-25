@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "countrygamercore",
+  "name": "CG Core",
+  "description": "Core libarary for all CountryGamer mods",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authors": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authors": ["CountryGamer"],
+  "credits": "",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []

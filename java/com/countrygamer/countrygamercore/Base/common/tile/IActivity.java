@@ -1,6 +1,7 @@
-package com.countrygamer.countrygamercore.Base.common.tile;
+package com.countrygamer.countrygamercore.base.common.tile;
 
-import com.countrygamer.countrygamercore.lib.Activity;
+import com.countrygamer.countrygamercore.common.lib.Activity;
+
 
 public interface IActivity {
 	

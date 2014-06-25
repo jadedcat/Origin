@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.Base.common.block;
+package com.countrygamer.countrygamercore.base.common.block;
 
 import java.util.ArrayList;
 

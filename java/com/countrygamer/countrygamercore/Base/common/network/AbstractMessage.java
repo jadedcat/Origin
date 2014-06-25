@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.Base.common.network;
+package com.countrygamer.countrygamercore.base.common.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;

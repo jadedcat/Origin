@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.Base.common.block;
+package com.countrygamer.countrygamercore.base.common.block;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -11,9 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import com.countrygamer.countrygamercore.Base.common.tile.TileEntityBase;
-import com.countrygamer.countrygamercore.Base.common.tile.TileEntityInventoryBase;
-import com.countrygamer.countrygamercore.lib.UtilDrops;
+import com.countrygamer.countrygamercore.base.common.tile.TileEntityBase;
+import com.countrygamer.countrygamercore.base.common.tile.TileEntityInventoryBase;
+import com.countrygamer.countrygamercore.common.lib.util.UtilDrops;
 
 /**
  * Basic Block class for tile entity blocks

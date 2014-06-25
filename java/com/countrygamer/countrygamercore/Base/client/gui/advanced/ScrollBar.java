@@ -1,18 +1,18 @@
-package com.countrygamer.countrygamercore.Base.client.gui.advanced;
+package com.countrygamer.countrygamercore.base.client.gui.advanced;
 
 import net.minecraft.client.gui.Gui;
 
-import com.countrygamer.countrygamercore.Base.client.gui.GuiScreenBase;
+import com.countrygamer.countrygamercore.base.client.gui.GuiScreenBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ScrollBar {
-	private static final int SCROLL_WIDTH = 7;
-	private static final int SCROLL_BAR_WIDTH = 5;
-	private static final int SCROLL_BAR_HEIGHT = 6;
-	private static final int SCROLL_BAR_SRC_X = 250;
-	private static final int SCROLL_BAR_SRC_Y = 167;
+	//private static final int SCROLL_WIDTH = 7;
+	//private static final int SCROLL_BAR_WIDTH = 5;
+	//private static final int SCROLL_BAR_HEIGHT = 6;
+	//private static final int SCROLL_BAR_SRC_X = 250;
+	//private static final int SCROLL_BAR_SRC_Y = 167;
 	private int x;
 	private int y;
 	private int h;

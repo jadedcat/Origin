@@ -1,6 +1,7 @@
-package com.countrygamer.countrygamercore.Base.common.tile;
+package com.countrygamer.countrygamercore.base.common.tile;
 
-import com.countrygamer.countrygamercore.lib.RedstoneState;
+import com.countrygamer.countrygamercore.common.lib.RedstoneState;
+
 
 /**
  * A base class for TileEntityBase which is used to discern the tile entity's {@link RedstoneState}

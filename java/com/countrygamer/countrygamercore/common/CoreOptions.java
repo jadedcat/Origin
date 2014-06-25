@@ -5,8 +5,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 
-import com.countrygamer.countrygamercore.Base.Plugin.registry.PluginOptionRegistry;
-import com.countrygamer.countrygamercore.lib.CoreUtil;
+import com.countrygamer.countrygamercore.base.registry.PluginOptionRegistry;
+import com.countrygamer.countrygamercore.common.lib.util.Config;
 
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -41,46 +41,46 @@ public class CoreOptions implements PluginOptionRegistry {
 	public void registerOptions(Configuration config) {
 		String csCate = "Crafting and Smelting";
 		
-		CoreOptions.netherStar = CoreUtil.getAndComment(config, csCate,
+		CoreOptions.netherStar = Config.getAndComment(config, csCate,
 				"Nether Star", "Crafting a Nether Star", true);
-		CoreOptions.lead = CoreUtil.getAndComment(config, csCate, "Lead",
+		CoreOptions.lead = Config.getAndComment(config, csCate, "Lead",
 				"Another recipe for the Lead", false);
-		CoreOptions.string = CoreUtil.getAndComment(config, csCate, "String",
+		CoreOptions.string = Config.getAndComment(config, csCate, "String",
 				"Wool to String recipe", true);
-		CoreOptions.smeltFlesh = CoreUtil.getAndComment(config, csCate,
+		CoreOptions.smeltFlesh = Config.getAndComment(config, csCate,
 				"Smelt Flesh", "Smelt Rotten Flesh to Leather", true);
-		CoreOptions.blazeRod = CoreUtil.getAndComment(config, csCate,
+		CoreOptions.blazeRod = Config.getAndComment(config, csCate,
 				"Craft Blaze Rods", "Craft Blaze Rods with Blaze Powder", true);
-		CoreOptions.cobbleGravel = CoreUtil.getAndComment(config, csCate,
+		CoreOptions.cobbleGravel = Config.getAndComment(config, csCate,
 				"Cobble to Gravel", "Craft Cobblestone to Gravel", true);
-		CoreOptions.gravelSand = CoreUtil.getAndComment(config, csCate,
+		CoreOptions.gravelSand = Config.getAndComment(config, csCate,
 				"Gravel to Sand", "Craft Gravel to Sand", true);
-		CoreOptions.gsDirt = CoreUtil.getAndComment(config, csCate,
+		CoreOptions.gsDirt = Config.getAndComment(config, csCate,
 				"GravelSand to Dirt", "Craft Gravel and Sand into Dirt", true);
-		CoreOptions.ghastTear = CoreUtil.getAndComment(config, csCate, "Ghast Tear",
+		CoreOptions.ghastTear = Config.getAndComment(config, csCate, "Ghast Tear",
 				"Craft a Ghast Tear", true);
-		CoreOptions.netherrack = CoreUtil.getAndComment(config, csCate,
+		CoreOptions.netherrack = Config.getAndComment(config, csCate,
 				"Netherrack", "Craft NetherRack from Blaze Powder and Stone", true);
-		CoreOptions.soulSand = CoreUtil.getAndComment(config, csCate, "Soulsand",
+		CoreOptions.soulSand = Config.getAndComment(config, csCate, "Soulsand",
 				"Craft Soulsand from Blaze Powder and Sand", true);
-		CoreOptions.netherBrick = CoreUtil.getAndComment(config, csCate,
+		CoreOptions.netherBrick = Config.getAndComment(config, csCate,
 				"Nether Brick", "Craft Nether Bricks from Blaze Powder and Bricks",
 				true);
-		CoreOptions.emerald = CoreUtil.getAndComment(config, csCate, "Emerald",
+		CoreOptions.emerald = Config.getAndComment(config, csCate, "Emerald",
 				"Craft an Emerald", true);
-		CoreOptions.spiderEye = CoreUtil.getAndComment(config, csCate, "Spider Eye",
+		CoreOptions.spiderEye = Config.getAndComment(config, csCate, "Spider Eye",
 				"Craft a Spider Eye", true);
-		CoreOptions.rottenFlesh = CoreUtil.getAndComment(config, csCate,
+		CoreOptions.rottenFlesh = Config.getAndComment(config, csCate,
 				"Rotten Flesh", "Craft Rotton Flesh", true);
-		CoreOptions.sapling = CoreUtil.getAndComment(config, csCate, "Saplings",
+		CoreOptions.sapling = Config.getAndComment(config, csCate, "Saplings",
 				"Craft Oak saplings", true);
-		CoreOptions.carrot = CoreUtil.getAndComment(config, csCate, "Carrot",
+		CoreOptions.carrot = Config.getAndComment(config, csCate, "Carrot",
 				"Craft a carrot", true);
-		CoreOptions.potato = CoreUtil.getAndComment(config, csCate, "Potato",
+		CoreOptions.potato = Config.getAndComment(config, csCate, "Potato",
 				"Craft a potato", true);
-		CoreOptions.fermSpiderEye = CoreUtil.getAndComment(config, csCate,
+		CoreOptions.fermSpiderEye = Config.getAndComment(config, csCate,
 				"Fermented Spider Eye", "Craft a Fermented Spider Eye", true);
-		CoreOptions.saddle = CoreUtil.getAndComment(config, csCate, "Saddle",
+		CoreOptions.saddle = Config.getAndComment(config, csCate, "Saddle",
 				"Crafting Recipe for a vanilla Saddle", true);
 		
 	}

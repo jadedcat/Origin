@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.Base.client.gui.widget;
+package com.countrygamer.countrygamercore.base.client.gui.widget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.countrygamer.countrygamercore.Base.client.gui.GuiScreenBase;
-import com.countrygamer.countrygamercore.lib.UtilRender;
+import com.countrygamer.countrygamercore.base.client.gui.GuiScreenBase;
+import com.countrygamer.countrygamercore.common.lib.util.UtilRender;
 
 public class WidgetTree {
 	
@@ -70,20 +70,28 @@ public class WidgetTree {
 	}
 	
 	public void updateBox(int minCol, int maxCol, int minRow, int maxRow) {
-		int gridCols_Pixel = ((maxCol + 1) * 24);
-		this.bufferW = (256 - gridCols_Pixel) / 2;
-		int gridRows_Pixel = ((maxRow + 1) * 24);
-		this.bufferH = (256 - gridRows_Pixel) / 2;
+		
+		this.bufferW = 50;
+		this.bufferH = 50;
 		
 		this.innerBoxLeft = minCol * 24 - this.bufferW;
-		this.innerBoxRight = maxCol * 24 + 24 + this.bufferW;
+		this.innerBoxRight = ((maxCol + 1) * 24) + this.bufferW;
 		
-		this.innerBoxWidth = (this.bufferW * 2) + ((maxCol + 1) * 24);
+		this.innerBoxWidth = this.innerBoxRight + this.bufferW;
 		
 		this.innerBoxTop = minRow * 24 - this.bufferH;
-		this.innerBoxBottom = maxRow * 24 + 24 + this.bufferH;
+		this.innerBoxBottom = ((maxRow + 1) * 24) + this.bufferH;
 		
-		this.innerBoxHeight = (maxRow * 24) + (this.bufferH * 2);
+		this.innerBoxHeight = this.innerBoxBottom + this.bufferH;
+		
+		if (this.innerBoxWidth > this.innerBoxHeight) {
+			this.innerBoxHeight = this.innerBoxWidth;
+			this.innerBoxBottom = this.innerBoxRight;
+		}
+		else {
+			this.innerBoxWidth = this.innerBoxHeight;
+			this.innerBoxRight += this.innerBoxBottom;
+		}
 		
 	}
 	
@@ -277,17 +285,26 @@ public class WidgetTree {
 	private void drawStaticBackground(int currentMapX, int currentMapY) {
 		UtilRender.bindResource(this.background);
 		
-		this.parentScreen.drawTexturedModalRect(0, 0, currentMapX + this.bufferW, currentMapY
-				+ this.bufferH, this.boxW, this.boxH);
+		float scaleW = (float) (this.innerBoxWidth) / 256.0F;
+		float scaleH = (float) (this.innerBoxHeight) / 256.0F;
+		
+		GL11.glScalef(scaleW, scaleH, 1.0F);
+		
+		this.parentScreen.drawTexturedModalRect(0, 0,
+				(int) ((currentMapX + this.bufferW) / scaleW),
+				(int) ((currentMapY + this.bufferH) / scaleH), (int) (this.boxW / scaleW) + 1,
+				(int) (this.boxH / scaleH) + 1);
+		
+		GL11.glScalef(1.0F / scaleW, 1.0F / scaleH, 1.0F);
 	}
 	
 	private void drawMovingBackground(int currentMapX, int currentMapY) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		int texWidth = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
-		int texHeight = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
+		//int texWidth = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
+		//int texHeight = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
 		
-		float scaleW = 1.0F;
-		float scaleH = 1.0F;
+		//float scaleW = 1.0F;
+		//float scaleH = 1.0F;
 		
 		int width = (this.innerBoxRight - this.innerBoxLeft);
 		int height = (this.innerBoxBottom - this.innerBoxTop);

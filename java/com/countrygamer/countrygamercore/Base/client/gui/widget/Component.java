@@ -1,8 +1,8 @@
-package com.countrygamer.countrygamercore.Base.client.gui.widget;
+package com.countrygamer.countrygamercore.base.client.gui.widget;
 
 import java.util.List;
 
-import com.countrygamer.countrygamercore.Base.client.gui.GuiScreenBase;
+import com.countrygamer.countrygamercore.base.client.gui.GuiScreenBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

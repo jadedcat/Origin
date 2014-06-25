@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.Base.client.gui;
+package com.countrygamer.countrygamercore.base.client.gui;
 
 import io.netty.buffer.Unpooled;
 
@@ -18,10 +18,10 @@ import org.apache.logging.log4j.LogManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import com.countrygamer.countrygamercore.Base.common.inventory.ContainerBase;
-import com.countrygamer.countrygamercore.Base.common.inventory.InventoryItemBase;
-import com.countrygamer.countrygamercore.Base.common.tile.TileEntityInventoryBase;
+import com.countrygamer.countrygamercore.base.common.tile.TileEntityInventoryBase;
 import com.countrygamer.countrygamercore.common.Core;
+import com.countrygamer.countrygamercore.common.inventory.ContainerBase;
+import com.countrygamer.countrygamercore.common.inventory.InventoryBase;
 
 /**
  * A base class for all GuiContainers
@@ -74,7 +74,7 @@ public abstract class GuiContainerBase extends GuiContainer {
 	 * 
 	 * @return
 	 */
-	protected InventoryItemBase getItemInventory() {
+	protected InventoryBase getItemInventory() {
 		return ((ContainerBase) this.inventorySlots).getItemInventory();
 	}
 	

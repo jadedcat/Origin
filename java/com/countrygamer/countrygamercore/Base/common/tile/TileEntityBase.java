@@ -1,6 +1,9 @@
-package com.countrygamer.countrygamercore.Base.common.tile;
+package com.countrygamer.countrygamercore.base.common.tile;
 
 import java.util.ArrayList;
+
+import com.countrygamer.countrygamercore.common.lib.Activity;
+import com.countrygamer.countrygamercore.common.lib.RedstoneState;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -9,9 +12,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-
-import com.countrygamer.countrygamercore.lib.Activity;
-import com.countrygamer.countrygamercore.lib.RedstoneState;
 
 /**
  * A very basic tile entity

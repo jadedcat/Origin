@@ -1,11 +1,12 @@
 package com.countrygamer.countrygamercore.common;
 
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
-import com.countrygamer.countrygamercore.Base.Plugin.PluginCommonProxy;
-import com.countrygamer.countrygamercore.Base.common.network.MessageSyncExtendedProperties;
-import com.countrygamer.countrygamercore.Base.common.network.PacketHandler;
+import com.countrygamer.countrygamercore.base.common.PluginCommonProxy;
+import com.countrygamer.countrygamercore.common.network.MessageSyncExtendedProperties;
+import com.countrygamer.countrygamercore.common.network.PacketHandler;
 
 public class CommonProxy implements PluginCommonProxy {
 	
@@ -23,10 +24,17 @@ public class CommonProxy implements PluginCommonProxy {
 		return null;
 	}
 	
-	
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world,
 			int x, int y, int z) {
+		return null;
+	}
+	
+	public int addArmor(String armor) {
+		return 0;
+	}
+	
+	public ModelBiped getArmorModel() {
 		return null;
 	}
 	

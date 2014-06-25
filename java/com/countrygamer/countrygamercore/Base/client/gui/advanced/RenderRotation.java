@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.Base.client.gui.advanced;
+package com.countrygamer.countrygamercore.base.client.gui.advanced;
 
 public enum RenderRotation {
 	NORMAL, ROTATE_90, ROTATE_180, ROTATE_270,

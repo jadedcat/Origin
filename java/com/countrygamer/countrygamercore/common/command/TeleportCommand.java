@@ -2,14 +2,15 @@ package com.countrygamer.countrygamercore.common.command;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
 
 import com.countrygamer.countrygamercore.common.Core;
-import com.countrygamer.countrygamercore.lib.CoreUtil;
+import com.countrygamer.countrygamercore.common.lib.util.Player;
+import com.countrygamer.countrygamercore.common.lib.util.UtilVector;
 
 public class TeleportCommand implements ICommand {
 
@@ -61,13 +62,12 @@ public class TeleportCommand implements ICommand {
 			}
 			return;
 		}
-		EntityPlayerMP playerMP = MinecraftServer.getServer()
-				.getConfigurationManager().getPlayerForUsername(playerName);
+		EntityPlayerMP playerMP = Player.getPlayerByUUID(UUID.fromString(playerName));
 		// CG_Core.instance.dimLoad();
 		if (playerMP != null && Core.dimensions.get(dimensionName) != null) {
-			CoreUtil.teleportPlayerToDimension(playerMP,
+			UtilVector.teleportPlayerToDimension(playerMP,
 					Core.dimensions.get(dimensionName));
-			CoreUtil.teleportPlayer(playerMP, x, y, z, false, false);
+			UtilVector.teleportPlayer(playerMP, x, y, z, false, false);
 		} else {
 			// TODO
 			// icommandsender.sendChatToPlayer((new ChatMessageComponent())

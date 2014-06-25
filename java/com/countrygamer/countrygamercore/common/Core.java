@@ -13,8 +13,9 @@ import net.minecraft.item.Item;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 
-import com.countrygamer.countrygamercore.Base.Plugin.PluginBase;
-import com.countrygamer.countrygamercore.Base.common.network.MessageSyncExtendedProperties;
+import com.countrygamer.countrygamercore.base.common.PluginBase;
+import com.countrygamer.countrygamercore.common.network.ExtendedSync;
+import com.countrygamer.countrygamercore.common.network.MessageSyncExtendedProperties;
 import com.countrygamer.countrygamercore.common.network.MessageTeleport;
 import com.countrygamer.countrygamercore.common.network.MessageUpdateActivity;
 import com.countrygamer.countrygamercore.common.network.MessageUpdateRedstoneState;
@@ -62,6 +63,7 @@ public class Core extends PluginBase {
 		super.preInitialize(Core.pluginID, Core.pluginName, event, Core.proxy, new CoreOptions(),
 				null, null, null, null);
 		this.registerHandlers(this, null);
+		this.registerHandlers(new ExtendedSync(), null);
 		
 		((CoreOptions) this.options).vanillaCraftSmelt();
 		

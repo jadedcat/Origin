@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.Base.common.generic;
+package com.countrygamer.countrygamercore.base.common.generic;
 
 import net.minecraft.util.RegistryNamespaced;
 

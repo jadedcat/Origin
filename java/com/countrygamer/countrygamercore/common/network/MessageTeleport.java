@@ -3,8 +3,8 @@ package com.countrygamer.countrygamercore.common.network;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 
-import com.countrygamer.countrygamercore.Base.common.network.AbstractMessage;
-import com.countrygamer.countrygamercore.lib.CoreUtil;
+import com.countrygamer.countrygamercore.base.common.network.AbstractMessage;
+import com.countrygamer.countrygamercore.common.lib.util.UtilVector;
 
 public class MessageTeleport extends AbstractMessage {
 	
@@ -53,8 +53,8 @@ public class MessageTeleport extends AbstractMessage {
 	
 	@Override
 	public void handleOnServer(EntityPlayer player) {
-		CoreUtil.teleportPlayerToDimension(player, this.dimId);
-		CoreUtil.teleportPlayer(player, coords[0], coords[1], coords[2], fallDamage, particles);
+		UtilVector.teleportPlayerToDimension(player, this.dimId);
+		UtilVector.teleportPlayer(player, coords[0], coords[1], coords[2], fallDamage, particles);
 	}
 	
 }

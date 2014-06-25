@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.Base.client.gui;
+package com.countrygamer.countrygamercore.base.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import com.countrygamer.countrygamercore.common.Core;
-import com.countrygamer.countrygamercore.lib.RedstoneState;
+import com.countrygamer.countrygamercore.common.lib.RedstoneState;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

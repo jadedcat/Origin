@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.Base.client.gui.widget;
+package com.countrygamer.countrygamercore.base.client.gui.widget;
 
 public interface IWidgetOwner {
 	

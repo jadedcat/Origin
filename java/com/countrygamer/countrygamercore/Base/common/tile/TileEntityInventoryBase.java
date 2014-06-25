@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.Base.common.tile;
+package com.countrygamer.countrygamercore.base.common.tile;
 
 import java.util.ArrayList;
 

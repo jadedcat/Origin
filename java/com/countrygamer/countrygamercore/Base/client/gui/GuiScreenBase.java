@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.Base.client.gui;
+package com.countrygamer.countrygamercore.base.client.gui;
 
 import io.netty.buffer.Unpooled;
 
@@ -27,9 +27,9 @@ import org.apache.logging.log4j.LogManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import com.countrygamer.countrygamercore.Base.client.gui.advanced.ItemRenderHelper;
-import com.countrygamer.countrygamercore.Base.client.gui.advanced.RenderRotation;
-import com.countrygamer.countrygamercore.Base.client.gui.widget.IWidgetOwner;
+import com.countrygamer.countrygamercore.base.client.gui.advanced.ItemRenderHelper;
+import com.countrygamer.countrygamercore.base.client.gui.advanced.RenderRotation;
+import com.countrygamer.countrygamercore.base.client.gui.widget.IWidgetOwner;
 import com.countrygamer.countrygamercore.common.Core;
 
 import cpw.mods.fml.relauncher.Side;

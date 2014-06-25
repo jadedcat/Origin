@@ -5,9 +5,9 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
-import com.countrygamer.countrygamercore.Base.common.network.AbstractMessage;
-import com.countrygamer.countrygamercore.Base.common.tile.IActivity;
-import com.countrygamer.countrygamercore.lib.Activity;
+import com.countrygamer.countrygamercore.base.common.network.AbstractMessage;
+import com.countrygamer.countrygamercore.base.common.tile.IActivity;
+import com.countrygamer.countrygamercore.common.lib.Activity;
 
 public class MessageUpdateActivity extends AbstractMessage {
 	

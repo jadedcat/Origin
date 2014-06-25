@@ -1,4 +1,4 @@
-package com.countrygamer.countrygamercore.Base.client.gui;
+package com.countrygamer.countrygamercore.base.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
