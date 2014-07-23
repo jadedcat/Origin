@@ -1,0 +1,16 @@
+[
+{
+  "modid": "cgo",
+  "name": "CG Origin",
+  "description": "Example placeholder mod.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["TheCountryGamer/CountryGamer/Country_Gamer"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
