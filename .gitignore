@@ -1,9 +1,25 @@
 *.class
+*.log
 
 # Package Files #
 *.jar
 *.war
 *.ear
+
+# sbt specific
+.cache/
+.history/
+.lib/
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+
+# Scala-IDE specific
+.scala_dependencies
+.worksheet
 
 # OS generated files #
 ######################
@@ -17,9 +33,9 @@ Thumbs.db
 
 .gradle
 build
-CGOrigin.iml
-CGOrigin.ipr
-CGOrigin.iws
+*.iml
+*.ipr
+*.iws
 devlog.txt
 eclipse
 gradle
