@@ -24,11 +24,11 @@ class FakeInventory(var holderStack: ItemStack, var inventorySize: Int, var stac
 	// End Constructor
 
 	def getSizeInventory: Int = {
-		return this.inventorySize
+		this.inventorySize
 	}
 
 	def getStackInSlot(slot: Int): ItemStack = {
-		return this.inv(slot)
+		this.inv(slot)
 	}
 
 	def decrStackSize(slot: Int, amount: Int): ItemStack = {
@@ -38,7 +38,7 @@ class FakeInventory(var holderStack: ItemStack, var inventorySize: Int, var stac
 				itemstack = this.inv(slot)
 				this.inv(slot) = null
 				this.markDirty
-				return itemstack
+				itemstack
 			}
 			else {
 				itemstack = this.inv(slot).splitStack(amount)
@@ -46,16 +46,16 @@ class FakeInventory(var holderStack: ItemStack, var inventorySize: Int, var stac
 					this.inv(slot) = null
 				}
 				this.markDirty
-				return itemstack
+				itemstack
 			}
 		}
 		else {
-			return null
+			null
 		}
 	}
 
 	def getStackInSlotOnClosing(slot: Int): ItemStack = {
-		return this.getStackInSlot(slot)
+		this.getStackInSlot(slot)
 	}
 
 	def setInventorySlotContents(slot: Int, stack: ItemStack) {
@@ -64,22 +64,22 @@ class FakeInventory(var holderStack: ItemStack, var inventorySize: Int, var stac
 	}
 
 	def getInventoryName: String = {
-		return if (this.holderStack != null) this.holderStack.getDisplayName else ""
+		if (this.holderStack != null) this.holderStack.getDisplayName else ""
 	}
 
 	def hasCustomInventoryName: Boolean = {
-		return false
+		false
 	}
 
 	def getInventoryStackLimit: Int = {
-		return this.stackLimit
+		this.stackLimit
 	}
 
 	def markDirty {
 	}
 
 	def isUseableByPlayer(var1: EntityPlayer): Boolean = {
-		return true
+		true
 	}
 
 	def openInventory {
@@ -89,7 +89,7 @@ class FakeInventory(var holderStack: ItemStack, var inventorySize: Int, var stac
 	}
 
 	def isItemValidForSlot(slot: Int, stack: ItemStack): Boolean = {
-		return true
+		true
 	}
 
 }

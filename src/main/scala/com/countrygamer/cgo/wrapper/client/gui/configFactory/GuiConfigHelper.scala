@@ -23,7 +23,7 @@ object GuiConfigHelper {
 			elements.addAll(ele.getChildElements)
 		}
 
-		return elements
+		elements
 	}
 
 }

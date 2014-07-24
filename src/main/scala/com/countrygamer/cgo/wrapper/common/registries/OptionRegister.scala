@@ -37,8 +37,7 @@ class OptionRegister() extends Register {
 			this.register()
 		}
 		catch {
-			case e: Exception => {
-			}
+			case e: Exception =>
 		}
 		finally {
 			if (this.config.hasChanged) {
@@ -50,6 +49,8 @@ class OptionRegister() extends Register {
 	override def register(): Unit = {}
 
 	@SideOnly(Side.CLIENT)
-	def getGuiConfigClass(): Class[_ <: net.minecraft.client.gui.GuiScreen] = {return null}
+	def getGuiConfigClass: Class[_ <: net.minecraft.client.gui.GuiScreen] = {
+		null
+	}
 
 }

@@ -4,7 +4,7 @@ import java.util
 import java.util.Random
 
 import com.countrygamer.cgo.common.lib.util.UtilDrops
-import com.countrygamer.cgo.wrapper.common.tile.{IPowerable, ICustomDrops}
+import com.countrygamer.cgo.wrapper.common.tile.{ICustomDrops, IPowerable}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.{ItemBlock, ItemStack}
@@ -58,16 +58,14 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 				return this.tileEntityClass.newInstance()
 			}
 			catch {
-				case e: InstantiationException => {
+				case e: InstantiationException =>
 					e.printStackTrace
-				}
-				case e: IllegalAccessException => {
+				case e: IllegalAccessException =>
 					e.printStackTrace
-				}
 			}
 		}
 		// Will return a null value
-		return super.createTileEntity(world, metadata)
+		super.createTileEntity(world, metadata)
 	}
 
 	/**
@@ -76,7 +74,7 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 	 * @return
 	 */
 	override def hasTileEntity(metadata: Int): Boolean = {
-		return this.tileEntityClass != null
+		this.tileEntityClass != null
 	}
 
 	// ~~~~~~~~~~~~~~~ Start supered wrappers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,11 +117,11 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 				// get if the world says this block is powered
 				val blockGettingPower: Boolean = world.isBlockIndirectlyGettingPowered(x, y, z)
 				// set the powerable's power based on world power get ^
-				if (powerable.isPowered(false) && !blockGettingPower) {
-					powerable.setPowered(false)
+				if (powerable.isPowered(checkState = false) && !blockGettingPower) {
+					powerable.setPowered(isRecievingPower = false)
 				}
-				else if (!powerable.isPowered(false) && blockGettingPower) {
-					powerable.setPowered(true)
+				else if (!powerable.isPowered(checkState = false) && blockGettingPower) {
+					powerable.setPowered(isRecievingPower = true)
 				}
 			}
 		}
@@ -135,7 +133,7 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 	 * @return
 	 */
 	def hasTileEntityDrops(metadata: Int): Boolean = {
-		return false
+		false
 	}
 
 	override def breakBlock(world: World, x: Int, y: Int, z: Int, block: Block, meta: Int) {

@@ -9,12 +9,12 @@ class ItemRegister() extends Register {
 
 	override def register(): Unit = {}
 
-	def registerItemsPostBlock: Unit = {}
+	def registerItemsPostBlock(): Unit = {}
 
-	def registerCrafting: Unit = {}
+	def registerCrafting(): Unit = {}
 
-	def registerSmelting: Unit = {}
+	def registerSmelting(): Unit = {}
 
-	def registerOther: Unit = {}
+	def registerOther(): Unit = {}
 
 }

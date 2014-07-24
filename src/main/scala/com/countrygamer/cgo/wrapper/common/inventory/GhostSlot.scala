@@ -1,6 +1,6 @@
 package com.countrygamer.cgo.wrapper.common.inventory
 
-import net.minecraft.entity.player.{InventoryPlayer, EntityPlayer}
+import net.minecraft.entity.player.{EntityPlayer, InventoryPlayer}
 import net.minecraft.inventory.{IInventory, Slot}
 import net.minecraft.item.ItemStack
 ;
@@ -22,11 +22,11 @@ class GhostSlot(inv: IInventory, slotID: Int, x: Int, y: Int) extends Slot(inv, 
 
 	override def canTakeStack(par1EntityPlayer: EntityPlayer): Boolean = {
 		// Make sure you can never extract from a ghost slot
-		return false
+		false
 	}
 
 	override def getSlotStackLimit: Int = {
-		return if (this.maxStackSize > 0) this.maxStackSize
+		if (this.maxStackSize > 0) this.maxStackSize
 		else this.inventory.getInventoryStackLimit
 	}
 
@@ -64,8 +64,7 @@ class GhostSlot(inv: IInventory, slotID: Int, x: Int, y: Int) extends Slot(inv, 
 			}
 		}
 		// return self's stack
-		return this.getStack
+		this.getStack
 	}
-
 
 }

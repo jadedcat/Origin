@@ -27,6 +27,7 @@ class TEWrapper(var name: String)
 	private val timers: util.HashMap[String, Array[Int]] = new util.HashMap[String, Array[Int]]()
 	// Default Constructor
 	this.timers.clear()
+
 	// End Constructor
 
 	// Other Constructors
@@ -40,8 +41,8 @@ class TEWrapper(var name: String)
 	 * Returns the name of this tile entity
 	 * @return
 	 */
-	def getName(): String = {
-		return this.name
+	def getName: String = {
+		this.name
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ IInventory~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -71,8 +72,8 @@ class TEWrapper(var name: String)
 
 	}
 
-	def hasInventory(): Boolean = {
-		return this.inventory != null
+	def hasInventory: Boolean = {
+		this.inventory != null
 	}
 
 	/**
@@ -80,7 +81,7 @@ class TEWrapper(var name: String)
 	 */
 	def clearInventory(): Unit = {
 		if (this.hasInventory()) {
-			this.inventory = new Array[ItemStack](this.inventorySize);
+			this.inventory = new Array[ItemStack](this.inventorySize)
 		}
 		else {
 			this.inventory = null
@@ -90,10 +91,10 @@ class TEWrapper(var name: String)
 
 	override def getSizeInventory: Int = {
 		if (this.hasInventory()) {
-			return this.inventorySize
+			this.inventorySize
 		}
 		else {
-			return 0
+			0
 		}
 
 	}
@@ -104,7 +105,7 @@ class TEWrapper(var name: String)
 				return this.inventory(slotID)
 			}
 		}
-		return null
+		null
 	}
 
 	override def decrStackSize(slotID: Int, decrement: Int): ItemStack = {
@@ -146,11 +147,11 @@ class TEWrapper(var name: String)
 			}
 		}
 		// return nothing, since nothing was taken
-		return null
+		null
 	}
 
 	override def getStackInSlotOnClosing(slotID: Int): ItemStack = {
-		return this.getStackInSlot(slotID)
+		this.getStackInSlot(slotID)
 	}
 
 	override def setInventorySlotContents(slotID: Int, itemStack: ItemStack): Unit = {
@@ -169,22 +170,22 @@ class TEWrapper(var name: String)
 		if (this.hasInventory()) {
 			return this.getName()
 		}
-		return ""
+		""
 	}
 
 	override def hasCustomInventoryName: Boolean = {
-		return false
+		false
 	}
 
 	override def getInventoryStackLimit: Int = {
 		if (this.hasInventory()) {
 			return this.maxStackSize
 		}
-		return 0
+		0
 	}
 
 	override def isUseableByPlayer(p1: EntityPlayer): Boolean = {
-		return this.hasInventory()
+		this.hasInventory()
 	}
 
 	override def openInventory(): Unit = {}
@@ -195,7 +196,7 @@ class TEWrapper(var name: String)
 		if (this.hasInventory()) {
 			return slotID < this.inventorySize
 		}
-		return false
+		false
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ISidedInventory ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -211,15 +212,15 @@ class TEWrapper(var name: String)
 
 			return slotsFromSide
 		}
-		return null
+		null
 	}
 
 	override def canInsertItem(slotID: Int, itemStack: ItemStack, side: Int): Boolean = {
-		return this.hasInventory()
+		this.hasInventory()
 	}
 
 	override def canExtractItem(slotID: Int, itemStack: ItemStack, side: Int): Boolean = {
-		return this.hasInventory()
+		this.hasInventory()
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ IFluidHandler ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -241,8 +242,8 @@ class TEWrapper(var name: String)
 		this.tank = new FluidTank(this.tankSize)
 	}
 
-	def hasTank(): Boolean = {
-		return this.tank != null
+	def hasTank: Boolean = {
+		this.tank != null
 	}
 
 	/**
@@ -252,38 +253,38 @@ class TEWrapper(var name: String)
 		this.tank = new FluidTank(this.tankSize)
 	}
 
-	def getFluidStack(): FluidStack = {
+	def getFluidStack: FluidStack = {
 		if (this.hasTank()) {
 			if (this.tank.getFluid != null)
 				return this.tank.getFluid.copy()
 		}
-		return null
+		null
 	}
 
-	def getTankCapacity(): Int = {
+	def getTankCapacity: Int = {
 		if (this.hasTank()) {
 			return this.tankSize
 		}
-		return 0
+		0
 	}
 
-	def canHoldMoreFluid(): Boolean = {
+	def canHoldMoreFluid: Boolean = {
 		if (this.hasTank()) {
 			return this.tank.getFluidAmount < this.tank.getCapacity
 		}
-		return false
+		false
 	}
 
 	/**
 	 * Get the ratio of self tank's current fluid to its capacity
 	 * @return
 	 */
-	def getFluidRatio(): Float = {
+	def getFluidRatio: Float = {
 		if (this.hasTank()) {
 			return this.tank.getFluidAmount.asInstanceOf[Float] /
 					this.tank.getCapacity.asInstanceOf[Float]
 		}
-		return 0.0F
+		0.0F
 	}
 
 	override def fill(direction: ForgeDirection, fluidStack: FluidStack, doAction: Boolean): Int = {
@@ -296,7 +297,7 @@ class TEWrapper(var name: String)
 
 			return amount
 		}
-		return 0
+		0
 	}
 
 	override def drain(direction: ForgeDirection, fluidStack: FluidStack,
@@ -307,7 +308,7 @@ class TEWrapper(var name: String)
 				return this.drain(direction, internalStack.amount, doAction)
 			}
 		}
-		return null
+		null
 	}
 
 	override def drain(direction: ForgeDirection, amount: Int, doAction: Boolean): FluidStack = {
@@ -320,21 +321,21 @@ class TEWrapper(var name: String)
 
 			return internalStack
 		}
-		return null
+		null
 	}
 
 	override def canFill(direction: ForgeDirection, fluid: Fluid): Boolean = {
 		if (this.hasTank()) {
 			return this.canHoldMoreFluid()
 		}
-		return false
+		false
 	}
 
 	override def canDrain(direction: ForgeDirection, fluid: Fluid): Boolean = {
 		if (this.hasTank()) {
 			return this.tank.getFluidAmount > 0
 		}
-		return false
+		false
 	}
 
 	override def getTankInfo(direction: ForgeDirection): Array[FluidTankInfo] = {
@@ -349,7 +350,7 @@ class TEWrapper(var name: String)
 				new FluidTankInfo(internalStack, this.tank.getCapacity)
 			)
 		}
-		return null
+		null
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Timer ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -516,7 +517,7 @@ class TEWrapper(var name: String)
 	override def getDescriptionPacket: Packet = {
 		val tagCom: NBTTagCompound = new NBTTagCompound
 		this.writeToNBT(tagCom)
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord,
+		new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord,
 			this.blockMetadata, tagCom)
 	}
 

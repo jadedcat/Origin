@@ -86,18 +86,7 @@ public class UtilVector {
 					if (player.dimension == dimensionID)
 						return true;
 				}
-				else {
-					// if (Core.DEBUG) Core.log.info("Riding entity stuff");
-				}
 			}
-			else {
-				// if (Core.DEBUG) Core.log.info("Not PlayerMP");
-			}
-			// } else if (WeepingAngelsMod.DEBUG)
-			// WeepingAngelsMod.log.info("Side Not Server");
-		}
-		else {
-			// if (Core.DEBUG) Core.log.info("Player and destination dim are equal");
 		}
 		return false;
 	}
@@ -131,22 +120,19 @@ public class UtilVector {
 
 		if (particles) {
 			Random rand = new Random();
-			double d3 = x;
-			double d4 = y;
-			double d5 = z;
 			int l = 128;
 			for (int j1 = 0; j1 < l; j1++) {
 				double d6 = (double) j1 / ((double) l - 1.0D);
 				//float f = (rand.nextFloat() - 0.5F) * 0.2F;
 				//float f1 = (rand.nextFloat() - 0.5F) * 0.2F;
 				//float f2 = (rand.nextFloat() - 0.5F) * 0.2F;
-				double d7 = d3 + (player.posX - d3) * d6 + (rand.nextDouble() - 0.5D)
+				double d7 = x + (player.posX - x) * d6 + (rand.nextDouble() - 0.5D)
 						* (double) player.width * 2D;
-				double d8 = d4 + (player.posY - d4) * d6 + rand.nextDouble()
+				double d8 = y + (player.posY - y) * d6 + rand.nextDouble()
 						* (double) player.height;
-				double d9 = d5 + (player.posZ - d5) * d6 + (rand.nextDouble() - 0.5D)
+				double d9 = z + (player.posZ - z) * d6 + (rand.nextDouble() - 0.5D)
 						* (double) player.width * 2D;
-				player.worldObj.spawnParticle("portal", d3, d4, d5, d7, d8, d9);
+				player.worldObj.spawnParticle("portal", x, y, z, d7, d8, d9);
 
 			}
 		}
@@ -199,7 +185,7 @@ public class UtilVector {
 		//System.out.println(range);
 
 		int offsetX = rand.nextInt(range) + minimumRange;
-		int offsetZ =rand.nextInt(range) + minimumRange;
+		int offsetZ = rand.nextInt(range) + minimumRange;
 
 		// Center the values on a block, to make the boundingbox calculations
 		// match less.
@@ -309,10 +295,8 @@ public class UtilVector {
 					coords.side);
 			coords = new MovingObjectPositionTarget(newCoords[0], newCoords[1], newCoords[2],
 					coords.side);
-			if (coords != null) {
-				UtilVector.teleportPlayer(player, coords.x + 0.5, coords.y + 1, coords.z + 0.5,
-						false, false);
-			}
+			UtilVector.teleportPlayer(player, coords.x + 0.5, coords.y + 1, coords.z + 0.5,
+					false, false);
 		}
 	}
 

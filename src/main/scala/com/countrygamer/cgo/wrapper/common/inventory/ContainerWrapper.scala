@@ -67,7 +67,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 							this.addSlotToContainer(
 								new FinalSlot(this.player.inventory, slotID, x, y))
 							setSlot = true
-							break;
+							break()
 						}
 					}
 				}
@@ -87,12 +87,13 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 			val y: Int = 142 + offsetY
 
 			var setSlot: Boolean = false
-			var slotIndex = 0
-			for (slotIndex <- 0 to finalSlotIDs.length) {
-				if (finalSlotIDs(slotIndex) == slotID) {
-					this.addSlotToContainer(new FinalSlot(this.player.inventory, slotID, x, y))
-					setSlot = true
-					break;
+			breakable {
+				for (slotIndex <- 0 to finalSlotIDs.length) {
+					if (finalSlotIDs(slotIndex) == slotID) {
+						this.addSlotToContainer(new FinalSlot(this.player.inventory, slotID, x, y))
+						setSlot = true
+						break()
+					}
 				}
 			}
 
@@ -112,7 +113,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 	 * @return
 	 */
 	def getIInventory(): IInventory = {
-		return this.inventory
+		this.inventory
 	}
 
 	/**
@@ -121,7 +122,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 	 * @return
 	 */
 	def isAttachedToTileEntity(): Boolean = {
-		return this.inventory.isInstanceOf[TileEntity]
+		this.inventory.isInstanceOf[TileEntity]
 	}
 
 	/**
@@ -133,7 +134,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 		if (this.isAttachedToTileEntity()) {
 			return this.inventory.asInstanceOf[TileEntity]
 		}
-		return null
+		null
 	}
 
 	/**
@@ -142,7 +143,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 	 * @return
 	 */
 	def isAttachedToItem(): Boolean = {
-		return this.inventory.isInstanceOf[InventoryWrapper] &&
+		this.inventory.isInstanceOf[InventoryWrapper] &&
 				this.inventory.asInstanceOf[InventoryWrapper].isItemInventory
 	}
 
@@ -155,7 +156,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 		if (this.isAttachedToItem()) {
 			return this.inventory.asInstanceOf[InventoryWrapper]
 		}
-		return null
+		null
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~ Interactions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -164,7 +165,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 	 * Discern whether or not the passed player can use this container.
 	 */
 	override def canInteractWith(player: EntityPlayer): Boolean = {
-		return this.inventory.isUseableByPlayer(player)
+		this.inventory.isUseableByPlayer(player)
 	}
 
 	/**
@@ -176,7 +177,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 		if (slot != null && slot.getHasStack) {
 			val stackInSlotCopy: ItemStack = slot.getStack.copy
 			stackInSlot = stackInSlotCopy.copy
-			val inventorySize: Int = this.getIInventory.getSizeInventory
+			val inventorySize: Int = this.getIInventory.getSizeInventory()
 			val playerInventoryEnd: Int = inventorySize + 36
 			val playerHotBarStartID: Int = playerInventoryEnd - 9
 			if (slotiD < inventorySize) {
@@ -204,7 +205,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 										false)) return null
 								}
 							}
-							({slotID += 1; slotID - 1})
+							{slotID += 1; slotID - 1}
 						}
 					}
 				}
@@ -235,23 +236,23 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 			}
 			slot.onPickupFromSlot(player, stackInSlotCopy)
 		}
-		return stackInSlot
+		stackInSlot
 	}
 
 	protected def getSlotIDForItemStack(stackToProcess: ItemStack): Int = {
-		return -1
+		-1
 	}
 
 	protected def getExcludedMaximumSlotIDForItemStack(stackToProcess: ItemStack): Int = {
-		return this.getIInventory.getSizeInventory
+		this.getIInventory.getSizeInventory()
 	}
 
 	protected def isItemValidForSlotOnShift(slot: Slot, stackToProcess: ItemStack): Boolean = {
 		if (slot.isInstanceOf[GhostSlot]) {
-			return false
+			false
 		}
 		else {
-			return slot.isItemValid(stackToProcess)
+			slot.isItemValid(stackToProcess)
 		}
 	}
 
@@ -263,9 +264,9 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 		if (slotID >= 0 && slotID < this.inventorySlots.size() &&
 				this.inventorySlots.get(slotID).isInstanceOf[GhostSlot]) {
 			return this.inventorySlots.get(slotID).asInstanceOf[GhostSlot]
-					.ghostSlotClick(mouseButton, player);
+					.ghostSlotClick(mouseButton, player)
 		}
-		return super.slotClick(slotID, mouseButton, flag, player)
+		super.slotClick(slotID, mouseButton, flag, player)
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~ Item NBT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

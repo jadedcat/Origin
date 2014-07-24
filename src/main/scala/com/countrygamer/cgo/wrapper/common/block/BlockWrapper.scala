@@ -74,7 +74,7 @@ class BlockWrapper(material: Material, val pluginID: String, name: String,
 		// Get the unlocalized name of this block
 		val unlocalizedName: String = this.getUnlocalizedName
 		// return the result of the unlocalized name, making sure to get rid of the "tile." prefix
-		return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1)
+		unlocalizedName.substring(unlocalizedName.indexOf(".") + 1)
 	}
 
 	/**
@@ -84,7 +84,7 @@ class BlockWrapper(material: Material, val pluginID: String, name: String,
 	override def getUnlocalizedName: String = {
 		// return a formatted string using the format:
 		//   tile.{pluginID}:{blockName}
-		return String.format("tile.%s%s", this.pluginID + ":",
+		String.format("tile.%s%s", this.pluginID + ":",
 			this.getUnwrappedUnlocalizedName(super.getUnlocalizedName))
 	}
 
@@ -95,14 +95,14 @@ class BlockWrapper(material: Material, val pluginID: String, name: String,
 	 */
 	def getUnwrappedUnlocalizedName(unlocalizedName: String): String = {
 		// Get rid of the "tile." prefix and return the result
-		return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1)
+		unlocalizedName.substring(unlocalizedName.indexOf(".") + 1)
 	}
 
 	// ~~~~~~~~~~~~~~~ Start supered wrappers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	override def onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer,
 			side: Int, offsetX: Float, offsetY: Float, offsetZ: Float): Boolean = {
-		return super.onBlockActivated(world, x, y, z, player, side, offsetX, offsetY, offsetZ)
+		super.onBlockActivated(world, x, y, z, player, side, offsetX, offsetY, offsetZ)
 	}
 
 	override def onEntityWalking(world: World, x: Int, y: Int, z: Int, entity: Entity) {

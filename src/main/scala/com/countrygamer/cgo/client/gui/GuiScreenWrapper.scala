@@ -87,7 +87,7 @@ class GuiScreenWrapper(val xSize: Int, val ySize: Int) extends GuiScreen with IW
 	}
 
 	override def doesGuiPauseGame(): Boolean = {
-		return false
+		false
 	}
 
 	override def onGuiClosed(): Unit = {
@@ -143,9 +143,8 @@ class GuiScreenWrapper(val xSize: Int, val ySize: Int) extends GuiScreen with IW
 					.addToSendQueue(new C17PacketCustomPayload("MC|ItemName", packetBuffer))
 		}
 		catch {
-			case e: Exception => {
+			case e: Exception =>
 				LogManager.getLogger.error("Couldn\'t send text field info", e)
-			}
 		}
 		finally {
 			packetBuffer.release()
@@ -197,25 +196,25 @@ class GuiScreenWrapper(val xSize: Int, val ySize: Int) extends GuiScreen with IW
 	}
 
 	override def getXSize(): Int = {
-		return this.xSize
+		this.xSize
 	}
 
 	override def getYSize(): Int = {
-		return this.ySize
+		this.ySize
 	}
 
 	override def getGuiLeft(): Int = {
 		this.guiLeft = (this.width - this.xSize) / 2
-		return this.guiLeft
+		this.guiLeft
 	}
 
 	override def getGuiTop(): Int = {
 		this.guiTop = (this.height - this.ySize) / 2
-		return this.guiTop
+		this.guiTop
 	}
 
 	def getStringWidth(string: String): Int = {
-		return this.fontRendererObj.getStringWidth(string)
+		this.fontRendererObj.getStringWidth(string)
 	}
 
 	private def drawHoverInformation(mouseX: Int, mouseY: Int,
@@ -235,7 +234,7 @@ class GuiScreenWrapper(val xSize: Int, val ySize: Int) extends GuiScreen with IW
 
 	protected def isMouseInArea(x: Int, y: Int, w: Int, h: Int, mouseX: Int,
 			mouseY: Int): Boolean = {
-		return (x <= mouseX) && (mouseX <= x + w) && (y <= mouseY) && (mouseY <= y + h)
+		(x <= mouseX) && (mouseX <= x + w) && (y <= mouseY) && (mouseY <= y + h)
 	}
 
 	private def renderHoverInformation(mouseX: Int, mouseY: Int,

@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack
 class OutputSlot(inv: IInventory, id: Int, x: Int, y: Int) extends Slot(inv, id, x, y) {
 
 	override def isItemValid(par1ItemStack: ItemStack): Boolean = {
-		return false
+		false
 	}
 
 }

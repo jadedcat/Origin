@@ -2,13 +2,13 @@ package com.countrygamer.cgo.common
 
 import java.util
 
-import com.countrygamer.cgo.wrapper.common.extended.{ExtendedEntityHandler, ExtendedEntity}
+import com.countrygamer.cgo.wrapper.common.extended.{ExtendedEntity, ExtendedEntityHandler}
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.IExtendedEntityProperties
-import net.minecraftforge.event.entity.{EntityJoinWorldEvent, EntityEvent}
 import net.minecraftforge.event.entity.living.LivingDeathEvent
+import net.minecraftforge.event.entity.{EntityEvent, EntityJoinWorldEvent}
 
 /**
  *
@@ -33,7 +33,7 @@ object ExtendedSync {
 			val playerName: String = player.getGameProfile.getName
 			return ExtendedSync.persistanceTags.get(extendedClass).remove(playerName)
 		}
-		return null
+		null
 	}
 
 	private def checkForClassKey(extendedClass: Class[_ <: ExtendedEntity]): Boolean = {
@@ -42,7 +42,7 @@ object ExtendedSync {
 					.put(extendedClass, new util.HashMap[String, NBTTagCompound])
 			return false
 		}
-		return true
+		true
 	}
 
 	/**
@@ -86,7 +86,7 @@ object ExtendedSync {
 	@SubscribeEvent
 	def onLivingDeath(event: LivingDeathEvent) {
 		if (event.entity == null || event.entity.worldObj.isRemote ||
-				!(event.entity.isInstanceOf[EntityPlayer])) return
+				!event.entity.isInstanceOf[EntityPlayer]) return
 		val player: EntityPlayer = event.entity.asInstanceOf[EntityPlayer]
 		val propertyMap: util.Map[Class[_ <: ExtendedEntity], Array[String]] = ExtendedEntityHandler
 				.getExtendedProperties
@@ -115,7 +115,7 @@ object ExtendedSync {
 	@SubscribeEvent
 	def onEntityJoinWorld(event: EntityJoinWorldEvent) {
 		if (event.entity == null || event.entity.worldObj.isRemote ||
-				!(event.entity.isInstanceOf[EntityPlayer])) return
+				!event.entity.isInstanceOf[EntityPlayer]) return
 		val player: EntityPlayer = event.entity.asInstanceOf[EntityPlayer]
 		val propertyMap: util.Map[Class[_ <: ExtendedEntity], Array[String]] = ExtendedEntityHandler
 				.getExtendedProperties
@@ -124,7 +124,8 @@ object ExtendedSync {
 			val extendedClass: Class[_ <: ExtendedEntity] = iterator.next()
 					.asInstanceOf[Class[_ <: ExtendedEntity]]
 			val shouldPersist: String = propertyMap.get(extendedClass)(1)
-			val extendedPlayer: ExtendedEntity = ExtendedEntityHandler.getExtended(player, extendedClass)
+			val extendedPlayer: ExtendedEntity = ExtendedEntityHandler
+					.getExtended(player, extendedClass)
 					.asInstanceOf[ExtendedEntity]
 			if (extendedPlayer != null) {
 				if (shouldPersist.toBoolean) {
@@ -134,7 +135,7 @@ object ExtendedSync {
 						extendedPlayer.loadNBTData(extPlayerData)
 					}
 				}
-				extendedPlayer.syncEntity
+				extendedPlayer.syncEntity()
 			}
 		}
 	}

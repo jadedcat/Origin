@@ -3,7 +3,7 @@ package com.countrygamer.cgo.wrapper.common.inventory
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.{NBTTagList, NBTTagCompound}
+import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 
 /**
  *
@@ -31,15 +31,15 @@ class InventoryWrapper(var name: String, var inventorySize: Int, var ownerStack:
 	// End Constructors
 
 	def isItemInventory: Boolean = {
-		return this.ownerStack != null
+		this.ownerStack != null
 	}
 
 	def getSizeInventory: Int = {
-		return inventory.length
+		inventory.length
 	}
 
 	def getStackInSlot(slot: Int): ItemStack = {
-		return inventory(slot)
+		inventory(slot)
 	}
 
 	def decrStackSize(slot: Int, amount: Int): ItemStack = {
@@ -56,7 +56,7 @@ class InventoryWrapper(var name: String, var inventorySize: Int, var ownerStack:
 			}
 			this.markDirty
 		}
-		return stack
+		stack
 	}
 
 	def getStackInSlotOnClosing(slot: Int): ItemStack = {
@@ -64,7 +64,7 @@ class InventoryWrapper(var name: String, var inventorySize: Int, var ownerStack:
 		if (stack != null) {
 			setInventorySlotContents(slot, null)
 		}
-		return stack
+		stack
 	}
 
 	def setInventorySlotContents(slot: Int, itemstack: ItemStack) {
@@ -76,15 +76,15 @@ class InventoryWrapper(var name: String, var inventorySize: Int, var ownerStack:
 	}
 
 	def getInventoryName: String = {
-		return this.name
+		this.name
 	}
 
 	def hasCustomInventoryName: Boolean = {
-		return name.length > 0
+		name.length > 0
 	}
 
 	def getInventoryStackLimit: Int = {
-		return 64
+		64
 	}
 
 	def markDirty {
@@ -96,13 +96,13 @@ class InventoryWrapper(var name: String, var inventorySize: Int, var ownerStack:
 							this.getStackInSlot(i).stackSize == 0) this
 							.setInventorySlotContents(i, null)
 				}
-				({i += 1; i})
+				{i += 1; i}
 			}
 		}
 	}
 
 	def isUseableByPlayer(entityplayer: EntityPlayer): Boolean = {
-		return true
+		true
 	}
 
 	def openInventory {
@@ -117,7 +117,7 @@ class InventoryWrapper(var name: String, var inventorySize: Int, var ownerStack:
 	 * even when this returns false
 	 */
 	def isItemValidForSlot(slot: Int, itemstack: ItemStack): Boolean = {
-		return true
+		true
 	}
 
 	/**

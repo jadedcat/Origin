@@ -18,14 +18,14 @@ object EnchantmentHelper {
 			for (it <- 0 to Enchantment.enchantmentsList.length) {
 				if (Enchantment.enchantmentsList(it) == null) {
 					id = it
-					break
+					break()
 				}
 			}
 		}
 		if (id < 0) {
 			id = Enchantment.enchantmentsList.length
 		}
-		return id
+		id
 	}
 
 }

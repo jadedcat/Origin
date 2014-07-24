@@ -14,36 +14,37 @@ import java.util.List;
 import java.util.UUID;
 
 public class Player {
-	
+
 	public static void sendMessageToPlayer(EntityPlayer player, String message) {
 		//if (player.worldObj.isRemote)
-			player.addChatComponentMessage(new ChatComponentText(message));
+		player.addChatComponentMessage(new ChatComponentText(message));
 	}
-	
+
 	public static boolean breakBlockAsPlayer(World world, EntityPlayer player, int x, int y, int z,
 			Block block) {
-		if (player == null || world == null) return false;
+		if (player == null || world == null)
+			return false;
 		WorldClient worldclient = Minecraft.getMinecraft().theWorld;
 		worldclient.playAuxSFX(2001, x, y, z,
 				Block.getIdFromBlock(block) + (worldclient.getBlockMetadata(x, y, z) << 12));
-		
+
 		int meta = world.getBlockMetadata(x, y, z);
 		world.setBlockToAir(x, y, z);
 		block.onBlockDestroyedByPlayer(world, x, y, z, meta);
-		
+
 		return true;
 	}
-	
+
 	public static int getDirection(EntityPlayer player) {
 		return MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public static EntityPlayerMP getPlayerByUUID(UUID id) {
 		List players = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
-		for (int i = 0; i < players.size(); i++) {
-			if (players.get(i) instanceof EntityPlayerMP) {
-				EntityPlayerMP player = (EntityPlayerMP)players.get(i);
+		for (Object player1 : players) {
+			if (player1 instanceof EntityPlayerMP) {
+				EntityPlayerMP player = (EntityPlayerMP) player1;
 				if (player.getUniqueID().equals(id)) {
 					return player;
 				}
@@ -51,16 +52,16 @@ public class Player {
 		}
 		return null;
 	}
-	
+
 	public static String getUsername(EntityPlayer player) {
 		return player.getCommandSenderName(); // Also player.getGameProfile().getName()
 	}
 
 	public static EntityPlayerMP getPlayerByUsername(String name) {
 		List players = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
-		for (int i = 0; i < players.size(); i++) {
-			if (players.get(i) instanceof EntityPlayerMP) {
-				EntityPlayerMP player = (EntityPlayerMP)players.get(i);
+		for (Object player1 : players) {
+			if (player1 instanceof EntityPlayerMP) {
+				EntityPlayerMP player = (EntityPlayerMP) player1;
 				if (player.getCommandSenderName().equals(name)) {
 					return player;
 				}
@@ -68,5 +69,5 @@ public class Player {
 		}
 		return null;
 	}
-	
+
 }

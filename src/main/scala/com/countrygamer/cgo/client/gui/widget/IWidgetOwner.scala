@@ -7,12 +7,12 @@ package com.countrygamer.cgo.client.gui.widget
  */
 trait IWidgetOwner {
 
-	def getXSize(): Int
+	def getXSize: Int
 
-	def getYSize(): Int
+	def getYSize: Int
 
-	def getGuiLeft(): Int
+	def getGuiLeft: Int
 
-	def getGuiTop(): Int
+	def getGuiTop: Int
 
 }

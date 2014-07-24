@@ -16,13 +16,13 @@ object CGOOptions extends OptionRegister {
 
 	override def register(): Unit = {
 		this.enableLambchops = Config.getAndComment(this.config, "Other", "Enable Lambchops",
-			"Enable Labchops to be dropped from sheep", true);
+			"Enable Labchops to be dropped from sheep", true)
 
 	}
 
 	@SideOnly(Side.CLIENT)
 	override def getGuiConfigClass(): Class[_ <: GuiScreen] = {
-		return classOf[com.countrygamer.cgo.client.gui.configFactory.GuiConfig]
+		classOf[com.countrygamer.cgo.client.gui.configFactory.GuiConfig]
 	}
 
 }

@@ -13,11 +13,11 @@ class FinalSlot(inventory: IInventory, slotID: Int, x: Int, y: Int)
 		extends OutputSlot(inventory, slotID, x, y) {
 
 	override def isItemValid(itemStack: ItemStack): Boolean = {
-		return false
+		false
 	}
 
 	override def canTakeStack(player: EntityPlayer): Boolean = {
-		return false
+		false
 	}
 
 }

@@ -1,8 +1,8 @@
 package com.countrygamer.cgo.client
 
 import com.countrygamer.cgo.client.render.BlockCamouflageRender
-import com.countrygamer.cgo.common.{Origin, CommonProxy}
 import com.countrygamer.cgo.common.network.{PacketHandler, PacketSyncExtendedProperties}
+import com.countrygamer.cgo.common.{CommonProxy, Origin}
 import cpw.mods.fml.client.registry.RenderingRegistry
 import cpw.mods.fml.common.FMLCommonHandler
 import net.minecraft.entity.player.EntityPlayer
@@ -22,7 +22,7 @@ class ClientProxy() extends CommonProxy {
 
 	override def getClientGuiElement(p1: Int, p2: EntityPlayer, p3: World, p4: Int, p5: Int,
 			p6: Int): AnyRef = {
-		return null
+		null
 	}
 
 	override def syncPacket(message: PacketSyncExtendedProperties, player: EntityPlayer) {
@@ -35,7 +35,7 @@ class ClientProxy() extends CommonProxy {
 	}
 
 	override def addArmor(armor: String): Int = {
-		return RenderingRegistry.addNewArmourRendererPrefix(armor)
+		RenderingRegistry.addNewArmourRendererPrefix(armor)
 	}
 
 }

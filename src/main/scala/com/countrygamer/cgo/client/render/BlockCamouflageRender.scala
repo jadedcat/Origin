@@ -4,7 +4,7 @@ import com.countrygamer.cgo.common.lib.ItemMeta
 import com.countrygamer.cgo.wrapper.common.tile.ICamouflage
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler
 import net.minecraft.block.Block
-import net.minecraft.client.renderer.{Tessellator, RenderBlocks}
+import net.minecraft.client.renderer.{RenderBlocks, Tessellator}
 import net.minecraft.init.Blocks
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.IBlockAccess
@@ -82,7 +82,7 @@ object BlockCamouflageRender extends ISimpleBlockRenderingHandler {
 
 	override def renderWorldBlock(world: IBlockAccess, x: Int, y: Int, z: Int, block: Block,
 			modelId: Int, renderer: RenderBlocks): Boolean = {
-		return this.render(world, x, y, z, block, modelId, renderer)
+		this.render(world, x, y, z, block, modelId, renderer)
 	}
 
 	private def render(world: IBlockAccess, x: Int, y: Int, z: Int, block: Block, modelId: Int,
@@ -108,11 +108,11 @@ object BlockCamouflageRender extends ISimpleBlockRenderingHandler {
 			renderer.renderStandardBlock(block, x, y, z)
 			return true
 		}
-		return false
+		false
 	}
 
 	override def shouldRender3DInInventory(p1: Int): Boolean = {
-		return true
+		true
 	}
 
 	override def getRenderId: Int = {

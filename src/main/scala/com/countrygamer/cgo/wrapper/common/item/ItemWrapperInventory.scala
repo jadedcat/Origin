@@ -28,7 +28,7 @@ class ItemWrapperInventory(pluginID: String, name: String) extends ItemWrapper(p
 	// End Constructors
 
 	override def getMaxItemUseDuration(itemstack: ItemStack): Int = {
-		return 1
+		1
 	}
 
 	override def onUpdate(itemstack: ItemStack, world: World, entity: Entity, par4: Int,
@@ -52,11 +52,11 @@ class ItemWrapperInventory(pluginID: String, name: String) extends ItemWrapper(p
 			// and update
 			if (player.openContainer != null &&
 					player.openContainer.isInstanceOf[ContainerWrapper] &&
-					(player.openContainer.asInstanceOf[ContainerWrapper]).needsUpdate) {
+					player.openContainer.asInstanceOf[ContainerWrapper].needsUpdate) {
 				// save the nbt data from the container to the itemstack
-				(player.openContainer.asInstanceOf[ContainerWrapper]).writeToNBT
+				player.openContainer.asInstanceOf[ContainerWrapper].writeToNBT()
 				// reset the status of the container requiring an update
-				(player.openContainer.asInstanceOf[ContainerWrapper]).needsUpdate = false
+				player.openContainer.asInstanceOf[ContainerWrapper].needsUpdate = false
 			}
 		}
 

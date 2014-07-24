@@ -136,7 +136,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractPacke
 	public final String channel;
 	public EnumMap<Side, FMLEmbeddedChannel> channels;
 
-	PacketHandler(String pluginID, Class<? extends AbstractPacket>... packetClasses) {
+	private PacketHandler(String pluginID, Class<? extends AbstractPacket>... packetClasses) {
 		this.channel = pluginID.toLowerCase();
 
 		ArrayList<Class<? extends AbstractPacket>> list = new ArrayList<Class<? extends AbstractPacket>>();
@@ -186,7 +186,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<AbstractPacke
 		protected void channelRead0(ChannelHandlerContext ctx, AbstractPacket msg)
 				throws Exception {
 			Side side = FMLCommonHandler.instance().getEffectiveSide();
-			EntityPlayer player = null;
+			EntityPlayer player;
 			if (side.isServer()) {
 				INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
 				player = ((NetHandlerPlayServer) netHandler).playerEntity;

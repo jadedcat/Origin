@@ -14,16 +14,16 @@ trait ICamouflage {
 	var camouflageBlock: Block = null
 	var camouflageMetadata: Int = 0
 
-	def isCamouflaged(): Boolean = {
-		return this.hasCamouflage()
+	def isCamouflaged: Boolean = {
+		this.hasCamouflage()
 	}
 
-	def hasCamouflage(): Boolean = {
-		return this.camouflageBlock != null
+	def hasCamouflage: Boolean = {
+		this.camouflageBlock != null
 	}
 
-	def getCamouflage(): ItemMeta = {
-		return new ItemMeta(this.camouflageBlock, this.camouflageMetadata)
+	def getCamouflage: ItemMeta = {
+		new ItemMeta(this.camouflageBlock, this.camouflageMetadata)
 	}
 
 	def setCamouflage(itemMeta: ItemMeta): Unit = {

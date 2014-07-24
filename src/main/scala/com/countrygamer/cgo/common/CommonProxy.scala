@@ -16,12 +16,12 @@ class CommonProxy extends ProxyWrapper {
 
 	override def getServerGuiElement(p1: Int, p2: EntityPlayer, p3: World, p4: Int, p5: Int,
 			p6: Int): AnyRef = {
-		return null
+		null
 	}
 
 	override def getClientGuiElement(p1: Int, p2: EntityPlayer, p3: World, p4: Int, p5: Int,
 			p6: Int): AnyRef = {
-		return null
+		null
 	}
 
 	def syncPacket(message: PacketSyncExtendedProperties, player: EntityPlayer) {
@@ -29,7 +29,7 @@ class CommonProxy extends ProxyWrapper {
 	}
 
 	def addArmor(armor: String): Int = {
-		return 0
+		0
 	}
 
 }

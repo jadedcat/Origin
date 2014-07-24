@@ -14,7 +14,7 @@ class GenericRegister() {
 	private final val DATA: RegistryNamespaced = new RegistryNamespaced
 	private val keys: util.ArrayList[String] = new util.ArrayList[String]
 
-	def registerObjects: Unit = {}
+	def registerObjects(): Unit = {}
 
 	def registerObject(id: Int, key: String, obj: AnyRef) {
 		this.DATA.addObject(id, key, obj)
@@ -22,15 +22,15 @@ class GenericRegister() {
 	}
 
 	def getObject(key: String): AnyRef = {
-		return this.DATA.getObject(key)
+		this.DATA.getObject(key)
 	}
 
 	def getObject(id: Int): AnyRef = {
-		return this.DATA.getObjectById(id)
+		this.DATA.getObjectById(id)
 	}
 
 	def getRegister: RegistryNamespaced = {
-		return this.DATA
+		this.DATA
 	}
 
 	def getKeys: Array[String] = {
@@ -41,7 +41,7 @@ class GenericRegister() {
 			retKeys(i) = this.keys.get(i)
 		}
 
-		return retKeys
+		retKeys
 	}
 
 }

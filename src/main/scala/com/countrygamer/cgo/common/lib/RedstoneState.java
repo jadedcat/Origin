@@ -9,10 +9,8 @@ public enum RedstoneState {
 			"Only active with a redstone signal"
 	});
 
-	public final String[] desc;
-
 	private RedstoneState(String[] desc) {
-		this.desc = desc;
+		String[] desc1 = desc;
 	}
 
 	public static RedstoneState getStateFromInt(int stateID) {

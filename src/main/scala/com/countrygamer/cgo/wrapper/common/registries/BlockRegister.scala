@@ -7,14 +7,14 @@ package com.countrygamer.cgo.wrapper.common.registries
  */
 class BlockRegister() extends Register {
 
-	def registerTileEntities: Unit = {}
+	def registerTileEntities(): Unit = {}
 
 	override def register(): Unit = {}
 
-	def registerCrafting: Unit = {}
+	def registerCrafting(): Unit = {}
 
-	def registerSmelting: Unit = {}
+	def registerSmelting(): Unit = {}
 
-	def registerOther: Unit = {}
+	def registerOther(): Unit = {}
 
 }

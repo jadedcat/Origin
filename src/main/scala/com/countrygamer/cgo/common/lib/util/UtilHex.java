@@ -1,17 +1,17 @@
 package com.countrygamer.cgo.common.lib.util;
 
+import net.minecraft.item.ItemStack;
+
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
-import net.minecraft.item.ItemStack;
-
 public class UtilHex {
-	
+
 	/**
 	 * Returns color ratios for each RR GG and BB values of a hex string, determined from an item
-	 * 
-	 * @param item
-	 * @return
+	 *
+	 * @param itemStack ItemStack containing a dye
+	 * @return an array of color values
 	 */
 	public static double[] getColorFromDye(ItemStack itemStack) {
 		HashMap<Integer, String> hexFromMeta = new HashMap<Integer, String>();
@@ -31,19 +31,17 @@ public class UtilHex {
 		hexFromMeta.put(13, "e600e6");
 		hexFromMeta.put(14, "ff9000");
 		hexFromMeta.put(15, "ffffff");
-		
-		double[] sums = getSumHex(hexFromMeta.containsKey(itemStack.getItemDamage()) ? hexFromMeta
+
+		return getSumHex(hexFromMeta.containsKey(itemStack.getItemDamage()) ? hexFromMeta
 				.get(itemStack.getItemDamage()) : "");
-		// MultiDye.log.info(sums[0] + ":" + sums[1] + ":" + sums[2]);
-		return sums;
 	}
-	
+
 	/**
 	 * Returns int[] of the sum of each RR GG and BB values in a hex string
 	 * Returns {-1, -1, -1} if impossible
-	 * 
-	 * @param hexString
-	 * @return
+	 *
+	 * @param hexString a hexadecimal as a string
+	 * @return an array container color quantities (0 - 255)
 	 */
 	public static double[] getSumHex(String hexString) {
 		if (isValidHexString(hexString)) {
@@ -56,17 +54,18 @@ public class UtilHex {
 					r += chars[i];
 				else if (i < 4)
 					g += chars[i];
-				else if (i < 6) b += chars[i];
+				else if (i < 6)
+					b += chars[i];
 			}
-			
+
 			double rSum = formatToDecimals(getSumIndividualHex(r), 2, 2) / 30.00D;
 			double gSum = formatToDecimals(getSumIndividualHex(g), 2, 2) / 30.00D;
 			double bSum = formatToDecimals(getSumIndividualHex(b), 2, 2) / 30.00D;
-			
+
 			rSum = formatToDecimals(rSum, 2, 2);
 			gSum = formatToDecimals(gSum, 2, 2);
 			bSum = formatToDecimals(bSum, 2, 2);
-			
+
 			return new double[] {
 					rSum, gSum, bSum
 			};
@@ -75,27 +74,28 @@ public class UtilHex {
 				-1, -1, -1
 		};
 	}
-	
+
 	/**
 	 * Returns sum of RR GG or BB string values
-	 * 
-	 * @param digitsHex
+	 *
+	 * @param digitsHex get the sum (0 - 255) of a
 	 * @return
 	 */
+	@Deprecated
 	public static double getSumIndividualHex(String digitsHex) {
 		double sum = 0;
-		
+
 		HashMap<String, Integer> strToInt = getHexValues();
-		
+
 		char[] chars = digitsHex.toCharArray();
 		for (char letter : chars) {
 			String str = letter + "";
 			sum += strToInt.get(str.toLowerCase());
 		}
-		
+
 		return sum;
 	}
-	
+
 	public static HashMap<String, Integer> getHexValues() {
 		HashMap<String, Integer> strToInt = new HashMap<String, Integer>();
 		strToInt.put("0", 0);
@@ -116,18 +116,18 @@ public class UtilHex {
 		strToInt.put("f", 15);
 		return strToInt;
 	}
-	
+
 	/**
 	 * Returns hexadecimal integer value of integer RGB values.
 	 * Returns -1 if impossible;
-	 * 
-	 * @param r
-	 * @param g
-	 * @param b
-	 * @return
+	 *
+	 * @param r red (0 - 255)
+	 * @param g green (0 - 255)
+	 * @param b blue (0 - 255)
+	 * @return an color value as an integer
 	 */
 	public static int convertRGBtoHex(int r, int g, int b) {
-		int hex = -1;
+		int hex;
 		try {
 			hex = Integer.parseInt(convertRGBtoHexString(r, g, b));
 		} catch (NumberFormatException e) {
@@ -136,23 +136,21 @@ public class UtilHex {
 		}
 		return hex;
 	}
-	
+
 	/**
 	 * Returns hexadecimal string value of integer RGB values.
-	 * 
-	 * @param r
-	 * @param g
-	 * @param b
-	 * @return
+	 *
+	 * @param r red (0 - 255)
+	 * @param g green (0 - 255)
+	 * @param b blue (0 - 255)
+	 * @return a hexadeciaml number as a string
 	 */
 	public static String convertRGBtoHexString(int r, int g, int b) {
 		return String.format("%02x%02x%02x", r, g, b);
 	}
-	
+
 	/**
-	 * 
-	 * @param hexString
-	 *            EX; "ff80a5"
+	 * @param hexString EX; "ff80a5"
 	 * @return int[]{R, G, B}
 	 */
 	public static int[] convertHexToRGB(String hexString) {
@@ -162,19 +160,22 @@ public class UtilHex {
 				Integer.valueOf(hexString.substring(4, 6), 16)
 		};
 	}
-	
+
 	public static boolean isValidHexString(String str) {
-		if (str.length() != 6) return false;
-		boolean valid = false;
+		if (str.length() != 6)
+			return false;
+		boolean valid;
 		char[] chars = str.toCharArray();
 		HashMap<String, Integer> hexVals = getHexValues();
-		for (int i = 0; i < chars.length; i++) {
-			valid = hexVals.get(chars[i] + "") != null;
-			if (!valid) return valid;
+		for (char aChar : chars) {
+			valid = hexVals.get(aChar + "") != null;
+			if (!valid) {
+				return valid;
+			}
 		}
 		return true;
 	}
-	
+
 	public static double formatToDecimals(double number, int maxInt, int decimals) {
 		String decimal = "";
 		for (int i = 0; i < maxInt; i++) {
@@ -184,10 +185,10 @@ public class UtilHex {
 		for (int i = 0; i < decimals; i++) {
 			decimal += "#";
 		}
-		
+
 		DecimalFormat df = new DecimalFormat(decimal);
 		return Double.parseDouble(df.format(number));
-		
+
 	}
-	
+
 }

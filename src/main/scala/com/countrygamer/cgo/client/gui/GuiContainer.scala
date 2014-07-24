@@ -213,12 +213,15 @@ class GuiContainer(xSize: Int, ySize: Int, val container: Container)
 			// slotY - (mouseY - guiTop)
 			val yVar: Int = this.returningStackDestSlot.yDisplayPosition - this.mouseYAndGuiTopDif
 			// (mouseX - guiLeft) + ((slotX - (mouseX - guiLeft)) * timeVar)
-			val itemStackX: Int = this.mouseXAndGuiLeftDif + (xVar.asInstanceOf[Float] * f1).asInstanceOf[Int]
+			val itemStackX: Int = this.mouseXAndGuiLeftDif +
+					(xVar.asInstanceOf[Float] * f1).asInstanceOf[Int]
 			// (mouseY - guiTop) + ((slotY - (mouseY - guiTop)) * timeVar)
-			val itemStackY: Int = this.mouseYAndGuiTopDif + (yVar.asInstanceOf[Float] * f1).asInstanceOf[Int]
+			val itemStackY: Int = this.mouseYAndGuiTopDif +
+					(yVar.asInstanceOf[Float] * f1).asInstanceOf[Int]
 
 			// Draw itemstack with not tool tip?
-			this.drawItemStack(this.returningStack, itemStackX, itemStackY, null.asInstanceOf[String])
+			this.drawItemStack(this.returningStack, itemStackX, itemStackY,
+				null.asInstanceOf[String])
 		}
 
 		// End Matrix
@@ -380,8 +383,9 @@ class GuiContainer(xSize: Int, ySize: Int, val container: Container)
 				}
 
 				// Handles splitting the stack
-				Container.func_94525_a(this.hoveredSlotSet, this.slotTakingDecider, hoveredItemStack,
-					hoveredItemStackSize)
+				Container
+						.func_94525_a(this.hoveredSlotSet, this.slotTakingDecider, hoveredItemStack,
+				            hoveredItemStackSize)
 
 				// If the stacksize is over the max stack size, cap it
 				if (hoveredItemStack.stackSize > hoveredItemStack.getMaxStackSize) {
@@ -411,7 +415,7 @@ class GuiContainer(xSize: Int, ySize: Int, val container: Container)
 		val guiTop: Int = this.getGuiTop()
 		val mouseX_1 = mouseX - guiLeft
 		val mouseY_1 = mouseY - guiTop
-		return (mouseX_1 >= x - 1) && (mouseX_1 < x + w + 1) && (mouseY_1 >= y - 1) &&
+		(mouseX_1 >= x - 1) && (mouseX_1 < x + w + 1) && (mouseY_1 >= y - 1) &&
 				(mouseY_1 < y + h + 1)
 	}
 
@@ -554,7 +558,7 @@ class GuiContainer(xSize: Int, ySize: Int, val container: Container)
 
 		}
 
-		return null
+		null
 	}
 
 	protected def handleMouseClick(slot: Slot, slotID: Int, par3: Int, par4: Int): Unit = {
@@ -864,7 +868,7 @@ class GuiContainer(xSize: Int, ySize: Int, val container: Container)
 
 		}
 
-		return false
+		false
 	}
 
 	override def onGuiClosed(): Unit = {

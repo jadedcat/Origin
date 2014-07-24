@@ -20,7 +20,7 @@ class GhostBlockSlot(inv: IInventory, slotID: Int, x: Int, y: Int, maxSize: Int)
 
 	override def isItemValid(itemStack: ItemStack): Boolean = {
 		val block: Block = Block.getBlockFromItem(itemStack.getItem)
-		return block.equals(Blocks.air) && (block.getRenderType == 0)
+		block.equals(Blocks.air) && (block.getRenderType == 0)
 	}
 
 }

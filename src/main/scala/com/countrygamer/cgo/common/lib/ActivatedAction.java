@@ -7,10 +7,8 @@ public enum ActivatedAction {
 			"Active while redstone pulse (while settings apply)"
 	});
 
-	public final String[] desc;
-
 	private ActivatedAction(String[] desc) {
-		this.desc = desc;
+		String[] desc1 = desc;
 	}
 
 	public static ActivatedAction getState(int stateID) {

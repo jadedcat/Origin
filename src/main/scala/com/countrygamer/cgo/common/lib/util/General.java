@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class General {
-	
+
 	public static HashMap<ItemStack, ItemStack> getBasicOreDict() {
 		HashMap<ItemStack, ItemStack> oreDict = new HashMap<ItemStack, ItemStack>();
 		String[] oreNames = new String[] {
@@ -26,7 +26,7 @@ public class General {
 		oreDict.put(new ItemStack(Blocks.lapis_ore, 1), new ItemStack(Items.dye, 1, 4));
 		oreDict.put(new ItemStack(Blocks.redstone_ore, 1), new ItemStack(Items.redstone, 1));
 		oreDict.put(new ItemStack(Blocks.emerald_ore, 1), new ItemStack(Items.emerald, 1));
-		
+
 		for (String oreName : oreNames) {
 			ArrayList<ItemStack> ores = OreDictionary.getOres("ore" + oreName);
 			for (ItemStack ore : ores) {
@@ -36,14 +36,14 @@ public class General {
 				}
 			}
 		}
-		
+
 		return oreDict;
 	}
-	
+
 	/**
 	 * Find new id
-	 * 
-	 * @return
+	 *
+	 * @return A unique entity ID
 	 */
 	public static int getUniqueEntityId() {
 		int entityid = 0;
@@ -52,12 +52,12 @@ public class General {
 		} while (EntityList.getStringFromID(entityid) != null);
 		return entityid;
 	}
-	
+
 	/**
 	 * Check for loaded mod
-	 * 
-	 * @param targetModid
-	 * @return
+	 *
+	 * @param targetModid the modid of the mod you are looking for
+	 * @return whether or not the mod is installed
 	 */
 	public static boolean isModLoaded(String targetModid) {
 		if (Loader.isModLoaded(targetModid)) {

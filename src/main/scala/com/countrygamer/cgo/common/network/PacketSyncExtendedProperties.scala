@@ -52,7 +52,7 @@ class PacketSyncExtendedProperties(var extendedClass: Class[_ <: ExtendedEntity]
 				return extendedClass
 			}
 		}
-		return null
+		null
 	}
 
 	override def handleOnClient(player: EntityPlayer): Unit = {
@@ -66,7 +66,7 @@ class PacketSyncExtendedProperties(var extendedClass: Class[_ <: ExtendedEntity]
 	}
 
 	def handleSync(player: EntityPlayer): Unit = {
-		(ExtendedEntityHandler.getExtended(player, this.extendedClass)).loadNBTData(this.data)
+		ExtendedEntityHandler.getExtended(player, this.extendedClass).loadNBTData(this.data)
 	}
 
 }

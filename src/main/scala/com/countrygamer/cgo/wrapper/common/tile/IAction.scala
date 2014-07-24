@@ -16,8 +16,8 @@ trait IAction {
 		this.action = action
 	}
 
-	def getAction(): ActivatedAction = {
-		return this.action
+	def getAction: ActivatedAction = {
+		this.action
 	}
 
 	def saveActionNBT(tagCom: NBTTagCompound): Unit = {

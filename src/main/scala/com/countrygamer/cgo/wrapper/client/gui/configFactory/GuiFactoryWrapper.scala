@@ -19,16 +19,16 @@ class GuiFactoryWrapper(val options: OptionRegister) extends IModGuiFactory {
 	}
 
 	override def runtimeGuiCategories(): util.Set[RuntimeOptionCategoryElement] = {
-		return null
+		null
 	}
 
 	override def getHandlerFor(
 			element: IModGuiFactory.RuntimeOptionCategoryElement): IModGuiFactory.RuntimeOptionGuiHandler = {
-		return null
+		null
 	}
 
 	override def mainConfigGuiClass(): Class[_ <: GuiScreen] = {
-		return options.getGuiConfigClass()
+		options.getGuiConfigClass()
 	}
 
 }

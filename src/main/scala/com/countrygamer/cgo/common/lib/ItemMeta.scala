@@ -22,6 +22,7 @@ class ItemMeta(var item: Item, var metadata: Int) {
 		this(Item.getItemFromBlock(block), metadata)
 		this.isBlock = true
 	}
+
 	// End Constructors
 
 	def saveToNBT(compound: NBTTagCompound) {
@@ -37,45 +38,46 @@ class ItemMeta(var item: Item, var metadata: Int) {
 	}
 
 	override def equals(obj: Any): Boolean = {
-		return this.equals(obj, false)
+		this.equals(obj, ignoreMeta = false)
 	}
 
 	def equals(obj: Any, ignoreMeta: Boolean): Boolean = {
-		if (obj.isInstanceOf[ItemMeta]) {
-			val that: ItemMeta = obj.asInstanceOf[ItemMeta]
-			return (this.item == that.getItem) &&
-					(if (ignoreMeta) true else this.metadata == that.getMetadata)
+		obj match {
+			case that: ItemMeta =>
+				return (this.item == that.getItem) &&
+						(if (ignoreMeta) true else this.metadata == that.getMetadata)
+			case _ =>
 		}
-		return false
+		false
 	}
 
 	def copy: ItemMeta = {
 		if (this.isBlock) return new ItemMeta(Block.getBlockFromItem(this.item), this.metadata)
-		return new ItemMeta(this.item, this.metadata)
+		new ItemMeta(this.item, this.metadata)
 	}
 
 	def getItemStack(size: Int): ItemStack = {
-		return new ItemStack(this.item, if (size < 1) 1 else (if (size > 64) 64 else size),
+		new ItemStack(this.item, if (size < 1) 1 else (if (size > 64) 64 else size),
 			this.metadata)
 	}
 
-	def print {
+	def print() {
 		System.out.println(this.item.getUnlocalizedName + " - " + this.metadata)
 	}
 
 	def getItem: Item = {
-		return this.item
+		this.item
 	}
 
 	def getBlock: Block = {
 		if (this.isBlock) {
 			return Block.getBlockFromItem(this.item)
 		}
-		return null
+		null
 	}
 
 	def getMetadata: Int = {
-		return this.metadata
+		this.metadata
 	}
 
 }

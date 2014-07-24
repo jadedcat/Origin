@@ -1,6 +1,6 @@
 package com.countrygamer.cgo.wrapper.common.item
 
-import java.util.List
+import java.util
 
 import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.{Side, SideOnly}
@@ -51,7 +51,7 @@ class ItemWrapper(val pluginID: String, name: String) extends Item {
 		// Get the unlocalized name of this item
 		val unlocalizedName: String = this.getUnlocalizedName
 		// return the result of the unlocalized name, making sure to get rid of the "item." prefix
-		return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1)
+		unlocalizedName.substring(unlocalizedName.indexOf(".") + 1)
 	}
 
 	/**
@@ -61,7 +61,7 @@ class ItemWrapper(val pluginID: String, name: String) extends Item {
 	override def getUnlocalizedName: String = {
 		// return a formatted string using the format:
 		//   item.{pluginID}:{itemName}
-		return String.format("item.%s%s", this.pluginID + ":",
+		String.format("item.%s%s", this.pluginID + ":",
 			this.getUnwrappedUnlocalizedName(super.getUnlocalizedName))
 	}
 
@@ -71,7 +71,7 @@ class ItemWrapper(val pluginID: String, name: String) extends Item {
 	 * @return
 	 */
 	override def getUnlocalizedName(itemStack: ItemStack): String = {
-		return this.getUnlocalizedName
+		this.getUnlocalizedName
 	}
 
 	/**
@@ -81,7 +81,7 @@ class ItemWrapper(val pluginID: String, name: String) extends Item {
 	 */
 	def getUnwrappedUnlocalizedName(unlocalizedName: String): String = {
 		// Get rid of the "item." prefix and return the result
-		return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1)
+		unlocalizedName.substring(unlocalizedName.indexOf(".") + 1)
 	}
 
 	// ~~~~~~~~~~~~~~~ Start supered wrappers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -96,7 +96,7 @@ class ItemWrapper(val pluginID: String, name: String) extends Item {
 	 */
 	override def onItemRightClick(itemStack: ItemStack, world: World,
 			player: EntityPlayer): ItemStack = {
-		return super.onItemRightClick(itemStack, world, player)
+		super.onItemRightClick(itemStack, world, player)
 	}
 
 	/**
@@ -118,7 +118,7 @@ class ItemWrapper(val pluginID: String, name: String) extends Item {
 	 */
 	override def onItemUse(itemStack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int,
 			z: Int, side: Int, offsetX: Float, offsetY: Float, offsetZ: Float): Boolean = {
-		return super.onItemUse(itemStack, player, world, x, y, z, side, offsetX, offsetY, offsetZ)
+		super.onItemUse(itemStack, player, world, x, y, z, side, offsetX, offsetY, offsetZ)
 	}
 
 	/**
@@ -131,7 +131,7 @@ class ItemWrapper(val pluginID: String, name: String) extends Item {
 	 */
 	override def itemInteractionForEntity(itemStack: ItemStack, player: EntityPlayer,
 			entity: EntityLivingBase): Boolean = {
-		return super.itemInteractionForEntity(itemStack, player, entity)
+		super.itemInteractionForEntity(itemStack, player, entity)
 	}
 
 	/**
@@ -146,7 +146,7 @@ class ItemWrapper(val pluginID: String, name: String) extends Item {
 	 */
 	override def onLeftClickEntity(itemStack: ItemStack, player: EntityPlayer,
 			entity: Entity): Boolean = {
-		return super.onLeftClickEntity(itemStack, player, entity)
+		super.onLeftClickEntity(itemStack, player, entity)
 	}
 
 	/**
@@ -182,9 +182,9 @@ class ItemWrapper(val pluginID: String, name: String) extends Item {
 	 * @param isAdvanced
 	 */
 	@SideOnly(Side.CLIENT)
-	override def addInformation(itemStack: ItemStack, player: EntityPlayer, list: List[_],
+	override def addInformation(itemStack: ItemStack, player: EntityPlayer, list: util.List[_],
 			isAdvanced: Boolean): Unit = {
-		super.addInformation(itemStack, player, list, isAdvanced);
+		super.addInformation(itemStack, player, list, isAdvanced)
 	}
 
 }

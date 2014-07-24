@@ -93,18 +93,17 @@ class PluginWrapper() {
 
 		var registerIndex: Int = 0
 		for (registerIndex <- 0 until registers.length) {
-			if (registers(registerIndex).isInstanceOf[ItemRegister]) {
-				map.get("item").add(registers(registerIndex))
-			}
-			else if (registers(registerIndex).isInstanceOf[BlockRegister]) {
-				map.get("block").add(registers(registerIndex).asInstanceOf[BlockRegister])
-			}
-			else if (registers(registerIndex).isInstanceOf[EntityRegister]) {
-				map.get("entity").add(registers(registerIndex).asInstanceOf[EntityRegister])
-			}
-			else if (registers(registerIndex).isInstanceOf[OptionRegister]) {
-				map.get("option").add(registers(registerIndex).asInstanceOf[OptionRegister])
-				this.options = registers(registerIndex).asInstanceOf[OptionRegister]
+			registers(registerIndex) match {
+				case _: ItemRegister =>
+					map.get("item").add(registers(registerIndex))
+				case register: BlockRegister =>
+					map.get("block").add(register)
+				case register: EntityRegister =>
+					map.get("entity").add(register)
+				case register: OptionRegister =>
+					map.get("option").add(register)
+					this.options = register
+				case _ =>
 			}
 		}
 

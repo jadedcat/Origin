@@ -18,8 +18,8 @@ trait IPowerable {
 
 	}
 
-	def getRedstoneState(): RedstoneState = {
-		return this.redstoneState
+	def getRedstoneState: RedstoneState = {
+		this.redstoneState
 	}
 
 	/**
@@ -56,20 +56,20 @@ trait IPowerable {
 				return this.isRecievingPower
 			}
 		}
-		return false
+		false
 	}
 
 	/**
 	 * Called when the power is not what it was
 	 */
-	def onPowerChanged: Unit = {}
+	def onPowerChanged(): Unit = {}
 
 	/**
 	 * Checks if self is powered with regards to redstone state
 	 * @return
 	 */
-	def canRun(): Boolean = {
-		return this.isPowered(true)
+	def canRun: Boolean = {
+		this.isPowered(checkState = true)
 	}
 
 	/**

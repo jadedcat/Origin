@@ -90,7 +90,7 @@ object Origin extends PluginWrapper {
 		if (!this.tabItems.isEmpty || !this.tabBlocks.isEmpty) {
 			val originTab: CreativeTabs = new CreativeTabs(Origin.pluginID) {
 				override def getTabIconItem: Item = {
-					return net.minecraft.init.Items.iron_pickaxe
+					net.minecraft.init.Items.iron_pickaxe
 				}
 			}
 

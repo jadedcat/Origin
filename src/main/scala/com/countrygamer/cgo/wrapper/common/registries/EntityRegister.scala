@@ -11,16 +11,16 @@ class EntityRegister() extends Register {
 
 	override def register(): Unit = {}
 
-	def addEntityMappings: Unit = {}
+	def addEntityMappings(): Unit = {}
 
-	def addEntitySpawns: Unit = {}
+	def addEntitySpawns(): Unit = {}
 
-	def getNewEntityID(): Int = {
+	def getNewEntityID: Int = {
 		var id: Int = 0
 		while (EntityList.IDtoClassMapping.containsKey(id)) {
 			id = id + 1
 		}
-		return id
+		id
 	}
 
 }

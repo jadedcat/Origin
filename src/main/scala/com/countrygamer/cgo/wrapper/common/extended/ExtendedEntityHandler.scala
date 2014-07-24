@@ -33,7 +33,7 @@ object ExtendedEntityHandler {
 	def registerExtended(classKey: String, extendedClass: Class[_ <: ExtendedEntity],
 			persistPastDeath: Boolean): Unit = {
 		ExtendedEntityHandler.extendedProperties
-				.put(extendedClass, Array[String](classKey, (persistPastDeath + "")))
+				.put(extendedClass, Array[String](classKey, persistPastDeath + ""))
 	}
 
 	/**
@@ -41,7 +41,7 @@ object ExtendedEntityHandler {
 	 * @return
 	 */
 	def getExtendedProperties: util.HashMap[Class[_ <: ExtendedEntity], Array[String]] = {
-		return ExtendedEntityHandler.extendedProperties
+		ExtendedEntityHandler.extendedProperties
 	}
 
 	/**
@@ -54,7 +54,7 @@ object ExtendedEntityHandler {
 	final def getExtended(player: EntityPlayer,
 			extendedClass: Class[_ <: ExtendedEntity]): IExtendedEntityProperties = {
 		if (ExtendedEntityHandler.extendedProperties.containsKey(extendedClass)) {
-			return player
+			player
 					.getExtendedProperties(
 			            ExtendedEntityHandler.extendedProperties.get(extendedClass)(0))
 		}
@@ -62,7 +62,7 @@ object ExtendedEntityHandler {
 			System.out.println(
 				"ERROR: No ExtendedEntity class with the name of " + extendedClass.getSimpleName +
 						" registered.")
-			return null
+			null
 		}
 	}
 
@@ -80,35 +80,29 @@ object ExtendedEntityHandler {
 			ent = extendedClass.getConstructor(classOf[EntityPlayer]).newInstance(player)
 		}
 		catch {
-			case e: IllegalArgumentException => {
+			case e: IllegalArgumentException =>
 				e.printStackTrace
-			}
-			case e: SecurityException => {
+			case e: SecurityException =>
 				e.printStackTrace
-			}
-			case e: InstantiationException => {
+			case e: InstantiationException =>
 				e.printStackTrace
-			}
-			case e: IllegalAccessException => {
+			case e: IllegalAccessException =>
 				e.printStackTrace
-			}
-			case e: InvocationTargetException => {
+			case e: InvocationTargetException =>
 				e.printStackTrace
-			}
-			case e: NoSuchMethodException => {
+			case e: NoSuchMethodException =>
 				e.printStackTrace
-			}
 		}
 		if (ent != null) {
 			player.registerExtendedProperties(
 				ExtendedEntityHandler.extendedProperties.get(extendedClass)(0), ent)
 			return true
 		}
-		return false
+		false
 	}
 
 	def syncEntity(extendedPlayer: ExtendedEntity) {
-		extendedPlayer.syncEntity
+		extendedPlayer.syncEntity()
 	}
 
 }
