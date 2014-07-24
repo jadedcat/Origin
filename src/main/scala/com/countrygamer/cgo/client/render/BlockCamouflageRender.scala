@@ -93,8 +93,8 @@ object BlockCamouflageRender extends ISimpleBlockRenderingHandler {
 			if (tileEntity != null && tileEntity.isInstanceOf[ICamouflage]) {
 				val camo: ICamouflage = tileEntity.asInstanceOf[ICamouflage]
 
-				if (camo.isCamouflaged()) {
-					val itemMeta: ItemMeta = camo.getCamouflage()
+				if (camo.isCamouflaged) {
+					val itemMeta: ItemMeta = camo.getCamouflage
 					val camoBlock: Block = itemMeta.getBlock
 
 					if (camoBlock != null && camoBlock != Blocks.air) {

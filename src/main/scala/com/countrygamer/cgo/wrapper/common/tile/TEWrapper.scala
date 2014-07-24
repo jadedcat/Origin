@@ -80,7 +80,7 @@ class TEWrapper(var name: String)
 	 * Completely deletes any itemstack in the inventory
 	 */
 	def clearInventory(): Unit = {
-		if (this.hasInventory()) {
+		if (this.hasInventory) {
 			this.inventory = new Array[ItemStack](this.inventorySize)
 		}
 		else {
@@ -90,7 +90,7 @@ class TEWrapper(var name: String)
 	}
 
 	override def getSizeInventory: Int = {
-		if (this.hasInventory()) {
+		if (this.hasInventory) {
 			this.inventorySize
 		}
 		else {
@@ -100,7 +100,7 @@ class TEWrapper(var name: String)
 	}
 
 	override def getStackInSlot(slotID: Int): ItemStack = {
-		if (this.hasInventory()) {
+		if (this.hasInventory) {
 			if (slotID < this.inventorySize) {
 				return this.inventory(slotID)
 			}
@@ -110,7 +110,7 @@ class TEWrapper(var name: String)
 
 	override def decrStackSize(slotID: Int, decrement: Int): ItemStack = {
 		// Check to see if self has a inventory
-		if (this.hasInventory()) {
+		if (this.hasInventory) {
 			// check if it is a valid slot
 			if (slotID < this.inventorySize) {
 				// check to see of stack in slot is occupied
@@ -155,7 +155,7 @@ class TEWrapper(var name: String)
 	}
 
 	override def setInventorySlotContents(slotID: Int, itemStack: ItemStack): Unit = {
-		if (this.hasInventory()) {
+		if (this.hasInventory) {
 			if (slotID < this.inventorySize) {
 				if (itemStack eq null)
 					this.inventory(slotID) = null
@@ -167,8 +167,8 @@ class TEWrapper(var name: String)
 	}
 
 	override def getInventoryName: String = {
-		if (this.hasInventory()) {
-			return this.getName()
+		if (this.hasInventory) {
+			return this.getName
 		}
 		""
 	}
@@ -178,14 +178,14 @@ class TEWrapper(var name: String)
 	}
 
 	override def getInventoryStackLimit: Int = {
-		if (this.hasInventory()) {
+		if (this.hasInventory) {
 			return this.maxStackSize
 		}
 		0
 	}
 
 	override def isUseableByPlayer(p1: EntityPlayer): Boolean = {
-		this.hasInventory()
+		this.hasInventory
 	}
 
 	override def openInventory(): Unit = {}
@@ -193,7 +193,7 @@ class TEWrapper(var name: String)
 	override def closeInventory(): Unit = {}
 
 	override def isItemValidForSlot(slotID: Int, itemStack: ItemStack): Boolean = {
-		if (this.hasInventory()) {
+		if (this.hasInventory) {
 			return slotID < this.inventorySize
 		}
 		false
@@ -202,7 +202,7 @@ class TEWrapper(var name: String)
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ISidedInventory ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	override def getAccessibleSlotsFromSide(side: Int): Array[Int] = {
-		if (this.hasInventory()) {
+		if (this.hasInventory) {
 			val slotsFromSide: Array[Int] = new Array[Int](this.inventorySize)
 
 			var i = 0
@@ -216,11 +216,11 @@ class TEWrapper(var name: String)
 	}
 
 	override def canInsertItem(slotID: Int, itemStack: ItemStack, side: Int): Boolean = {
-		this.hasInventory()
+		this.hasInventory
 	}
 
 	override def canExtractItem(slotID: Int, itemStack: ItemStack, side: Int): Boolean = {
-		this.hasInventory()
+		this.hasInventory
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ IFluidHandler ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -254,7 +254,7 @@ class TEWrapper(var name: String)
 	}
 
 	def getFluidStack: FluidStack = {
-		if (this.hasTank()) {
+		if (this.hasTank) {
 			if (this.tank.getFluid != null)
 				return this.tank.getFluid.copy()
 		}
@@ -262,14 +262,14 @@ class TEWrapper(var name: String)
 	}
 
 	def getTankCapacity: Int = {
-		if (this.hasTank()) {
+		if (this.hasTank) {
 			return this.tankSize
 		}
 		0
 	}
 
 	def canHoldMoreFluid: Boolean = {
-		if (this.hasTank()) {
+		if (this.hasTank) {
 			return this.tank.getFluidAmount < this.tank.getCapacity
 		}
 		false
@@ -280,7 +280,7 @@ class TEWrapper(var name: String)
 	 * @return
 	 */
 	def getFluidRatio: Float = {
-		if (this.hasTank()) {
+		if (this.hasTank) {
 			return this.tank.getFluidAmount.asInstanceOf[Float] /
 					this.tank.getCapacity.asInstanceOf[Float]
 		}
@@ -288,7 +288,7 @@ class TEWrapper(var name: String)
 	}
 
 	override def fill(direction: ForgeDirection, fluidStack: FluidStack, doAction: Boolean): Int = {
-		if (this.hasTank()) {
+		if (this.hasTank) {
 			val amount: Int = this.tank.fill(fluidStack, doAction)
 
 			if (amount > 0 && doAction) {
@@ -302,7 +302,7 @@ class TEWrapper(var name: String)
 
 	override def drain(direction: ForgeDirection, fluidStack: FluidStack,
 			doAction: Boolean): FluidStack = {
-		if (this.hasTank()) {
+		if (this.hasTank) {
 			val internalStack: FluidStack = this.tank.getFluid
 			if (internalStack.isFluidEqual(fluidStack)) {
 				return this.drain(direction, internalStack.amount, doAction)
@@ -312,7 +312,7 @@ class TEWrapper(var name: String)
 	}
 
 	override def drain(direction: ForgeDirection, amount: Int, doAction: Boolean): FluidStack = {
-		if (this.hasTank()) {
+		if (this.hasTank) {
 			val internalStack: FluidStack = this.tank.drain(amount, doAction)
 
 			if (internalStack != null && doAction) {
@@ -325,21 +325,21 @@ class TEWrapper(var name: String)
 	}
 
 	override def canFill(direction: ForgeDirection, fluid: Fluid): Boolean = {
-		if (this.hasTank()) {
-			return this.canHoldMoreFluid()
+		if (this.hasTank) {
+			return this.canHoldMoreFluid
 		}
 		false
 	}
 
 	override def canDrain(direction: ForgeDirection, fluid: Fluid): Boolean = {
-		if (this.hasTank()) {
+		if (this.hasTank) {
 			return this.tank.getFluidAmount > 0
 		}
 		false
 	}
 
 	override def getTankInfo(direction: ForgeDirection): Array[FluidTankInfo] = {
-		if (this.hasTank()) {
+		if (this.hasTank) {
 
 			var internalStack: FluidStack = null
 			if (this.tank.getFluid != null) {
@@ -411,8 +411,8 @@ class TEWrapper(var name: String)
 
 		tagCom.setString("TEWrapper_teName", this.name)
 
-		tagCom.setBoolean("TEWrapper_hasInventory", this.hasInventory())
-		if (this.hasInventory()) {
+		tagCom.setBoolean("TEWrapper_hasInventory", this.hasInventory)
+		if (this.hasInventory) {
 			tagCom.setInteger("TEWrapper_Inventory_size", this.inventorySize)
 
 			val tagList: NBTTagList = new NBTTagList()
@@ -430,8 +430,8 @@ class TEWrapper(var name: String)
 			tagCom.setInteger("TEWrapper_Inventory_maxStackSize", this.maxStackSize)
 		}
 
-		tagCom.setBoolean("TEWrapper_hasTank", this.hasTank())
-		if (this.hasTank()) {
+		tagCom.setBoolean("TEWrapper_hasTank", this.hasTank)
+		if (this.hasTank) {
 			tagCom.setInteger("TEWrapper_Tank_capacity", this.tankSize)
 			tagCom.setTag("TEWrapper_Tank_tankNBT", this.tank.writeToNBT(new NBTTagCompound()))
 		}

@@ -28,7 +28,7 @@ class GuiFactoryWrapper(val options: OptionRegister) extends IModGuiFactory {
 	}
 
 	override def mainConfigGuiClass(): Class[_ <: GuiScreen] = {
-		options.getGuiConfigClass()
+		options.getGuiConfigClass
 	}
 
 }

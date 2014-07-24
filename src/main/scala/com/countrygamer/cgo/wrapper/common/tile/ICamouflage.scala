@@ -15,7 +15,7 @@ trait ICamouflage {
 	var camouflageMetadata: Int = 0
 
 	def isCamouflaged: Boolean = {
-		this.hasCamouflage()
+		this.hasCamouflage
 	}
 
 	def hasCamouflage: Boolean = {
@@ -35,8 +35,8 @@ trait ICamouflage {
 
 	def saveCamouflageNBT(tagCom: NBTTagCompound): Unit = {
 
-		tagCom.setBoolean("ICamouflage_hasCamouflage", this.hasCamouflage())
-		if (this.hasCamouflage()) {
+		tagCom.setBoolean("ICamouflage_hasCamouflage", this.hasCamouflage)
+		if (this.hasCamouflage) {
 			tagCom.setInteger("ICamouflage_camouflageBlockID",
 				Block.getIdFromBlock(this.camouflageBlock))
 			tagCom.setInteger("ICamouflage_camouflageMetadata", this.camouflageMetadata)
