@@ -69,9 +69,29 @@ public class SkinHelper {
 		HEAD, BODY, LEFTARM, RIGHTARM, LEFTLEG, RIGHTLEG
 	}
 
+	/**
+	 * Renders a given part of a player using the given skin
+	 *
+	 * @param x         x coord on the screen
+	 * @param y         y coord on the screen
+	 * @param scale     the scale of the rendered image
+	 * @param part      the part you want to render
+	 * @param direction the side you want to render of the part:
+	 *                  Down is Down |
+	 *                  Up is Up |
+	 *                  North is forward |
+	 *                  South is backward |
+	 *                  West is left |
+	 *                  East is right |
+	 * @param isArmor   whether the layer you want to render is the armor layer of the player's tex
+	 * @param skin      the SkinHelper object that you are going to render (holds the player's skin)
+	 */
+	@SuppressWarnings("unused")
 	public static void renderPart(int x, int y, float scale, Part part, ForgeDirection direction,
 			boolean isArmor, SkinHelper skin) {
+		// get the parts coords and size
 		int[] partUVWH = SkinHelper.getPartUVWH(part, isArmor);
+		// get the side the direction is for
 		int side = direction.ordinal();
 		int[] sideUVWH = SkinHelper.getSidedUVWH(part, side);
 
