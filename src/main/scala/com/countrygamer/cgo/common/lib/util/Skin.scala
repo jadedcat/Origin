@@ -324,13 +324,33 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 	def render3D(horizontal: Double, vertical: Double, scale: Float, part: Part.Value,
 			partSide: Int, isArmor: Boolean, skin: Skin,
 			directionFacing: ForgeDirection): Unit = {
+		var uvwh: Array[Double] = null
 
+		if (skin.getSkinHeight() != 64 && part == Part.LEFTARM) {
+			uvwh = this.getUVWH(Part.RIGHTARM, isArmor, partSide)
+		}
+		else if (skin.getSkinHeight() != 64 && part == Part.LEFTLEG) {
+			uvwh = this.getUVWH(Part.RIGHTLEG, isArmor, partSide)
+		}
+		else {
+			uvwh = this.getUVWH(part, isArmor, partSide)
+		}
+
+		GL11.glPushMatrix()
+		GL11.glScalef(scale, scale, scale)
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F)
+		//GL11.glTranslatef(horizontal.asInstanceOf[Float],
+		//		vertical.asInstanceOf[Float], 0.0F
+		UtilRender.bindResource(skin.getSkin())
+		this.draw3D(horizontal, vertical, uvwh(0), uvwh(1), uvwh(2), uvwh(3), skin.getSkinWidth(),
+			skin.getSkinHeight(), directionFacing)
+		GL11.glPopMatrix()
 	}
 
 	def draw3D(horizontal: Double, vertical: Double, u: Double, v: Double, w: Double, h: Double,
-			skinW: Float, skinH: Float): Unit = {
-
-		val xyz: Array[Double] = null
+			skinW: Float, skinH: Float, directionFacing: ForgeDirection): Unit = {
+		//System.out.println("draw")
+		var xyz: Array[Double] = null
 
 		val scaledSkinW: Float = 1.0F / skinW
 		val scaledSkinH: Float = 1.0F / skinH
@@ -338,6 +358,38 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 
 		tessellator.startDrawingQuads()
 
+		xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 1)
+		tessellator.addVertexWithUV(
+			xyz(0),
+			xyz(1),
+			xyz(2),
+			u * scaledSkinW.asInstanceOf[Double],
+			(v + h) * scaledSkinH.asInstanceOf[Double]
+		)
+		xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 2)
+		tessellator.addVertexWithUV(
+			xyz(0),
+			xyz(1),
+			xyz(2),
+			(u + w) * scaledSkinW.asInstanceOf[Double],
+			(v + h) * scaledSkinH.asInstanceOf[Double]
+		)
+		xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 3)
+		tessellator.addVertexWithUV(
+			xyz(0),
+			xyz(1),
+			xyz(2),
+			(u + w) * scaledSkinW.asInstanceOf[Double],
+			v * scaledSkinH.asInstanceOf[Double]
+		)
+		xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 4)
+		tessellator.addVertexWithUV(
+			xyz(0),
+			xyz(1),
+			xyz(2),
+			u * scaledSkinW.asInstanceOf[Double],
+			v * scaledSkinH.asInstanceOf[Double]
+		)
 
 
 		tessellator.draw()
@@ -354,47 +406,127 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 			case ForgeDirection.DOWN => // on y axis, going -y
 				corner match {
 					case 1 =>
-						x = horizontal
+						x = horizontal + width
 						z = vertical + height
 					case 2 =>
-						x = horizontal + width
+						x = horizontal
 						z = vertical + height
 					case 3 =>
-						x = horizontal + width
+						x = horizontal
 						z = vertical
 					case 4 =>
-						x = horizontal
+						x = horizontal + width
 						z = vertical
 				}
 				y = 0.0
 			case ForgeDirection.UP => // on y axis, going +y
 				corner match {
 					case 1 =>
-						x = horizontal + width
+						x = horizontal
 						z = vertical + height
 					case 2 =>
-						x = horizontal
+						x = horizontal + width
 						z = vertical + height
 					case 3 =>
-						x = horizontal
+						x = horizontal + width
 						z = vertical
 					case 4 =>
-						x = horizontal + width
+						x = horizontal
 						z = vertical
 				}
 				y = 0.0
 			case ForgeDirection.NORTH => // on z axis, going -z
-
+				corner match {
+					case 1 =>
+						x = horizontal - width
+						y = vertical + height
+					case 2 =>
+						x = horizontal
+						y = vertical + height
+					case 3 =>
+						x = horizontal
+						y = vertical
+					case 4 =>
+						x = horizontal - width
+						y = vertical
+				}
+				z = 0.0
 			case ForgeDirection.SOUTH => // on z axis, going +z
-
+				corner match {
+					case 1 =>
+						x = horizontal + width
+						y = vertical + height
+					case 2 =>
+						x = horizontal
+						y = vertical + height
+					case 3 =>
+						x = horizontal
+						y = vertical
+					case 4 =>
+						x = horizontal + width
+						y = vertical
+				}
+				z = 0.0
 			case ForgeDirection.WEST => // on x axis, going -x
-
+				corner match {
+					case 1 =>
+						z = horizontal + width
+						y = vertical + height
+					case 2 =>
+						z = horizontal
+						y = vertical + height
+					case 3 =>
+						z = horizontal
+						y = vertical
+					case 4 =>
+						z = horizontal + width
+						y = vertical
+				}
+				x = 0.0
 			case ForgeDirection.EAST => // on x axis, going +x
+				corner match {
+					case 1 =>
+						z = horizontal - width
+						y = vertical + height
+					case 2 =>
+						z = horizontal
+						y = vertical + height
+					case 3 =>
+						z = horizontal
+						y = vertical
+					case 4 =>
+						z = horizontal - width
+						y = vertical
+				}
+				x = 0.0
+			case _ =>
 
 		}
 
 		Array[Double](x, y, z)
 	}
+
+	/* Drawing a head
+
+
+		GL11.glPushMatrix()
+		// translated for the te
+		GL11.glTranslatef(0.0F, -0.5F, 0.0F)
+
+		val scale: Float = 0.1F
+		GL11.glTranslatef(0.0F, 3.0F, 0.0F)
+
+		GL11.glScalef(scale, scale, scale)
+
+		val skin: Skin = new util.Skin("Country_Gamer", true)
+
+		skin.render3D(0.0D, 0.0D, 1.0F, skin.Part.HEAD, ForgeDirection.NORTH, false, skin, ForgeDirection.NORTH)
+		skin.render3D(0.0D, 0.0D, 1.0F, skin.Part.HEAD, ForgeDirection.EAST, false, skin, ForgeDirection.EAST)
+		skin.render3D(0.0D, 0.0D, 1.0F, skin.Part.HEAD, ForgeDirection.SOUTH, false, skin, ForgeDirection.SOUTH)
+		skin.render3D(0.0D, 0.0D, 1.0F, skin.Part.HEAD, ForgeDirection.WEST, false, skin, ForgeDirection.WEST)
+
+		GL11.glPopMatrix()
+	 */
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
