@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.texture.DynamicTexture
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.common.util.ForgeDirection
+import org.lwjgl.opengl.GL11
 
 /**
  *
@@ -85,53 +86,191 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 		this.bufferedImage.getHeight
 	}
 
-	/*
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 	object Part extends Enumeration {
 		type Part = Value
 
 		val HEAD, BODY, LEFTARM, RIGHTARM, LEFTLEG, RIGHTLEG = Value
 
 	}
-	*/
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	def render(x: Int, y: Int, scale: Float, part: SkinPart.Value,
+	def render(x: Int, y: Int, scale: Float, part: Part.Value,
 			partSideDirection: ForgeDirection,
 			isArmor: Boolean, skin: Skin): Unit = {
 		this.render(x, y, scale, part, partSideDirection.ordinal(), isArmor, skin)
 	}
 
-	def render(x: Int, y: Int, scale: Float, part: SkinPart.Value, partSide: Int,
+	def render(x: Int, y: Int, scale: Float, part: Part.Value, partSide: Int,
 			isArmor: Boolean, skin: Skin): Unit = {
+		var uvwh: Array[Double] = null
+		if (skin.getSkinHeight() != 64 && part == Part.LEFTARM) {
+			uvwh = this.getUVWH(Part.RIGHTARM, isArmor, partSide)
+		}
+		else if (skin.getSkinHeight() != 64 && part == Part.LEFTLEG) {
+			uvwh = this.getUVWH(Part.RIGHTLEG, isArmor, partSide)
+		}
+		else {
+			uvwh = this.getUVWH(part, isArmor, partSide)
+		}
+
+		GL11.glPushMatrix()
+		GL11.glScalef(scale, scale, 1.0F)
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F)
+		GL11.glTranslatef(x.asInstanceOf[Float] / scale, y.asInstanceOf[Float] / scale, 1.0F)
+		UtilRender.bindResource(skin.getSkin())
+		this.draw(x, y, uvwh(0), uvwh(1), uvwh(2), uvwh(3), skin.getSkinWidth(),
+			skin.getSkinHeight())
+		GL11.glPopMatrix()
 
 	}
 
-	def getUVWH(): Array[Double] = {
+	def getUVWH(part: Part.Value, isArmor: Boolean, side: Int): Array[Double] = {
 		val uvwh: Array[Double] = new Array[Double](4)
 
-		val partUVWH: Array[Double] = null
-		val sidedUVWH: Array[Double] = null
+		val partUV: Array[Double] = this.getPartUV(part, isArmor)
+		val sidedUV: Array[Double] = this.getSidedUV(part, side)
+		val partBySideWH: Array[Double] = this.getPartWHBySide(part, side)
 
-		uvwh(0) = partUVWH(0) + sidedUVWH(0)
-		uvwh(1) = partUVWH(1) + sidedUVWH(1)
-		uvwh(2) = partUVWH(2) + sidedUVWH(2)
-		uvwh(3) = partUVWH(3) + sidedUVWH(3)
+		uvwh(0) = partUV(0) + sidedUV(0)
+		uvwh(1) = partUV(1) + sidedUV(1)
+		uvwh(2) = partBySideWH(0)
+		uvwh(3) = partBySideWH(1)
 
 		uvwh
 	}
 
-	def getPartUVWH(part: SkinPart.Value, isArmor: Boolean): Unit = {
+	def getPartUV(part: Part.Value, isArmor: Boolean): Array[Double] = {
+		var u: Double = 0.0D
+		var v: Double = 0.0D
 
+		part match {
+			case Part.HEAD =>
+				u = 0.0
+				v = 0.0
+				if (isArmor) {
+					u += 32.0
+				}
+			case Part.BODY =>
+				u = 16.0
+				v = 16.0
+				if (isArmor) {
+					v += 16.0
+				}
+			case Part.LEFTARM =>
+				u = 32.0
+				v = 48.0
+				if (isArmor) {
+					u += 16.0
+				}
+			case Part.RIGHTARM =>
+				u = 40.0
+				v = 16.0
+				if (isArmor) {
+					v += 16.0
+				}
+			case Part.LEFTLEG =>
+				u = 16.0
+				v = 48.0
+				if (isArmor) {
+					u -= 16.0
+				}
+			case Part.RIGHTLEG =>
+				u = 0.0
+				v = 16.0
+				if (isArmor) {
+					v += 16.0
+				}
+			case _ =>
+				u = 0.0
+				v = 0.0
+		}
+
+		Array[Double](u, v)
 	}
 
-	def draw(x: Int, y: Int, u: Float, v: Float, w: Int, h: Int, skinW: Float,
-			skinH: Float): Unit = {
-		this.draw(x, y, 0, u, v, w, h, skinW, skinH)
+	def getSidedUV(part: Part.Value, side: Int): Array[Double] = {
+		part match {
+			case Part.HEAD =>
+				getPartUVBySide(8, 8, side)
+			case Part.BODY =>
+				getPartUVBySide(4, 8, side)
+			case _ =>
+				getPartUVBySide(4, 4, side)
+		}
 	}
 
-	def draw(x: Int, y: Int, z: Int, u: Float, v: Float, w: Int, h: Int, skinW: Float,
+	def getPartUVBySide(unitSideU: Int, unitSideV: Int, forgeDirectionSide: Int): Array[Double] = {
+		var uMult: Int = 0
+		var vMult: Int = 0
+
+		forgeDirectionSide match {
+			case 0 =>
+				uMult = 2
+				vMult = 0
+			case 1 =>
+				uMult = 1
+				vMult = 0
+			case 2 =>
+				uMult = 1
+				vMult = 1
+			case 3 =>
+				uMult = 2
+				vMult = 1
+			case 4 =>
+				uMult = 3
+				vMult = 1
+			case 5 =>
+				uMult = 0
+				vMult = 1
+			case _ =>
+				uMult = 0
+				vMult = 0
+		}
+
+		Array[Double](unitSideU * uMult, unitSideV * vMult)
+	}
+
+	def getPartWHBySide(part: Part.Value, side: Int): Array[Double] = {
+		part match {
+			case Part.HEAD =>
+				getPartWH(8, 8, 8, side)
+			case Part.BODY =>
+				getPartWH(8, 4, 12, side)
+			case _ =>
+				getPartWH(4, 4, 12, side)
+		}
+	}
+
+	def getPartWH(width: Double, length: Double, height: Double,
+			forgeDirectionSide: Int): Array[Double] = {
+		var w: Double = 0.0
+		var h: Double = 0.0
+
+		forgeDirectionSide match {
+			case 0 | 1 =>
+				w = width
+				h = length
+			case 2 | 3 | 4 | 5 =>
+				w = width
+				h = height
+			case _ =>
+				w = 0.0
+				h = 0.0
+		}
+
+		Array[Double](w, h)
+	}
+
+	def draw(x: Double, y: Double, u: Double, v: Double, w: Double, h: Double, skinW: Float,
 			skinH: Float): Unit = {
+		this.draw(x, y, 0.0D, u, v, w, h, skinW, skinH)
+	}
+
+	def draw(x: Double, y: Double, z: Double, u: Double, v: Double, w: Double, h: Double,
+			skinW: Float, skinH: Float): Unit = {
 		val scaledSkinW: Float = 1.0F / skinW
 		val scaledSkinH: Float = 1.0F / skinH
 		val tessellator: Tessellator = Tessellator.instance
@@ -139,32 +278,32 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 		tessellator.startDrawingQuads()
 
 		tessellator.addVertexWithUV(
-			x.asInstanceOf[Double],
-			(y + h).asInstanceOf[Double],
-			z.asInstanceOf[Double],
-			(u * scaledSkinW).asInstanceOf[Double],
-			((v + h.asInstanceOf[Float]).asInstanceOf[Double] * scaledSkinH)
+			x,
+			(y + h),
+			z,
+			(u * scaledSkinW.asInstanceOf[Double]),
+			((v + h) * scaledSkinH.asInstanceOf[Double])
 		)
 		tessellator.addVertexWithUV(
-			(x + w).asInstanceOf[Double],
-			(y + h).asInstanceOf[Double],
+			(x + w),
+			(y + h),
 			z.asInstanceOf[Double],
-			((u + w.asInstanceOf[Float]).asInstanceOf[Double] * scaledSkinW),
-			((v + h.asInstanceOf[Float]).asInstanceOf[Double] * scaledSkinH)
+			((u + w) * scaledSkinW.asInstanceOf[Double]),
+			((v + h) * scaledSkinH.asInstanceOf[Double])
 		)
 		tessellator.addVertexWithUV(
-			(x + w).asInstanceOf[Double],
-			y.asInstanceOf[Double],
-			z.asInstanceOf[Double],
-			((u + w.asInstanceOf[Float]).asInstanceOf[Double] * scaledSkinW),
-			(v * scaledSkinH).asInstanceOf[Double]
+			(x + w),
+			y,
+			z,
+			((u + w) * scaledSkinW.asInstanceOf[Double]),
+			(v * scaledSkinH.asInstanceOf[Double])
 		)
 		tessellator.addVertexWithUV(
-			x.asInstanceOf[Double],
-			y.asInstanceOf[Double],
-			z.asInstanceOf[Double],
-			(u * scaledSkinW).asInstanceOf[Double],
-			(v * scaledSkinH).asInstanceOf[Double]
+			x,
+			y,
+			z,
+			(u * scaledSkinW.asInstanceOf[Double]),
+			(v * scaledSkinH.asInstanceOf[Double])
 		)
 
 		tessellator.draw()

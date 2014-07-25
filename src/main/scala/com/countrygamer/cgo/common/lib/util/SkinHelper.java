@@ -16,6 +16,7 @@ import java.net.URL;
 /**
  * A class for storing a player's skin by username, and then rendering and part of that skin
  * TODO, change for 1.8, where we have the ability for 3 wide arms
+ *
  * @author maxpowa (permissions given)
  */
 public class SkinHelper {
