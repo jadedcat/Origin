@@ -281,31 +281,31 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 
 		tessellator.addVertexWithUV(
 			x,
-			(y + h),
+			y + h,
 			z,
-			(u * scaledSkinW.asInstanceOf[Double]),
-			((v + h) * scaledSkinH.asInstanceOf[Double])
+			u * scaledSkinW.asInstanceOf[Double],
+			(v + h) * scaledSkinH.asInstanceOf[Double]
 		)
 		tessellator.addVertexWithUV(
-			(x + w),
-			(y + h),
-			z.asInstanceOf[Double],
-			((u + w) * scaledSkinW.asInstanceOf[Double]),
-			((v + h) * scaledSkinH.asInstanceOf[Double])
+			x + w,
+			y + h,
+			z,
+			(u + w) * scaledSkinW.asInstanceOf[Double],
+			(v + h) * scaledSkinH.asInstanceOf[Double]
 		)
 		tessellator.addVertexWithUV(
-			(x + w),
+			x + w,
 			y,
 			z,
-			((u + w) * scaledSkinW.asInstanceOf[Double]),
-			(v * scaledSkinH.asInstanceOf[Double])
+			(u + w) * scaledSkinW.asInstanceOf[Double],
+			v * scaledSkinH.asInstanceOf[Double]
 		)
 		tessellator.addVertexWithUV(
 			x,
 			y,
 			z,
-			(u * scaledSkinW.asInstanceOf[Double]),
-			(v * scaledSkinH.asInstanceOf[Double])
+			u * scaledSkinW.asInstanceOf[Double],
+			v * scaledSkinH.asInstanceOf[Double]
 		)
 
 		tessellator.draw()
@@ -325,6 +325,75 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 			partSide: Int, isArmor: Boolean, skin: Skin,
 			directionFacing: ForgeDirection): Unit = {
 
+	}
+
+	def draw3D(horizontal: Double, vertical: Double, u: Double, v: Double, w: Double, h: Double,
+			skinW: Float, skinH: Float): Unit = {
+
+		val xyz: Array[Double] = null
+
+		val scaledSkinW: Float = 1.0F / skinW
+		val scaledSkinH: Float = 1.0F / skinH
+		val tessellator: Tessellator = Tessellator.instance
+
+		tessellator.startDrawingQuads()
+
+
+
+		tessellator.draw()
+	}
+
+	def getXYZRenderCoordsFromDirection(horizontal: Double, vertical: Double, width: Double,
+			height: Double,
+			facingDirection: ForgeDirection, corner: Int): Array[Double] = {
+		var x: Double = 0.0
+		var y: Double = 0.0
+		var z: Double = 0.0
+
+		facingDirection match {
+			case ForgeDirection.DOWN => // on y axis, going -y
+				corner match {
+					case 1 =>
+						x = horizontal
+						z = vertical + height
+					case 2 =>
+						x = horizontal + width
+						z = vertical + height
+					case 3 =>
+						x = horizontal + width
+						z = vertical
+					case 4 =>
+						x = horizontal
+						z = vertical
+				}
+				y = 0.0
+			case ForgeDirection.UP => // on y axis, going +y
+				corner match {
+					case 1 =>
+						x = horizontal + width
+						z = vertical + height
+					case 2 =>
+						x = horizontal
+						z = vertical + height
+					case 3 =>
+						x = horizontal
+						z = vertical
+					case 4 =>
+						x = horizontal + width
+						z = vertical
+				}
+				y = 0.0
+			case ForgeDirection.NORTH => // on z axis, going -z
+
+			case ForgeDirection.SOUTH => // on z axis, going +z
+
+			case ForgeDirection.WEST => // on x axis, going -x
+
+			case ForgeDirection.EAST => // on x axis, going +x
+
+		}
+
+		Array[Double](x, y, z)
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
