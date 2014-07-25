@@ -518,7 +518,7 @@ class TEWrapper(var name: String)
 		val tagCom: NBTTagCompound = new NBTTagCompound
 		this.writeToNBT(tagCom)
 		new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord,
-			this.blockMetadata, tagCom)
+			0, tagCom)
 	}
 
 }
