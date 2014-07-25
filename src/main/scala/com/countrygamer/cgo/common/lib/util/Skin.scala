@@ -105,7 +105,9 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 
 	def render(x: Int, y: Int, scale: Float, part: Part.Value, partSide: Int,
 			isArmor: Boolean, skin: Skin): Unit = {
+
 		var uvwh: Array[Double] = null
+
 		if (skin.getSkinHeight() != 64 && part == Part.LEFTARM) {
 			uvwh = this.getUVWH(Part.RIGHTARM, isArmor, partSide)
 		}
@@ -307,6 +309,21 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 		)
 
 		tessellator.draw()
+
+	}
+
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	def render3D(horizontal: Double, vertical: Double, scale: Float, part: Part.Value,
+			partSide: ForgeDirection, isArmor: Boolean, skin: Skin,
+			directionFacing: ForgeDirection): Unit = {
+		this.render3D(horizontal, vertical, scale, part, partSide.ordinal(), isArmor, skin,
+			directionFacing)
+	}
+
+	def render3D(horizontal: Double, vertical: Double, scale: Float, part: Part.Value,
+			partSide: Int, isArmor: Boolean, skin: Skin,
+			directionFacing: ForgeDirection): Unit = {
 
 	}
 
