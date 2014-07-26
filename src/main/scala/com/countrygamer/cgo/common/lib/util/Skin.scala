@@ -780,15 +780,24 @@ def getXYZForCorner(width: Double, height: Double, facingDirection: ForgeDirecti
 
 	/* Statue Render Code
 
-		GL11.glPushMatrix()
+GL11.glPushMatrix()
 		GL11.glTranslatef(0.0F, -0.5F, 0.0F)
 		val skin: Skin = new Skin("Country_Gamer")
 		var part: skin.Part = new skin.Part(skin.PartType.HEAD, false)
-		skin.render(-0.5D, 4.0D, 1.0D, 1.0D, 1.0D, part)
-		//part = new skin.Part(skin.PartType.BODY, false)
-		//skin.render(-0.5D, 0.0D, 0.66667D, 0.3D, 1.0D, part)
+		skin.render(0.0D, 4.0D, 1.0D, 1.0D, 1.0D, part)
+		part = new skin.Part(skin.PartType.BODY, false)
+		skin.render(0.0D, 0.0D, 8.0D, 12.0D, 4.0D, part)
+		part = new skin.Part(skin.PartType.RIGHTARM, false)
+		skin.render(6.0D, 0.0D, 4.0D, 12.0D, 4.0D, part)
+		part = new skin.Part(skin.PartType.LEFTARM, false)
+		skin.render(-6.0D, 0.0D, 4.0D, 12.0D, 4.0D, part)
+		part = new skin.Part(skin.PartType.RIGHTLEG, false)
+		skin.render(-3.0D, -12.0D, 4.0D, 12.0D, 4.0D, part)
+		part = new skin.Part(skin.PartType.LEFTLEG, false)
+		skin.render(3.0D, -12.0D, 4.0D, 12.0D, 4.0D, part)
 
 		GL11.glPopMatrix()
+
 	*/
 
 	def render(horizontal: Double, vertical: Double, requestedWidth: Double,
@@ -796,66 +805,73 @@ def getXYZForCorner(width: Double, height: Double, facingDirection: ForgeDirecti
 
 		GL11.glPushMatrix()
 
-		GL11.glTranslated(0.0D, vertical, 0.0D)
+		GL11.glTranslated(horizontal, 0.0D, 0.0D)
+
+		GL11.glTranslated(-(requestedWidth / 2), vertical, requestedLength / 2)
+
+		// Top
+		this.render(
+			0.0D,
+			0.0D,
+			requestedWidth, requestedLength, part.toSided(ForgeDirection.UP),
+			ForgeDirection.UP
+		)
+
 		GL11.glTranslated(0.0D, -requestedHeight, 0.0D)
 		// Bottom
 		this.render(
-			horizontal,
-			requestedWidth / 2,
-			requestedWidth, requestedWidth, part.toSided(ForgeDirection.DOWN),
+			0.0D,
+			0.0D,
+			requestedWidth, requestedLength, part.toSided(ForgeDirection.DOWN),
 			ForgeDirection.DOWN
 		)
-
 		GL11.glTranslated(0.0D, requestedHeight, 0.0D)
-		// Top
-		this.render(
-			horizontal,
-			requestedWidth / 2,
-			requestedWidth, requestedWidth, part.toSided(ForgeDirection.UP),
-			ForgeDirection.UP
-		)
-		GL11.glTranslated(0.0D, -vertical, 0.0D)
 
-		GL11.glTranslated(0.0D, 0.0D, -(requestedWidth / 2))
+		GL11.glTranslated(requestedWidth, 0.0D, -requestedLength)
 		// Front
 		this.render(
-			horizontal + (requestedWidth),
-			vertical,
+			0.0D,
+			0.0D,
 			requestedWidth, requestedHeight, part.toSided(ForgeDirection.NORTH),
 			ForgeDirection.NORTH
 		)
-		GL11.glTranslated(0.0D, 0.0D, +(requestedWidth / 2))
+		GL11.glTranslated(-requestedWidth, 0.0D, requestedLength)
 
-		GL11.glTranslated(0.0D, 0.0D, +(requestedWidth / 2))
 		// Back
+		/*
 		this.render(
-			horizontal,
-			vertical,
+			0.0D,
+			0.0D,
 			requestedWidth, requestedHeight, part.toSided(ForgeDirection.SOUTH),
 			ForgeDirection.SOUTH
 		)
-		GL11.glTranslated(0.0D, 0.0D, -(requestedWidth / 2))
+		*/
 
-		GL11.glTranslated(-(requestedWidth / 2), 0.0D, 0.0D)
+		GL11.glTranslated(0.0D, 0.0D, -requestedLength)
 		// Right
+		/*
 		this.render(
-			horizontal,
-			vertical,
-			requestedWidth, requestedHeight, part.toSided(ForgeDirection.WEST),
+			0.0D,
+			0.0D,
+			requestedLength, requestedHeight, part.toSided(ForgeDirection.WEST),
 			ForgeDirection.WEST
 		)
-		GL11.glTranslated(+(requestedWidth / 2), 0.0D, 0.0D)
+		*/
+		GL11.glTranslated(0.0D, 0.0D, requestedLength)
 
-		GL11.glTranslated(+(requestedWidth / 2), 0.0D, 0.0D)
+		GL11.glTranslated(requestedWidth, 0.0D, 0.0D)
 		// Left
+		/*
 		this.render(
-			horizontal + (requestedWidth),
-			vertical,
-			requestedWidth, requestedHeight, part.toSided(ForgeDirection.EAST),
+			0.0D,
+			0.0D,
+			requestedLength, requestedHeight, part.toSided(ForgeDirection.EAST),
 			ForgeDirection.EAST
 		)
-		GL11.glTranslated(-(requestedWidth / 2), 0.0D, 0.0D)
+		*/
+		GL11.glTranslated(-requestedWidth, 0.0D, 0.0D)
 
+		GL11.glTranslated(+(requestedWidth / 2), -vertical, -(requestedLength / 2))
 		GL11.glPopMatrix()
 
 	}
@@ -879,6 +895,8 @@ def getXYZForCorner(width: Double, height: Double, facingDirection: ForgeDirecti
 		this.draw(uvwh(0), uvwh(1), uvwh(2), uvwh(3), this.getSkinWidth(), this.getSkinHeight(),
 			facingDirection)
 
+		GL11.glScaled(1.0D / scaleXYZ(0), 1.0D / scaleXYZ(1), 1.0D / scaleXYZ(2))
+		GL11.glTranslated(-xyz(0), -xyz(1), -xyz(2))
 		GL11.glPopMatrix()
 
 	}
@@ -1138,7 +1156,7 @@ def getXYZForCorner(width: Double, height: Double, facingDirection: ForgeDirecti
 		var u: Double = 0.0D
 		var v: Double = 0.0D
 
-		(part.getType()) match {
+		part.getType() match {
 			case PartType.HEAD =>
 				u = 0.0
 				v = 0.0
@@ -1184,11 +1202,11 @@ def getXYZForCorner(width: Double, height: Double, facingDirection: ForgeDirecti
 	}
 
 	def getSidedUV(part: SidedPart): Array[Double] = {
-		(part.getType()) match {
+		part.getType() match {
 			case PartType.HEAD =>
 				this.getPartUVBySide(8, 8, part.getSide())
 			case PartType.BODY =>
-				this.getPartUVBySide(4, 8, part.getSide())
+				this.getPartUVBySide(8, 4, part.getSide())
 			case _ =>
 				this.getPartUVBySide(4, 4, part.getSide())
 		}
@@ -1200,29 +1218,29 @@ def getXYZForCorner(width: Double, height: Double, facingDirection: ForgeDirecti
 
 		forgeDirectionSide match {
 			case 0 =>
-				uMult = 2
+				uMult = (unitSideV * 1) + (unitSideU * 1)
 				vMult = 0
 			case 1 =>
-				uMult = 1
+				uMult = unitSideV * 1
 				vMult = 0
 			case 2 =>
-				uMult = 1
-				vMult = 1
+				uMult = unitSideV * 1
+				vMult = unitSideV * 1
 			case 3 =>
-				uMult = 2
-				vMult = 1
+				uMult = (unitSideV * 1) + (unitSideU * 1)
+				vMult = unitSideV * 1
 			case 4 =>
-				uMult = 3
-				vMult = 1
+				uMult = (unitSideV * 1) + (unitSideU * 2)
+				vMult = unitSideV * 1
 			case 5 =>
 				uMult = 0
-				vMult = 1
+				vMult = unitSideV * 1
 			case _ =>
 				uMult = 0
 				vMult = 0
 		}
 
-		Array[Double](unitSideU * uMult, unitSideV * vMult)
+		Array[Double](uMult, vMult)
 	}
 
 	def getPartWHBySide(part: SidedPart): Array[Double] = {
@@ -1245,8 +1263,11 @@ def getXYZForCorner(width: Double, height: Double, facingDirection: ForgeDirecti
 			case 0 | 1 =>
 				w = width
 				h = length
-			case 2 | 3 | 4 | 5 =>
+			case 2 | 3 =>
 				w = width
+				h = height
+			case 4 | 5 =>
+				w = length
 				h = height
 			case _ =>
 				w = 0.0
