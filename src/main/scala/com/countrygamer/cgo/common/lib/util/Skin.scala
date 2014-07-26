@@ -38,7 +38,7 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 
 	// Other Constructors
 	def this(username: String) {
-		this(username, false)
+		this(username, true)
 
 	}
 
@@ -88,7 +88,7 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	object Part extends Enumeration {
+	object Part0 extends Enumeration {
 		type Part = Value
 
 		val HEAD, BODY, LEFTARM, RIGHTARM, LEFTLEG, RIGHTLEG = Value
@@ -97,22 +97,23 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	def render(x: Int, y: Int, scale: Float, part: Part.Value,
+	/*
+	def render(x: Int, y: Int, scale: Float, part: Part0.Value,
 			partSideDirection: ForgeDirection,
 			isArmor: Boolean, skin: Skin): Unit = {
 		this.render(x, y, scale, part, partSideDirection.ordinal(), isArmor, skin)
 	}
 
-	def render(x: Int, y: Int, scale: Float, part: Part.Value, partSide: Int,
+	def render(x: Int, y: Int, scale: Float, part: Part0.Value, partSide: Int,
 			isArmor: Boolean, skin: Skin): Unit = {
 
 		var uvwh: Array[Double] = null
 
-		if (skin.getSkinHeight() != 64 && part == Part.LEFTARM) {
-			uvwh = this.getUVWH(Part.RIGHTARM, isArmor, partSide)
+		if (skin.getSkinHeight() != 64 && part == Part0.LEFTARM) {
+			uvwh = this.getUVWH(Part0.RIGHTARM, isArmor, partSide)
 		}
-		else if (skin.getSkinHeight() != 64 && part == Part.LEFTLEG) {
-			uvwh = this.getUVWH(Part.RIGHTLEG, isArmor, partSide)
+		else if (skin.getSkinHeight() != 64 && part == Part0.LEFTLEG) {
+			uvwh = this.getUVWH(Part0.RIGHTLEG, isArmor, partSide)
 		}
 		else {
 			uvwh = this.getUVWH(part, isArmor, partSide)
@@ -129,7 +130,7 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 
 	}
 
-	def getUVWH(part: Part.Value, isArmor: Boolean, side: Int): Array[Double] = {
+	def getUVWH(part: Part0.Value, isArmor: Boolean, side: Int): Array[Double] = {
 		val uvwh: Array[Double] = new Array[Double](4)
 
 		val partUV: Array[Double] = this.getPartUV(part, isArmor)
@@ -144,42 +145,42 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 		uvwh
 	}
 
-	def getPartUV(part: Part.Value, isArmor: Boolean): Array[Double] = {
+	def getPartUV(part: Part0.Value, isArmor: Boolean): Array[Double] = {
 		var u: Double = 0.0D
 		var v: Double = 0.0D
 
 		part match {
-			case Part.HEAD =>
+			case Part0.HEAD =>
 				u = 0.0
 				v = 0.0
 				if (isArmor) {
 					u += 32.0
 				}
-			case Part.BODY =>
+			case Part0.BODY =>
 				u = 16.0
 				v = 16.0
 				if (isArmor) {
 					v += 16.0
 				}
-			case Part.LEFTARM =>
+			case Part0.LEFTARM =>
 				u = 32.0
 				v = 48.0
 				if (isArmor) {
 					u += 16.0
 				}
-			case Part.RIGHTARM =>
+			case Part0.RIGHTARM =>
 				u = 40.0
 				v = 16.0
 				if (isArmor) {
 					v += 16.0
 				}
-			case Part.LEFTLEG =>
+			case Part0.LEFTLEG =>
 				u = 16.0
 				v = 48.0
 				if (isArmor) {
 					u -= 16.0
 				}
-			case Part.RIGHTLEG =>
+			case Part0.RIGHTLEG =>
 				u = 0.0
 				v = 16.0
 				if (isArmor) {
@@ -193,11 +194,11 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 		Array[Double](u, v)
 	}
 
-	def getSidedUV(part: Part.Value, side: Int): Array[Double] = {
+	def getSidedUV(part: Part0.Value, side: Int): Array[Double] = {
 		part match {
-			case Part.HEAD =>
+			case Part0.HEAD =>
 				getPartUVBySide(8, 8, side)
-			case Part.BODY =>
+			case Part0.BODY =>
 				getPartUVBySide(4, 8, side)
 			case _ =>
 				getPartUVBySide(4, 4, side)
@@ -235,11 +236,11 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 		Array[Double](unitSideU * uMult, unitSideV * vMult)
 	}
 
-	def getPartWHBySide(part: Part.Value, side: Int): Array[Double] = {
+	def getPartWHBySide(part: Part0.Value, side: Int): Array[Double] = {
 		part match {
-			case Part.HEAD =>
+			case Part0.HEAD =>
 				getPartWH(8, 8, 8, side)
-			case Part.BODY =>
+			case Part0.BODY =>
 				getPartWH(8, 4, 12, side)
 			case _ =>
 				getPartWH(4, 4, 12, side)
@@ -311,200 +312,404 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 		tessellator.draw()
 
 	}
-
+	*/
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	def render3D(horizontal: Double, vertical: Double, scale: Float, part: Part.Value,
-			partSide: ForgeDirection, isArmor: Boolean, skin: Skin,
-			directionFacing: ForgeDirection): Unit = {
-		this.render3D(horizontal, vertical, scale, part, partSide.ordinal(), isArmor, skin,
-			directionFacing)
+	/*
+def render3D(horizontal: Double, vertical: Double, scale: Float, part: Part0.Value,
+		partSide: ForgeDirection, isArmor: Boolean, skin: Skin,
+		directionFacing: ForgeDirection): Unit = {
+	this.render3D(horizontal, vertical, scale, part, partSide.ordinal(), isArmor, skin,
+		directionFacing)
+}
+
+def render3D(horizontal: Double, vertical: Double, scale: Float, part: Part0.Value,
+		partSide: Int, isArmor: Boolean, skin: Skin,
+		directionFacing: ForgeDirection): Unit = {
+	var uvwh: Array[Double] = null
+
+	if (skin.getSkinHeight() != 64 && part == Part0.LEFTARM) {
+		uvwh = this.getUVWH(Part0.RIGHTARM, isArmor, partSide)
+	}
+	else if (skin.getSkinHeight() != 64 && part == Part0.LEFTLEG) {
+		uvwh = this.getUVWH(Part0.RIGHTLEG, isArmor, partSide)
+	}
+	else {
+		uvwh = this.getUVWH(part, isArmor, partSide)
 	}
 
-	def render3D(horizontal: Double, vertical: Double, scale: Float, part: Part.Value,
-			partSide: Int, isArmor: Boolean, skin: Skin,
-			directionFacing: ForgeDirection): Unit = {
-		var uvwh: Array[Double] = null
+	GL11.glPushMatrix()
+	GL11.glScalef(scale, scale, scale)
+	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F)
+	//GL11.glTranslatef(horizontal.asInstanceOf[Float],
+	//		vertical.asInstanceOf[Float], 0.0F
+	UtilRender.bindResource(skin.getSkin())
+	this.draw3D(horizontal, vertical, uvwh(0), uvwh(1), uvwh(2), uvwh(3), skin.getSkinWidth(),
+		skin.getSkinHeight(), directionFacing)
+	GL11.glPopMatrix()
+}
 
-		if (skin.getSkinHeight() != 64 && part == Part.LEFTARM) {
-			uvwh = this.getUVWH(Part.RIGHTARM, isArmor, partSide)
-		}
-		else if (skin.getSkinHeight() != 64 && part == Part.LEFTLEG) {
-			uvwh = this.getUVWH(Part.RIGHTLEG, isArmor, partSide)
-		}
-		else {
-			uvwh = this.getUVWH(part, isArmor, partSide)
-		}
+def draw3D(horizontal: Double, vertical: Double, u: Double, v: Double, w: Double, h: Double,
+		skinW: Float, skinH: Float, directionFacing: ForgeDirection): Unit = {
+	//System.out.println("draw")
+	var xyz: Array[Double] = null
 
-		GL11.glPushMatrix()
-		GL11.glScalef(scale, scale, scale)
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F)
-		//GL11.glTranslatef(horizontal.asInstanceOf[Float],
-		//		vertical.asInstanceOf[Float], 0.0F
-		UtilRender.bindResource(skin.getSkin())
-		this.draw3D(horizontal, vertical, uvwh(0), uvwh(1), uvwh(2), uvwh(3), skin.getSkinWidth(),
-			skin.getSkinHeight(), directionFacing)
-		GL11.glPopMatrix()
+	val scaledSkinW: Float = 1.0F / skinW
+	val scaledSkinH: Float = 1.0F / skinH
+	val tessellator: Tessellator = Tessellator.instance
+
+	tessellator.startDrawingQuads()
+
+	xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 1)
+	tessellator.addVertexWithUV(
+		xyz(0),
+		xyz(1),
+		xyz(2),
+		u * scaledSkinW.asInstanceOf[Double],
+		(v + h) * scaledSkinH.asInstanceOf[Double]
+	)
+	xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 2)
+	tessellator.addVertexWithUV(
+		xyz(0),
+		xyz(1),
+		xyz(2),
+		(u + w) * scaledSkinW.asInstanceOf[Double],
+		(v + h) * scaledSkinH.asInstanceOf[Double]
+	)
+	xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 3)
+	tessellator.addVertexWithUV(
+		xyz(0),
+		xyz(1),
+		xyz(2),
+		(u + w) * scaledSkinW.asInstanceOf[Double],
+		v * scaledSkinH.asInstanceOf[Double]
+	)
+	xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 4)
+	tessellator.addVertexWithUV(
+		xyz(0),
+		xyz(1),
+		xyz(2),
+		u * scaledSkinW.asInstanceOf[Double],
+		v * scaledSkinH.asInstanceOf[Double]
+	)
+
+
+	tessellator.draw()
+}
+
+def getXYZRenderCoordsFromDirection(horizontal: Double, vertical: Double, width: Double,
+		height: Double,
+		facingDirection: ForgeDirection, corner: Int): Array[Double] = {
+	var x: Double = 0.0
+	var y: Double = 0.0
+	var z: Double = 0.0
+
+	facingDirection match {
+		case ForgeDirection.DOWN => // on y axis, going -y
+			corner match {
+				case 1 =>
+					x = horizontal + width
+					z = vertical + height
+				case 2 =>
+					x = horizontal
+					z = vertical + height
+				case 3 =>
+					x = horizontal
+					z = vertical
+				case 4 =>
+					x = horizontal + width
+					z = vertical
+			}
+			y = 0.0
+		case ForgeDirection.UP => // on y axis, going +y
+			corner match {
+				case 1 =>
+					x = horizontal
+					z = vertical + height
+				case 2 =>
+					x = horizontal + width
+					z = vertical + height
+				case 3 =>
+					x = horizontal + width
+					z = vertical
+				case 4 =>
+					x = horizontal
+					z = vertical
+			}
+			y = 0.0
+		case ForgeDirection.NORTH => // on z axis, going -z
+			corner match {
+				case 1 =>
+					x = horizontal - width
+					y = vertical + height
+				case 2 =>
+					x = horizontal
+					y = vertical + height
+				case 3 =>
+					x = horizontal
+					y = vertical
+				case 4 =>
+					x = horizontal - width
+					y = vertical
+			}
+			z = 0.0
+		case ForgeDirection.SOUTH => // on z axis, going +z
+			corner match {
+				case 1 =>
+					x = horizontal + width
+					y = vertical + height
+				case 2 =>
+					x = horizontal
+					y = vertical + height
+				case 3 =>
+					x = horizontal
+					y = vertical
+				case 4 =>
+					x = horizontal + width
+					y = vertical
+			}
+			z = 0.0
+		case ForgeDirection.WEST => // on x axis, going -x
+			corner match {
+				case 1 =>
+					z = horizontal + width
+					y = vertical + height
+				case 2 =>
+					z = horizontal
+					y = vertical + height
+				case 3 =>
+					z = horizontal
+					y = vertical
+				case 4 =>
+					z = horizontal + width
+					y = vertical
+			}
+			x = 0.0
+		case ForgeDirection.EAST => // on x axis, going +x
+			corner match {
+				case 1 =>
+					z = horizontal - width
+					y = vertical + height
+				case 2 =>
+					z = horizontal
+					y = vertical + height
+				case 3 =>
+					z = horizontal
+					y = vertical
+				case 4 =>
+					z = horizontal - width
+					y = vertical
+			}
+			x = 0.0
+		case _ =>
+
 	}
 
-	def draw3D(horizontal: Double, vertical: Double, u: Double, v: Double, w: Double, h: Double,
-			skinW: Float, skinH: Float, directionFacing: ForgeDirection): Unit = {
-		//System.out.println("draw")
-		var xyz: Array[Double] = null
+	Array[Double](x, y, z)
+}
 
-		val scaledSkinW: Float = 1.0F / skinW
-		val scaledSkinH: Float = 1.0F / skinH
-		val tessellator: Tessellator = Tessellator.instance
+def renderPart(hor: Double, ver: Double, scale: Float, part: Part0.Value, partSide: Int,
+		isArmor: Boolean, skin: Skin, directionFacing: ForgeDirection): Unit = {
+	// Create a variable for the u, v, width, and height of the rendering image
+	var uvwh: Array[Double] = null
 
-		tessellator.startDrawingQuads()
-
-		xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 1)
-		tessellator.addVertexWithUV(
-			xyz(0),
-			xyz(1),
-			xyz(2),
-			u * scaledSkinW.asInstanceOf[Double],
-			(v + h) * scaledSkinH.asInstanceOf[Double]
-		)
-		xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 2)
-		tessellator.addVertexWithUV(
-			xyz(0),
-			xyz(1),
-			xyz(2),
-			(u + w) * scaledSkinW.asInstanceOf[Double],
-			(v + h) * scaledSkinH.asInstanceOf[Double]
-		)
-		xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 3)
-		tessellator.addVertexWithUV(
-			xyz(0),
-			xyz(1),
-			xyz(2),
-			(u + w) * scaledSkinW.asInstanceOf[Double],
-			v * scaledSkinH.asInstanceOf[Double]
-		)
-		xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 4)
-		tessellator.addVertexWithUV(
-			xyz(0),
-			xyz(1),
-			xyz(2),
-			u * scaledSkinW.asInstanceOf[Double],
-			v * scaledSkinH.asInstanceOf[Double]
-		)
-
-
-		tessellator.draw()
+	// Check to make sure, if the image does not have areas for separate parts
+	// (say the image is of the old type when arms were the same and legs were the same).
+	// If the image is of the old style, and the parts are special, then render the passed parts
+	// Using the old system
+	if (skin.getSkinHeight() != 64 && part == Part0.LEFTARM) {
+		uvwh = this.getUVWH(Part0.RIGHTARM, isArmor, partSide)
+	}
+	else if (skin.getSkinHeight() != 64 && part == Part0.LEFTLEG) {
+		uvwh = this.getUVWH(Part0.RIGHTLEG, isArmor, partSide)
+	}
+	else {
+		uvwh = this.getUVWH(part, isArmor, partSide)
 	}
 
-	def getXYZRenderCoordsFromDirection(horizontal: Double, vertical: Double, width: Double,
-			height: Double,
-			facingDirection: ForgeDirection, corner: Int): Array[Double] = {
-		var x: Double = 0.0
-		var y: Double = 0.0
-		var z: Double = 0.0
+	// New matrix for rendering
+	GL11.glPushMatrix()
+	// Make sure render is in full color
+	GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f)
+	// Scale the image to the user's whim
+	GL11.glScalef(scale, scale, scale)
+	// Bind the texture
+	UtilRender.bindResource(skin.getSkin())
 
-		facingDirection match {
-			case ForgeDirection.DOWN => // on y axis, going -y
-				corner match {
-					case 1 =>
-						x = horizontal + width
-						z = vertical + height
-					case 2 =>
-						x = horizontal
-						z = vertical + height
-					case 3 =>
-						x = horizontal
-						z = vertical
-					case 4 =>
-						x = horizontal + width
-						z = vertical
-				}
-				y = 0.0
-			case ForgeDirection.UP => // on y axis, going +y
-				corner match {
-					case 1 =>
-						x = horizontal
-						z = vertical + height
-					case 2 =>
-						x = horizontal + width
-						z = vertical + height
-					case 3 =>
-						x = horizontal + width
-						z = vertical
-					case 4 =>
-						x = horizontal
-						z = vertical
-				}
-				y = 0.0
-			case ForgeDirection.NORTH => // on z axis, going -z
-				corner match {
-					case 1 =>
-						x = horizontal - width
-						y = vertical + height
-					case 2 =>
-						x = horizontal
-						y = vertical + height
-					case 3 =>
-						x = horizontal
-						y = vertical
-					case 4 =>
-						x = horizontal - width
-						y = vertical
-				}
-				z = 0.0
-			case ForgeDirection.SOUTH => // on z axis, going +z
-				corner match {
-					case 1 =>
-						x = horizontal + width
-						y = vertical + height
-					case 2 =>
-						x = horizontal
-						y = vertical + height
-					case 3 =>
-						x = horizontal
-						y = vertical
-					case 4 =>
-						x = horizontal + width
-						y = vertical
-				}
-				z = 0.0
-			case ForgeDirection.WEST => // on x axis, going -x
-				corner match {
-					case 1 =>
-						z = horizontal + width
-						y = vertical + height
-					case 2 =>
-						z = horizontal
-						y = vertical + height
-					case 3 =>
-						z = horizontal
-						y = vertical
-					case 4 =>
-						z = horizontal + width
-						y = vertical
-				}
-				x = 0.0
-			case ForgeDirection.EAST => // on x axis, going +x
-				corner match {
-					case 1 =>
-						z = horizontal - width
-						y = vertical + height
-					case 2 =>
-						z = horizontal
-						y = vertical + height
-					case 3 =>
-						z = horizontal
-						y = vertical
-					case 4 =>
-						z = horizontal - width
-						y = vertical
-				}
-				x = 0.0
-			case _ =>
-
-		}
-
-		Array[Double](x, y, z)
+	var x: Double = 0.0
+	var y: Double = 0.0
+	var z: Double = 0.0
+	directionFacing match {
+		case ForgeDirection.DOWN | ForgeDirection.UP =>
+			x = hor
+			y = 0.0
+			z = ver
+		case ForgeDirection.NORTH | ForgeDirection.SOUTH =>
+			x = hor
+			y = ver
+			z = 0.0
+		case ForgeDirection.WEST | ForgeDirection.EAST =>
+			x = 0.0
+			y = ver
+			z = hor
+		case _ =>
+			x = 0.0
+			y = 0.0
+			z = 0.0
 	}
+
+	GL11.glTranslated(x, y, z)
+
+	// Time to do the render code!
+	this.drawPart(hor, ver, uvwh(0), uvwh(1), uvwh(2), uvwh(3), skin.getSkinWidth(),
+		skin.getSkinHeight(), directionFacing)
+
+	// End the matrix
+	GL11.glPopMatrix()
+
+}
+
+def drawPart(horizontal: Double, vertical: Double, u: Double, v: Double, w: Double, h: Double,
+		skinW: Float, skinH: Float, directionFacing: ForgeDirection): Unit = {
+	var xyz: Array[Double] = null
+
+	val scaledSkinW: Float = 1.0F / skinW
+	val scaledSkinH: Float = 1.0F / skinH
+	val tess: Tessellator = Tessellator.instance
+
+	tess.startDrawingQuads()
+
+	xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 1)
+	tess.addVertexWithUV(0.0D, 0.0D, 0.0D,
+		u * scaledSkinW.asInstanceOf[Double], (v + h) * scaledSkinH.asInstanceOf[Double])
+
+	xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 2)
+	tess.addVertexWithUV(0.0D, 0.0D, 0.0D,
+		(u + w) * scaledSkinW.asInstanceOf[Double], (v + h) * scaledSkinH.asInstanceOf[Double])
+
+	xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 3)
+	tess.addVertexWithUV(0.0D, 0.0D, 0.0D,
+		(u + w) * scaledSkinW.asInstanceOf[Double], v * scaledSkinH.asInstanceOf[Double])
+
+
+	xyz = this.getXYZRenderCoordsFromDirection(horizontal, vertical, w, h, directionFacing, 4)
+	tess.addVertexWithUV(0.0D, 0.0D, 0.0D,
+		u * scaledSkinW.asInstanceOf[Double], v * scaledSkinH.asInstanceOf[Double])
+
+	tess.draw()
+
+}
+
+def getXYZForCorner(width: Double, height: Double, facingDirection: ForgeDirection,
+		corner: Int): Array[Double] = {
+	var x: Double = 0.0
+	var y: Double = 0.0
+	var z: Double = 0.0
+
+	// TODO
+	facingDirection match {
+		case ForgeDirection.DOWN => // on y axis, going -y
+			corner match {
+				case 1 =>
+					x = horizontal + width
+					z = vertical + height
+				case 2 =>
+					x = horizontal
+					z = vertical + height
+				case 3 =>
+					x = horizontal
+					z = vertical
+				case 4 =>
+					x = horizontal + width
+					z = vertical
+			}
+			y = 0.0
+		case ForgeDirection.UP => // on y axis, going +y
+			corner match {
+				case 1 =>
+					x = horizontal
+					z = vertical + height
+				case 2 =>
+					x = horizontal + width
+					z = vertical + height
+				case 3 =>
+					x = horizontal + width
+					z = vertical
+				case 4 =>
+					x = horizontal
+					z = vertical
+			}
+			y = 0.0
+		case ForgeDirection.NORTH => // on z axis, going -z
+			corner match {
+				case 1 =>
+					x = horizontal - width
+					y = vertical + height
+				case 2 =>
+					x = horizontal
+					y = vertical + height
+				case 3 =>
+					x = horizontal
+					y = vertical
+				case 4 =>
+					x = horizontal - width
+					y = vertical
+			}
+			z = 0.0
+		case ForgeDirection.SOUTH => // on z axis, going +z
+			corner match {
+				case 1 =>
+					x = horizontal + width
+					y = vertical + height
+				case 2 =>
+					x = horizontal
+					y = vertical + height
+				case 3 =>
+					x = horizontal
+					y = vertical
+				case 4 =>
+					x = horizontal + width
+					y = vertical
+			}
+			z = 0.0
+		case ForgeDirection.WEST => // on x axis, going -x
+			corner match {
+				case 1 =>
+					z = horizontal + width
+					y = vertical + height
+				case 2 =>
+					z = horizontal
+					y = vertical + height
+				case 3 =>
+					z = horizontal
+					y = vertical
+				case 4 =>
+					z = horizontal + width
+					y = vertical
+			}
+			x = 0.0
+		case ForgeDirection.EAST => // on x axis, going +x
+			corner match {
+				case 1 =>
+					z = horizontal - width
+					y = vertical + height
+				case 2 =>
+					z = horizontal
+					y = vertical + height
+				case 3 =>
+					z = horizontal
+					y = vertical
+				case 4 =>
+					z = horizontal - width
+					y = vertical
+			}
+			x = 0.0
+		case _ =>
+
+	}
+	Array[Double](x, y, z)
+}
+	*/
 
 	/* Drawing a head
 
@@ -527,6 +732,529 @@ class Skin(private val username: String, private val shouldPrepare: Boolean) {
 
 		GL11.glPopMatrix()
 	 */
+
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	final object PartType extends Enumeration {
+		type PartType = Value
+
+		val HEAD, BODY, LEFTARM, RIGHTARM, LEFTLEG, RIGHTLEG = Value
+
+	}
+
+	class Part(private val partType: PartType.Value, private val armor: Boolean) {
+
+		def getType(): PartType.Value = {
+			this.partType
+		}
+
+		def isArmor(): Boolean = {
+			this.armor
+		}
+
+		def toSided(side: ForgeDirection): SidedPart = {
+			new SidedPart(this.partType, this.armor, side)
+		}
+
+	}
+
+	class SidedPart(partType: PartType.Value, armor: Boolean, private val side: Int)
+			extends Part(partType, armor) {
+
+		def this(partType: PartType.Value, armor: Boolean, side: ForgeDirection) {
+			this(partType, armor, side.ordinal())
+
+		}
+
+		def getSide(): Int = {
+			this.side
+		}
+
+		def getDirection(): ForgeDirection = {
+			ForgeDirection.getOrientation(this.getSide())
+		}
+
+	}
+
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	/* Statue Render Code
+
+		GL11.glPushMatrix()
+		GL11.glTranslatef(0.0F, -0.5F, 0.0F)
+		val skin: Skin = new Skin("Country_Gamer")
+		var part: skin.Part = new skin.Part(skin.PartType.HEAD, false)
+		skin.render(-0.5D, 4.0D, 1.0D, 1.0D, 1.0D, part)
+		//part = new skin.Part(skin.PartType.BODY, false)
+		//skin.render(-0.5D, 0.0D, 0.66667D, 0.3D, 1.0D, part)
+
+		GL11.glPopMatrix()
+	*/
+
+	def render(horizontal: Double, vertical: Double, requestedWidth: Double,
+			requestedHeight: Double, requestedLength: Double, part: Part): Unit = {
+
+		GL11.glPushMatrix()
+
+		GL11.glTranslated(0.0D, vertical, 0.0D)
+		GL11.glTranslated(0.0D, -requestedHeight, 0.0D)
+		// Bottom
+		this.render(
+			horizontal,
+			requestedWidth / 2,
+			requestedWidth, requestedWidth, part.toSided(ForgeDirection.DOWN),
+			ForgeDirection.DOWN
+		)
+
+		GL11.glTranslated(0.0D, requestedHeight, 0.0D)
+		// Top
+		this.render(
+			horizontal,
+			requestedWidth / 2,
+			requestedWidth, requestedWidth, part.toSided(ForgeDirection.UP),
+			ForgeDirection.UP
+		)
+		GL11.glTranslated(0.0D, -vertical, 0.0D)
+
+		GL11.glTranslated(0.0D, 0.0D, -(requestedWidth / 2))
+		// Front
+		this.render(
+			horizontal + (requestedWidth),
+			vertical,
+			requestedWidth, requestedHeight, part.toSided(ForgeDirection.NORTH),
+			ForgeDirection.NORTH
+		)
+		GL11.glTranslated(0.0D, 0.0D, +(requestedWidth / 2))
+
+		GL11.glTranslated(0.0D, 0.0D, +(requestedWidth / 2))
+		// Back
+		this.render(
+			horizontal,
+			vertical,
+			requestedWidth, requestedHeight, part.toSided(ForgeDirection.SOUTH),
+			ForgeDirection.SOUTH
+		)
+		GL11.glTranslated(0.0D, 0.0D, -(requestedWidth / 2))
+
+		GL11.glTranslated(-(requestedWidth / 2), 0.0D, 0.0D)
+		// Right
+		this.render(
+			horizontal,
+			vertical,
+			requestedWidth, requestedHeight, part.toSided(ForgeDirection.WEST),
+			ForgeDirection.WEST
+		)
+		GL11.glTranslated(+(requestedWidth / 2), 0.0D, 0.0D)
+
+		GL11.glTranslated(+(requestedWidth / 2), 0.0D, 0.0D)
+		// Left
+		this.render(
+			horizontal + (requestedWidth),
+			vertical,
+			requestedWidth, requestedHeight, part.toSided(ForgeDirection.EAST),
+			ForgeDirection.EAST
+		)
+		GL11.glTranslated(-(requestedWidth / 2), 0.0D, 0.0D)
+
+		GL11.glPopMatrix()
+
+	}
+
+	def render(horizontal: Double, vertical: Double, requestedWidth: Double,
+			requestedHeight: Double, part: SidedPart, facingDirection: ForgeDirection): Unit = {
+
+		val xyz: Array[Double] = this.getXYZByDirection(horizontal, vertical, facingDirection)
+		val uvwh: Array[Double] = this.getUVWH(part)
+
+		GL11.glPushMatrix()
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F)
+		GL11.glTranslated(xyz(0), xyz(1), xyz(2))
+		UtilRender.bindResource(this.getSkin())
+
+		val scaleXYZ: Array[Double] = this
+				.getXYZByDirection(requestedWidth / uvwh(2), requestedHeight / uvwh(3),
+		            facingDirection)
+		GL11.glScaled(scaleXYZ(0), scaleXYZ(1), scaleXYZ(2))
+
+		this.draw(uvwh(0), uvwh(1), uvwh(2), uvwh(3), this.getSkinWidth(), this.getSkinHeight(),
+			facingDirection)
+
+		GL11.glPopMatrix()
+
+	}
+
+	def draw(u: Double, v: Double, uwidth: Double, vheight: Double, skinWidth: Float,
+			skinHeight: Float, direction: ForgeDirection): Unit = {
+
+		val scaledSkinWidth: Float = 1.0F / skinWidth
+		val scaledSkinHeight: Float = 1.0F / skinHeight
+		val tessellator: Tessellator = Tessellator.instance
+
+		tessellator.startDrawingQuads
+
+		/*
+		tessellator.addVertexWithUV(
+			x.asInstanceOf[Double],
+			(y + height).asInstanceOf[Double],
+			0.0D,
+			(u * f4).asInstanceOf[Double],
+			((v + height.asInstanceOf[Float]) * scaledSkinHeight).asInstanceOf[Double])
+
+
+		tessellator.addVertexWithUV(
+			(x + width).asInstanceOf[Double],
+			(y + height).asInstanceOf[Double],
+			0.0D,
+			((u + width.asInstanceOf[Float]) * scaledSkinWidth).asInstanceOf[Double],
+			((v + height.asInstanceOf[Float]) * scaledSkinHeight).asInstanceOf[Double])
+
+
+		tessellator.addVertexWithUV(
+			(x + width).asInstanceOf[Double],
+			y.asInstanceOf[Double],
+			0.0D,
+			((u + width.asInstanceOf[Float]) * scaledSkinWidth).asInstanceOf[Double],
+			(v * scaledSkinHeight).asInstanceOf[Double])
+
+
+		tessellator.addVertexWithUV(
+			x.asInstanceOf[Double],
+			y.asInstanceOf[Double],
+			0.0D,
+			(u * scaledSkinWidth).asInstanceOf[Double],
+			(v * scaledSkinHeight).asInstanceOf[Double])
+		*/
+
+		var wlh: Array[Double] = null
+
+		wlh = this.getXYZByDirectionAndCorner(uwidth, vheight, direction, 1)
+		tessellator.addVertexWithUV(
+			wlh(0),
+			wlh(1),
+			wlh(2),
+			u * scaledSkinWidth,
+			(v + vheight) * scaledSkinHeight
+		)
+
+		wlh = this.getXYZByDirectionAndCorner(uwidth, vheight, direction, 2)
+		tessellator.addVertexWithUV(
+			wlh(0),
+			wlh(1),
+			wlh(2),
+			(u + uwidth) * scaledSkinWidth,
+			(v + vheight) * scaledSkinHeight
+		)
+
+		wlh = this.getXYZByDirectionAndCorner(uwidth, vheight, direction, 3)
+		tessellator.addVertexWithUV(
+			wlh(0),
+			wlh(1),
+			wlh(2),
+			(u + uwidth) * scaledSkinWidth,
+			v * scaledSkinHeight
+		)
+
+		wlh = this.getXYZByDirectionAndCorner(uwidth, vheight, direction, 4)
+		tessellator.addVertexWithUV(
+			wlh(0),
+			wlh(1),
+			wlh(2),
+			u * scaledSkinWidth,
+			v * scaledSkinHeight
+		)
+
+		tessellator.draw
+	}
+
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	def getXYZByDirection(horizontal: Double, vertical: Double,
+			direction: ForgeDirection): Array[Double] = {
+		this.getXYZByDirectionAndCorner(horizontal, vertical, direction, 0)
+	}
+
+	def getXYZByDirectionAndCorner(horizontal: Double, vertical: Double,
+			direction: ForgeDirection, corner: Int): Array[Double] = {
+		var x: Double = 0.0
+		var y: Double = 0.0
+		var z: Double = 0.0
+
+		direction match {
+			case ForgeDirection.DOWN => // on y axis, going -y
+				y = 0.0
+				if (corner > 0) {
+					corner match {
+						case 1 =>
+							x = 0.0 + horizontal
+							z = 0.0
+						case 2 =>
+							x = 0.0
+							z = 0.0
+						case 3 =>
+							x = 0.0
+							z = 0.0 - vertical
+						case 4 =>
+							x = 0.0 + horizontal
+							z = 0.0 - vertical
+					}
+				}
+				else {
+					x = horizontal
+					z = vertical
+				}
+			case ForgeDirection.UP => // on y axis, going +y
+				y = 0.0
+				if (corner > 0) {
+					corner match {
+						case 1 =>
+							x = 0.0
+							z = 0.0
+						case 2 =>
+							x = 0.0 + horizontal
+							z = 0.0
+						case 3 =>
+							x = 0.0 + horizontal
+							z = 0.0 - vertical
+						case 4 =>
+							x = 0.0
+							z = 0.0 - vertical
+					}
+				}
+				else {
+					x = horizontal
+					z = vertical
+				}
+			case ForgeDirection.NORTH => // on z axis, going -z
+				z = 0.0
+				if (corner > 0) {
+					corner match {
+						case 1 =>
+							x = 0.0 - horizontal
+							y = 0.0
+						case 2 =>
+							x = 0.0
+							y = 0.0
+						case 3 =>
+							x = 0.0
+							y = 0.0 - vertical
+						case 4 =>
+							x = 0.0 - horizontal
+							y = 0.0 - vertical
+					}
+				}
+				else {
+					x = horizontal
+					y = vertical
+				}
+			case ForgeDirection.SOUTH => // on z axis, going +z
+				z = 0.0
+				if (corner > 0) {
+					corner match {
+						case 1 =>
+							x = 0.0 + horizontal
+							y = 0.0
+						case 2 =>
+							x = 0.0
+							y = 0.0
+						case 3 =>
+							x = 0.0
+							y = 0.0 - vertical
+						case 4 =>
+							x = 0.0 + horizontal
+							y = 0.0 - vertical
+					}
+				}
+				else {
+					x = horizontal
+					y = vertical
+				}
+			case ForgeDirection.WEST => // on x axis, going -x
+				x = 0.0
+				if (corner > 0) {
+					corner match {
+						case 1 =>
+							z = 0.0 + horizontal
+							y = 0.0
+						case 2 =>
+							z = 0.0
+							y = 0.0
+						case 3 =>
+							z = 0.0
+							y = 0.0 - vertical
+						case 4 =>
+							z = 0.0 + horizontal
+							y = 0.0 - vertical
+					}
+				}
+				else {
+					z = horizontal
+					y = vertical
+				}
+			case ForgeDirection.EAST => // on x axis, going +x
+				x = 0.0
+				if (corner > 0) {
+					corner match {
+						case 1 =>
+							z = 0.0 - horizontal
+							y = 0.0
+						case 2 =>
+							z = 0.0
+							y = 0.0
+						case 3 =>
+							z = 0.0
+							y = 0.0 - vertical
+						case 4 =>
+							z = 0.0 - horizontal
+							y = 0.0 - vertical
+					}
+				}
+				else {
+					z = horizontal
+					y = vertical
+				}
+			case _ =>
+
+		}
+
+		Array[Double](x, y, z)
+	}
+
+	def getUVWH(part: SidedPart): Array[Double] = {
+		val uvwh: Array[Double] = new Array[Double](4)
+
+		val partUV: Array[Double] = this.getPartUV(part)
+		val sidedUV: Array[Double] = this.getSidedUV(part)
+		val partBySideWH: Array[Double] = this.getPartWHBySide(part)
+
+		uvwh(0) = partUV(0) + sidedUV(0)
+		uvwh(1) = partUV(1) + sidedUV(1)
+		uvwh(2) = partBySideWH(0)
+		uvwh(3) = partBySideWH(1)
+
+		uvwh
+	}
+
+	def getPartUV(part: SidedPart): Array[Double] = {
+		var u: Double = 0.0D
+		var v: Double = 0.0D
+
+		(part.getType()) match {
+			case PartType.HEAD =>
+				u = 0.0
+				v = 0.0
+				if (part.isArmor()) {
+					u += 32.0
+				}
+			case PartType.BODY =>
+				u = 16.0
+				v = 16.0
+				if (part.isArmor()) {
+					v += 16.0
+				}
+			case PartType.LEFTARM =>
+				u = 32.0
+				v = 48.0
+				if (part.isArmor()) {
+					u += 16.0
+				}
+			case PartType.RIGHTARM =>
+				u = 40.0
+				v = 16.0
+				if (part.isArmor()) {
+					v += 16.0
+				}
+			case PartType.LEFTLEG =>
+				u = 16.0
+				v = 48.0
+				if (part.isArmor()) {
+					u -= 16.0
+				}
+			case PartType.RIGHTLEG =>
+				u = 0.0
+				v = 16.0
+				if (part.isArmor()) {
+					v += 16.0
+				}
+			case _ =>
+				u = 0.0
+				v = 0.0
+		}
+
+		Array[Double](u, v)
+	}
+
+	def getSidedUV(part: SidedPart): Array[Double] = {
+		(part.getType()) match {
+			case PartType.HEAD =>
+				this.getPartUVBySide(8, 8, part.getSide())
+			case PartType.BODY =>
+				this.getPartUVBySide(4, 8, part.getSide())
+			case _ =>
+				this.getPartUVBySide(4, 4, part.getSide())
+		}
+	}
+
+	def getPartUVBySide(unitSideU: Int, unitSideV: Int, forgeDirectionSide: Int): Array[Double] = {
+		var uMult: Int = 0
+		var vMult: Int = 0
+
+		forgeDirectionSide match {
+			case 0 =>
+				uMult = 2
+				vMult = 0
+			case 1 =>
+				uMult = 1
+				vMult = 0
+			case 2 =>
+				uMult = 1
+				vMult = 1
+			case 3 =>
+				uMult = 2
+				vMult = 1
+			case 4 =>
+				uMult = 3
+				vMult = 1
+			case 5 =>
+				uMult = 0
+				vMult = 1
+			case _ =>
+				uMult = 0
+				vMult = 0
+		}
+
+		Array[Double](unitSideU * uMult, unitSideV * vMult)
+	}
+
+	def getPartWHBySide(part: SidedPart): Array[Double] = {
+		(part.getType()) match {
+			case PartType.HEAD =>
+				this.getPartWH(8, 8, 8, part.getSide())
+			case PartType.BODY =>
+				this.getPartWH(8, 4, 12, part.getSide())
+			case _ =>
+				this.getPartWH(4, 4, 12, part.getSide())
+		}
+	}
+
+	def getPartWH(width: Double, length: Double, height: Double,
+			forgeDirectionSide: Int): Array[Double] = {
+		var w: Double = 0.0
+		var h: Double = 0.0
+
+		forgeDirectionSide match {
+			case 0 | 1 =>
+				w = width
+				h = length
+			case 2 | 3 | 4 | 5 =>
+				w = width
+				h = height
+			case _ =>
+				w = 0.0
+				h = 0.0
+		}
+
+		Array[Double](w, h)
+	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
