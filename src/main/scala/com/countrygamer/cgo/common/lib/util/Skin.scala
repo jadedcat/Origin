@@ -742,10 +742,14 @@ def getXYZForCorner(width: Double, height: Double, facingDirection: ForgeDirecti
 
 	}
 
-	class Part(private val partType: PartType.Value, private val armor: Boolean) {
+	class Part(private var partType: PartType.Value, private val armor: Boolean) {
 
 		def getType(): PartType.Value = {
 			this.partType
+		}
+
+		def setType(part: PartType.Value): Unit = {
+			this.partType = part
 		}
 
 		def isArmor(): Boolean = {
@@ -782,9 +786,10 @@ def getXYZForCorner(width: Double, height: Double, facingDirection: ForgeDirecti
 
 GL11.glPushMatrix()
 		GL11.glTranslatef(0.0F, -0.5F, 0.0F)
-		val skin: Skin = new Skin("Country_Gamer")
+		val skin: Skin = new Skin("FireBall1725")
+		/*
 		var part: skin.Part = new skin.Part(skin.PartType.HEAD, false)
-		skin.render(0.0D, 4.0D, 1.0D, 1.0D, 1.0D, part)
+		skin.render(0.0D, 8.0D, 8.0D, 8.0D, 8.0D, part)
 		part = new skin.Part(skin.PartType.BODY, false)
 		skin.render(0.0D, 0.0D, 8.0D, 12.0D, 4.0D, part)
 		part = new skin.Part(skin.PartType.RIGHTARM, false)
@@ -792,13 +797,63 @@ GL11.glPushMatrix()
 		part = new skin.Part(skin.PartType.LEFTARM, false)
 		skin.render(-6.0D, 0.0D, 4.0D, 12.0D, 4.0D, part)
 		part = new skin.Part(skin.PartType.RIGHTLEG, false)
-		skin.render(-3.0D, -12.0D, 4.0D, 12.0D, 4.0D, part)
+		skin.render(-2.0D, -12.0D, 4.0D, 12.0D, 4.0D, part)
 		part = new skin.Part(skin.PartType.LEFTLEG, false)
-		skin.render(3.0D, -12.0D, 4.0D, 12.0D, 4.0D, part)
+		skin.render(2.0D, -12.0D, 4.0D, 12.0D, 4.0D, part)
+		*/
+		skin.render(1.0D, 0.0D)
 
 		GL11.glPopMatrix()
 
 	*/
+
+	def render(horizontal: Double, vertical: Double): Unit = {
+		this.render(horizontal, vertical, false)
+		// TODO fix armor layer
+		//GL11.glScalef(1.1F, 1.1F, 1.1F)
+		//this.render(horizontal, vertical, true)
+
+	}
+
+	def render(horizontal: Double, vertical: Double, isArmorLayer: Boolean): Unit = {
+		this.render(1.0D, 0.0D, 0.475D, isArmorLayer)
+	}
+
+	def render(horizontal: Double, vertical: Double, headSize: Double,
+			isArmorLayer: Boolean): Unit = {
+
+		val scale: Double = headSize / 8.0D
+
+		val eight: Double = 8.0D * scale
+		val four: Double = 4.0D * scale
+		val twelve: Double = 12.0D * scale
+
+		this.render(
+			horizontal - (2.0D * scale),
+			vertical + (12.0D * scale),
+			four, twelve, four, new Part(PartType.RIGHTLEG, isArmorLayer))
+		this.render(
+			horizontal + (2.0D * scale),
+			vertical + (12.0D * scale),
+			four, twelve, four, new Part(PartType.LEFTLEG, isArmorLayer))
+		this.render(
+			horizontal,
+			vertical + (24.0D * scale),
+			eight, twelve, four, new Part(PartType.BODY, isArmorLayer))
+		this.render(
+			horizontal + (6.0D * scale),
+			vertical + (24.0D * scale),
+			four, twelve, four, new Part(PartType.RIGHTARM, isArmorLayer))
+		this.render(
+			horizontal - (6.0D * scale),
+			vertical + (24.0D * scale),
+			four, twelve, four, new Part(PartType.LEFTARM, isArmorLayer))
+		this.render(
+			horizontal,
+			vertical + (32.0D * scale),
+			eight, eight, eight, new Part(PartType.HEAD, isArmorLayer))
+
+	}
 
 	def render(horizontal: Double, vertical: Double, requestedWidth: Double,
 			requestedHeight: Double, requestedLength: Double, part: Part): Unit = {
@@ -838,37 +893,37 @@ GL11.glPushMatrix()
 		GL11.glTranslated(-requestedWidth, 0.0D, requestedLength)
 
 		// Back
-		/*
+		///*
 		this.render(
 			0.0D,
 			0.0D,
 			requestedWidth, requestedHeight, part.toSided(ForgeDirection.SOUTH),
 			ForgeDirection.SOUTH
 		)
-		*/
+		//*/
 
 		GL11.glTranslated(0.0D, 0.0D, -requestedLength)
 		// Right
-		/*
+		///*
 		this.render(
 			0.0D,
 			0.0D,
 			requestedLength, requestedHeight, part.toSided(ForgeDirection.WEST),
 			ForgeDirection.WEST
 		)
-		*/
+		//*/
 		GL11.glTranslated(0.0D, 0.0D, requestedLength)
 
 		GL11.glTranslated(requestedWidth, 0.0D, 0.0D)
 		// Left
-		/*
+		///*
 		this.render(
 			0.0D,
 			0.0D,
 			requestedLength, requestedHeight, part.toSided(ForgeDirection.EAST),
 			ForgeDirection.EAST
 		)
-		*/
+		//*/
 		GL11.glTranslated(-requestedWidth, 0.0D, 0.0D)
 
 		GL11.glTranslated(+(requestedWidth / 2), -vertical, -(requestedLength / 2))
@@ -878,6 +933,17 @@ GL11.glPushMatrix()
 
 	def render(horizontal: Double, vertical: Double, requestedWidth: Double,
 			requestedHeight: Double, part: SidedPart, facingDirection: ForgeDirection): Unit = {
+
+		if (part.isArmor() && this.getSkinHeight() != 64 && part.getType() != PartType.HEAD) {
+			return
+		}
+
+		if (this.getSkinHeight() != 64 && part.getType() == PartType.LEFTARM) {
+			part.setType(PartType.RIGHTARM)
+		}
+		else if (this.getSkinHeight() != 64 && part.getType() == PartType.LEFTLEG) {
+			part.setType(PartType.RIGHTLEG)
+		}
 
 		val xyz: Array[Double] = this.getXYZByDirection(horizontal, vertical, facingDirection)
 		val uvwh: Array[Double] = this.getUVWH(part)
@@ -1003,17 +1069,17 @@ GL11.glPushMatrix()
 				if (corner > 0) {
 					corner match {
 						case 1 =>
-							x = 0.0 + horizontal
-							z = 0.0
+							x = 0.0
+							z = 0.0 - vertical
 						case 2 =>
-							x = 0.0
-							z = 0.0
-						case 3 =>
-							x = 0.0
-							z = 0.0 - vertical
-						case 4 =>
 							x = 0.0 + horizontal
 							z = 0.0 - vertical
+						case 3 =>
+							x = 0.0 + horizontal
+							z = 0.0
+						case 4 =>
+							x = 0.0
+							z = 0.0
 					}
 				}
 				else {
@@ -1025,17 +1091,17 @@ GL11.glPushMatrix()
 				if (corner > 0) {
 					corner match {
 						case 1 =>
-							x = 0.0
-							z = 0.0
+							x = 0.0 + horizontal
+							z = 0.0 - vertical
 						case 2 =>
-							x = 0.0 + horizontal
-							z = 0.0
-						case 3 =>
-							x = 0.0 + horizontal
-							z = 0.0 - vertical
-						case 4 =>
 							x = 0.0
 							z = 0.0 - vertical
+						case 3 =>
+							x = 0.0
+							z = 0.0
+						case 4 =>
+							x = 0.0 + horizontal
+							z = 0.0
 					}
 				}
 				else {
@@ -1047,17 +1113,17 @@ GL11.glPushMatrix()
 				if (corner > 0) {
 					corner match {
 						case 1 =>
-							x = 0.0 - horizontal
-							y = 0.0
+							x = 0.0
+							y = 0.0 - vertical
 						case 2 =>
-							x = 0.0
-							y = 0.0
-						case 3 =>
-							x = 0.0
-							y = 0.0 - vertical
-						case 4 =>
 							x = 0.0 - horizontal
 							y = 0.0 - vertical
+						case 3 =>
+							x = 0.0 - horizontal
+							y = 0.0
+						case 4 =>
+							x = 0.0
+							y = 0.0
 					}
 				}
 				else {
@@ -1069,17 +1135,17 @@ GL11.glPushMatrix()
 				if (corner > 0) {
 					corner match {
 						case 1 =>
-							x = 0.0 + horizontal
-							y = 0.0
+							x = 0.0
+							y = 0.0 - vertical
 						case 2 =>
-							x = 0.0
-							y = 0.0
-						case 3 =>
-							x = 0.0
-							y = 0.0 - vertical
-						case 4 =>
 							x = 0.0 + horizontal
 							y = 0.0 - vertical
+						case 3 =>
+							x = 0.0 + horizontal
+							y = 0.0
+						case 4 =>
+							x = 0.0
+							y = 0.0
 					}
 				}
 				else {
@@ -1091,17 +1157,17 @@ GL11.glPushMatrix()
 				if (corner > 0) {
 					corner match {
 						case 1 =>
-							z = 0.0 + horizontal
-							y = 0.0
+							z = 0.0
+							y = 0.0 - vertical
 						case 2 =>
-							z = 0.0
-							y = 0.0
-						case 3 =>
-							z = 0.0
-							y = 0.0 - vertical
-						case 4 =>
 							z = 0.0 + horizontal
 							y = 0.0 - vertical
+						case 3 =>
+							z = 0.0 + horizontal
+							y = 0.0
+						case 4 =>
+							z = 0.0
+							y = 0.0
 					}
 				}
 				else {
@@ -1113,17 +1179,17 @@ GL11.glPushMatrix()
 				if (corner > 0) {
 					corner match {
 						case 1 =>
-							z = 0.0 - horizontal
-							y = 0.0
+							z = 0.0
+							y = 0.0 - vertical
 						case 2 =>
-							z = 0.0
-							y = 0.0
-						case 3 =>
-							z = 0.0
-							y = 0.0 - vertical
-						case 4 =>
 							z = 0.0 - horizontal
 							y = 0.0 - vertical
+						case 3 =>
+							z = 0.0 - horizontal
+							y = 0.0
+						case 4 =>
+							z = 0.0
+							y = 0.0
 					}
 				}
 				else {
