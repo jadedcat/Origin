@@ -8,7 +8,7 @@ public enum ActivatedAction {
 	});
 
 	private ActivatedAction(String[] desc) {
-		String[] desc1 = desc;
+
 	}
 
 	public static ActivatedAction getState(int stateID) {

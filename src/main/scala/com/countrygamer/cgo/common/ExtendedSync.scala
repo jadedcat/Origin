@@ -62,15 +62,11 @@ object ExtendedSync {
 			while (iterator.hasNext) {
 				val extendedClass: Class[_ <: ExtendedEntity] = iterator.next()
 
-				var props: IExtendedEntityProperties = event.entity
+				val props: IExtendedEntityProperties = event.entity
 						.getExtendedProperties(extendedProperties.get(extendedClass)(0))
 				if (props == null) {
 					ExtendedEntityHandler
 							.registerPlayer(event.entity.asInstanceOf[EntityPlayer], extendedClass)
-				}
-				if (!event.entity.worldObj.isRemote) {
-					props = event.entity
-							.getExtendedProperties(extendedProperties.get(extendedClass)(0))
 				}
 
 			}

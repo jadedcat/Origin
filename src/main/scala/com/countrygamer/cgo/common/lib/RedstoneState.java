@@ -10,7 +10,6 @@ public enum RedstoneState {
 	});
 
 	private RedstoneState(String[] desc) {
-		String[] desc1 = desc;
 	}
 
 	public static RedstoneState getStateFromInt(int stateID) {

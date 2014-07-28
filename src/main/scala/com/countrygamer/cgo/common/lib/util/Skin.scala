@@ -808,7 +808,7 @@ GL11.glPushMatrix()
 	*/
 
 	def render(horizontal: Double, vertical: Double): Unit = {
-		this.render(horizontal, vertical, false)
+		this.render(horizontal, vertical, isArmorLayer = false)
 		// TODO fix armor layer
 		//GL11.glScalef(1.1F, 1.1F, 1.1F)
 		//this.render(horizontal, vertical, true)
@@ -1311,7 +1311,7 @@ GL11.glPushMatrix()
 	}
 
 	def getPartWHBySide(part: SidedPart): Array[Double] = {
-		(part.getType()) match {
+		part.getType() match {
 			case PartType.HEAD =>
 				this.getPartWH(8, 8, 8, part.getSide())
 			case PartType.BODY =>

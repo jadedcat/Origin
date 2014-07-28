@@ -57,7 +57,7 @@ class ItemMeta(var item: Item, var metadata: Int) {
 	}
 
 	def getItemStack(size: Int): ItemStack = {
-		new ItemStack(this.item, if (size < 1) 1 else (if (size > 64) 64 else size),
+		new ItemStack(this.item, if (size < 1) 1 else if (size > 64) 64 else size,
 			this.metadata)
 	}
 
