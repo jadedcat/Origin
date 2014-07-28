@@ -34,7 +34,7 @@ dependencies {
     // compile project(':Core')
 }
 
-version = "3.0.0"
+version = "3.0.1"
 
 minecraft {
     version = "${config.minecraft_version}-${config.forge_version}"
