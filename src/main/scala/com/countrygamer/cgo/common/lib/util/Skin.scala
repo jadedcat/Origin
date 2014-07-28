@@ -974,7 +974,7 @@ GL11.glPushMatrix()
 		val scaledSkinHeight: Float = 1.0F / skinHeight
 		val tessellator: Tessellator = Tessellator.instance
 
-		tessellator.startDrawingQuads
+		tessellator.startDrawingQuads()
 
 		/*
 		tessellator.addVertexWithUV(
@@ -1048,6 +1048,7 @@ GL11.glPushMatrix()
 		)
 
 		tessellator.draw
+
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
