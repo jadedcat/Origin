@@ -30,8 +30,8 @@ object OptionHandler {
 								File(event.getModConfigurationDirectory, pluginName + ".cfg")
 				options.config = new Configuration(cfgFile, true)
 			}
-			options.loadConfiguration()
 		}
+		options.loadConfiguration()
 		this.handlers.put(pluginID, options)
 	}
 

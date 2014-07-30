@@ -1,7 +1,12 @@
 package com.countrygamer.cgo.common.lib.util;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Config {
 	
@@ -38,5 +43,31 @@ public class Config {
 		if (!comment.equals("")) property.comment = comment;
 		return property.getDouble();
 	}
-	
+
+	public static List<Item> getItemsFromArray(String[] names) {
+		List<Item> ret = new ArrayList<Item>();
+		for (String name : names) {
+			if (name != null) {
+				Object obj = Item.itemRegistry.getObject(name);
+				if (obj != null && obj instanceof Item) {
+					ret.add((Item) obj);
+				}
+			}
+		}
+		return ret;
+	}
+
+	public static List<Block> getBlocksFromArray(String[] names) {
+		List<Block> ret = new ArrayList<Block>();
+		for (String name : names) {
+			if (name != null) {
+				Block obj = Block.getBlockFromName(name);
+				if (obj != null) {
+					ret.add(obj);
+				}
+			}
+		}
+		return ret;
+	}
+
 }
