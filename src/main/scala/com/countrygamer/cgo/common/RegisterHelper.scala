@@ -1,10 +1,15 @@
-package com.countrygamer.cgo.wrapper.common.registries
+package com.countrygamer.cgo.common
+
+import java.util
+
+import scala.collection.JavaConversions._
 
 import com.countrygamer.cgo.common.network.PacketHandler
 import com.countrygamer.cgo.wrapper.common.extended.{ExtendedEntity, ExtendedEntityHandler}
 import com.countrygamer.cgo.wrapper.common.network.AbstractPacket
 import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.common.{FMLCommonHandler, IFuelHandler}
+import net.minecraft.command.ICommand
 import net.minecraftforge.common.MinecraftForge
 
 /**
@@ -33,6 +38,16 @@ object RegisterHelper {
 	def registerExtendedPlayer(classKey: String, extendedClass: Class[_ <: ExtendedEntity],
 			deathPersistance: Boolean): Unit = {
 		ExtendedEntityHandler.registerExtended(classKey, extendedClass, deathPersistance)
+	}
+
+	private val commands: util.List[ICommand] = new util.ArrayList[ICommand]()
+
+	def registerCommand(command: ICommand): Unit = {
+		this.commands.add(command)
+	}
+
+	def getCommands(): scala.List[ICommand] = {
+		this.commands.toList
 	}
 
 }

@@ -5,7 +5,6 @@ import java.util.Random
 
 import com.countrygamer.cgo.common.command.TeleportCommand
 import com.countrygamer.cgo.common.network._
-import com.countrygamer.cgo.wrapper.common.registries.RegisterHelper
 import com.countrygamer.cgo.wrapper.common.{OptionHandler, PluginWrapper}
 import cpw.mods.fml.common.event._
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
@@ -61,6 +60,7 @@ object Origin extends PluginWrapper {
 		super.preInitialize(this.pluginID, this.pluginName, event, this.proxy, CGOOptions)
 
 		RegisterHelper.registerHandler(this, null)
+		RegisterHelper.registerCommand(TeleportCommand)
 
 		RegisterHelper.registerPacketHandler(this.pluginID, classOf[PacketSyncExtendedProperties],
 			classOf[PacketTeleport], classOf[PacketRedstoneUpdate], classOf[PacketActionUpdate])
@@ -133,6 +133,11 @@ object Origin extends PluginWrapper {
 
 	@Mod.EventHandler
 	def serverLoad(event: FMLServerStartingEvent) {
+
+		for (command <- RegisterHelper.getCommands()) {
+			event.registerServerCommand(command)
+		}
+
 		val allWS: Array[WorldServer] = DimensionManager.getWorlds
 		val temp: util.HashMap[String, Integer] = new util.HashMap[String, Integer]
 
@@ -151,8 +156,6 @@ object Origin extends PluginWrapper {
 			Origin.dimensions.put(key, id)
 			Origin.dimensions1.put(id, key)
 		}
-
-		event.registerServerCommand(TeleportCommand)
 
 	}
 
