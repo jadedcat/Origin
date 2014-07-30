@@ -40,7 +40,7 @@ class OptionRegister() extends Register {
 			case e: Exception =>
 		}
 		finally {
-			if (this.config.hasChanged) {
+			if (this.config != null && this.config.hasChanged) {
 				this.config.save
 			}
 		}
