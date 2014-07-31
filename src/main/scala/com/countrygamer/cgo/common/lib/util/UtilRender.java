@@ -51,6 +51,7 @@ public class UtilRender {
 		GL11.glPopMatrix();
 	}
 */
+
 	/**
 	 * Used for rendering items in block renders
 	 *
@@ -112,8 +113,14 @@ public class UtilRender {
 
 	public static void drawTextureWithOffsets(Gui gui, int x, int y, int u, int v, int w, int h,
 			int leftOffset, int rightOffset, int topOffset, int bottomOffset) {
-		gui.drawTexturedModalRect(x + leftOffset - rightOffset, y + topOffset, u + leftOffset
-				- rightOffset, v + topOffset, w - leftOffset, h - topOffset - bottomOffset);
+		gui.drawTexturedModalRect(
+				x + leftOffset,
+				y + topOffset,
+				u + leftOffset,
+				v + topOffset,
+				w - rightOffset - leftOffset,
+				h - bottomOffset - topOffset
+		);
 	}
 
 }

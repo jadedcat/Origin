@@ -167,9 +167,13 @@ class GuiScreenWrapper(val xSize: Int, val ySize: Int) extends GuiScreen with IW
 	}
 
 	protected def drawGuiBackground(): Unit = {
-		UtilRender.bindResource(this.background)
+		UtilRender.bindResource(this.getBackgound())
 		this.drawTexturedModalRect(this.getGuiLeft(), this.getGuiTop(), 0, 0, this.xSize,
 			this.ySize)
+	}
+
+	def getBackgound(): ResourceLocation = {
+		this.background
 	}
 
 	protected def drawGuiForegroundLayer(mouseX: Int, mouseY: Int,
@@ -232,7 +236,7 @@ class GuiScreenWrapper(val xSize: Int, val ySize: Int) extends GuiScreen with IW
 			renderPartialTicks: Float, hoverInfo: util.List[String]): Unit = {
 	}
 
-	protected def isMouseInArea(x: Int, y: Int, w: Int, h: Int, mouseX: Int,
+	def isMouseInArea(x: Int, y: Int, w: Int, h: Int, mouseX: Int,
 			mouseY: Int): Boolean = {
 		(x <= mouseX) && (mouseX <= x + w) && (y <= mouseY) && (mouseY <= y + h)
 	}
