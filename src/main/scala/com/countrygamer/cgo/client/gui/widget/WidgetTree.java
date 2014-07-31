@@ -2,6 +2,8 @@ package com.countrygamer.cgo.client.gui.widget;
 
 import com.countrygamer.cgo.client.gui.GuiScreenWrapper;
 import com.countrygamer.cgo.common.lib.util.UtilRender;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
@@ -14,6 +16,7 @@ import java.util.List;
 /**
  * @author CountryGamer
  */
+@SideOnly(Side.CLIENT)
 public class WidgetTree {
 
 	IWidgetOwner owner;
