@@ -40,7 +40,7 @@ version = "3.0.2"
 
 ext.BUILD_NUMBER = System.getenv().BUILD_NUMBER;
 if (ext.BUILD_NUMBER == null) ext.BUILD_NUMBER = "0"
-version = version + "." + ext.BUILD_NUMBER
+version = version + "_build-" + ext.BUILD_NUMBER
 
 minecraft {
     version = "${config.minecraft_version}-${config.forge_version}"
