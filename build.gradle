@@ -38,9 +38,8 @@ archivesBaseName = "CGOrigin"
 
 version = "3.0.2"
 
-if (ext.BUILD_NUMBER != null) {
-    ext.BUILD_NUMBER = System.getenv().BUILD_NUMBER
-    version = version + "_build-" + ext.BUILD_NUMBER
+if (System.getenv().BUILD_NUMBER != null) {
+    version = version + "_build-" + System.getenv().BUILD_NUMBER
 }
 
 minecraft {
