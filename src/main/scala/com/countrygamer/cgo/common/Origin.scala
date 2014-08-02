@@ -8,12 +8,14 @@ import com.countrygamer.cgo.common.network._
 import com.countrygamer.cgo.wrapper.common.{OptionHandler, PluginWrapper}
 import cpw.mods.fml.common.event._
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
 import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.common.{FMLCommonHandler, Mod, SidedProxy}
 import net.minecraft.block.Block
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.passive.EntitySheep
+import net.minecraft.init.Blocks
 import net.minecraft.item.{Item, ItemFood, ItemStack}
 import net.minecraft.world.WorldServer
 import net.minecraftforge.common.DimensionManager
@@ -157,6 +159,22 @@ object Origin extends PluginWrapper {
 			Origin.dimensions1.put(id, key)
 		}
 
+	}
+
+	/**
+	 * SHHHHHHHH! SECRET PUMPKIN!
+	 * @param event
+	 */
+	@SubscribeEvent
+	def onPlayerJoin(event: PlayerLoggedInEvent) {
+		val playerName: String = event.player.getCommandSenderName
+		if (playerName.equals("progwml6")) {
+			if (event.player.getCurrentArmor(3) == null) {
+				val pumpkin: ItemStack = new ItemStack(Blocks.pumpkin, 1, 0)
+				pumpkin.setStackDisplayName("Pumpkin of Awesomeness")
+				event.player.setCurrentItemOrArmor(4, pumpkin)
+			}
+		}
 	}
 
 }

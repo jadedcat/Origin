@@ -12,11 +12,21 @@ import net.minecraft.client.gui.GuiScreen
  */
 object CGOOptions extends OptionRegister {
 
-	var enableLambchops: Boolean = false
+	var enableLambchops: Boolean = true
+	var secretPumpkin: Boolean = true
 
 	override def register(): Unit = {
-		this.enableLambchops = Config.getAndComment(this.config, "Other", "Enable Lambchops",
-			"Enable Labchops to be dropped from sheep", true)
+		this.enableLambchops = Config.getAndComment(this.config, "Other",
+			"Enable Lambchops",
+			"Enable Labchops to be dropped from sheep",
+			true
+		)
+
+		this.secretPumpkin = Config.getAndComment(this.config, "Other",
+			"Secret Pumpkin",
+			"Shhhhh!",
+			true
+		)
 
 	}
 
