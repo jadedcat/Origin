@@ -28,7 +28,9 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent
  */
 @Mod(modid = Origin.pluginID, name = Origin.pluginName, version = "@PLUGIN_VERSION@",
 	guiFactory = "com.countrygamer.cgo.client.gui.configFactory.CGOFactory",
-	modLanguage = "scala")
+	modLanguage = "scala",
+	dependencies = "required-after:Forge@[10.13,)"
+)
 object Origin extends PluginWrapper {
 
 	final val pluginID = "cgo"
