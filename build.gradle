@@ -1,3 +1,5 @@
+import scala.tools.nsc.io.Jar
+
 buildscript {
     repositories {
         mavenCentral()
@@ -36,7 +38,7 @@ configFile.withReader {
 group = "com.countrygamer.cgo"
 archivesBaseName = "CGOrigin"
 
-version = "3.0.2"
+version = "3.0.3"
 
 if (System.getenv().BUILD_NUMBER != null) {
     version = version + "_build-" + System.getenv().BUILD_NUMBER
