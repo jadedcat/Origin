@@ -42,65 +42,68 @@ public class GuiConfigHelper {
 
 				ConfigGuiType type = elementInCate.getType();
 
+				String name = elementInCate.getName();
+				String comment = "config." + elementInCate.getName();
+
 				switch (type) {
 					case BOOLEAN:
 						if (!elementInCate.isList()) {
 							element = new DummyConfigElement<Boolean>(
-									elementInCate.getName(),
+									name,
 									Boolean.parseBoolean(elementInCateValue),
-									type, elementInCate.getComment());
+									type, comment);
 						}
 						else {
 							Object[] vals = elementInCate.getList();
 							element = new DummyConfigElement.DummyListElement<Boolean>(
-									elementInCate.getName(),
+									name,
 									Arrays.copyOf(vals, vals.length, Boolean[].class),
-									type, elementInCate.getComment());
+									type, comment);
 						}
 						break;
 					case DOUBLE:
 						if (!elementInCate.isList()) {
 							element = new DummyConfigElement<Double>(
-									elementInCate.getName(),
+									name,
 									Double.parseDouble(elementInCateValue),
-									type, elementInCate.getComment());
+									type, comment);
 						}
 						else {
 							Object[] vals = elementInCate.getList();
 							element = new DummyConfigElement.DummyListElement<Double>(
-									elementInCate.getName(),
+									name,
 									Arrays.copyOf(vals, vals.length, Double[].class),
-									type, elementInCate.getComment());
+									type, comment);
 						}
 						break;
 					case INTEGER:
 						if (!elementInCate.isList()) {
 							element = new DummyConfigElement<Integer>(
-									elementInCate.getName(),
+									name,
 									Integer.parseInt(elementInCateValue),
-									type, elementInCate.getComment());
+									type, comment);
 						}
 						else {
 							Object[] vals = elementInCate.getList();
 							element = new DummyConfigElement.DummyListElement<Integer>(
-									elementInCate.getName(),
+									name,
 									Arrays.copyOf(vals, vals.length, Integer[].class),
-									type, elementInCate.getComment());
+									type, comment);
 						}
 						break;
 					case STRING:
 						if (!elementInCate.isList()) {
 							element = new DummyConfigElement<String>(
-									elementInCate.getName(),
+									name,
 									elementInCateValue,
-									type, elementInCate.getComment());
+									type, comment);
 						}
 						else {
 							Object[] vals = elementInCate.getList();
 							element = new DummyConfigElement.DummyListElement<String>(
-									elementInCate.getName(),
+									name,
 									Arrays.copyOf(vals, vals.length, String[].class),
-									type, elementInCate.getComment());
+									type, comment);
 						}
 						break;
 					default:
