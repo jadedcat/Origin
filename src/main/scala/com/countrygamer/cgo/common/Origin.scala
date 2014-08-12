@@ -5,7 +5,7 @@ import java.util.Random
 
 import com.countrygamer.cgo.common.command.TeleportCommand
 import com.countrygamer.cgo.common.network._
-import com.countrygamer.cgo.wrapper.common.{OptionHandler, PluginWrapper}
+import com.countrygamer.cgo.wrapper.common.PluginWrapper
 import cpw.mods.fml.common.event._
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent

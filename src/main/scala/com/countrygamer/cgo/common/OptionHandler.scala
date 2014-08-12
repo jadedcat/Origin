@@ -1,4 +1,4 @@
-package com.countrygamer.cgo.wrapper.common
+package com.countrygamer.cgo.common
 
 import java.io.File
 import java.util

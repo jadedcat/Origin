@@ -2,6 +2,7 @@ package com.countrygamer.cgo.wrapper.common
 
 import java.util
 
+import com.countrygamer.cgo.common.OptionHandler
 import com.countrygamer.cgo.wrapper.common.registries._
 import cpw.mods.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
 import cpw.mods.fml.common.network.NetworkRegistry
