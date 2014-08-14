@@ -20,7 +20,7 @@ class OptionRegister() extends Register {
 	 * Tell the core that this register has a custom configuration to handle
 	 * @return false for normal configuration
 	 */
-	def hasCustomConfiguration: Boolean = {
+	def hasCustomConfiguration(): Boolean = {
 		false
 	}
 
