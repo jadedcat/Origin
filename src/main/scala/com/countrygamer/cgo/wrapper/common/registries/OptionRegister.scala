@@ -46,6 +46,10 @@ class OptionRegister() extends Register {
 		}
 	}
 
+	def hasDefaultConfig(): Boolean = {
+		true
+	}
+
 	override def register(): Unit = {}
 
 	@SideOnly(Side.CLIENT)
