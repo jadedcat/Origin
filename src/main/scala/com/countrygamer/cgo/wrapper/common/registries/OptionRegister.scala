@@ -1,5 +1,7 @@
 package com.countrygamer.cgo.wrapper.common.registries
 
+import java.io.File
+
 import cpw.mods.fml.common.event.FMLPreInitializationEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraftforge.common.config.Configuration
@@ -15,6 +17,10 @@ class OptionRegister() extends Register {
 	 * Stores the configuration data
 	 */
 	var config: Configuration = null
+
+	def getConfigDirectory(configDir: File): File = {
+		configDir
+	}
 
 	/**
 	 * Tell the core that this register has a custom configuration to handle

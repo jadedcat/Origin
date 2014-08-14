@@ -27,7 +27,8 @@ object OptionHandler {
 
 		if (options.hasDefaultConfig() && options.config == null) {
 			val cfgFile: File = new
-							File(event.getModConfigurationDirectory, pluginName + ".cfg")
+							File(options.getConfigDirectory(event.getModConfigurationDirectory),
+								pluginName + ".cfg")
 			options.config = new Configuration(cfgFile, true)
 		}
 		options.loadConfiguration()
