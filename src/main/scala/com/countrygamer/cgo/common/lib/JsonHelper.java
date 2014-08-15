@@ -30,7 +30,7 @@ public class JsonHelper {
 				}
 			}
 
-			if (c == ':') {
+			if (c == ':' && !isInString) {
 				ret += " ";
 			}
 
