@@ -16,14 +16,14 @@ public class UtilDrops {
 			Random random = new Random();
 			for (ItemStack drop : drops) {
 				if (drop != null && drop.getItem() != null) {
-					UtilDrops.spawnItemStack(world, x, y, z, drop, random);
+					UtilDrops.spawnItemStack(world, x, y, z, drop, random, 10);
 				}
 			}
 		}
 	}
 
 	public static void spawnItemStack(World world, double x, double y, double z,
-			ItemStack itemStack, Random random) {
+			ItemStack itemStack, Random random, int delay) {
 		if (itemStack != null) {
 			float f = random.nextFloat() * 0.8F + 0.1F;
 			float f1 = random.nextFloat() * 0.8F + 0.1F;
@@ -36,6 +36,8 @@ public class UtilDrops {
 			entityitem.motionX = (double) ((float) random.nextGaussian() * f3);
 			entityitem.motionY = (double) ((float) random.nextGaussian() * f3 + 0.2F);
 			entityitem.motionZ = (double) ((float) random.nextGaussian() * f3);
+
+			entityitem.delayBeforeCanPickup = delay;
 
 			if (itemStack.hasTagCompound()) {
 				entityitem.getEntityItem().setTagCompound(
