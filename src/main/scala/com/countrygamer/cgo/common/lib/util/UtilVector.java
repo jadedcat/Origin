@@ -1,6 +1,5 @@
 package com.countrygamer.cgo.common.lib.util;
 
-import com.countrygamer.cgo.common.lib.util.UtilCursor.MovingObjectPositionTarget;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -284,18 +283,18 @@ public class UtilVector {
 	 */
 	public static void teleportVector(World world, EntityPlayer player, double maxDistance) {
 		if (!world.isRemote) {
-			MovingObjectPositionTarget coords = UtilCursor
+			MovingObjectPositionTarget coords = Cursor
 					.getBlockFromCursor(world, player, maxDistance);
 
 			if (coords == null) {
 				return;
 			}
 
-			int[] newCoords = UtilCursor.getNewCoordsFromSide(coords.x, coords.y, coords.z,
-					coords.side);
+			int[] newCoords = Cursor.getNewCoordsFromSide(coords.x(), coords.y(), coords.z(),
+					coords.side());
 			coords = new MovingObjectPositionTarget(newCoords[0], newCoords[1], newCoords[2],
-					coords.side);
-			UtilVector.teleportPlayer(player, coords.x + 0.5, coords.y + 1, coords.z + 0.5,
+					coords.side());
+			UtilVector.teleportPlayer(player, coords.x() + 0.5, coords.y() + 1, coords.z() + 0.5,
 					false, false);
 		}
 	}
