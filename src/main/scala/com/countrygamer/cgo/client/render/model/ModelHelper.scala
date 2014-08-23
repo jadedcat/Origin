@@ -20,9 +20,9 @@ object ModelHelper {
 		model.addBox(offsetX, offsetY, offsetZ, width, height, length)
 		model.setTextureSize(modelInstance.textureWidth, modelInstance.textureHeight)
 		model.mirror = true
-		model.rotateAngleX = Math.toRadians(rotationX)
-		model.rotateAngleY = Math.toRadians(rotationY)
-		model.rotateAngleZ = Math.toRadians(rotationZ)
+		model.rotateAngleX = Math.toRadians(rotationX).asInstanceOf[Float]
+		model.rotateAngleY = Math.toRadians(rotationY).asInstanceOf[Float]
+		model.rotateAngleZ = Math.toRadians(rotationZ).asInstanceOf[Float]
 
 		modelInstance2.addModel(model)
 
