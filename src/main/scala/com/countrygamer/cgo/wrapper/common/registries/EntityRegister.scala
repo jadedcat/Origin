@@ -18,7 +18,7 @@ class EntityRegister() extends Register {
 	def getNewEntityID(): Int = {
 		var id: Int = 0
 		while (EntityList.IDtoClassMapping.containsKey(id)) {
-			id = id + 1
+			id += 1
 		}
 		id
 	}
