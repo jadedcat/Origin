@@ -1,5 +1,6 @@
 package com.countrygamer.cgo.common.lib.util
 
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraft.util.{MathHelper, MovingObjectPosition, Vec3}
@@ -12,65 +13,44 @@ import net.minecraft.world.World
  */
 object Cursor {
 
-	def getMOPFromPlayer(world: World, player: EntityPlayer,
-			reachLength: Double): MovingObjectPosition = {
+	def rayTrace(player: EntityPlayer, reachDistance: Double): MovingObjectPosition = {
 		val partialTicks: Float = 1.0F
 		val checkLiquids: Boolean = true
-		val checkCoordinates: Boolean = false
+		val checkEntities: Boolean = true
 
-		val posVec: Vec3 = this.getEntityPosition(player, partialTicks)
-		val translatedLookAndDistanceVec: Vec3 = this
-				.getCursorPosition(player, partialTicks, reachLength)
-		// ray traces blocks
-		val mop: MovingObjectPosition = world.func_147447_a(
-			posVec, translatedLookAndDistanceVec, checkLiquids, false, checkCoordinates)
-		mop
+		val position: Vec3 = this.getPosition(player, partialTicks)
+		val cursor: Vec3 = this.getCursor(player, reachDistance, partialTicks)
+
+		player.worldObj.func_147447_a(position, cursor, checkLiquids, false, checkEntities)
 	}
 
-	def getEntityPosition(entity: EntityPlayer, partialTicks: Float): Vec3 = {
-		val x: Double = entity.prevPosX +
-				(entity.posX - entity.prevPosX) * partialTicks.asInstanceOf[Double]
-
-		var yOffsetEyeHeight: Float = 0.0F
-		// TODO This is test code!
-		if (true) {
-			yOffsetEyeHeight = if (entity.worldObj.isRemote) entity.getEyeHeight -
-					entity.getDefaultEyeHeight
-			else entity.getEyeHeight
-		}
-		else {
-			yOffsetEyeHeight = 1.62F - entity.yOffset
-		}
-
-		val y: Double = entity.prevPosY +
-				(entity.posY - entity.prevPosY) * partialTicks.asInstanceOf[Double] +
-				yOffsetEyeHeight
-		val z: Double = entity.prevPosZ +
-				(entity.posZ - entity.prevPosZ) * partialTicks.asInstanceOf[Double]
+	def getPosition(entity: EntityLivingBase, partialTicks: Float): Vec3 = {
+		val x: Double = entity.prevPosX + (entity.posX - entity.prevPosX) * partialTicks
+		val y: Double = entity.prevPosY + (entity.posY - entity.prevPosY) * partialTicks
+		val z: Double = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialTicks
 		Vec3.createVectorHelper(x, y, z)
 	}
 
-	def getCursorPosition(entity: EntityPlayer, partialTicks: Float,
-			reachLength: Double): Vec3 = {
-		val yaw: Float = entity.prevRotationYaw +
-				(entity.rotationYaw - entity.prevRotationYaw) * partialTicks
+	def getCursor(entity: EntityLivingBase, reachDistance: Double, partialTicks: Float): Vec3 = {
 		val pitch: Float = entity.prevRotationPitch +
-				(entity.rotationPitch - entity.prevRotationPitch) * partialTicks
+				(entity.prevRotationPitch - entity.rotationPitch) * partialTicks
+		val yaw: Float = entity.prevRotationYaw +
+				(entity.prevRotationYaw - entity.rotationYaw * partialTicks)
 
-		val yawCos: Float = MathHelper
+		val cosYaw: Float = MathHelper
 				.cos(-yaw * 0.017453292F - java.lang.Math.PI.asInstanceOf[Float])
-		val yawSin: Float = MathHelper
+		val sinYaw: Float = MathHelper
 				.sin(-yaw * 0.017453292F - java.lang.Math.PI.asInstanceOf[Float])
-		val pitchCos: Float = -MathHelper.cos(-pitch * 0.017453292F)
-		val pitchSin: Float = MathHelper.sin(-pitch * 0.017453292F)
-
-		val reachDistance: Double = if (reachLength < 0.0D) 5.0D else reachLength
-
-		val x: Double = (yawSin * pitchCos).asInstanceOf[Double] * reachDistance
-		val y: Double = pitchSin.asInstanceOf[Double] * reachDistance
-		val z: Double = (yawCos * pitchCos).asInstanceOf[Double] * reachDistance
-
-		this.getEntityPosition(entity, partialTicks).addVector(x, y, z)
+		val cosPitch: Float = -MathHelper.cos(-pitch * 0.017453292F)
+		val sinPitch: Float = MathHelper.sin(-pitch * 0.017453292F)
+		val cursor: Vec3 = Vec3.createVectorHelper(
+			(sinYaw * cosPitch).asInstanceOf[Double],
+			sinPitch.asInstanceOf[Double],
+			(cosYaw * cosPitch).asInstanceOf[Double]
+		)
+		this.getPosition(entity, partialTicks)
+				.addVector(cursor.xCoord * reachDistance, cursor.yCoord * reachDistance,
+		            cursor.zCoord * reachDistance)
 	}
 
 	def getNewCoordsFromSide(x: Int, y: Int, z: Int, side: Int): Array[Int] = {
@@ -96,7 +76,7 @@ object Cursor {
 
 	def getBlockFromCursor(world: World, entity: EntityPlayer,
 			reachLength: Double): MovingObjectPositionTarget = {
-		val mop: MovingObjectPosition = Cursor.getMOPFromPlayer(world, entity, reachLength)
+		val mop: MovingObjectPosition = Cursor.rayTrace(entity, reachLength)
 		if (mop == null) return null
 		var blockX: Int = 0
 		var blockY: Int = 0
