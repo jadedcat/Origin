@@ -1,7 +1,7 @@
 package com.countrygamer.cgo.common.lib.util
 
 import net.minecraft.entity.EntityLivingBase
-import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraft.util.{MathHelper, MovingObjectPosition, Vec3}
 import net.minecraft.world.World
@@ -26,8 +26,20 @@ object Cursor {
 
 	def getPosition(entity: EntityLivingBase, partialTicks: Float): Vec3 = {
 		val x: Double = entity.prevPosX + (entity.posX - entity.prevPosX) * partialTicks
-		val y: Double = entity.prevPosY + (entity.posY - entity.prevPosY) * partialTicks
+		var y: Double = entity.prevPosY + (entity.posY - entity.prevPosY) * partialTicks
 		val z: Double = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialTicks
+		entity match {
+			case player: EntityPlayer =>
+				if (player.worldObj.isRemote) {
+					y = y + (player.getEyeHeight - player.getDefaultEyeHeight)
+				}
+				else {
+					y = y + player.getEyeHeight
+					if (player.isInstanceOf[EntityPlayerMP] && player.isSneaking)
+						y = y - 0.08D
+				}
+			case _ =>
+		}
 		Vec3.createVectorHelper(x, y, z)
 	}
 
