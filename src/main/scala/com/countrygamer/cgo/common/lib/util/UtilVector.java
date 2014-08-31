@@ -294,7 +294,7 @@ public class UtilVector {
 					coords.side());
 			coords = new MovingObjectPositionTarget(newCoords[0], newCoords[1], newCoords[2],
 					coords.side());
-			UtilVector.teleportPlayer(player, coords.x() + 0.5, coords.y() + 1, coords.z() + 0.5,
+			UtilVector.teleportPlayer(player, coords.x() + 0.5, coords.y(), coords.z() + 0.5,
 					false, false);
 		}
 	}
