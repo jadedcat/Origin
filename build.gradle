@@ -146,7 +146,11 @@ curse {
 
 task curseTest() << {
 	logger.quiet "--"
-	logger.quiet curseConfig.curseforge_key
+	key = "no curse for you!"
+	if (System.getenv().BUILD_NUMBER == null) {
+		key = curseConfig.curseforge_key
+	}
+	logger.quiet "$key"
 	logger.quiet "--"
 	logger.quiet log
 	logger.quiet "--"
