@@ -23,14 +23,22 @@ configurations {
 apply plugin: 'scala'
 apply plugin: 'forge'
 apply plugin: 'maven'
+apply plugin: "curseforge"
 
 ext.configFile = file "CG.properties"
+ext.curseFile = file "../curse.properties"
 
 configFile.withReader {
     // Load config.  It shall from now be referenced as simply config or project.config
     def prop = new Properties()
     prop.load(it)
     project.ext.config = new ConfigSlurper().parse prop
+}
+
+curseFile.withReader {
+	def prop = new Properties()
+	prop.load(it)
+	project.ext.curseConfig = new ConfigSlurper().parse prop
 }
 
 group = "com.countrygamer.cgo"
@@ -52,25 +60,111 @@ minecraft {
 
 version = "${config.minecraft_version}-$version"
 
-processResources
-        {
-            // this will ensure that this task is redone when the versions change.
-            inputs.property "version", project.version
-            inputs.property "mcversion", project.minecraft.version
+private String getLastGitPush() {
+	def outStream = new ByteArrayOutputStream()
+	def lastGitPush = ""
+	try {
+		exec {
+			executable = "git"
+			args = ["rev-parse", "origin/master"]
+			standardOutput = outStream
+		}
+		lastGitPush = outStream.toString().trim()
+	}
+	catch (e) {
+		logger.quiet "Error while fetching last git tag: $e"
+	}
+	return lastGitPush
+}
 
-            // replace stuff in mcmod.info, nothing else
-            from(sourceSets.main.resources.srcDirs) {
-                include 'mcmod.info'
+private String getRawChangelog() {
+	def outStream = new ByteArrayOutputStream()
+    String changelog = ""
+    String lastGitPush = getLastGitPush()
 
-                // replace version and mcversion
-                expand 'version': project.version, 'mcversion': project.minecraft.version
-            }
-
-            // copy everything else, thats not the mcmod.info
-            from(sourceSets.main.resources.srcDirs) {
-                exclude 'mcmod.info'
-            }
+    try {
+        exec {
+            executable = "git"
+            args = ["log", "--pretty=%s~%b", "$lastGitPush..HEAD"]
+            standardOutput = outStream
         }
+
+        changelog = outStream.toString().trim()
+    }
+    catch (e) {
+        logger.quiet "Error while generating theChangelog: $e"
+    }
+
+    return changelog
+}
+
+private String getChangelog() {
+	String changelog = getRawChangelog()
+	final String[] split = changelog.split("\n")
+	
+	final StringBuilder result = new StringBuilder()
+
+	result.append("Changelog:\n")
+
+	for (String s : split) {
+		if (s.length() == 0) continue
+
+		final String[] titleVbody = s.split("~")
+		String temp = "\t" + titleVbody[0]
+
+		for (int i = 1; i < titleVbody.length; i++) {
+			temp = temp + "\n\t\t" + titleVbody[i]
+		}
+
+		temp = temp + "\r\n"
+		result.append(temp)
+	}
+
+	//
+
+	result.append("Dependencies:")
+	result.append("\n\tForge " + "${config.forge_version}")
+
+	result.toString()
+}
+
+def log = getChangelog()
+
+curse {
+	apiKey = curseConfig.curseforge_key
+	projectId = "72503"
+	changelog = log
+	releaseType = "release"
+
+}
+
+task curseTest() << {
+	logger.quiet "--"
+	logger.quiet curseConfig.curseforge_key
+	logger.quiet "--"
+	logger.quiet log
+	logger.quiet "--"
+}
+
+processResources
+{
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        // replace version and mcversion
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
