@@ -198,13 +198,14 @@ if (System.getenv().BUILD_NUMBER == null) {
 def log = getChangelog()
 
 curse {
-    apiKey = curseConfig.curseforge_key
-    projectId = curseforgeConfig.projectID
-    changelog = log
-    releaseType = curseforgeConfig.releaseType
+    if (System.getenv().BUILD_NUMBER == null) {
+        apiKey = curseConfig.curseforge_key
+        projectId = curseforgeConfig.projectID
+        changelog = log
+        releaseType = curseforgeConfig.releaseType
 
-    setLastCursePush(gitConfig.lastCurseforgePush, getLastGitPush())
-
+        setLastCursePush(gitConfig.lastCurseforgePush, getLastGitPush())
+    }
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Curseforge Groovy Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
