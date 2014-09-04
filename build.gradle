@@ -26,7 +26,6 @@ apply plugin: 'maven'
 apply plugin: "curseforge"
 
 ext.configFile = file "CG.properties"
-ext.curseFile = file "../curse.properties"
 
 configFile.withReader {
     // Load config.  It shall from now be referenced as simply config or project.config
@@ -35,10 +34,14 @@ configFile.withReader {
     project.ext.config = new ConfigSlurper().parse prop
 }
 
-curseFile.withReader {
-	def prop = new Properties()
-	prop.load(it)
-	project.ext.curseConfig = new ConfigSlurper().parse prop
+if (System.getenv().BUILD_NUMBER == null) {
+	ext.curseFile = file "../curse.properties"
+
+	curseFile.withReader {
+		def prop = new Properties()
+		prop.load(it)
+		project.ext.curseConfig = new ConfigSlurper().parse prop
+	}
 }
 
 group = "com.countrygamer.cgo"
@@ -131,7 +134,10 @@ private String getChangelog() {
 def log = getChangelog()
 
 curse {
-	apiKey = curseConfig.curseforge_key
+	apiKey = "no curse for you!"
+	if (System.getenv().BUILD_NUMBER == null) {
+		apiKey = curseConfig.curseforge_key
+	}
 	projectId = "72503"
 	changelog = log
 	releaseType = "release"
