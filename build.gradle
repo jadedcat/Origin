@@ -1,3 +1,4 @@
+// Download repo things, this is required stuffs
 buildscript {
     repositories {
         mavenCentral()
@@ -15,25 +16,13 @@ buildscript {
     }
 }
 
-configurations {
-    compile
-    deployJars
-}
-
+// this is scala source
 apply plugin: 'scala'
 apply plugin: 'forge'
 apply plugin: 'maven'
 
-if (System.getenv().BUILD_NUMBER == null) {
-	apply from: '../curse.gradle'
-}
-
+// Load the config for general stats
 ext.configFile = file "CG.properties"
-
-ext.getDeps = {
-	return "xyz"
-}
-
 configFile.withReader {
     // Load config.  It shall from now be referenced as simply config or project.config
     def prop = new Properties()
@@ -41,27 +30,39 @@ configFile.withReader {
     project.ext.config = new ConfigSlurper().parse prop
 }
 
-group = "com.countrygamer.cgo"
-archivesBaseName = "CGOrigin"
-
-version = "3.0.5"
-
-if (System.getenv().BUILD_NUMBER != null) {
-    version = version + "_build-" + System.getenv().BUILD_NUMBER
+// Load the config for this project
+ext.projectPropFile = file "project.properties"
+projectPropFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.projectConfig = new ConfigSlurper().parse prop
 }
+
+// Store the data for this project
+group = "${projectConfig.prefix}.${projectConfig.modid}"
+archivesBaseName = "${projectConfig.modName}"
+version = "${projectConfig.version}"
 
 minecraft {
+    // Make the mc version in the style of "1.7.10-10.13.0.1208"
+    // Used to update forge locally
     version = "${config.minecraft_version}-${config.forge_version}"
+    // set the assets
     runDir = "${config.assets_path}"
 
+    // Replacements
+    // the version replacement
     replace "@PLUGIN_VERSION@", project.version
-    replaceIn "Origin.scala"
+    // replacements go in the main file
+    replaceIn "${projectConfig.mainFile}"
+
 }
 
+// This is used to set the local version
 version = "${config.minecraft_version}-$version"
 
-processResources
-{
+// Used for processing, dont meddle
+processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -79,6 +80,28 @@ processResources
         exclude 'mcmod.info'
     }
 }
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start Jenkins Things ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// Load the config
+ext.gitFile = file "git.properties"
+gitFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.gitConfig = new ConfigSlurper().parse prop
+}
+
+configurations {
+    compile
+    deployJars
+}
+
+// If on the jenkins system, append the build number to the jar name
+if (System.getenv().BUILD_NUMBER != null) {
+    version = version + "_build-" + System.getenv().BUILD_NUMBER
+}
+
+// The next 3 tasks are little tasks for compiling different versions of the code
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
@@ -100,6 +123,7 @@ artifacts {
     archives deobfJar
 }
 
+// This links with jenkins system
 uploadArchives {
     if (project.hasProperty("mavenUser") && project.hasProperty("mavenPassword")) {
         repositories {
@@ -114,24 +138,24 @@ uploadArchives {
                     project {
                         name project.archivesBaseName
                         packaging 'jar'
-                        description 'CG-Origin'
-                        url 'https://github.com/TheCountryGamer/CG-Origin'
+                        description '${gitConfig.gitName}'
+                        url 'https://github.com/TheCountryGamer/${gitConfig.gitName}'
 
                         scm {
-                            url 'https://github.com/TheCountryGamer/CG-Origin'
-                            connection 'scm:git:git://github.com/TheCountryGamer/CG-Origin.git'
-                            developerConnection 'scm:git:git@github.com:TheCountryGamer/CG-Origin.git'
+                            url 'https://github.com/TheCountryGamer/${gitConfig.gitName}'
+                            connection 'scm:git:git://github.com/TheCountryGamer/${gitConfig.gitName}.git'
+                            developerConnection 'scm:git:git@github.com:TheCountryGamer/${gitConfig.gitName}.git'
                         }
 
                         issueManagement {
                             system 'github'
-                            url 'https://github.com/TheCountryGamer/CG-Origin/issues'
+                            url 'https://github.com/TheCountryGamer/${gitConfig.gitName}/issues'
                         }
 
                         licenses {
                             license {
-                                name 'Apache License Version 2.0'
-                                url 'https://github.com/TheCountryGamer/CG-Origin/blob/master/LICENSE'
+                                name '${gitConfig.license}'
+                                url 'https://github.com/TheCountryGamer/${gitConfig.gitName}/blob/master/LICENSE'
                                 distribution 'repo'
                             }
                         }
@@ -149,3 +173,147 @@ uploadArchives {
         }
     }
 }
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start CurseForge Things ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+apply plugin: "curseforge"
+
+// Only if not on jenkins
+if (System.getenv().BUILD_NUMBER == null) {
+    // Load the config
+    ext.curseFile = file "../curse.properties"    
+    curseFile.withReader {
+        def prop = new Properties()
+        prop.load(it)
+        project.ext.curseConfig = new ConfigSlurper().parse prop
+    }
+    ext.curseforgeFile = file "curseforge.properties"
+    curseforgeFile.withReader {
+        def prop = new Properties()
+        prop.load(it)
+        project.ext.curseforgeConfig = new ConfigSlurper().parse prop
+    }
+}
+
+// get the changelog
+def log = getChangelog()
+
+curse {
+    apiKey = curseConfig.curseforge_key
+    projectId = curseforgeConfig.projectID
+    changelog = log
+    releaseType = curseforgeConfig.releaseType
+
+    setLastCursePush(gitConfig.lastCurseforgePush, getLastGitPush())
+
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Curseforge Groovy Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+private String getLastGitPush() {
+    def outStream = new ByteArrayOutputStream()
+    def lastGitPush = ""
+    try {
+        exec {
+            executable = "git"
+            args = ["rev-parse", "origin/master"]
+            standardOutput = outStream
+        }
+        lastGitPush = outStream.toString().trim()
+    }
+    catch (e) {
+        logger.quiet "Error while fetching last git tag: $e"
+    }
+    return lastGitPush
+}
+
+private void setLastCursePush(String prevGitKey, String nextGitKey) {
+    StringBuilder token = new StringBuilder()
+    StringBuilder value = new StringBuilder()
+    token.append("lastCurseforgePush=")
+    value.append("lastCurseforgePush=")
+    token.append(prevGitKey)
+    value.append(nextGitKey)
+
+    ant.replace(file: "git.properties", token: token.toString(), value: value.toString())
+}
+
+private String getRawChangelog() {
+    def outStream = new ByteArrayOutputStream()
+    String changelog = ""
+    String lastGitPush = "${gitConfig.lastCurseforgePush}"
+
+    try {
+        exec {
+            executable = "git"
+            args = ["log", "--pretty=%s~%b", "$lastGitPush..HEAD"]
+            standardOutput = outStream
+        }
+
+        changelog = outStream.toString().trim()
+    }
+    catch (e) {
+        logger.quiet "Error while generating theChangelog: $e"
+    }
+
+    return changelog
+}
+
+private String getChangelog() {
+    String changelog = getRawChangelog()
+    final String[] split = changelog.split("\n")
+    
+    final StringBuilder result = new StringBuilder()
+
+    result.append("Changelog:\n")
+
+    for (String s : split) {
+        if (s.length() == 0) continue
+
+        final String[] titleVbody = s.split("~")
+        String temp = "\t" + titleVbody[0]
+
+        for (int i = 1; i < titleVbody.length; i++) {
+            temp = temp + "\n\t\t" + titleVbody[i]
+        }
+
+        temp = temp + "\r\n"
+        result.append(temp)
+    }
+
+    result.toString()
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start Test Tasks ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+task baseTest() << {
+    logger.quiet project.group
+    logger.quiet minecraft.version
+    logger.quiet project.version
+    logger.quiet project.archivesBaseName
+}
+
+task jenkinsTest() << {
+    logger.quiet project.version
+    logger.quiet System.getenv().BUILD_NUMBER
+    logger.quiet gitConfig.gitName
+    logger.quiet gitConfig.license
+}
+
+task curseTest() << {
+    logger.quiet "--"
+    logger.quiet curseConfig.curseforge_key
+    logger.quiet curseforgeConfig.projectID
+    logger.quiet curseforgeConfig.releaseType
+    logger.quiet "--"
+    logger.quiet gitConfig.lastCurseforgePush
+    logger.quiet "--"
+    logger.quiet log
+    logger.quiet "--"
+
+}
+
+task curseTest2() << {
+    setLastCursePush(gitConfig.lastCurseforgePush, getLastGitPush())
+}
+
+
