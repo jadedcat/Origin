@@ -113,8 +113,9 @@ public class UtilVector {
 			return;
 
 		// Set the location of the player, on the final position.
-		player.setPositionAndUpdate(x, y, z);
-		player.setAngles(player.rotationYaw, player.rotationPitch);
+		//player.setPositionAndUpdate(x, y, z);
+		player.setPositionAndRotation(x, y, z, player.rotationYaw, player.rotationPitch);
+		//player.setAngles(player.rotationYaw, player.rotationPitch);
 		// FMLLog.info("Succesfully teleported to: "+(int)player.posX+" "+(int)player.posY+" "+(int)player.posZ);
 
 		if (particles) {
