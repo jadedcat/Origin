@@ -1,6 +1,7 @@
 package com.countrygamer.cgo.common.lib
 
 import net.minecraft.block.Block
+import net.minecraft.init.Blocks
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 
@@ -14,13 +15,16 @@ class ItemMeta(var item: Item, var metadata: Int) {
 	private var isBlock: Boolean = false
 
 	// Default Constructor
-
+	{
+		if (Block.getBlockFromItem(item) != Blocks.air) {
+			this.isBlock = true
+		}
+	}
 	// End Constructor
 
 	// Other Constructors
 	def this(block: Block, metadata: Int) {
 		this(Item.getItemFromBlock(block), metadata)
-		this.isBlock = true
 	}
 
 	// End Constructors
