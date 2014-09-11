@@ -195,7 +195,7 @@ if (System.getenv().BUILD_NUMBER == null) {
 }
 
 // get the changelog
-def log = ""
+def log = getChangelog()
 
 curse {
     if (System.getenv().BUILD_NUMBER == null) {
@@ -207,7 +207,6 @@ curse {
 }
 
 task pushToCurse(group: 'versioning', description: 'Pushes all outstanding commits to curseforge') << {
-    log = getChangelog()
     setLastCursePush(curseforgeConfig.lastCurseforgePush, getLastGitPush())
     pushGitCommit()
 }
@@ -251,7 +250,7 @@ private void setLastCursePush(String prevGitKey, String nextGitKey) {
 private String getRawChangelog() {
     def outStream = new ByteArrayOutputStream()
     String changelog = ""
-    String lastGitPush = "${gitConfig.lastCurseforgePush}"
+    String lastGitPush = "${curseforgeConfig.lastCurseforgePush}"
 
     try {
         exec {
@@ -277,6 +276,10 @@ private String getChangelog() {
 
     result.append("Changelog:\n")
 
+    result.append("\t")
+    result.append(getGitPushMessage())
+    result.append("\r\n")
+
     for (String s : split) {
         if (s.length() == 0) continue
 
@@ -290,8 +293,6 @@ private String getChangelog() {
         temp = temp + "\r\n"
         result.append(temp)
     }
-
-    result.append(getGitPushMessage())
 
     result.toString()
 }
@@ -333,7 +334,7 @@ task curseTest() << {
     logger.quiet curseforgeConfig.projectID
     logger.quiet curseforgeConfig.releaseType
     logger.quiet "--"
-    logger.quiet gitConfig.lastCurseforgePush
+    logger.quiet curseforgeConfig.lastCurseforgePush
     logger.quiet "--"
     logger.quiet log
     logger.quiet "--"
