@@ -31,7 +31,7 @@ configFile.withReader {
 }
 
 // Load the config for this project
-ext.projectPropFile = file "project.properties"
+ext.projectPropFile = file "props/project.properties"
 projectPropFile.withReader {
     def prop = new Properties()
     prop.load(it)
@@ -84,7 +84,7 @@ processResources {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start Jenkins Things ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Load the config
-ext.gitFile = file "git.properties"
+ext.gitFile = file "props/git.properties"
 gitFile.withReader {
     def prop = new Properties()
     prop.load(it)
@@ -187,7 +187,7 @@ if (System.getenv().BUILD_NUMBER == null) {
         project.ext.curseConfig = new ConfigSlurper().parse prop
     }
 }
-ext.curseforgeFile = file "curseforge.properties"
+ext.curseforgeFile = file "props/curseforge.properties"
 curseforgeFile.withReader {
     def prop = new Properties()
     prop.load(it)
