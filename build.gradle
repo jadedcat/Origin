@@ -125,11 +125,11 @@ artifacts {
 
 // This links with jenkins system
 uploadArchives {
-    if (project.hasProperty("mavenUser") && project.hasProperty("mavenPassword")) {
+    if (project.hasProperty("dddUser") && project.hasProperty("dddPass")) {
         repositories {
             mavenDeployer {
-                repository(url: "http://maven.dries007.net/content/repositories/ccm/") {
-                    authentication(userName: mavenUser, password: mavenPassword)
+                repository(url: "http://doubledoordev.net:8081/artifactory/mods") {
+                    authentication(userName: dddUser, password: dddPass)
                 }
                 pom {
                     groupId = project.group
