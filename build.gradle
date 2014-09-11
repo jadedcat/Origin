@@ -207,7 +207,7 @@ curse {
 }
 
 task pushToCurse(group: 'versioning', description: 'Pushes all outstanding commits to curseforge') << {
-    setLastCursePush(gitConfig.lastCurseforgePush, getLastGitPush())
+    setLastCursePush(curseforgeConfig.lastCurseforgePush, getLastGitPush())
     pushGitCommit()
 }
 
