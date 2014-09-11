@@ -203,9 +203,12 @@ curse {
         projectId = curseforgeConfig.projectID
         changelog = log
         releaseType = curseforgeConfig.releaseType
-
-        setLastCursePush(gitConfig.lastCurseforgePush, getLastGitPush())
     }
+}
+
+task pushToCurse(group: 'versioning', description: 'Pushes all outstanding commits to curseforge', dependsOn: 'curse') << {
+    setLastCursePush(gitConfig.lastCurseforgePush, getLastGitPush())
+    pushGitCommit()
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Curseforge Groovy Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -282,6 +285,13 @@ private String getChangelog() {
     }
 
     result.toString()
+}
+
+private void pushGitCommit() {
+    exec {
+        executable = 'git'
+        args = ['commit', '-m', '"Update git.prop, pre curse push"']
+    }
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start Test Tasks ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
