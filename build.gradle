@@ -196,7 +196,6 @@ if (System.getenv().BUILD_NUMBER == null) {
 
 // get the changelog
 def log = ""
-def gitCommitPushMessage = "Update git.prop and curseforge.prop, pre curse push"
 
 curse {
     if (System.getenv().BUILD_NUMBER == null) {
@@ -216,6 +215,10 @@ task pushToCurse(group: 'versioning', description: 'Pushes all outstanding commi
 curse.dependsOn(pushToCurse)
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Curseforge Groovy Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+private String getGitPushMessage() {
+    return "Update git.prop and curseforge.prop, pre curse push"
+}
 
 private String getLastGitPush() {
     def outStream = new ByteArrayOutputStream()
@@ -288,7 +291,7 @@ private String getChangelog() {
         result.append(temp)
     }
 
-    result.append(gitCommitPushMessage)
+    result.append(getGitPushMessage())
 
     result.toString()
 }
@@ -300,7 +303,7 @@ private void pushGitCommit() {
     }
     exec {
         executable = 'git'
-        args = ['commit', '-m', gitCommitPushMessage]
+        args = ['commit', '-m', getGitPushMessage()]
     }
     exec {
         executable = 'git'
