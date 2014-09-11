@@ -31,7 +31,8 @@ class TERenderer(val texture: ResourceLocation) extends TileEntitySpecialRendere
 
 		GL11.glTranslated(viewX + 0.5, viewY + 0.5, viewZ + 0.5)
 
-		UtilRender.bindResource(this.texture)
+		if (this.texture != null)
+			UtilRender.bindResource(this.texture)
 
 		this.render(tileEntity, renderPartialTicks, 0.0625F)
 
