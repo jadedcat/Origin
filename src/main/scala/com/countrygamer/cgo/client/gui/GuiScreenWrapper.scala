@@ -67,6 +67,7 @@ class GuiScreenWrapper(val xSize: Int, val ySize: Int) extends GuiScreen with IW
 			val textField: GuiTextField = this.textFieldList.get(i)
 			if (textField.textboxKeyTyped(letter, key)) {
 				this.sendKeyPacket(textField)
+				this.onKeyTyped(textField)
 				containsField = true
 			}
 		}
@@ -74,6 +75,8 @@ class GuiScreenWrapper(val xSize: Int, val ySize: Int) extends GuiScreen with IW
 			super.keyTyped(letter, key)
 		}
 	}
+
+	def onKeyTyped(textField: GuiTextField): Unit = {}
 
 	override def mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int): Unit = {
 		super.mouseClicked(mouseX, mouseY, mouseButton)
