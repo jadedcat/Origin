@@ -1,5 +1,6 @@
 package com.countrygamer.cgo.common.lib;
 
+import com.google.gson.JsonArray;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -66,6 +67,41 @@ public class NameParser {
 		}
 
 		return item_is_in_list;
+	}
+
+	public static void registerRecipe(JsonArray jsonArray) {
+		ItemStack result = null;
+		for (int i = 0; i < jsonArray.size(); i++) {
+			JsonArray parts = jsonArray.get(i).getAsJsonArray();
+			result = NameParser.getItemStack(parts.get(0).getAsString());
+
+			boolean isShaped = false;
+			Object[] objs = new Object[parts.size() - 1];
+
+			for (int i1 = 1; i1 < parts.size(); i1++) {
+				int j = i1 - 1;
+				String comp = parts.get(i1).getAsString();
+				if (comp.matches("(.*):(.*)")) {
+					objs[j] = NameParser.getItemStack(comp);
+				}
+				else if (comp.length() == 1 && j > 1) {
+					objs[j] = comp.charAt(0);
+				}
+				else {
+					objs[j] = comp;
+					isShaped = true;
+				}
+
+			}
+
+			if (isShaped) {
+				GameRegistry.addShapedRecipe(result, objs);
+			}
+			else {
+				GameRegistry.addShapelessRecipe(result, objs);
+			}
+
+		}
 	}
 
 }
