@@ -26,6 +26,6 @@ trait AbstractPacket {
 		this.handle(player)
 	}
 
-	def handle(player: EntityPlayer): Unit
+	def handle(player: EntityPlayer): Unit = {}
 
 }

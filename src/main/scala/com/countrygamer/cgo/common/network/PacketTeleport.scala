@@ -50,4 +50,5 @@ class PacketTeleport(var dimId: Int, var coords: Array[Double], var fall: Boolea
 		UtilVector.teleportPlayer(player, coords(0), coords(1), coords(2), fall, particles)
 
 	}
+
 }

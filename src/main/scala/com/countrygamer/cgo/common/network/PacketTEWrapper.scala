@@ -20,6 +20,7 @@ class PacketTEWrapper(var x: Int, var y: Int, var z: Int) extends AbstractPacket
 	def this() {
 		this(0, 0, 0)
 	}
+
 	// End Constructors
 
 	override def writeTo(buffer: ByteBuf): Unit = {
@@ -36,14 +37,8 @@ class PacketTEWrapper(var x: Int, var y: Int, var z: Int) extends AbstractPacket
 
 	}
 
-	override def handleOnClient(player: EntityPlayer): Unit = {
+	override def handle(player: EntityPlayer): Unit = {
 		this.handleSync(player, player.worldObj.getTileEntity(this.x, this.y, this.z))
-
-	}
-
-	override def handleOnServer(player: EntityPlayer): Unit = {
-		this.handleSync(player, player.worldObj.getTileEntity(this.x, this.y, this.z))
-
 	}
 
 	def handleSync(player: EntityPlayer, tileEntity: TileEntity): Unit = {
