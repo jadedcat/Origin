@@ -18,8 +18,14 @@ trait AbstractPacket {
 
 	def readFrom(buffer: ByteBuf): Unit
 
-	def handleOnClient(player: EntityPlayer): Unit
+	def handleOnClient(player: EntityPlayer): Unit = {
+		this.handle(player)
+	}
 
-	def handleOnServer(player: EntityPlayer): Unit
+	def handleOnServer(player: EntityPlayer): Unit = {
+		this.handle(player)
+	}
+
+	def handle(player: EntityPlayer): Unit
 
 }
