@@ -8,7 +8,7 @@ import com.countrygamer.cgo.common.lib.util.UtilRender
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import io.netty.buffer.Unpooled
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.{GuiScreen, GuiTextField}
+import net.minecraft.client.gui.{GuiButton, GuiScreen, GuiTextField}
 import net.minecraft.network.PacketBuffer
 import net.minecraft.network.play.client.C17PacketCustomPayload
 import net.minecraft.util.ResourceLocation
@@ -58,6 +58,10 @@ class GuiScreenWrapper(val xSize: Int, val ySize: Int) extends GuiScreen with IW
 
 		Keyboard.enableRepeatEvents(true)
 
+	}
+
+	protected def addButton(button: GuiButton): Unit = {
+		this.buttonList.asInstanceOf[util.List[Any]].add(button)
 	}
 
 	override def keyTyped(letter: Char, key: Int): Unit = {
