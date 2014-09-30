@@ -70,7 +70,7 @@ class GuiContainer(xSize: Int, ySize: Int, val container: ContainerWrapper)
 	// End Constructor
 
 	// Other Constructors
-	def this(container: Container) {
+	def this(container: ContainerWrapper) {
 		this(176, 166, container)
 	}
 
