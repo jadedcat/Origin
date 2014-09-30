@@ -69,7 +69,7 @@ class GuiScreenWrapper(val xSize: Int, val ySize: Int) extends GuiScreen with IW
 		var i: Int = 0
 		for (i <- 0 until this.textFieldList.size()) {
 			val textField: GuiTextField = this.textFieldList.get(i)
-			if (textField.textboxKeyTyped(letter, key)) {
+			if (this.canKeyType(textField, letter) && textField.textboxKeyTyped(letter, key)) {
 				this.sendKeyPacket(textField)
 				this.onKeyTyped(textField)
 				containsField = true
@@ -78,6 +78,10 @@ class GuiScreenWrapper(val xSize: Int, val ySize: Int) extends GuiScreen with IW
 		if (!containsField) {
 			super.keyTyped(letter, key)
 		}
+	}
+
+	def canKeyType(textField: GuiTextField, letter: Char): Boolean = {
+		true
 	}
 
 	def onKeyTyped(textField: GuiTextField): Unit = {}
