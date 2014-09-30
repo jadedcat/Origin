@@ -60,14 +60,16 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 				val y: Int = (84 + row * 18) + offsetY
 
 				var setSlot: Boolean = false
-				var slotIndex = 0
-				breakable {
-					for (slotIndex <- 0 to finalSlotIDs.length) {
-						if (finalSlotIDs(slotIndex) == slotID) {
-							this.addSlotToContainer(
-								new FinalSlot(this.player.inventory, slotID, x, y))
-							setSlot = true
-							break()
+				if (finalSlotIDs.length > 0) {
+					var slotIndex = 0
+					breakable {
+						for (slotIndex <- 0 to finalSlotIDs.length) {
+							if (finalSlotIDs(slotIndex) == slotID) {
+								this.addSlotToContainer(
+									new FinalSlot(this.player.inventory, slotID, x, y))
+								setSlot = true
+								break()
+							}
 						}
 					}
 				}
