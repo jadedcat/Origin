@@ -3,6 +3,7 @@ package com.countrygamer.cgo.client.gui
 import java.util
 
 import com.countrygamer.cgo.common.lib.util.UtilRender
+import com.countrygamer.cgo.wrapper.common.inventory.ContainerWrapper
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.{FontRenderer, Gui, GuiScreen}
@@ -22,7 +23,7 @@ import org.lwjgl.opengl.{GL11, GL12}
  * @author CountryGamer
  */
 @SideOnly(Side.CLIENT)
-class GuiContainer(xSize: Int, ySize: Int, val container: Container)
+class GuiContainer(xSize: Int, ySize: Int, val container: ContainerWrapper)
 		extends GuiScreenWrapper(xSize, ySize) {
 
 	// ~~~~~~~~~~ Default GuiContainer Variables, TODO refactor
