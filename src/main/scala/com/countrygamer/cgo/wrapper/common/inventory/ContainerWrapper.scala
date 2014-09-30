@@ -35,8 +35,13 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 	protected def registerSlots(): Unit = {
 	}
 
-	protected def registerSlot(slotID: Int, slotX: Int, slotY: Int): Unit = {
-		this.addSlotToContainer(new Slot(this.inventory, slotID, slotX, slotY))
+	protected def registerSlot(slotID: Int, slotX: Int, slotY: Int, isFinal: Boolean): Unit = {
+		if (isFinal) {
+			this.addSlotToContainer(new FinalSlot(this.inventory, slotID, slotX, slotY))
+		}
+		else {
+			this.addSlotToContainer(new Slot(this.inventory, slotID, slotX, slotY))
+		}
 	}
 
 	/**
