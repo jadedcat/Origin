@@ -1,6 +1,7 @@
 package com.countrygamer.cgo.wrapper.client.render
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.{RenderBlocks, Tessellator}
 import net.minecraft.world.IBlockAccess
@@ -11,6 +12,7 @@ import org.lwjgl.opengl.GL11
  *
  * @author CountryGamer
  */
+@SideOnly(Side.CLIENT)
 class SBRHWrapper(final val renderID: Int) extends ISimpleBlockRenderingHandler {
 
 	override def renderInventoryBlock(block: Block, metadata: Int, modelId: Int,

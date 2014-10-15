@@ -1,6 +1,6 @@
 package com.countrygamer.cgo.wrapper.client.render
 
-import com.countrygamer.cgo.common.lib.util.UtilRender
+import com.countrygamer.cgo.library.client.utility.Rendering
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.tileentity.TileEntity
@@ -32,7 +32,7 @@ class TERenderer(val texture: ResourceLocation) extends TileEntitySpecialRendere
 		GL11.glTranslated(viewX + 0.5, viewY + 0.5, viewZ + 0.5)
 
 		if (this.texture != null)
-			UtilRender.bindResource(this.texture)
+			Rendering.bindResource(this.texture)
 
 		this.render(tileEntity, renderPartialTicks, 0.0625F)
 

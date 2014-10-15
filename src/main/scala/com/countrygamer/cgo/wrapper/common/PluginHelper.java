@@ -1,6 +1,6 @@
 package com.countrygamer.cgo.wrapper.common;
 
-import com.countrygamer.cgo.wrapper.common.registries.Register;
+import com.countrygamer.cgo.library.common.register.Register;
 import scala.collection.Seq;
 
 import java.util.Arrays;

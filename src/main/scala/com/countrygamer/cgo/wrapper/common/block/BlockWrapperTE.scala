@@ -3,7 +3,7 @@ package com.countrygamer.cgo.wrapper.common.block
 import java.util
 import java.util.Random
 
-import com.countrygamer.cgo.common.lib.util.UtilDrops
+import com.countrygamer.cgo.library.common.utility.Drops
 import com.countrygamer.cgo.wrapper.common.tile.{ICustomDrops, IPowerable}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -151,7 +151,7 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 			}
 		}
 		// Spawn the drops
-		UtilDrops.spawnDrops(world, x, y, z, drops)
+		Drops.spawnDrops(world, x, y, z, drops)
 		// remove the tile
 		world.removeTileEntity(x, y, z)
 

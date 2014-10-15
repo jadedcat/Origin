@@ -3,6 +3,8 @@ package com.countrygamer.cgo.wrapper.client.gui.configFactory;
 import cpw.mods.fml.client.config.ConfigGuiType;
 import cpw.mods.fml.client.config.DummyConfigElement;
 import cpw.mods.fml.client.config.IConfigElement;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
@@ -14,6 +16,7 @@ import java.util.List;
 /**
  * @author CountryGamer
  */
+@SideOnly(Side.CLIENT)
 public class GuiConfigHelper {
 
 	public static List<IConfigElement> getConfigElements(Configuration configuration) {

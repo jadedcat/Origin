@@ -2,8 +2,14 @@ package com.countrygamer.cgo.wrapper.common
 
 import java.util
 
-import com.countrygamer.cgo.common.OptionHandler
-import com.countrygamer.cgo.wrapper.common.registries._
+<<<<<<< HEAD
+import com.countrygamer.cgo.library.common.helpers.OptionHandler
+=======
+import com.countrygamer.cgo.library.common.Origin
+import com.countrygamer.cgo.library.common.helpers.OptionHandler
+import com.countrygamer.cgo.library.common.lib.LogHelper
+>>>>>>> 4614287... Much updates. Many things have been moved and re-organized.
+import com.countrygamer.cgo.library.common.register._
 import cpw.mods.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
 import cpw.mods.fml.common.network.NetworkRegistry
 
@@ -79,6 +85,40 @@ class PluginWrapper() {
 
 		proxy.registerRender()
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy)
+
+		// Packet Registration
+		//todo does not find any IPackets
+		val packageName: String = this.getClass.getPackage.getName
+		LogHelper.info(Origin.pluginName,
+			"Looking for packets to register for channel \'" + pluginID + "\' in package \'" +
+					packageName + "\'."
+		)
+		try {
+			/*
+			val fullurl: String = packageName + classOf[IPacket].getName
+			val classLoader: ClassLoader = Thread.currentThread().getContextClassLoader
+			// todo does this recursively get resources?
+			val resources: Enumeration[URL] = classLoader.getResource(fullurl)
+
+
+
+			val packets: Array[Class[_ <: IPacket]] =
+				new ResourceFinder(this.getClass.getPackage.getName)
+						.findAllImplementations(classOf[IPacket]).toArray()
+						.asInstanceOf[Array[Class[_ <: IPacket]]]
+			if (packets.length > 0) {
+				LogHelper.info(Origin.pluginName,
+					"Found " + packets.length + " packets in overall package " +
+							packageName + ". Registering to channel \'" + pluginID + "\'."
+				)
+				PacketHandler.registerHandler(pluginID, packets)
+			}
+			*/
+		}
+		catch {
+			case e: Exception =>
+
+		}
 
 	}
 

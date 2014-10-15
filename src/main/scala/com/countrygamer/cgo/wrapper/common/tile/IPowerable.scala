@@ -1,6 +1,6 @@
 package com.countrygamer.cgo.wrapper.common.tile
 
-import com.countrygamer.cgo.common.lib.RedstoneState
+import com.countrygamer.cgo.library.common.lib.enums.RedstoneState
 import net.minecraft.nbt.NBTTagCompound
 
 /**

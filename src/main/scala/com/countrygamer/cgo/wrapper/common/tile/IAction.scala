@@ -1,6 +1,6 @@
 package com.countrygamer.cgo.wrapper.common.tile
 
-import com.countrygamer.cgo.common.lib.ActivatedAction
+import com.countrygamer.cgo.library.common.lib.enums.ActivatedAction
 import net.minecraft.nbt.NBTTagCompound
 
 /**
