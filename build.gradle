@@ -308,7 +308,7 @@ private void pushGitCommit() {
     }
     exec {
         executable = 'git'
-        args = ['push']
+        args = ['push', 'origin', 'master:master']
     }
 }
 
