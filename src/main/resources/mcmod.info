@@ -1,13 +1,13 @@
 [
 {
-  "modid": "cgo",
-  "name": "CG Origin",
+  "modid": "origin",
+  "name": "Origin",
   "description": "Example placeholder mod.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authors": ["TheCountryGamer/CountryGamer/Country_Gamer"],
+  "authors": ["TheTemportalist"],
   "credits": "",
   "logoFile": "",
   "screenshots": [],
