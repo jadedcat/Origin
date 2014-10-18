@@ -8,12 +8,12 @@ import net.minecraft.item.ItemStack
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 /**
  * Makes it able for tile entities to easily have custom drops
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 trait ICustomDrops {
 

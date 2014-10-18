@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class PacketTEWrapper(var x: Int, var y: Int, var z: Int) extends IPacket {
 

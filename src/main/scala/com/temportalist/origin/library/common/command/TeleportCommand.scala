@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayerMP
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object TeleportCommand extends CommandBase {
 

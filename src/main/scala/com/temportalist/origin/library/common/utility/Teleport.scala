@@ -14,7 +14,7 @@ import net.minecraftforge.event.entity.living.EnderTeleportEvent
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object Teleport {
 

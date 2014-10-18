@@ -24,7 +24,7 @@ import net.minecraft.world.World
  * @param itemBlock
  * The item block class
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class BlockWrapper(material: Material, val pluginID: String, name: String,
 		itemBlock: Class[_ <: ItemBlock]) extends Block(material) {

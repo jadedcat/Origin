@@ -8,7 +8,7 @@ import net.minecraft.world.World
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 trait ProxyWrapper extends IGuiHandler {
 

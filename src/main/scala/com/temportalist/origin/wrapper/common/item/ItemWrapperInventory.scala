@@ -10,7 +10,7 @@ import net.minecraft.world.World
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class ItemWrapperInventory(pluginID: String, name: String) extends ItemWrapper(pluginID, name) {
 

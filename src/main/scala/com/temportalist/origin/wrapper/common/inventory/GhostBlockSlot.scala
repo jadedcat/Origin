@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class GhostBlockSlot(inv: IInventory, slotID: Int, x: Int, y: Int, maxSize: Int)
 		extends GhostSlot(inv, slotID, x, y, maxSize) {

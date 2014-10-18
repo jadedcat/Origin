@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class ItemMeta(var item: Item, var metadata: Int) {
 

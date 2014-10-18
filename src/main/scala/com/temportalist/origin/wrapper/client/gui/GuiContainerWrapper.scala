@@ -20,7 +20,7 @@ import org.lwjgl.opengl.{GL11, GL12}
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
 class GuiContainerWrapper(xSize: Int, ySize: Int, val container: ContainerWrapper)

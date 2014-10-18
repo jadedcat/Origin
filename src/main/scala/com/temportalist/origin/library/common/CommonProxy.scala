@@ -10,7 +10,7 @@ import net.minecraft.world.World
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class CommonProxy extends ProxyWrapper {
 

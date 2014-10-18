@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 trait IPacket {
 

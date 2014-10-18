@@ -5,7 +5,7 @@ import java.util.Random
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object MathFuncs {
 

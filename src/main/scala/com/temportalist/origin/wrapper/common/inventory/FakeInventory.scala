@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack
  * @param stackLimit
  * The maximum stack size per slot
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class FakeInventory(var holderStack: ItemStack, var inventorySize: Int, var stackLimit: Int)
 		extends IInventory {

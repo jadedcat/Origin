@@ -12,7 +12,7 @@ import cpw.mods.fml.common.network.NetworkRegistry
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class PluginWrapper() {
 

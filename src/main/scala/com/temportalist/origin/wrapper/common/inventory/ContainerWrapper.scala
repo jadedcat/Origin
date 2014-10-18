@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) extends Container() {
 

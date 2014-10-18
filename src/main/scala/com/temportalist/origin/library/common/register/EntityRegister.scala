@@ -5,7 +5,7 @@ import net.minecraft.entity.EntityList
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class EntityRegister() extends Register {
 

@@ -8,7 +8,7 @@ import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class PacketTeleport(var dimId: Int, var coords: Array[Double], var fall: Boolean,
 		var particles: Boolean) extends IPacket {

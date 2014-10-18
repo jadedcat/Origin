@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
 class GuiButtonCheck(id: Int, x: Int, y: Int, val isCheckmark: Boolean)

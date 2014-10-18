@@ -6,7 +6,7 @@ import scala.collection.Seq;
 import java.util.Arrays;
 
 /**
- * @author CountryGamer
+ * @author TheTemportalist
  */
 public class PluginHelper {
 

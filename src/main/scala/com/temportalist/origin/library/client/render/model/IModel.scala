@@ -6,7 +6,7 @@ import net.minecraft.client.model.ModelRenderer
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
 trait IModel {

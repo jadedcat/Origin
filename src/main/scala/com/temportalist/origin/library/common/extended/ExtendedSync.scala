@@ -13,7 +13,7 @@ import net.minecraftforge.event.entity.{EntityEvent, EntityJoinWorldEvent}
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object ExtendedSync {
 

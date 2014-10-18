@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Level
 /**
  * Used for easy logging
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object LogHelper {
 

@@ -6,7 +6,7 @@ import net.minecraft.util.{AxisAlignedBB, Vec3}
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object VecHelper {
 

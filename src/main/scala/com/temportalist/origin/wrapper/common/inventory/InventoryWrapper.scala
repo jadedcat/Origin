@@ -8,7 +8,7 @@ import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class InventoryWrapper(var name: String, var inventorySize: Int, var ownerStack: ItemStack)
 		extends IInventory {

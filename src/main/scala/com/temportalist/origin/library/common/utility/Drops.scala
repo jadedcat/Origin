@@ -11,7 +11,7 @@ import net.minecraft.world.World
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object Drops {
 	def spawnDrops(world: World, x: Double, y: Double, z: Double,

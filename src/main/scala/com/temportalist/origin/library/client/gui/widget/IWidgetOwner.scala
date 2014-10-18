@@ -5,7 +5,7 @@ import cpw.mods.fml.relauncher.{Side, SideOnly}
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
 trait IWidgetOwner {

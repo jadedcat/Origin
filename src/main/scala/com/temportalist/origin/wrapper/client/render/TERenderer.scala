@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
 class TERenderer(val texture: ResourceLocation) extends TileEntitySpecialRenderer {

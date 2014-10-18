@@ -16,7 +16,7 @@ import net.minecraftforge.common.config.{Configuration, Property}
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class OptionRegister() extends Register with IModGuiFactory {
 

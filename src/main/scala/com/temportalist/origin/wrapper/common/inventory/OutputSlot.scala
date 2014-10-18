@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack
 /**
  * A final slot of only outputs
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class OutputSlot(inv: IInventory, id: Int, x: Int, y: Int) extends Slot(inv, id, x, y) {
 

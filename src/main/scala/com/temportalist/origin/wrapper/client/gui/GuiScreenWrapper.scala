@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
 class GuiScreenWrapper(val xSize: Int, val ySize: Int) extends GuiScreen with IWidgetOwner {

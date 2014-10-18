@@ -6,7 +6,7 @@ import net.minecraft.client.model.{ModelBase, ModelRenderer}
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
 object ModelHelper {

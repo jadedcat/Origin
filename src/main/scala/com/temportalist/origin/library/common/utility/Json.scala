@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object Json {
 

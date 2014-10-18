@@ -12,7 +12,7 @@ import net.minecraftforge.common.config.Configuration
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object OptionHandler {
 

@@ -8,7 +8,7 @@ import net.minecraft.client.gui.GuiScreen
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
 class GuiConfig(guiScreen: GuiScreen) extends GuiConfigWrapper(guiScreen, Origin, Origin.pluginID) {

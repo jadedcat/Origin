@@ -5,7 +5,7 @@ import net.minecraft.enchantment.{Enchantment, EnumEnchantmentType}
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class EnchantmentWrapper(name: String, weight: Int)
 		extends Enchantment(EnchantmentHelper.getNewID, weight, EnumEnchantmentType.all) {

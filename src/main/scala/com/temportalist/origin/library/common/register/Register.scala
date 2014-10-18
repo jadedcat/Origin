@@ -3,7 +3,7 @@ package com.temportalist.origin.library.common.register
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 trait Register {
 

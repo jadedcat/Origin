@@ -12,7 +12,7 @@ import net.minecraft.crash.CrashReport
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class Crash(message: String, error: String) {
 

@@ -12,7 +12,7 @@ import net.minecraftforge.oredict.OreDictionary
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object NameParser {
 

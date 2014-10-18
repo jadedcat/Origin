@@ -7,7 +7,7 @@ import net.minecraft.util.ChatComponentText
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object Player {
 

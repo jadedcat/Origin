@@ -11,7 +11,7 @@ import net.minecraftforge.common.IExtendedEntityProperties
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 abstract class ExtendedEntity(var player: EntityPlayer) extends IExtendedEntityProperties {
 

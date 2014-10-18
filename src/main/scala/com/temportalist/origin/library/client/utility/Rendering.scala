@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
 object Rendering {

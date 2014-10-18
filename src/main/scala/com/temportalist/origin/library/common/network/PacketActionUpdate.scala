@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class PacketActionUpdate(x: Int, y: Int, z: Int, var state: ActivatedAction)
 		extends PacketTEWrapper(x, y, z) {

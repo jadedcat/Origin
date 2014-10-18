@@ -14,7 +14,7 @@ import net.minecraftforge.common.MinecraftForge
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object RegisterHelper {
 

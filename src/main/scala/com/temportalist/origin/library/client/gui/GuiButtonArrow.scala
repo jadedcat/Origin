@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
 class GuiButtonArrow(id: Int, x: Int, y: Int, buttonType: ArrowButtonType)

@@ -26,7 +26,7 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @Mod(modid = Origin.pluginID, name = Origin.pluginName, version = "@PLUGIN_VERSION@",
 	guiFactory = Origin.clientProxy,
@@ -37,8 +37,8 @@ object Origin extends PluginWrapper {
 
 	final val pluginID = "origin"
 	final val pluginName = "Origin"
-	final val clientProxy = "com.countrygamer.origin.library.client.ClientProxy"
-	final val serverProxy = "com.countrygamer.origin.library.server.ServerProxy"
+	final val clientProxy = "com.temportalist.origin.library.client.ClientProxy"
+	final val serverProxy = "com.temportalist.origin.library.server.ServerProxy"
 
 	@SidedProxy(
 		clientSide = this.clientProxy,

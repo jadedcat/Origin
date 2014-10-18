@@ -18,7 +18,7 @@ import net.minecraftforge.fluids._
  * @param name
  * The name of this tile entity, this is superficial, used normally only for inventories
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class TEWrapper(var name: String)
 		extends TileEntity() with IInventory with ISidedInventory with IFluidHandler with

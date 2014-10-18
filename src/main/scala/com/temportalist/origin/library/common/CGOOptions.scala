@@ -8,7 +8,7 @@ import net.minecraft.client.gui.GuiScreen
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object CGOOptions extends OptionRegister {
 

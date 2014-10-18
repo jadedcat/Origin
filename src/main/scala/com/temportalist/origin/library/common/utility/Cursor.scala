@@ -11,7 +11,7 @@ import net.minecraftforge.common.util.ForgeDirection
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object Cursor {
 

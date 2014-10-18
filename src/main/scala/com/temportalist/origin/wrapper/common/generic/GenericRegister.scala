@@ -7,7 +7,7 @@ import net.minecraft.util.RegistryNamespaced
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class GenericRegister() {
 

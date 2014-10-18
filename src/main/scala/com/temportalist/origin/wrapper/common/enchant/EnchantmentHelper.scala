@@ -7,7 +7,7 @@ import net.minecraft.enchantment.Enchantment
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object EnchantmentHelper {
 

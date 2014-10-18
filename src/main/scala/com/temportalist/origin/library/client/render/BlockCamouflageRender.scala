@@ -13,7 +13,7 @@ import net.minecraft.world.IBlockAccess
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
 object BlockCamouflageRender extends SBRHWrapper(42025) {

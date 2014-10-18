@@ -18,7 +18,7 @@ import net.minecraft.world.World
  * @param name
  * The name of the item
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class ItemWrapper(val pluginID: String, name: String) extends Item {
 

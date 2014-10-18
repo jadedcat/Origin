@@ -9,7 +9,7 @@ import net.minecraftforge.common.IExtendedEntityProperties
 /**
  * A handler class for the ExtendedEntity wrapper class.
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 object ExtendedEntityHandler {
 

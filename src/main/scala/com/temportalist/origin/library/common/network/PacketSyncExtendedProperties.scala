@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class PacketSyncExtendedProperties(var extendedClass: Class[_ <: ExtendedEntity],
 		var data: NBTTagCompound) extends IPacket {

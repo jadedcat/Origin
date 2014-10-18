@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack
 /**
  * A slot which holds a ghost version of whichever item is put into it
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class GhostSlot(inv: IInventory, slotID: Int, x: Int, y: Int) extends Slot(inv, slotID, x, y) {
 

@@ -14,7 +14,7 @@ import net.minecraft.world.World
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class BlockWrapperTE(material: Material, pluginID: String, name: String,
 		itemBlock: Class[_ <: ItemBlock], val tileEntityClass: Class[_ <: TileEntity])

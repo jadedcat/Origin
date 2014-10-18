@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author CountryGamer
+ * @author TheTemportalist
  */
 public class PacketHandler extends FMLIndexedMessageToMessageCodec<IPacket> {
 

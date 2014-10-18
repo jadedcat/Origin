@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class PacketRedstoneUpdate(x: Int, y: Int, z: Int, var state: RedstoneState)
 		extends PacketTEWrapper(x, y, z) {

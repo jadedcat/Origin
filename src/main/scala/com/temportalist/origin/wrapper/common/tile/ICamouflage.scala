@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagCompound
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 trait ICamouflage {
 

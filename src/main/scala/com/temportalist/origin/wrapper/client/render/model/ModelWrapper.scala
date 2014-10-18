@@ -10,7 +10,7 @@ import net.minecraft.entity.Entity
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
 class ModelWrapper(texWidth: Int, texHeight: Int) extends ModelBase with IModel {

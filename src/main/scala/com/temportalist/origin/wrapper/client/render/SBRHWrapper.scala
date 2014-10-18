@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
 class SBRHWrapper(final val renderID: Int) extends ISimpleBlockRenderingHandler {

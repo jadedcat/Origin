@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack
 /**
  * A slot you cannot interfere with
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class FinalSlot(inventory: IInventory, slotID: Int, x: Int, y: Int)
 		extends OutputSlot(inventory, slotID, x, y) {

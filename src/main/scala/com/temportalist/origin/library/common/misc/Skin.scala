@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @Deprecated
 class Skin(private val username: String, private val shouldPrepare: Boolean) {

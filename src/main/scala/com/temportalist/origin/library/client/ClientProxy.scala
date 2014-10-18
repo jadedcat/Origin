@@ -20,7 +20,7 @@ import net.minecraft.world.World
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class ClientProxy() extends CommonProxy with IModGuiFactory {
 

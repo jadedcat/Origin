@@ -6,7 +6,7 @@ import net.minecraft.nbt.NBTTagCompound
 /**
  * Used by TileEntities for handling usage of power
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 trait IPowerable {
 

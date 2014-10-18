@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
 class GuiButtonRedstone(id: Int, x: Int, y: Int, val state: RedstoneState, val useOld: Boolean)

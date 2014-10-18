@@ -6,7 +6,7 @@ import net.minecraft.world.{Teleporter, WorldServer}
 /**
  *
  *
- * @author CountryGamer
+ * @author TheTemportalist
  */
 class TeleporterCore(ws: WorldServer) extends Teleporter(ws) {
 
