@@ -60,22 +60,6 @@ object Teleport {
 	/**
 	 * Teleports player based on where their crosshair lays.
 	 *
-<<<<<<< HEAD
-	 * @param player
-	 * @param maxDistance
-	 */
-	def toCursorPosition(player: EntityPlayer, maxDistance: Double): Boolean = {
-		val point: Vec3Sided = Cursor.getBlockFromCursor(
-			player.worldObj, player, maxDistance
-		)
-		if (point != null) {
-			val pos: Vec3 = Cursor.getNewCoordsFromSide(point)
-			if (pos != null) {
-				return Teleport.toPoint(
-					player, pos.addVector(0.5D, 0.0D, 0.5D)
-				)
-			}
-=======
 	 * @param entityPlayer
 	 * @param maxDistance
 	 */
@@ -94,27 +78,18 @@ object Teleport {
 					}
 				}
 			case _ =>
->>>>>>> 4614287... Much updates. Many things have been moved and re-organized.
 		}
 		false
 	}
 
-<<<<<<< HEAD
 	def toPointRandom(player: EntityPlayer, minRange: Int, maxRange: Int): Boolean = {
-=======
-	def toPointRandom(player: EntityPlayerMP, minRange: Int, maxRange: Int): Boolean = {
->>>>>>> 4614287... Much updates. Many things have been moved and re-organized.
 		this.toPointRandom(
 			player, Vec3.createVectorHelper(player.posX, player.posY, player.posZ),
 			minRange, maxRange
 		)
 	}
 
-<<<<<<< HEAD
 	def toPointRandom(player: EntityPlayer, center: Vec3, minRadius: Int,
-=======
-	def toPointRandom(player: EntityPlayerMP, center: Vec3, minRadius: Int,
->>>>>>> 4614287... Much updates. Many things have been moved and re-organized.
 			maxRadius: Int): Boolean = {
 		val world: World = player.worldObj
 		val random: Random = new Random
@@ -188,11 +163,7 @@ object Teleport {
 	 * @param y
 	 * @param z
 	 */
-<<<<<<< HEAD
 	def toPoint(player: EntityPlayer, x: Double, y: Double, z: Double): Boolean = {
-=======
-	def toPoint(player: EntityPlayerMP, x: Double, y: Double, z: Double): Boolean = {
->>>>>>> 4614287... Much updates. Many things have been moved and re-organized.
 		this.toPoint(player, Vec3.createVectorHelper(x, y, z))
 	}
 
@@ -205,12 +176,7 @@ object Teleport {
 	 * @param player
 	 * @param point
 	 */
-<<<<<<< HEAD
 	def toPoint(player: EntityPlayer, point: Vec3): Boolean = {
-=======
-	def toPoint(player: EntityPlayerMP, point: Vec3): Boolean = {
->>>>>>> 4614287... Much updates. Many things have been moved and re-organized.
-
 		// todo fall damage
 
 		val event: EnderTeleportEvent = new EnderTeleportEvent(

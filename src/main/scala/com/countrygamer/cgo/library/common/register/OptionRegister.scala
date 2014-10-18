@@ -3,10 +3,6 @@ package com.countrygamer.cgo.library.common.register
 import java.io.File
 import java.util
 
-<<<<<<< HEAD
-import cpw.mods.fml.common.event.FMLPreInitializationEvent
-import net.minecraft.block.Block
-=======
 import cpw.mods.fml.client.IModGuiFactory
 import cpw.mods.fml.client.IModGuiFactory.{RuntimeOptionCategoryElement, RuntimeOptionGuiHandler}
 import cpw.mods.fml.common.event.FMLPreInitializationEvent
@@ -14,7 +10,6 @@ import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
->>>>>>> 4614287... Much updates. Many things have been moved and re-organized.
 import net.minecraft.item.Item
 import net.minecraftforge.common.config.{Configuration, Property}
 
@@ -23,11 +18,7 @@ import net.minecraftforge.common.config.{Configuration, Property}
  *
  * @author CountryGamer
  */
-<<<<<<< HEAD
-class OptionRegister() extends Register {
-=======
 class OptionRegister() extends Register with IModGuiFactory {
->>>>>>> 4614287... Much updates. Many things have been moved and re-organized.
 
 	/**
 	 * Stores the configuration data
@@ -74,8 +65,6 @@ class OptionRegister() extends Register with IModGuiFactory {
 
 	override def register(): Unit = {}
 
-<<<<<<< HEAD
-=======
 	// Gui Factory Things
 
 	@SideOnly(Side.CLIENT)
@@ -98,7 +87,6 @@ class OptionRegister() extends Register with IModGuiFactory {
 		null
 	}
 
->>>>>>> 4614287... Much updates. Many things have been moved and re-organized.
 	// Configuration Things
 	def getAndComment(cate: String, name: String, comment: String, value: Int): Int = {
 		val property: Property = this.config.get(cate, name, value)

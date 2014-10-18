@@ -29,11 +29,7 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent
  * @author CountryGamer
  */
 @Mod(modid = Origin.pluginID, name = Origin.pluginName, version = "@PLUGIN_VERSION@",
-<<<<<<< HEAD:src/main/scala/com/countrygamer/cgo/library/common/Origin.scala
 	guiFactory = Origin.clientProxy,
-=======
-	guiFactory = "com.countrygamer.cgo.library.common.CGOOptions",
->>>>>>> 4614287... Much updates. Many things have been moved and re-organized.:src/main/scala/com/countrygamer/cgo/library/common/Origin.scala
 	modLanguage = "scala",
 	dependencies = "required-after:Forge@[10.13,)"
 )
@@ -45,13 +41,8 @@ object Origin extends PluginWrapper {
 	final val serverProxy = "com.countrygamer.cgo.library.server.ServerProxy"
 
 	@SidedProxy(
-<<<<<<< HEAD:src/main/scala/com/countrygamer/cgo/library/common/Origin.scala
 		clientSide = this.clientProxy,
 		serverSide = this.serverProxy
-=======
-		clientSide = "com.countrygamer.cgo.library.client.ClientProxy",
-		serverSide = "com.countrygamer.cgo.library.server.ServerProxy"
->>>>>>> 4614287... Much updates. Many things have been moved and re-organized.:src/main/scala/com/countrygamer/cgo/library/common/Origin.scala
 	)
 	var proxy: CommonProxy = null
 

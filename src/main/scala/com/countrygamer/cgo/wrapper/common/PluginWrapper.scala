@@ -2,13 +2,9 @@ package com.countrygamer.cgo.wrapper.common
 
 import java.util
 
-<<<<<<< HEAD
-import com.countrygamer.cgo.library.common.helpers.OptionHandler
-=======
 import com.countrygamer.cgo.library.common.Origin
 import com.countrygamer.cgo.library.common.helpers.OptionHandler
 import com.countrygamer.cgo.library.common.lib.LogHelper
->>>>>>> 4614287... Much updates. Many things have been moved and re-organized.
 import com.countrygamer.cgo.library.common.register._
 import cpw.mods.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
 import cpw.mods.fml.common.network.NetworkRegistry

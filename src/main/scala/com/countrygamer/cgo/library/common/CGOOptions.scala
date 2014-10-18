@@ -1,13 +1,9 @@
 package com.countrygamer.cgo.library.common
 
-<<<<<<< HEAD
-import com.countrygamer.cgo.library.common.register.OptionRegister
-=======
 import com.countrygamer.cgo.library.client.gui.config.GuiConfig
 import com.countrygamer.cgo.library.common.register.OptionRegister
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.gui.GuiScreen
->>>>>>> 4614287... Much updates. Many things have been moved and re-organized.
 
 /**
  *
@@ -36,12 +32,9 @@ object CGOOptions extends OptionRegister {
 
 	}
 
-<<<<<<< HEAD
-=======
 	@SideOnly(Side.CLIENT)
 	override def mainConfigGuiClass(): Class[_ <: GuiScreen] = {
 		classOf[GuiConfig]
 	}
 
->>>>>>> 4614287... Much updates. Many things have been moved and re-organized.
 }
