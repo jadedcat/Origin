@@ -5,7 +5,7 @@ import java.util
 import com.temportalist.origin.library.common.Origin
 import com.temportalist.origin.library.common.utility.{Player, Teleport}
 import net.minecraft.command.{CommandBase, ICommandSender}
-import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.entity.player.EntityPlayer
 
 /**
  *
@@ -30,29 +30,6 @@ object TeleportCommand extends CommandBase {
 	}
 
 	override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
-		/*
-		if (args.length == 0) {
-			return
-		}
-
-		val playerName: String = args(0)
-		val dimensionName: String = args(1)
-		var x: Double = 0.0
-		var y: Double = 0.0
-		var z: Double = 0.0
-		try {
-			x = args(2).toDouble
-			y = args(3).toDouble
-			z = args(4).toDouble
-		}
-		catch {
-			case e: NumberFormatException => {
-				if (commandSender.isInstanceOf[EntityPlayer])
-					Player.sendMessageToPlayer(commandSender.asInstanceOf[EntityPlayer],
-						"Cannot parse arguments")
-			}
-		}
-		*/
 		if (args.length == 0) {
 			return
 		}
@@ -62,8 +39,8 @@ object TeleportCommand extends CommandBase {
 		if (commandType.equals("tp")) {
 			// origin tp ...
 			sender match {
-				case player1: EntityPlayerMP =>
-					var player: EntityPlayerMP = player1
+				case player1: EntityPlayer =>
+					var player: EntityPlayer = player1
 
 					if (args.length == 1) {
 						Teleport.toCursorPosition(player, 20000.0D)

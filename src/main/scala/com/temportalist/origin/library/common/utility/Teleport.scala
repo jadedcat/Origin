@@ -64,20 +64,16 @@ object Teleport {
 	 * @param maxDistance
 	 */
 	def toCursorPosition(entityPlayer: EntityPlayer, maxDistance: Double): Boolean = {
-		entityPlayer match {
-			case player: EntityPlayerMP =>
-				val point: Vec3Sided = Cursor.getBlockFromCursor(
-					player.worldObj, player, maxDistance
+		val point: Vec3Sided = Cursor.getBlockFromCursor(
+			entityPlayer.worldObj, entityPlayer, maxDistance
+		)
+		if (point != null) {
+			val pos: Vec3 = Cursor.getNewCoordsFromSide(point)
+			if (pos != null) {
+				return Teleport.toPoint(
+					entityPlayer, pos.addVector(0.5D, 0.0D, 0.5D)
 				)
-				if (point != null) {
-					val pos: Vec3 = Cursor.getNewCoordsFromSide(point)
-					if (pos != null) {
-						return Teleport.toPoint(
-							player, pos.addVector(0.5D, 0.0D, 0.5D)
-						)
-					}
-				}
-			case _ =>
+			}
 		}
 		false
 	}
@@ -191,9 +187,8 @@ object Teleport {
 			player.worldObj.getChunkProvider.loadChunk(chunk.xPosition, chunk.zPosition)
 		}
 
-		player.setPositionAndRotation(
-			point.xCoord, point.yCoord, point.zCoord,
-			player.rotationYaw, player.rotationPitch
+		player.setPositionAndUpdate(
+			point.xCoord, point.yCoord, point.zCoord
 		)
 
 		// todo particles
