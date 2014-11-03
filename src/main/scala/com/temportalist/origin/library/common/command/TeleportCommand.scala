@@ -26,7 +26,7 @@ object TeleportCommand extends CommandBase {
 	}
 
 	override def getCommandUsage(p1: ICommandSender): String = {
-		"origin [tp [x] [y] [z] <Dimension Name>:null]"
+		"origin tp < [x] [y] [z] <Dimension Name:_> >"
 	}
 
 	override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
@@ -89,15 +89,26 @@ object TeleportCommand extends CommandBase {
 
 					if ((!hasAlternatePlayer && args.length > 4) ||
 							(hasAlternatePlayer && args.length > 5)) {
-						val dimName: String = args(coordStartIndex + 3)
-
-						if (!Origin.dimensions.containsKey(dimName)) {
-							Player.message(player1,
-								"That was not a valid dimension name!")
-							return
+						var dimName: String = ""
+						for (i <- coordStartIndex + 3 until args.length) {
+							dimName = (if (dimName.equals("")) "" else dimName + " ") + args(i)
 						}
 
-						val dimID: Int = Origin.dimensions.get(dimName)
+						var dimID: Int = 0
+						try {
+							dimID = dimName.toInt
+						}
+						catch {
+							case e: Exception =>
+								if (!Origin.dimensions.containsKey(dimName)) {
+									Player.message(player1,
+										"\"" + dimName + "\"" + " is not a valid dimension name!")
+									return
+								}
+								else {
+									dimID = Origin.dimensions.get(dimName)
+								}
+						}
 
 						Teleport.toDimension(player, dimID)
 
