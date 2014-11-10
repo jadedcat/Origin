@@ -39,7 +39,7 @@ object Json {
 			}
 
 			if (c == ',' && !isIteratingInString) {
-				readable += this.addLineAndTabs(readable, tabs)
+				readable = this.addLineAndTabs(readable, tabs)
 			}
 
 		}
