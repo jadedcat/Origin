@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 /**
  * @author TheTemportalist
  */
-public class Vector3b extends Vector3 implements IVector3 {
+public class Vector3b extends codechicken.lib.vec.Vector3 implements IVector3 {
 
 	public Vector3b() {
 	}

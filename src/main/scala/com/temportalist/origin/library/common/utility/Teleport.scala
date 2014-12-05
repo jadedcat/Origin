@@ -2,7 +2,8 @@ package com.temportalist.origin.library.common.utility
 
 import java.util.Random
 
-import com.temportalist.origin.library.common.lib.{TeleporterCore, Vec3Sided}
+import com.temportalist.origin.library.common.lib.TeleporterCore
+import com.temportalist.origin.library.common.lib.vec.Vector3b
 import net.minecraft.block.Block
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.util.{AxisAlignedBB, MathHelper, Vec3}
@@ -64,18 +65,12 @@ object Teleport {
 	 * @param maxDistance
 	 */
 	def toCursorPosition(entityPlayer: EntityPlayer, maxDistance: Double): Boolean = {
-		val point: Vec3Sided = Cursor.getBlockFromCursor(
+		val point: Vector3b = Cursor.getRaytracedBlock(
 			entityPlayer.worldObj, entityPlayer, maxDistance
 		)
-		if (point != null) {
-			val pos: Vec3 = Cursor.getNewCoordsFromSide(point)
-			if (pos != null) {
-				return Teleport.toPoint(
-					entityPlayer, pos.addVector(0.5D, 0.0D, 0.5D)
-				)
-			}
-		}
-		false
+		Teleport.toPoint(
+			entityPlayer, point.translate(0.5D, 0.0D, 0.5D)
+		)
 	}
 
 	def toPointRandom(player: EntityPlayer, minRange: Int, maxRange: Int): Boolean = {
@@ -94,12 +89,12 @@ object Teleport {
 		val heightOffset: Double = player.ySize - player.yOffset
 		var yVar: Int = random.nextInt(128)
 
-		var point: Vec3 = null
+		var point: Vector3b = null
 		var playerNewBB: AxisAlignedBB = null
 		do {
 			yVar += 1
 
-			point = Vec3.createVectorHelper(
+			point = new Vector3b(
 				MathFuncs.getRandomBetweenBounds(minRadius, maxRadius) +
 						MathHelper.floor_double(player.posX) + 0.5,
 				yVar,
@@ -107,17 +102,17 @@ object Teleport {
 						MathHelper.floor_double(player.posZ) + 0.5
 			)
 			playerNewBB = AxisAlignedBB.getBoundingBox(
-				point.xCoord - halfWidth,
-				point.yCoord + heightOffset,
-				point.zCoord - halfWidth,
-				point.xCoord + halfWidth,
-				point.yCoord + player.height + heightOffset,
-				point.zCoord + halfWidth
+				point.x() - halfWidth,
+				point.y() + heightOffset,
+				point.z() - halfWidth,
+				point.x() + halfWidth,
+				point.y() + player.height + heightOffset,
+				point.z() + halfWidth
 			)
 
 		}
 		while (
-			point.yCoord > 0 && point.yCoord < 128 &&
+			point.y() > 0 && point.y() < 128 &&
 					!world.getCollidingBoundingBoxes(player, playerNewBB).isEmpty
 		)
 
@@ -127,11 +122,7 @@ object Teleport {
 
 		//point.yCoord += 1
 
-		if (!this.canLandOnBlock(world.getBlock(
-			MathHelper.floor_double(point.xCoord),
-			MathHelper.floor_double(point.yCoord),
-			MathHelper.floor_double(point.zCoord)
-		))) {
+		if (!this.canLandOnBlock(point.getBlock(world))) {
 			return this.toPointRandom(player, center, minRadius, maxRadius)
 		}
 
@@ -160,7 +151,7 @@ object Teleport {
 	 * @param z
 	 */
 	def toPoint(player: EntityPlayer, x: Double, y: Double, z: Double): Boolean = {
-		this.toPoint(player, Vec3.createVectorHelper(x, y, z))
+		this.toPoint(player, new Vector3b(x, y, z))
 	}
 
 	/**
@@ -172,24 +163,20 @@ object Teleport {
 	 * @param player
 	 * @param point
 	 */
-	def toPoint(player: EntityPlayer, point: Vec3): Boolean = {
+	def toPoint(player: EntityPlayer, point: Vector3b): Boolean = {
 		// todo fall damage
 
 		val event: EnderTeleportEvent = new EnderTeleportEvent(
-			player, point.xCoord, point.yCoord, point.zCoord, 0.0F
+			player, point.x_i(), point.y_i(), point.z_i(), 0.0F
 		)
 		if (MinecraftForge.EVENT_BUS.post(event)) return false
 
-		val chunk: Chunk = player.worldObj.getChunkFromBlockCoords(
-			point.xCoord.asInstanceOf[Int], point.zCoord.asInstanceOf[Int]
-		)
+		val chunk: Chunk = player.worldObj.getChunkFromBlockCoords(point.x_i(), point.z_i())
 		if (!chunk.isChunkLoaded) {
 			player.worldObj.getChunkProvider.loadChunk(chunk.xPosition, chunk.zPosition)
 		}
 
-		player.setPositionAndUpdate(
-			point.xCoord, point.yCoord, point.zCoord
-		)
+		player.setPositionAndUpdate(point.x_i(), point.y_i(), point.z_i())
 
 		// todo particles
 
