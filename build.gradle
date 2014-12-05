@@ -76,8 +76,7 @@ processResources {
         include '**/*.info'
 
         // replace version and mcversion
-        expand 'version': project.version, 'mcversion': project.minecraft.version
-        expand 'mc_version': project.minecraft.version, 'ccl_version': projectConfig.ccl_version
+        expand 'version': project.version, 'mcversion': project.minecraft.version, 'mc_version': project.minecraft.version, 'ccl_version': projectConfig.ccl_version
     }
 
     // copy everything else, thats not the mcmod.info
