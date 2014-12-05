@@ -109,7 +109,7 @@ if (System.getenv().BUILD_NUMBER != null) {
 // The next 3 tasks are little tasks for compiling different versions of the code
 
 task sourcesJar(type: Jar) {
-    from sourceSets.main.allSource
+    from sourceSets.main.java
     classifier = 'src'
 }
 
