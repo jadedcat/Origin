@@ -61,6 +61,10 @@ minecraft {
 // This is used to set the local version
 version = "${config.minecraft_version}-$version"
 
+dependencies {
+    compile "codechicken:CodeChickenLib:${config.minecraft_version}-${projectConfig.ccl_version}:dev"
+}
+
 // Used for processing, dont meddle
 processResources {
     // this will ensure that this task is redone when the versions change.
@@ -69,10 +73,11 @@ processResources {
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
+        include '*.info'
 
         // replace version and mcversion
         expand 'version': project.version, 'mcversion': project.minecraft.version
+        expand 'mc_version': project.minecraft.version, 'ccl_version': projectConfig.ccl_version
     }
 
     // copy everything else, thats not the mcmod.info
@@ -180,7 +185,7 @@ apply plugin: "curseforge"
 // Only if not on jenkins
 if (System.getenv().BUILD_NUMBER == null) {
     // Load the config
-    ext.curseFile = file "../curse.properties"    
+    ext.curseFile = file "../curse.properties"
     curseFile.withReader {
         def prop = new Properties()
         prop.load(it)
@@ -271,7 +276,7 @@ private String getRawChangelog() {
 private String getChangelog() {
     String changelog = getRawChangelog()
     final String[] split = changelog.split("\n")
-    
+
     final StringBuilder result = new StringBuilder()
 
     result.append("Changelog:\n")
@@ -339,4 +344,3 @@ task curseTest() << {
     logger.quiet log
     logger.quiet "--"
 }
-

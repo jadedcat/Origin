@@ -2,8 +2,10 @@ package com.temportalist.origin.library.client
 
 import java.util
 
+import com.temportalist.origin.library.client.gui.GuiRadialMenuHandler
 import com.temportalist.origin.library.client.gui.config.GuiConfig
 import com.temportalist.origin.library.client.render.BlockCamouflageRender
+import com.temportalist.origin.library.common.helpers.RegisterHelper
 import com.temportalist.origin.library.common.nethandler.PacketHandler
 import com.temportalist.origin.library.common.network.PacketSyncExtendedProperties
 import com.temportalist.origin.library.common.{CommonProxy, Origin}
@@ -26,6 +28,8 @@ class ClientProxy() extends CommonProxy with IModGuiFactory {
 
 	override def registerRender(): Unit = {
 		RenderingRegistry.registerBlockHandler(BlockCamouflageRender)
+
+		RegisterHelper.registerHandler(GuiRadialMenuHandler, null)
 
 	}
 

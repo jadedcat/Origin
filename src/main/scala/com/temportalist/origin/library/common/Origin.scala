@@ -6,6 +6,7 @@ import java.util.Random
 import com.temportalist.origin.library.common.command.TeleportCommand
 import com.temportalist.origin.library.common.extended.ExtendedSync
 import com.temportalist.origin.library.common.helpers.{OptionHandler, RegisterHelper}
+import com.temportalist.origin.library.common.lib.DepLoader
 import com.temportalist.origin.library.common.network._
 import com.temportalist.origin.wrapper.common.PluginWrapper
 import cpw.mods.fml.common._
@@ -34,6 +35,8 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent
 	dependencies = "required-after:Forge@[10.13,)"
 )
 object Origin extends PluginWrapper {
+
+	DepLoader.load()
 
 	final val pluginID = "origin"
 	final val pluginName = "Origin"

@@ -502,6 +502,15 @@ class TEWrapper(var name: String)
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Other ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	/**
+	 * Called when the power is not what it was
+	 */
+	override def onPowerChanged(): Unit = {
+		super.onPowerChanged()
+		this.markDirty
+	}
+
 	override def markDirty: Unit = {
 		super.markDirty
 		this.worldObj.scheduleBlockUpdate(this.xCoord, this.yCoord, this.zCoord,
