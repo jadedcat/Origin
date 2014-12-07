@@ -3,7 +3,7 @@ package com.temportalist.origin.library.common.utility
 import java.util.Random
 
 import com.temportalist.origin.library.common.lib.TeleporterCore
-import com.temportalist.origin.library.common.lib.vec.Vector3b
+import com.temportalist.origin.library.common.lib.vec.Vector3O
 import net.minecraft.block.Block
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.util.{AxisAlignedBB, MathHelper, Vec3}
@@ -65,11 +65,11 @@ object Teleport {
 	 * @param maxDistance
 	 */
 	def toCursorPosition(entityPlayer: EntityPlayer, maxDistance: Double): Boolean = {
-		val point: Vector3b = Cursor.getRaytracedBlock(
+		val point: Vector3O = Cursor.getRaytracedBlock(
 			entityPlayer.worldObj, entityPlayer, maxDistance
 		)
 		Teleport.toPoint(
-			entityPlayer, point.translate(0.5D, 0.0D, 0.5D)
+			entityPlayer, point.add(0.5D, 0.0D, 0.5D)
 		)
 	}
 
@@ -89,12 +89,12 @@ object Teleport {
 		val heightOffset: Double = player.ySize - player.yOffset
 		var yVar: Int = random.nextInt(128)
 
-		var point: Vector3b = null
+		var point: Vector3O = null
 		var playerNewBB: AxisAlignedBB = null
 		do {
 			yVar += 1
 
-			point = new Vector3b(
+			point = new Vector3O(
 				MathFuncs.getRandomBetweenBounds(minRadius, maxRadius) +
 						MathHelper.floor_double(player.posX) + 0.5,
 				yVar,
@@ -102,17 +102,17 @@ object Teleport {
 						MathHelper.floor_double(player.posZ) + 0.5
 			)
 			playerNewBB = AxisAlignedBB.getBoundingBox(
-				point.x() - halfWidth,
-				point.y() + heightOffset,
-				point.z() - halfWidth,
-				point.x() + halfWidth,
-				point.y() + player.height + heightOffset,
-				point.z() + halfWidth
+				point.x - halfWidth,
+				point.y + heightOffset,
+				point.z - halfWidth,
+				point.x + halfWidth,
+				point.y + player.height + heightOffset,
+				point.z + halfWidth
 			)
 
 		}
 		while (
-			point.y() > 0 && point.y() < 128 &&
+			point.y > 0 && point.y < 128 &&
 					!world.getCollidingBoundingBoxes(player, playerNewBB).isEmpty
 		)
 
@@ -151,7 +151,7 @@ object Teleport {
 	 * @param z
 	 */
 	def toPoint(player: EntityPlayer, x: Double, y: Double, z: Double): Boolean = {
-		this.toPoint(player, new Vector3b(x, y, z))
+		this.toPoint(player, new Vector3O(x, y, z))
 	}
 
 	/**
@@ -163,7 +163,7 @@ object Teleport {
 	 * @param player
 	 * @param point
 	 */
-	def toPoint(player: EntityPlayer, point: Vector3b): Boolean = {
+	def toPoint(player: EntityPlayer, point: Vector3O): Boolean = {
 		// todo fall damage
 
 		val event: EnderTeleportEvent = new EnderTeleportEvent(
