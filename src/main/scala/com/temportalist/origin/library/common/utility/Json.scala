@@ -2,8 +2,8 @@ package com.temportalist.origin.library.common.utility
 
 import com.google.gson.JsonArray
 import com.temportalist.origin.library.common.lib.NameParser
-import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fml.common.registry.GameRegistry
 
 /**
  *

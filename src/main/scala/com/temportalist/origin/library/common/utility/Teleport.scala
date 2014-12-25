@@ -6,7 +6,7 @@ import com.temportalist.origin.library.common.lib.TeleporterCore
 import com.temportalist.origin.library.common.lib.vec.Vector3O
 import net.minecraft.block.Block
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
-import net.minecraft.util.{AxisAlignedBB, MathHelper, Vec3}
+import net.minecraft.util._
 import net.minecraft.world.chunk.Chunk
 import net.minecraft.world.{World, WorldServer}
 import net.minecraftforge.common.MinecraftForge
@@ -75,18 +75,19 @@ object Teleport {
 
 	def toPointRandom(player: EntityPlayer, minRange: Int, maxRange: Int): Boolean = {
 		this.toPointRandom(
-			player, Vec3.createVectorHelper(player.posX, player.posY, player.posZ),
+			player, new Vec3i(player.posX, player.posY, player.posZ),
 			minRange, maxRange
 		)
 	}
 
-	def toPointRandom(player: EntityPlayer, center: Vec3, minRadius: Int,
+	def toPointRandom(player: EntityPlayer, center: Vec3i, minRadius: Int,
 			maxRadius: Int): Boolean = {
 		val world: World = player.worldObj
 		val random: Random = new Random
 
 		val halfWidth: Double = player.width / 2
-		val heightOffset: Double = player.ySize - player.yOffset
+		// todo player.ySize (Entity) got removed
+		val heightOffset: Double = -player.getYOffset//player.ySize - player.getYOffset
 		var yVar: Int = random.nextInt(128)
 
 		var point: Vector3O = null
@@ -101,7 +102,7 @@ object Teleport {
 				MathFuncs.getRandomBetweenBounds(minRadius, maxRadius) +
 						MathHelper.floor_double(player.posZ) + 0.5
 			)
-			playerNewBB = AxisAlignedBB.getBoundingBox(
+			playerNewBB = AxisAlignedBB.fromBounds(
 				point.x - halfWidth,
 				point.y + heightOffset,
 				point.z - halfWidth,
@@ -171,9 +172,10 @@ object Teleport {
 		)
 		if (MinecraftForge.EVENT_BUS.post(event)) return false
 
-		val chunk: Chunk = player.worldObj.getChunkFromBlockCoords(point.x_i(), point.z_i())
-		if (!chunk.isChunkLoaded) {
-			player.worldObj.getChunkProvider.loadChunk(chunk.xPosition, chunk.zPosition)
+		val chunk: Chunk = point.getChunk(player.getEntityWorld)
+		// todo proper chunk loading
+		if (!chunk.isLoaded) {
+			//player.getEntityWorld.getChunkProvider.loadChunk(chunk.xPosition, chunk.zPosition)
 		}
 
 		player.setPositionAndUpdate(point.x_i(), point.y_i(), point.z_i())

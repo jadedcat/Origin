@@ -6,10 +6,10 @@ import scala.collection.JavaConversions._
 
 import com.temportalist.origin.library.common.nethandler.{IPacket, PacketHandler}
 import com.temportalist.origin.wrapper.common.extended.{ExtendedEntity, ExtendedEntityHandler}
-import cpw.mods.fml.common.registry.GameRegistry
-import cpw.mods.fml.common.{FMLCommonHandler, IFuelHandler}
 import net.minecraft.command.ICommand
 import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.fml.common.{FMLCommonHandler, IFuelHandler}
 
 /**
  *

@@ -1,8 +1,13 @@
 package com.temportalist.origin.wrapper.common.tile
 
-import com.temportalist.origin.library.common.lib.ItemMeta
-import net.minecraft.block.Block
+import com.temportalist.origin.library.common.Origin
+import com.temportalist.origin.library.common.lib.LogHelper
+import net.minecraft.block.state.IBlockState
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.BlockPos
+import net.minecraftforge.common.property.IUnlistedProperty
+import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.fml.common.registry.GameRegistry.UniqueIdentifier
 
 /**
  *
@@ -11,35 +16,33 @@ import net.minecraft.nbt.NBTTagCompound
  */
 trait ICamouflage {
 
-	var camouflageBlock: Block = null
-	var camouflageMetadata: Int = 0
+	private var blockState: IBlockState = null
 
 	def isCamouflaged: Boolean = {
 		this.hasCamouflage
 	}
 
 	def hasCamouflage: Boolean = {
-		this.camouflageBlock != null
+		this.blockState != null
 	}
 
-	def getCamouflage: ItemMeta = {
-		new ItemMeta(this.camouflageBlock, this.camouflageMetadata)
-	}
+	def getCamouflage: IBlockState = this.blockState
 
-	def setCamouflage(itemMeta: ItemMeta): Unit = {
-		this.camouflageBlock = itemMeta.getBlock
-		if (this.camouflageBlock != null)
-			this.camouflageMetadata = itemMeta.getMetadata
-
+	def setCamouflage(blockState: IBlockState): Unit = {
+		this.blockState = blockState
 	}
 
 	def saveCamouflageNBT(tagCom: NBTTagCompound): Unit = {
 
 		tagCom.setBoolean("ICamouflage_hasCamouflage", this.hasCamouflage)
 		if (this.hasCamouflage) {
-			tagCom.setInteger("ICamouflage_camouflageBlockID",
-				Block.getIdFromBlock(this.camouflageBlock))
-			tagCom.setInteger("ICamouflage_camouflageMetadata", this.camouflageMetadata)
+			val ui: UniqueIdentifier = GameRegistry
+					.findUniqueIdentifierFor(this.blockState.getBlock)
+			tagCom.setString("ICamouflage_modName", ui.modId)
+			tagCom.setString("ICamouflage_blockName", ui.name)
+			tagCom.setInteger(
+				"ICamouflage_blockMeta", blockState.getBlock.getMetaFromState(blockState)
+			)
 		}
 
 	}
@@ -47,11 +50,43 @@ trait ICamouflage {
 	def readCamouflageNBT(tagCom: NBTTagCompound): Unit = {
 
 		if (tagCom.getBoolean("ICamouflage_hasCamouflage")) {
-			this.camouflageBlock = Block
-					.getBlockById(tagCom.getInteger("ICamouflage_camouflageBlockID"))
-			this.camouflageMetadata = tagCom.getInteger("ICamouflage_camouflageMetadata")
+			try {
+				this.blockState = GameRegistry.findBlock(
+					tagCom.getString("ICamouflage_modName"),
+					tagCom.getString("ICamouflage_blockName")
+				).getStateFromMeta(tagCom.getInteger("ICamouflage_blockMeta"))
+			} catch {
+				case e: Exception =>
+					if (e.isInstanceOf[NullPointerException]) {
+						LogHelper.info(Origin.pluginName,
+							"No block for " + tagCom.getString("ICamouflage_modName") + ":" +
+									tagCom.getString("ICamouflage_blockName"))
+					}
+					else e.printStackTrace()
+			}
 		}
 
+	}
+
+}
+
+object ICamouflage {
+
+	val CAMO_PROP: IUnlistedProperty[BlockPos] = new IUnlistedProperty[BlockPos] {
+		override def getType: Class[BlockPos] = classOf[BlockPos]
+
+		override def getName: String = "Block_Pos"
+
+		override def valueToString(value: BlockPos): String = value.toString
+
+		override def isValid(pos: BlockPos): Boolean = {
+			pos.getX() >= -30000000 &&
+					pos.getZ() >= -30000000 &&
+					pos.getX() < 30000000 &&
+					pos.getZ() < 30000000 &&
+					pos.getY() >= 0 &&
+					pos.getY() < 256
+		}
 	}
 
 }

@@ -2,13 +2,14 @@ package com.temportalist.origin.wrapper.common.tile
 
 import com.temportalist.origin.library.common.lib.enums.ActivatedAction
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
 
 /**
  *
  *
  * @author TheTemportalist
  */
-trait IAction {
+trait IAction extends TileEntity {
 
 	var action: ActivatedAction = ActivatedAction.PULSE
 
@@ -20,16 +21,15 @@ trait IAction {
 		this.action
 	}
 
-	def saveActionNBT(tagCom: NBTTagCompound): Unit = {
-
-		tagCom.setInteger("IAction_activatedActionID", ActivatedAction.getInt(this.action))
-
+	override def writeToNBT(compound: NBTTagCompound): Unit = {
+		super.writeToNBT(compound)
+		compound.setInteger("IAction_activatedActionID", ActivatedAction.getInt(this.action))
 	}
 
-	def readActionNBT(tagCom: NBTTagCompound): Unit = {
 
-		this.action = ActivatedAction.getState(tagCom.getInteger("IAction_activatedAction"))
-
+	override def readFromNBT(compound: NBTTagCompound): Unit = {
+		super.readFromNBT(compound)
+		this.action = ActivatedAction.getState(compound.getInteger("IAction_activatedAction"))
 	}
 
 }

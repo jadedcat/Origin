@@ -1,6 +1,6 @@
-package com.temportalist.origin.library.client.render.model
+package com.temportalist.origin.library.client.render.model_old
 
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.model.{ModelBase, ModelRenderer}
 
 /**

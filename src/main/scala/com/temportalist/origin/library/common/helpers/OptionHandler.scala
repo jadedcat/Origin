@@ -4,10 +4,10 @@ import java.io.File
 import java.util
 
 import com.temportalist.origin.library.common.register.OptionRegister
-import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent
-import cpw.mods.fml.common.event.FMLPreInitializationEvent
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.common.config.Configuration
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
 /**
  *

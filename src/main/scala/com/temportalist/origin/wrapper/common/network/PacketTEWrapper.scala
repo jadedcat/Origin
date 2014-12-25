@@ -4,13 +4,14 @@ import com.temportalist.origin.library.common.nethandler.IPacket
 import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.BlockPos
 
 /**
  *
  *
  * @author TheTemportalist
  */
-class PacketTEWrapper(var x: Int, var y: Int, var z: Int) extends IPacket {
+class PacketTEWrapper(private var pos: BlockPos) extends IPacket {
 
 	// Default Constructor
 
@@ -18,27 +19,24 @@ class PacketTEWrapper(var x: Int, var y: Int, var z: Int) extends IPacket {
 
 	// Other Constructors
 	def this() {
-		this(0, 0, 0)
+		this(BlockPos.ORIGIN)
 	}
 
 	// End Constructors
 
 	override def writeTo(buffer: ByteBuf): Unit = {
-		buffer.writeInt(this.x)
-		buffer.writeInt(this.y)
-		buffer.writeInt(this.z)
+		buffer.writeInt(this.pos.getX)
+		buffer.writeInt(this.pos.getY)
+		buffer.writeInt(this.pos.getZ)
 
 	}
 
 	override def readFrom(buffer: ByteBuf): Unit = {
-		this.x = buffer.readInt()
-		this.y = buffer.readInt()
-		this.z = buffer.readInt()
-
+		this.pos = new BlockPos(buffer.readInt(), buffer.readInt(), buffer.readInt())
 	}
 
 	override def handle(player: EntityPlayer): Unit = {
-		this.handleSync(player, player.worldObj.getTileEntity(this.x, this.y, this.z))
+		this.handleSync(player, player.worldObj.getTileEntity(this.pos))
 	}
 
 	def handleSync(player: EntityPlayer, tileEntity: TileEntity): Unit = {

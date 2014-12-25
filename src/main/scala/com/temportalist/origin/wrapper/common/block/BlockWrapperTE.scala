@@ -7,8 +7,10 @@ import com.temportalist.origin.library.common.utility.Drops
 import com.temportalist.origin.wrapper.common.tile.{ICustomDrops, IPowerable}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
+import net.minecraft.block.state.IBlockState
 import net.minecraft.item.{ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.BlockPos
 import net.minecraft.world.World
 
 /**
@@ -48,10 +50,10 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 	/**
 	 * Called to create a new tile entity instance for this block
 	 * @param world
-	 * @param metadata
+	 * @param state
 	 * @return
 	 */
-	override def createTileEntity(world: World, metadata: Int): TileEntity = {
+	override def createTileEntity(world: World, state: IBlockState): TileEntity = {
 		if (this.tileEntityClass != null) {
 			try {
 				// Try to create a new instance of this tile entity's class
@@ -64,8 +66,7 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 					e.printStackTrace
 			}
 		}
-		// Will return a null value
-		super.createTileEntity(world, metadata)
+		null
 	}
 
 	/**
@@ -73,16 +74,16 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 	 * @param metadata
 	 * @return
 	 */
-	override def hasTileEntity(metadata: Int): Boolean = {
+	override def hasTileEntity(state: IBlockState): Boolean = {
 		this.tileEntityClass != null
 	}
 
 	// ~~~~~~~~~~~~~~~ Start supered wrappers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	override def onBlockAdded(world: World, x: Int, y: Int, z: Int): Unit = {
+	override def onBlockAdded(worldIn: World, pos: BlockPos, state: IBlockState): Unit = {
 		// Check the power as soon as self is added to world
-		this.checkPower(world, x, y, z)
-		super.onBlockAdded(world, x, y, z)
+		this.checkPower(worldIn, pos)
+		super.onBlockAdded(worldIn, pos, state)
 	}
 
 	/**
@@ -95,27 +96,31 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 	 * @param z
 	 * @param block the neighbor block
 	 */
-	override def onNeighborBlockChange(world: World, x: Int, y: Int, z: Int, block: Block): Unit = {
+	override def onNeighborBlockChange(worldIn: World, pos: BlockPos, state: IBlockState,
+			neighborBlock: Block): Unit = {
 		// check the powewr when nearby blocks change
-		this.checkPower(world, x, y, z)
+		this.checkPower(worldIn, pos)
+		super.onNeighborBlockChange(worldIn, pos, state, neighborBlock)
 	}
 
-	override def updateTick(world: World, x: Int, y: Int, z: Int, random: Random): Unit = {
+	override def updateTick(worldIn: World, pos: BlockPos, state: IBlockState,
+			rand: Random): Unit = {
 		// check the power when updates are scheduled
-		this.checkPower(world, x, y, z)
+		this.checkPower(worldIn, pos)
+		super.updateTick(worldIn, pos, state, rand)
 	}
 
-	def checkPower(world: World, x: Int, y: Int, z: Int) {
+	def checkPower(world: World, pos: BlockPos) {
 		// make sure we are server side
 		if (!world.isRemote) {
 			// get the tile entity
-			val tileEntity: TileEntity = world.getTileEntity(x, y, z)
+			val tileEntity: TileEntity = world.getTileEntity(pos)
 			// check if it is a valid powerable tile entity
 			if (tileEntity != null && tileEntity.isInstanceOf[IPowerable]) {
 				// cast and store in variable
 				val powerable: IPowerable = tileEntity.asInstanceOf[IPowerable]
 				// get if the world says this block is powered
-				val blockGettingPower: Boolean = world.isBlockIndirectlyGettingPowered(x, y, z)
+				val blockGettingPower: Boolean = world.isBlockPowered(pos)
 				// set the powerable's power based on world power get ^
 				if (powerable.isPowered(checkState = false) && !blockGettingPower) {
 					powerable.setPowered(isRecievingPower = false)
@@ -132,29 +137,28 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 	 * @param metadata
 	 * @return
 	 */
-	def hasTileEntityDrops(metadata: Int): Boolean = {
+	def hasTileEntityDrops(state: IBlockState): Boolean = {
 		false
 	}
 
-	override def breakBlock(world: World, x: Int, y: Int, z: Int, block: Block, meta: Int) {
+	override def breakBlock(worldIn: World, pos: BlockPos, state: IBlockState): Unit = {
 		// get the super's drops (gets this block as a drop)
-		val drops: util.ArrayList[ItemStack] = this.getDrops(world, x, y, z, meta, 0)
-
+		val drops: util.List[ItemStack] = this.getDrops(worldIn, pos, state, 0)
 		// get the tile entity
-		val tileEntity: TileEntity = world.getTileEntity(x, y, z)
-		// check if valid tile entity
-		if (tileEntity != null && tileEntity.isInstanceOf[ICustomDrops]) {
-			// check if we are allowed to drop things
-			if (this.hasTileEntityDrops(meta)) {
-				// cast and run the get drops method
-				tileEntity.asInstanceOf[ICustomDrops].getDrops(drops, block, meta)
-			}
-		}
-		// Spawn the drops
-		Drops.spawnDrops(world, x, y, z, drops)
-		// remove the tile
-		world.removeTileEntity(x, y, z)
+		val tileEntity: TileEntity = worldIn.getTileEntity(pos)
 
+		// check if valid tile entity
+		if (tileEntity != null) tileEntity match {
+			case cuDo: ICustomDrops =>
+				if (this.hasTileEntityDrops(state)) cuDo.getDrops(drops, state.getBlock, state)
+		}
+
+		// Spawn the drops
+		Drops.spawnDrops(worldIn, pos: BlockPos, drops)
+		// remove the tile
+		worldIn.removeTileEntity(pos)
+
+		super.breakBlock(worldIn, pos, state)
 	}
 
 }

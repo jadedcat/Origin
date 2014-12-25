@@ -3,9 +3,8 @@ package com.temportalist.origin.library.client.gui
 import java.util
 
 import com.temportalist.origin.library.common.lib.IRadialSelection
-import com.temportalist.origin.wrapper.client.gui.GuiScreenWrapper
+import com.temportalist.origin.wrapper.client.gui.IGuiScreen
 import net.minecraft.client.gui.ScaledResolution
-import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.client.renderer.{RenderHelper, Tessellator}
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
@@ -18,11 +17,15 @@ import org.lwjgl.opengl.GL11
 abstract class GuiRadialMenu(
 		private val innerRadius: Int, private val outerRadius: Int,
 		private val selections: util.ArrayList[_ <: IRadialSelection]
-		) extends GuiScreenWrapper(outerRadius * 2, outerRadius * 2) {
+		) extends IGuiScreen {
+
+	this.setSize(outerRadius * 2, outerRadius * 2)
 
 	val animationTimer: Int = 20
 
 	var selectedLocalIndex: Int = -1
+
+	def shouldSelect(): Boolean
 
 	def selectCurrent(): Unit = {
 		if (this.selectedLocalIndex >= 0) {
@@ -62,7 +65,7 @@ abstract class GuiRadialMenu(
 		GL11.glPushMatrix()
 		GL11.glLoadIdentity()
 
-		val tessellator: Tessellator = Tessellator.instance
+		val tessellator: Tessellator = Tessellator.getInstance()
 
 		val mouseAngle = this.correctAngle(this.getMouseAngle() - 270)
 
@@ -84,30 +87,38 @@ abstract class GuiRadialMenu(
 				((this.outerRadius - animationTimer + (if (isMouseIn) 1 else 2)) / 100F) *
 						(257F / resolution.getScaledHeight.toFloat)
 
-			tessellator.startDrawingQuads()
-
 			if (isMouseIn) {
-				tessellator.setColorRGBA_F(28F / 255F, 232F / 255F, 31F / 255F, 153F / 255F)
+				GL11.glColor4f(28F / 255F, 232F / 255F, 31F / 255F, 153F / 255F)
 				this.selectedLocalIndex = i
 			}
 			else {
-				tessellator.setColorRGBA_F(0F / 255F, 0F / 255F, 0F / 255F, 153F / 255F)
+				GL11.glColor4f(0F / 255F, 0F / 255F, 0F / 255F, 153F / 255F)
 			}
 
-			tessellator.addVertex(Math.cos(currAngle) * resolution.getScaledHeight_double() /
-					resolution.getScaledWidth_double() * innerR,
-				Math.sin(currAngle) * innerR, 0)
-			tessellator.addVertex(Math.cos(currAngle) * resolution.getScaledHeight_double() /
-					resolution.getScaledWidth_double() * outerR,
-				Math.sin(currAngle) * outerR, 0)
-			tessellator.addVertex(Math.cos(nextAngle) * resolution.getScaledHeight_double() /
-					resolution.getScaledWidth_double() * outerR,
-				Math.sin(nextAngle) * outerR, 0)
-			tessellator.addVertex(Math.cos(nextAngle) * resolution.getScaledHeight_double() /
-					resolution.getScaledWidth_double() * innerR,
-				Math.sin(nextAngle) * innerR, 0)
+			tessellator.getWorldRenderer.startDrawingQuads()
 
-			tessellator.draw()
+			tessellator.getWorldRenderer.addVertex(
+				Math.cos(currAngle) * resolution.getScaledHeight_double() /
+						resolution.getScaledWidth_double() * innerR,
+				Math.sin(currAngle) * innerR, 0
+			)
+			tessellator.getWorldRenderer.addVertex(
+				Math.cos(currAngle) * resolution.getScaledHeight_double() /
+						resolution.getScaledWidth_double() * outerR,
+				Math.sin(currAngle) * outerR, 0
+			)
+			tessellator.getWorldRenderer.addVertex(
+				Math.cos(nextAngle) * resolution.getScaledHeight_double() /
+						resolution.getScaledWidth_double() * outerR,
+				Math.sin(nextAngle) * outerR, 0
+			)
+			tessellator.getWorldRenderer.addVertex(
+				Math.cos(nextAngle) * resolution.getScaledHeight_double() /
+						resolution.getScaledWidth_double() * innerR,
+				Math.sin(nextAngle) * innerR, 0
+			)
+
+			tessellator.getWorldRenderer.draw()
 
 		}
 
@@ -130,9 +141,11 @@ abstract class GuiRadialMenu(
 			resolution.getScaledHeight_double() / 2, 0)
 		RenderHelper.enableGUIStandardItemLighting()
 
-		val tessellator: Tessellator = Tessellator.instance
+		//val tessellator: Tessellator = Tessellator.getInstance()
 
-		this.mc.renderEngine.bindTexture(TextureMap.locationItemsTexture)
+		// todo bind what used to be TextureMap.locationItemsTexture
+		//this.mc.renderEngine.bindTexture(TextureMap.locationItemsTexture)
+		//Rendering.bindResource(TextureMap.)
 
 		var selection: IRadialSelection = null
 		for (i <- 0 until quantity) {

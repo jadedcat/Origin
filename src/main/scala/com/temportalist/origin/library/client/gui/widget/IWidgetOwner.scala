@@ -1,6 +1,6 @@
 package com.temportalist.origin.library.client.gui.widget
 
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  *

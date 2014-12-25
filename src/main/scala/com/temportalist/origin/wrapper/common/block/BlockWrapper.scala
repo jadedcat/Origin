@@ -2,15 +2,17 @@ package com.temportalist.origin.wrapper.common.block
 
 import java.util
 
-import cpw.mods.fml.common.registry.GameRegistry
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import com.temportalist.origin.wrapper.common.IRenderingObject
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.entity.Entity
+import net.minecraft.block.state.IBlockState
+import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{ItemBlock, ItemStack}
-import net.minecraft.world.World
+import net.minecraft.item.{Item, ItemBlock, ItemStack}
+import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.world.{IBlockAccess, World}
+import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  * A wrapper class for the Minecraft Block.
@@ -27,18 +29,16 @@ import net.minecraft.world.World
  * @author TheTemportalist
  */
 class BlockWrapper(material: Material, val pluginID: String, name: String,
-		itemBlock: Class[_ <: ItemBlock]) extends Block(material) {
+		itemBlock: Class[_ <: ItemBlock]) extends Block(material) with IRenderingObject {
 
-	// Default Constructor
-	this.setBlockName(name)
+	this.setUnlocalizedName(name)
 	if (itemBlock != null) {
 		GameRegistry.registerBlock(this, itemBlock, name)
 	}
 	else {
 		GameRegistry.registerBlock(this, name)
 	}
-
-	// End constructor
+	this.initRendering()
 
 	// Other Constructors
 	def this(material: Material, pluginID: String, name: String) {
@@ -55,14 +55,11 @@ class BlockWrapper(material: Material, val pluginID: String, name: String,
 
 	// End Constructors
 
-	/**
-	 * Register the icons for this block
-	 * @param iconRegister
-	 */
+	override def getItem(): Item = Item.getItemFromBlock(this)
+
 	@SideOnly(Side.CLIENT)
-	override def registerBlockIcons(iconRegister: IIconRegister) {
-		// set this icon from the path found at function 'getTexturePath()'
-		this.blockIcon = iconRegister.registerIcon(this.getTexturePath)
+	override def getModelLocation(): ModelResourceLocation = {
+		new ModelResourceLocation(this.pluginID + ":" + this.name, "inventory")
 	}
 
 	/**
@@ -100,18 +97,14 @@ class BlockWrapper(material: Material, val pluginID: String, name: String,
 
 	// ~~~~~~~~~~~~~~~ Start supered wrappers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	override def onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer,
-			side: Int, offsetX: Float, offsetY: Float, offsetZ: Float): Boolean = {
-		super.onBlockActivated(world, x, y, z, player, side, offsetX, offsetY, offsetZ)
+	override def onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState,
+			playerIn: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float,
+			hitZ: Float): Boolean = {
+		super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ)
 	}
 
-	override def onEntityWalking(world: World, x: Int, y: Int, z: Int, entity: Entity) {
-		super.onEntityWalking(world, x, y, z, entity)
+	override def getDrops(world: IBlockAccess, pos: BlockPos, state: IBlockState,
+			fortune: Int): util.List[ItemStack] = {
+		super.getDrops(world, pos, state, fortune)
 	}
-
-	override def getDrops(world: World, x: Int, y: Int, z: Int, metadata: Int,
-			fortune: Int): util.ArrayList[ItemStack] = {
-		super.getDrops(world, x, y, z, metadata, fortune)
-	}
-
 }

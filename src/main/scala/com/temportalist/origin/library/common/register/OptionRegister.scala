@@ -3,15 +3,15 @@ package com.temportalist.origin.library.common.register
 import java.io.File
 import java.util
 
-import cpw.mods.fml.client.IModGuiFactory
-import cpw.mods.fml.client.IModGuiFactory.{RuntimeOptionCategoryElement, RuntimeOptionGuiHandler}
-import cpw.mods.fml.common.event.FMLPreInitializationEvent
-import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.item.Item
 import net.minecraftforge.common.config.{Configuration, Property}
+import net.minecraftforge.fml.client.IModGuiFactory
+import net.minecraftforge.fml.client.IModGuiFactory.{RuntimeOptionGuiHandler, RuntimeOptionCategoryElement}
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import net.minecraftforge.fml.relauncher.{SideOnly, Side}
 
 /**
  *

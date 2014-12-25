@@ -1,20 +1,20 @@
 package com.temportalist.origin.library.common.network
 
 import com.temportalist.origin.library.common.lib.enums.ActivatedAction
+import com.temportalist.origin.library.common.lib.vec.BlockCoord
 import com.temportalist.origin.wrapper.common.network.PacketTEWrapper
 import com.temportalist.origin.wrapper.common.tile.IAction
 import io.netty.buffer.ByteBuf
-import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.BlockPos
 
 /**
  *
  *
  * @author TheTemportalist
  */
-class PacketActionUpdate(x: Int, y: Int, z: Int, var state: ActivatedAction)
-		extends PacketTEWrapper(x, y, z) {
+class PacketActionUpdate(pos: BlockPos, var state: ActivatedAction) extends PacketTEWrapper(pos) {
 
 	// Default Constructor
 
@@ -22,7 +22,7 @@ class PacketActionUpdate(x: Int, y: Int, z: Int, var state: ActivatedAction)
 
 	// Other Constructors
 	def this() {
-		this(0, 0, 0, null)
+		this(BlockPos.ORIGIN, null)
 	}
 
 	// End Constructors
@@ -43,13 +43,7 @@ class PacketActionUpdate(x: Int, y: Int, z: Int, var state: ActivatedAction)
 		if (tileEntity != null && tileEntity.isInstanceOf[IAction]) {
 			tileEntity.asInstanceOf[IAction].setAction(this.state)
 
-			val block: Block = player.worldObj.getBlock(this.x, this.y, this.z)
-			player.worldObj.notifyBlockOfNeighborChange(x + 1, y + 0, z + 0, block)
-			player.worldObj.notifyBlockOfNeighborChange(x - 1, y + 0, z + 0, block)
-			player.worldObj.notifyBlockOfNeighborChange(x + 0, y + 1, z + 0, block)
-			player.worldObj.notifyBlockOfNeighborChange(x + 0, y - 1, z + 0, block)
-			player.worldObj.notifyBlockOfNeighborChange(x + 0, y + 0, z + 1, block)
-			player.worldObj.notifyBlockOfNeighborChange(x + 0, y + 0, z - 1, block)
+			new BlockCoord(tileEntity).notifyAllOfStateChange()
 
 		}
 	}

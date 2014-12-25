@@ -2,10 +2,10 @@ package com.temportalist.origin.library.client.gui
 
 import com.temportalist.origin.library.client.utility.Rendering
 import com.temportalist.origin.library.common.Origin
-import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.util.ResourceLocation
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.opengl.GL11
 
 /**

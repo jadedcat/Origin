@@ -14,8 +14,8 @@ class TeleporterCore(ws: WorldServer) extends Teleporter(ws) {
 		true
 	}
 
-	override def placeInExistingPortal(entity: Entity, x: Double, y: Double, z: Double,
-			f: Float): Boolean = {
+	// todo check this function
+	override def func_180620_b(entity: Entity, f: Float): Boolean = {
 		true
 	}
 

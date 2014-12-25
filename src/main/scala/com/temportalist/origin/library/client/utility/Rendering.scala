@@ -1,6 +1,8 @@
 package com.temportalist.origin.library.client.utility
 
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraft.client.renderer.{WorldRenderer, Tessellator}
+import net.minecraft.client.renderer.texture.TextureAtlasSprite
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Gui
 import net.minecraft.util.ResourceLocation
@@ -12,82 +14,6 @@ import net.minecraft.util.ResourceLocation
  */
 @SideOnly(Side.CLIENT)
 object Rendering {
-
-	/*
-	public static RenderItem basicRender = new RenderItem() {
-		@Override
-		public byte getMiniBlockCount(ItemStack stack, byte original) {
-			return 1;
-		}
-
-		@Override
-		public byte getMiniItemCount(ItemStack stack, byte original) {
-			return 1;
-		}
-
-		@Override
-		public boolean shouldBob() {
-			return true;
-		}
-	};
-
-	public static void renderItem(TileEntityWrapper tileEnt, RenderItem itemRender,
-			ItemStack stack, float x, float y, float z) {
-		GL11.glPushMatrix();
-		float scaleFactor = UtilRender.getGhostItemScaleFactor(itemRender, stack);
-		float rotationAngle = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
-
-		EntityItem ghostEntityItem = new EntityItem(tileEnt.getWorldObj());
-		ghostEntityItem.hoverStart = 0.0F;
-		ghostEntityItem.setEntityItemStack(stack);
-
-		GL11.glTranslatef(x, y, z);
-		GL11.glScalef(scaleFactor, scaleFactor, scaleFactor);
-		GL11.glRotatef(rotationAngle, 0.0F, 1.0F, 0.0F);
-
-		itemRender.doRender(ghostEntityItem, 0, 0, 0, 0, 0);
-		GL11.glPopMatrix();
-	}
-
-	public static float getGhostItemScaleFactor(RenderItem itemRender, ItemStack itemStack) {
-		float scaleFactor = 1.0F;
-
-		if (itemStack != null) {
-			if (itemStack.getItem() instanceof ItemBlock) {
-				switch (itemRender.getMiniBlockCount(itemStack, (byte) 0)) {
-					case 1:
-						return 0.90F;
-					case 2:
-						return 0.90F;
-					case 3:
-						return 0.90F;
-					case 4:
-						return 0.90F;
-					case 5:
-						return 0.80F;
-					default:
-						return 0.90F;
-				}
-			}
-			else {
-				switch (itemRender.getMiniItemCount(itemStack, (byte) 0)) {
-					case 1:
-						return 0.65F;
-					case 2:
-						return 0.65F;
-					case 3:
-						return 0.65F;
-					case 4:
-						return 0.65F;
-					default:
-						return 0.65F;
-				}
-			}
-		}
-
-		return scaleFactor;
-	}
-*/
 
 	def bindResource(rl: ResourceLocation): Unit = {
 		Minecraft.getMinecraft.getTextureManager.bindTexture(rl)
@@ -102,6 +28,53 @@ object Rendering {
 			v + topOffset,
 			w - rightOffset - leftOffset,
 			h - bottomOffset - topOffset
+		)
+	}
+
+	def drawSprite(x: Double, y: Double, z: Double, sprite: TextureAtlasSprite, w: Double, h: Double): Unit = {
+		val tessellator: Tessellator = Tessellator.getInstance
+		val worldrenderer: WorldRenderer = tessellator.getWorldRenderer
+		worldrenderer.startDrawingQuads
+		worldrenderer.addVertexWithUV(
+			x + 0,
+			y + h,
+			z,
+			sprite.getMinU.asInstanceOf[Double],
+			sprite.getMaxV.asInstanceOf[Double]
+		)
+		worldrenderer.addVertexWithUV(
+			x + w,
+			y + h,
+			z,
+			sprite.getMaxU.asInstanceOf[Double],
+			sprite.getMaxV.asInstanceOf[Double]
+		)
+		worldrenderer.addVertexWithUV(
+			x + w,
+			y + 0,
+			z,
+			sprite.getMaxU.asInstanceOf[Double],
+			sprite.getMinV.asInstanceOf[Double]
+		)
+		worldrenderer.addVertexWithUV(
+			x + 0,
+			y + 0,
+			z,
+			sprite.getMinU.asInstanceOf[Double],
+			sprite.getMinV.asInstanceOf[Double]
+		)
+		tessellator.draw
+	}
+
+	def modelCoordsToVerticies(x: Float, y: Float, z: Float, color: Int, texture: TextureAtlasSprite, u: Float, v: Float): Array[Int] = {
+		Array[Int] (
+			java.lang.Float.floatToRawIntBits(x),
+			java.lang.Float.floatToRawIntBits(y),
+			java.lang.Float.floatToRawIntBits(z),
+			color,
+			java.lang.Float.floatToRawIntBits(texture.getInterpolatedU(u)),
+			java.lang.Float.floatToRawIntBits(texture.getInterpolatedV(v)),
+			0
 		)
 	}
 

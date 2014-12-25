@@ -4,20 +4,18 @@ import java.util
 
 import com.temportalist.origin.library.client.gui.GuiRadialMenuHandler
 import com.temportalist.origin.library.client.gui.config.GuiConfig
-import com.temportalist.origin.library.client.render.BlockCamouflageRender
 import com.temportalist.origin.library.common.helpers.RegisterHelper
 import com.temportalist.origin.library.common.nethandler.PacketHandler
 import com.temportalist.origin.library.common.network.PacketSyncExtendedProperties
 import com.temportalist.origin.library.common.{CommonProxy, Origin}
-import cpw.mods.fml.client.IModGuiFactory
-import cpw.mods.fml.client.IModGuiFactory.{RuntimeOptionCategoryElement, RuntimeOptionGuiHandler}
-import cpw.mods.fml.client.registry.RenderingRegistry
-import cpw.mods.fml.common.FMLCommonHandler
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
+import net.minecraftforge.fml.client.IModGuiFactory
+import net.minecraftforge.fml.client.IModGuiFactory.{RuntimeOptionCategoryElement, RuntimeOptionGuiHandler}
+import net.minecraftforge.fml.common.FMLCommonHandler
 
 /**
  *
@@ -27,7 +25,8 @@ import net.minecraft.world.World
 class ClientProxy() extends CommonProxy with IModGuiFactory {
 
 	override def registerRender(): Unit = {
-		RenderingRegistry.registerBlockHandler(BlockCamouflageRender)
+		// todo bind the camo rendering
+		//RenderingRegistry.registerBlockHandler(BlockCamouflageRender)
 
 		RegisterHelper.registerHandler(GuiRadialMenuHandler, null)
 
@@ -48,7 +47,9 @@ class ClientProxy() extends CommonProxy with IModGuiFactory {
 	}
 
 	override def addArmor(armor: String): Int = {
-		RenderingRegistry.addNewArmourRendererPrefix(armor)
+		// todo find a way to bind armor rendering
+		//RenderingRegistry.addNewArmourRendererPrefix(armor)
+		0
 	}
 
 	override def initialize(minecraftInstance: Minecraft): Unit = {}

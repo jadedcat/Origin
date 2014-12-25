@@ -17,4 +17,27 @@ object MathFuncs {
 		new Random().nextInt(100) < percent
 	}
 
+	/**
+	 * a < n < b
+	 * @return
+	 */
+	def between(a: Double, n: Double, b: Double): Boolean = {
+		a < n && b < b
+	}
+
+	/**
+	 * a <= n <= b
+	 * @return
+	 */
+	def between_eq(a: Double, n: Double, b: Double): Boolean = {
+		this.between(a, n, b) || a == n || n == b
+	}
+
+	def bind(min: Double, n: Double, max: Double, default: Double): Double = {
+		if (min < n && n < max)
+			default
+		else
+			n
+	}
+
 }

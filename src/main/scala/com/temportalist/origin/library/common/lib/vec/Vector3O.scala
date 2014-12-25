@@ -1,24 +1,25 @@
 package com.temportalist.origin.library.common.lib.vec
 
-import codechicken.lib.vec._
 import com.google.common.io.ByteArrayDataInput
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import com.temportalist.origin.library.common.utility.MathFuncs
 import net.minecraft.block.Block
+import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.entity.Entity
 import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{ChunkCoordinates, MovingObjectPosition, Vec3}
-import net.minecraft.world.{IBlockAccess, World}
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util._
+import net.minecraft.world.chunk.Chunk
+import net.minecraft.world.{ChunkCoordIntPair, World}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  *
  *
  * @author TheTemportalist
  */
-class Vector3O(_x: Double, _y: Double, _z: Double) extends Vector3(_x, _y, _z) {
+class Vector3O(var x: Double, var y: Double, var z: Double) {
 
 	def this(array: Array[Double]) {
 		this(array(0), array(1), array(2))
@@ -28,12 +29,8 @@ class Vector3O(_x: Double, _y: Double, _z: Double) extends Vector3(_x, _y, _z) {
 		this(vec.xCoord, vec.yCoord, vec.zCoord)
 	}
 
-	def this(vec: Vector3) {
-		this(vec.x, vec.y, vec.z)
-	}
-
-	def this(c: BlockCoord) {
-		this(c.x, c.y, c.z)
+	def this(vec: Vec3i) {
+		this(vec.getX, vec.getY, vec.getZ)
 	}
 
 	def this(amount: Double) {
@@ -45,27 +42,27 @@ class Vector3O(_x: Double, _y: Double, _z: Double) extends Vector3(_x, _y, _z) {
 	}
 
 	def this(tile: TileEntity) {
-		this(tile.xCoord, tile.zCoord, tile.yCoord)
+		this(tile.getPos)
 	}
 
-	def this(mop: MovingObjectPosition) {
-		this(mop.blockX, mop.blockY, mop.blockZ)
+	def this(mop: MovingObjectPosition, isBlock: Boolean) {
+		this(mop.hitVec)
 	}
 
-	def this(chunk: ChunkCoordinates) {
-		this(chunk.posX, chunk.posY, chunk.posZ)
+	def this(chunk: ChunkCoordIntPair) {
+		this(chunk.chunkXPos, 0, chunk.chunkZPos)
 	}
 
-	def this(dir: ForgeDirection) {
-		this(dir.offsetX, dir.offsetY, dir.offsetZ)
+	def this(dir: EnumFacing) {
+		this(dir.getFrontOffsetX, dir.getFrontOffsetY, dir.getFrontOffsetZ)
 	}
 
 	def this(nbt: NBTTagCompound) {
-		this(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"));
+		this(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"))
 	}
 
 	def this(data: ByteArrayDataInput) {
-		this(data.readDouble(), data.readDouble(), data.readDouble());
+		this(data.readDouble(), data.readDouble(), data.readDouble())
 	}
 
 	def x_i(): Int = this.x.asInstanceOf[Int]
@@ -80,22 +77,33 @@ class Vector3O(_x: Double, _y: Double, _z: Double) extends Vector3(_x, _y, _z) {
 
 	def z_f(): Float = this.z.asInstanceOf[Float]
 
-	def getBlock(world: IBlockAccess): Block =
-		world.getBlock(this.x_i(), this.y_i(), this.z_i())
-
-	def getMetadata(world: IBlockAccess): Int =
-		world.getBlockMetadata(this.x_i(), this.y_i(), this.z_i())
-
-	def getTile(world: IBlockAccess): TileEntity =
-		world.getTileEntity(this.x_i(), this.y_i(), this.z_i())
-
-	def setBlock(world: World, block: Block, meta: Int, notify: Int): Unit = {
-		world.setBlock(this.x_i(), this.y_i(), this.z_i(), block, meta, notify)
+	def toBlockPos(): BlockPos = {
+		new BlockPos(
+			MathHelper.floor_double(this.x),
+			MathHelper.floor_double(this.y),
+			MathHelper.floor_double(this.z)
+		)
 	}
 
-	def setBlock(world: World, block: Block, meta: Int): Unit = {
+	def toBlockCoord(world: World): BlockCoord = new BlockCoord(this, world.provider.getDimensionId)
+
+	def toVec3(): Vec3 = new Vec3(this.x, this.y, this.z)
+
+	def toVec3i(): Vec3i = new Vec3i(this.x_i(), this.y_i(), this.z_i())
+
+	def getChunk(world: World): Chunk = this.toBlockCoord(world).getChunk()
+
+	def getBlockState(world: World): IBlockState = this.toBlockCoord(world).getBlockState()
+
+	def getBlock(world: World): Block = this.getBlockState(world).getBlock
+
+	def getTile(world: World): TileEntity = this.toBlockCoord(world).getTile()
+
+	def setBlock(world: World, block: Block, meta: Int, notify: Int): Unit =
+		this.toBlockCoord(world).setBlock(block, meta, notify)
+
+	def setBlock(world: World, block: Block, meta: Int): Unit =
 		this.setBlock(world, block, meta, 3)
-	}
 
 	def setBlock(world: World, block: Block): Unit = {
 		this.setBlock(world, block, 0)
@@ -114,11 +122,11 @@ class Vector3O(_x: Double, _y: Double, _z: Double) extends Vector3(_x, _y, _z) {
 
 	def scale(amount: Double): Vector3O = this.scale(amount, amount, amount)
 
-	def scale(vec: Vector3): Vector3O = this.scale(vec.x, vec.y, vec.z)
+	def scale(vec: Vector3O): Vector3O = this.scale(vec.x, vec.y, vec.z)
 
 	def invert(): Vector3O = this.scale(-1)
 
-	override def copy(): Vector3O = super.copy().asInstanceOf[Vector3O]
+	def copy(): Vector3O = new Vector3O(this.x, this.y, this.z)
 
 	def toNBT(nbt: NBTTagCompound) {
 		nbt.setDouble("x", this.x)
@@ -126,7 +134,7 @@ class Vector3O(_x: Double, _y: Double, _z: Double) extends Vector3(_x, _y, _z) {
 		nbt.setDouble("z", this.z)
 	}
 
-	def distance(vec: Vector3): Double = {
+	def distance(vec: Vector3O): Double = {
 		this.copy().subtract(vec).mag()
 	}
 
@@ -136,102 +144,232 @@ class Vector3O(_x: Double, _y: Double, _z: Double) extends Vector3(_x, _y, _z) {
 
 	@SideOnly(Side.CLIENT)
 	def addVecUV(u: Double, v: Double): Unit = {
-		Tessellator.instance.addVertexWithUV(this.x, this.y, this.z, u, v)
+		Tessellator.getInstance().getWorldRenderer.addVertexWithUV(this.x, this.y, this.z, u, v)
 	}
 
-	def add(dir: ForgeDirection): Vector3O = this.add(new Vector3O(dir))
+	def magSquared(): Double = {
+		this.x * this.x + this.y * this.y + this.z * this.z
+	}
 
-	/*  Overrides  */
+	def mag(): Double = {
+		Math.sqrt(this.magSquared())
+	}
 
-	override def set(d: Double, d1: Double, d2: Double): Vector3O =
-		new Vector3O(super.set(d, d1, d2))
+	def add(dir: EnumFacing): Vector3O = this.add(new Vector3O(dir))
 
-	override def set(vec: Vector3): Vector3O = new Vector3O(super.set(vec))
+	def set(x1: Double, y1: Double, z1: Double): Vector3O = {
+		this.x = x1
+		this.y = y
+		this.z = z
+		this
+	}
 
-	override def setSide(s: Int, v: Double): Vector3O = new Vector3O(super.setSide(s, v))
+	def set(vec: Vector3O): Vector3O = this.set(vec.x, vec.y, vec.z)
 
-	override def add(d: Double, d1: Double, d2: Double): Vector3O =
-		new Vector3O(super.add(d, d1, d2))
+	def add(x1: Double, y1: Double, z1: Double): Vector3O = {
+		this.x += x1
+		this.y += y1
+		this.z += z1
+		this
+	}
 
-	override def add(vec: Vector3): Vector3O = new Vector3O(super.add(vec))
+	def add(vec: Vector3O): Vector3O = this.add(vec.x, vec.y, vec.z)
 
-	override def add(d: Double): Vector3O = new Vector3O(super.add(d))
+	def add(d: Double): Vector3O = this.add(d, d, d)
 
-	override def sub(vec: Vector3): Vector3O = new Vector3O(super.sub(vec))
+	def subtract(x1: Double, y1: Double, z1: Double): Vector3O = {
+		this.x -= x1
+		this.y -= y1
+		this.z -= z1
+		this
+	}
 
-	override def subtract(vec: Vector3): Vector3O = new Vector3O(super.subtract(vec))
+	def subtract(vec: Vector3O): Vector3O = this.subtract(vec.x, vec.y, vec.z)
 
-	override def negate(vec: Vector3): Vector3O = new Vector3O(super.negate(vec))
+	def subtract(d: Double): Vector3O = this.subtract(d, d, d)
 
-	override def multiply(d: Double): Vector3O = new Vector3O(super.multiply(d))
+	def negate(): Vector3O = {
+		this.x = -this.x
+		this.y = -this.y
+		this.z = -this.z
+		this
+	}
 
-	override def multiply(f: Vector3): Vector3O = new Vector3O(super.multiply(f))
+	def multiply(x1: Double, y1: Double, z1: Double): Vector3O = {
+		this.x *= x1
+		this.y *= y1
+		this.z *= z1
+		this
+	}
 
-	override def multiply(fx: Double, fy: Double, fz: Double): Vector3O =
-		new Vector3O(super.multiply(fx, fy, fz))
+	def multiply(d: Double): Vector3O = this.multiply(d, d, d)
 
-	override def normalize(): Vector3O = new Vector3O(super.normalize())
+	def multiply(f: Vector3O): Vector3O = this.multiply(f.x, f.y, f.z)
 
-	override def perpendicular(): Vector3O = new Vector3O(super.perpendicular())
+	def normalize(): Vector3O = {
+		val mag: Double = this.mag()
+		if (mag != 0.0D) {
+			this.multiply(1.0D / mag)
+		}
+		else this
+	}
 
-	override def xCrossProduct(): Vector3O = new Vector3O(super.xCrossProduct())
+	def dotProduct(vec: Vector3O): Double = {
+		var d: Double = vec.x * this.x + vec.y * this.y + vec.z * this.z
+		d = MathFuncs.bind(1, d, 1.00001, 1)
+		d = MathFuncs.bind(-1.00001, d, -1, -1)
+		d
+	}
 
-	override def zCrossProduct(): Vector3O = new Vector3O(super.zCrossProduct())
+	def dotProduct(x1: Double, y1: Double, z1: Double): Double = {
+		x1 * this.x + y1 * this.y + z1 * this.z
+	}
 
-	override def yCrossProduct(): Vector3O = new Vector3O(super.yCrossProduct())
+	def crossProduct(vec: Vector3O): Vector3O = {
+		val (x1, y1, z1) = (
+				this.y * vec.z - this.z * vec.y,
+				this.z * vec.x - this.x * vec.z,
+				this.x * vec.y - this.y * vec.x
+				)
+		x = x1
+		y = y1
+		z = z1
+		this
+	}
 
-	override def rotate(angle: Double, axis: Vector3): Vector3O =
-		new Vector3O(super.rotate(angle, axis))
+	def crossProduct(axis: EnumFacing.Axis): Vector3O = {
+		val (x1, y1, z1) = (this.x, this.y, this.z)
+		this.x = 0
+		this.y = 0
+		this.z = 0
+		axis match {
+			case EnumFacing.Axis.X =>
+				this.y = z1
+				this.z = -y1
+			case EnumFacing.Axis.Y =>
+				this.x = -z1
+				this.z = x1
+			case EnumFacing.Axis.Z =>
+				this.x = y1
+				this.y = -x1
+			case _ =>
+		}
+		this
+	}
 
-	override def rotate(rotator: Quat): Vector3O = new Vector3O(super.rotate(rotator))
+	def xCrossProduct(): Vector3O = this.crossProduct(EnumFacing.Axis.X)
 
-	override def YZintercept(end: Vector3, px: Double): Vector3O =
-		new Vector3O(super.YZintercept(end, px))
+	def zCrossProduct(): Vector3O = this.crossProduct(EnumFacing.Axis.Z)
 
-	override def XZintercept(end: Vector3, py: Double): Vector3O =
-		new Vector3O(super.XZintercept(end, py))
+	def yCrossProduct(): Vector3O = this.crossProduct(EnumFacing.Axis.Y)
 
-	override def XYintercept(end: Vector3, pz: Double): Vector3O =
-		new Vector3O(super.XYintercept(end, pz))
+	def perpendicular(): Vector3O =
+		if (this.z == 0.0D) this.zCrossProduct() else this.xCrossProduct()
 
-	override def negate(): Vector3O = new Vector3O(super.negate())
+	//def rotate(angle: Double, axis: Vector3O): Vector3O = new Vector3O(super.rotate(angle, axis))
 
-	override def project(b: Vector3): Vector3O = new Vector3O(super.project(b))
+	//def rotate(rotator: Quat): Vector3O = new Vector3O(super.rotate(rotator))
 
-	override def apply(t: Transformation): Vector3O = new Vector3O(super.apply(t))
+	def intercept(axis: EnumFacing.Axis, end: Vector3O, p: Double): Vector3O = {
+		val (dx, dy, dz) = (end.x - this.x, end.y - this.y, end.z - this.z)
+		var d: Double = 0.0D
+		axis match {
+			case EnumFacing.Axis.X =>
+				if (dx == 0.0D) return null
+				d = (p - this.x) / dx
 
-	override def unary_$tilde(): Vector3O = new Vector3O(super.unary_$tilde())
+				if (MathFuncs.between_eq(-1E-5, d, 1E-5)) return this
+				if (!MathFuncs.between_eq(0, d, 1)) return null
 
-	override def $tilde(): Vector3O = new Vector3O(super.$tilde())
+				x = p
+				y += d * dy
+				z += d * dz
+			case EnumFacing.Axis.Y =>
+				if (dy == 0.0D) return null
+				d = (p - this.y) / dy
 
-	override def $minus(v: Vector3): Vector3O = new Vector3O(super.$minus(v))
+				if (MathFuncs.between_eq(-1E-5, d, 1E-5)) return this
+				if (!MathFuncs.between_eq(0, d, 1)) return null
 
-	override def $plus(v: Vector3): Vector3O = new Vector3O(super.$plus(v))
+				x += d * dx
+				y = p
+				z += d * dz
+			case EnumFacing.Axis.Z =>
+				if (dz == 0.0D) return null
+				d = (p - this.z) / dz
 
-	override def $times(d: Double): Vector3O = new Vector3O(super.$times(d))
+				if (MathFuncs.between_eq(-1E-5, d, 1E-5)) return this
+				if (!MathFuncs.between_eq(0, d, 1)) return null
 
-	override def $div(d: Double): Vector3O = new Vector3O(super.$div(d))
+				x += d * dx
+				y += d * dy
+				z = p
+			case _ =>
+		}
+		this
+	}
 
-	override def $times(v: Vector3): Vector3O = new Vector3O(super.$times(v))
+	def YZintercept(end: Vector3O, px: Double): Vector3O =
+		this.intercept(EnumFacing.Axis.X, end, px)
+
+	def XZintercept(end: Vector3O, py: Double): Vector3O =
+		this.intercept(EnumFacing.Axis.Y, end, py)
+
+	def XYintercept(end: Vector3O, pz: Double): Vector3O =
+		this.intercept(EnumFacing.Axis.Z, end, pz)
+
+	def unary_$tilde(): Vector3O = this.normalize()
+
+	def $tilde(): Vector3O = this.normalize()
+
+	def $minus(v: Vector3O): Vector3O = this.subtract(v)
+
+	def $plus(v: Vector3O): Vector3O = this.add(v)
+
+	def $times(d: Double): Vector3O = this.multiply(d)
+
+	def $div(d: Double): Vector3O = this.multiply(1 / d)
+
+	def $times(v: Vector3O): Vector3O = this.crossProduct(v)
+
+	def $dot$times(v: Vector3O): Double = this.dotProduct(v)
+
+	override def equals(o: scala.Any): Boolean = {
+		o match {
+			case vec: Vector3O =>
+				return vec.x == this.x && vec.y == this.y && vec.z == this.z
+			case _ =>
+		}
+		false
+	}
+
+	override def hashCode(): Int = {
+		var hash: Int = 1
+		hash = hash * 31 + this.x.hashCode()
+		hash = hash * 31 + this.y.hashCode()
+		hash = hash * 31 + this.z.hashCode()
+		hash
+	}
+
 }
 
 object Vector3O {
 
-	def from(x: Double, y: Double, z: Double, dir: ForgeDirection): Vector3O = {
-		new Vector3O(x, y, z).add(new Vector3O(dir)).asInstanceOf[Vector3O]
+	def from(x: Double, y: Double, z: Double, dir: EnumFacing): Vector3O = {
+		new Vector3O(x, y, z).add(new Vector3O(dir))
 	}
 
-	def UP: Vector3O = new Vector3O(ForgeDirection.UP)
+	def UP: Vector3O = new Vector3O(EnumFacing.UP)
 
-	def DOWN: Vector3O = new Vector3O(ForgeDirection.DOWN)
+	def DOWN: Vector3O = new Vector3O(EnumFacing.DOWN)
 
-	def NORTH: Vector3O = new Vector3O(ForgeDirection.NORTH)
+	def NORTH: Vector3O = new Vector3O(EnumFacing.NORTH)
 
-	def SOUTH: Vector3O = new Vector3O(ForgeDirection.SOUTH)
+	def SOUTH: Vector3O = new Vector3O(EnumFacing.SOUTH)
 
-	def EAST: Vector3O = new Vector3O(ForgeDirection.EAST)
+	def EAST: Vector3O = new Vector3O(EnumFacing.EAST)
 
-	def WEST: Vector3O = new Vector3O(ForgeDirection.WEST)
+	def WEST: Vector3O = new Vector3O(EnumFacing.WEST)
 
 	def ZERO: Vector3O = new Vector3O(0, 0, 0)
 

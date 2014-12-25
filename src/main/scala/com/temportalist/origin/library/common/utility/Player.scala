@@ -1,8 +1,10 @@
 package com.temportalist.origin.library.common.utility
 
+import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.ChatComponentText
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  *
@@ -17,7 +19,7 @@ object Player {
 		for (i <- 0 until players.size()) {
 			players.get(i) match {
 				case player: EntityPlayerMP =>
-					if (player.getCommandSenderName.equals(senderNameORuuid) ||
+					if (player.getName.equals(senderNameORuuid) ||
 							player.getUniqueID.equals(senderNameORuuid)) {
 						return player
 					}
@@ -47,5 +49,19 @@ object Player {
 	def message(player: EntityPlayer, message: String): Unit = {
 		player.addChatComponentMessage(new ChatComponentText(message))
 	}
+
+	def getReachDistance(player: EntityPlayer): Double = {
+		if (player.getEntityWorld.isRemote)
+			this.getReach_client()
+		else player match {
+			case mp: EntityPlayerMP => this.getReach_server(mp)
+			case _ => 5.0D
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private def getReach_client(): Double = Minecraft.getMinecraft.playerController.getBlockReachDistance
+
+	private def getReach_server(mp: EntityPlayerMP): Double = mp.theItemInWorldManager.getBlockReachDistance
 
 }

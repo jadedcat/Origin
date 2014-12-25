@@ -2,13 +2,15 @@ package com.temportalist.origin.wrapper.common.item
 
 import java.util
 
-import cpw.mods.fml.common.registry.GameRegistry
-import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.client.renderer.texture.IIconRegister
+import com.temportalist.origin.wrapper.common.IRenderingObject
+import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{Item, ItemStack}
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.World
+import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  * A wrapper for Minecraft's Item
@@ -20,26 +22,17 @@ import net.minecraft.world.World
  *
  * @author TheTemportalist
  */
-class ItemWrapper(val pluginID: String, name: String) extends Item {
+class ItemWrapper(val pluginID: String, name: String) extends Item with IRenderingObject {
 
-	// Default Constructor
 	this.setUnlocalizedName(name)
 	GameRegistry.registerItem(this, name)
+	this.initRendering()
 
-	// End Constructor
+	override def getItem(): Item = this
 
-	// Other Constructors
-
-	// End Constructors
-
-	/**
-	 * Register the icons for this item
-	 * @param iconRegister
-	 */
-	@SideOnly(Side.CLIENT) // Make sure this is done only on the client side
-	override def registerIcons(iconRegister: IIconRegister): Unit = {
-		// Set this item's icon to the icon at the path, gotten from the method getTexturePath
-		this.itemIcon = iconRegister.registerIcon(this.getTexturePath)
+	@SideOnly(Side.CLIENT)
+	override def getModelLocation(): ModelResourceLocation = {
+		new ModelResourceLocation(this.pluginID + ":" + this.name, "inventory")
 	}
 
 	/**
@@ -104,21 +97,11 @@ class ItemWrapper(val pluginID: String, name: String) extends Item {
 	 * it will have one of these. Return true if something happens and false if it doesn't.
 	 * This is for ITEMS, not BLOCKS!
 	 *
-	 * @param itemStack
-	 * @param player
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param side
-	 * @param offsetX
-	 * @param offsetY
-	 * @param offsetZ
 	 * @return
 	 */
-	override def onItemUse(itemStack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int,
-			z: Int, side: Int, offsetX: Float, offsetY: Float, offsetZ: Float): Boolean = {
-		super.onItemUse(itemStack, player, world, x, y, z, side, offsetX, offsetY, offsetZ)
+	override def onItemUse(stack: ItemStack, playerIn: EntityPlayer, worldIn: World, pos: BlockPos,
+			side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+		super.onItemUse(stack, playerIn, worldIn, pos, side, hitX, hitY, hitZ)
 	}
 
 	/**

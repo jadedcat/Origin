@@ -1,13 +1,11 @@
 package com.temportalist.origin.library.common.utility
 
-import codechicken.lib.raytracer.RayTracer
 import com.temportalist.origin.library.common.lib.vec.Vector3O
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
-import net.minecraft.util.MovingObjectPosition
+import net.minecraft.util.{EnumFacing, MovingObjectPosition}
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraft.world.World
-import net.minecraftforge.common.util.ForgeDirection
 
 /**
  *
@@ -53,7 +51,7 @@ object Cursor {
 	def getCursorPosVec(entity: EntityLivingBase): Vector3O = {
 		entity match {
 			case player: EntityPlayer =>
-				this.getCursorPosVec(entity, RayTracer.getBlockReachDistance(player))
+				this.getCursorPosVec(entity, Player.getReachDistance(player))
 			case _ =>
 				this.getCursorPosVec(entity, 5D)
 		}
@@ -63,17 +61,17 @@ object Cursor {
 		val head: Vector3O = this.getHeadPos(entity)
 		val cursorPosVec: Vector3O = this.getCursorPosVec(entity, reachLength, head)
 		val mop: MovingObjectPosition = world
-				.rayTraceBlocks(head.toVec3D, cursorPosVec.toVec3D, false)
+				.rayTraceBlocks(head.toVec3(), cursorPosVec.toVec3(), false)
 		if (mop == null) return null
 		var blockX: Int = 0
 		var blockY: Int = 0
 		var blockZ: Int = 0
 		var side: Int = 0
 		if (mop.typeOfHit == MovingObjectType.BLOCK) {
-			blockX = mop.blockX
-			blockY = mop.blockY
-			blockZ = mop.blockZ
-			side = mop.sideHit
+			blockX = mop.func_178782_a().getX
+			blockY = mop.func_178782_a().getY
+			blockZ = mop.func_178782_a().getZ
+			side = mop.field_178784_b.getIndex
 		}
 		else {
 			blockX = mop.hitVec.xCoord.asInstanceOf[Int]
@@ -81,7 +79,7 @@ object Cursor {
 			blockZ = mop.hitVec.zCoord.asInstanceOf[Int]
 			side = 1
 		}
-		new Vector3O(blockX, blockY, blockZ).add(ForgeDirection.getOrientation(side))
+		new Vector3O(blockX, blockY, blockZ).add(EnumFacing.getFront(side))
 	}
 
 }

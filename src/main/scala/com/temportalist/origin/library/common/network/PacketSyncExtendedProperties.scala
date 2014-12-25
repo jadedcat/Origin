@@ -4,10 +4,10 @@ import java.util
 
 import com.temportalist.origin.library.common.nethandler.IPacket
 import com.temportalist.origin.wrapper.common.extended.{ExtendedEntity, ExtendedEntityHandler}
-import cpw.mods.fml.common.network.ByteBufUtils
 import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.fml.common.network.ByteBufUtils
 
 /**
  *

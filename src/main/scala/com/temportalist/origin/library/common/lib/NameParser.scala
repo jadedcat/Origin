@@ -2,11 +2,12 @@ package com.temportalist.origin.library.common.lib
 
 import java.util
 
-import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier
-import cpw.mods.fml.common.registry.{GameData, GameRegistry}
 import net.minecraft.block.Block
+import net.minecraft.item.Item
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fml.common.registry.{GameRegistry, GameData}
+import net.minecraftforge.fml.common.registry.GameRegistry.UniqueIdentifier
 import net.minecraftforge.oredict.OreDictionary
 
 /**
@@ -23,12 +24,12 @@ object NameParser {
 
 		val name: String =
 			if (Block.getBlockFromItem(itemStack.getItem) == Blocks.air) {
-				GameData.getItemRegistry.getNameForObject(itemStack.getItem)
+				GameData.getItemRegistry.getNameForObject(itemStack.getItem).asInstanceOf[String]
 			}
 			else {
 				GameData.getBlockRegistry.getNameForObject(
 					Block.getBlockFromItem(itemStack.getItem)
-				)
+				).asInstanceOf[String]
 			}
 		val ui: UniqueIdentifier = new UniqueIdentifier(name)
 		(if (hasID) ui.modId + ":" else "") + name +
@@ -45,10 +46,10 @@ object NameParser {
 		}
 		val modid: String = name.substring(0, name.indexOf(':'))
 		val itemName: String = name.substring(name.indexOf(':') + 1, endNameIndex)
-		val itemStack: ItemStack = GameRegistry.findItemStack(modid, itemName, 1)
-		if (itemStack != null) {
-			itemStack.setItemDamage(metadata)
-		}
+		val block: Block = GameRegistry.findBlock(modid, itemName)
+		val item: Item = GameRegistry.findItem(modid, itemName)
+		val itemStack: ItemStack = if (block != null) new ItemStack(block, 1, metadata)
+		else if (item != null) new ItemStack(item, 1, metadata) else null
 		itemStack
 	}
 

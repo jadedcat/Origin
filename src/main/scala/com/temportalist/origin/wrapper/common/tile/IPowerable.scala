@@ -2,13 +2,14 @@ package com.temportalist.origin.wrapper.common.tile
 
 import com.temportalist.origin.library.common.lib.enums.RedstoneState
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
 
 /**
  * Used by TileEntities for handling usage of power
  *
  * @author TheTemportalist
  */
-trait IPowerable {
+trait IPowerable extends TileEntity {
 
 	var redstoneState: RedstoneState = RedstoneState.HIGH
 	var isRecievingPower: Boolean = false
@@ -62,7 +63,9 @@ trait IPowerable {
 	/**
 	 * Called when the power is not what it was
 	 */
-	def onPowerChanged(): Unit = {}
+	def onPowerChanged(): Unit = {
+		this.markDirty()
+	}
 
 	/**
 	 * Checks if self is powered with regards to redstone state
@@ -72,28 +75,19 @@ trait IPowerable {
 		this.isPowered(checkState = true)
 	}
 
-	/**
-	 * Saves required data to passed compound
-	 * @param tagCom
-	 */
-	def savePowerableNBT(tagCom: NBTTagCompound): Unit = {
-
-		tagCom.setInteger("IPowerable_redstoneState",
+	override def writeToNBT(compound: NBTTagCompound): Unit = {
+		super.writeToNBT(compound)
+		compound.setInteger("IPowerable_redstoneState",
 			RedstoneState.getIntFromState(this.redstoneState))
-		tagCom.setBoolean("IPowerable_isRecievingPower", this.isRecievingPower)
-
+		compound.setBoolean("IPowerable_isRecievingPower", this.isRecievingPower)
 	}
 
-	/**
-	 * Reads required data from passed compound
-	 * @param tagCom
-	 */
-	def readPowerableNBT(tagCom: NBTTagCompound): Unit = {
-
-		this.redstoneState = RedstoneState
-				.getStateFromInt(tagCom.getInteger("IPowerable_redstoneState"))
-		this.isRecievingPower = tagCom.getBoolean("IPowerable_isRecievingPower")
-
+	override def readFromNBT(compound: NBTTagCompound): Unit = {
+		super.readFromNBT(compound)
+		this.redstoneState = RedstoneState.getStateFromInt(
+			compound.getInteger("IPowerable_redstoneState")
+		)
+		this.isRecievingPower = compound.getBoolean("IPowerable_isRecievingPower")
 	}
 
 }

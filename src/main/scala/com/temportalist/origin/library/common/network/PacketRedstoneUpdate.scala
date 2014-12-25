@@ -1,20 +1,21 @@
 package com.temportalist.origin.library.common.network
 
 import com.temportalist.origin.library.common.lib.enums.RedstoneState
+import com.temportalist.origin.library.common.lib.vec.BlockCoord
 import com.temportalist.origin.wrapper.common.network.PacketTEWrapper
 import com.temportalist.origin.wrapper.common.tile.IPowerable
 import io.netty.buffer.ByteBuf
-import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.BlockPos
 
 /**
  *
  *
  * @author TheTemportalist
  */
-class PacketRedstoneUpdate(x: Int, y: Int, z: Int, var state: RedstoneState)
-		extends PacketTEWrapper(x, y, z) {
+class PacketRedstoneUpdate(pos: BlockPos, var state: RedstoneState)
+		extends PacketTEWrapper(pos) {
 
 	// Default Constructor
 
@@ -22,7 +23,7 @@ class PacketRedstoneUpdate(x: Int, y: Int, z: Int, var state: RedstoneState)
 
 	// Other Constructors
 	def this() {
-		this(0, 0, 0, null)
+		this(BlockPos.ORIGIN, null)
 	}
 
 	// End Constructors
@@ -43,13 +44,8 @@ class PacketRedstoneUpdate(x: Int, y: Int, z: Int, var state: RedstoneState)
 		if (tileEntity != null && tileEntity.isInstanceOf[IPowerable]) {
 			tileEntity.asInstanceOf[IPowerable].setRedstoneState(this.state)
 
-			val block: Block = player.worldObj.getBlock(this.x, this.y, this.z)
-			player.worldObj.notifyBlockOfNeighborChange(x + 1, y + 0, z + 0, block)
-			player.worldObj.notifyBlockOfNeighborChange(x - 1, y + 0, z + 0, block)
-			player.worldObj.notifyBlockOfNeighborChange(x + 0, y + 1, z + 0, block)
-			player.worldObj.notifyBlockOfNeighborChange(x + 0, y - 1, z + 0, block)
-			player.worldObj.notifyBlockOfNeighborChange(x + 0, y + 0, z + 1, block)
-			player.worldObj.notifyBlockOfNeighborChange(x + 0, y + 0, z - 1, block)
+			val tileCoord: BlockCoord = new BlockCoord(tileEntity)
+			tileCoord.notifyAllOfStateChange()
 
 		}
 	}

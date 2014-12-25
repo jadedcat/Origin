@@ -1,7 +1,6 @@
 package com.temportalist.origin.library.common
 
 import java.util
-import java.util.Random
 
 import com.temportalist.origin.library.common.command.TeleportCommand
 import com.temportalist.origin.library.common.extended.ExtendedSync
@@ -9,20 +8,17 @@ import com.temportalist.origin.library.common.helpers.{OptionHandler, RegisterHe
 import com.temportalist.origin.library.common.lib.DepLoader
 import com.temportalist.origin.library.common.network._
 import com.temportalist.origin.wrapper.common.PluginWrapper
-import cpw.mods.fml.common._
-import cpw.mods.fml.common.event._
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
-import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.block.Block
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.item.EntityItem
-import net.minecraft.entity.passive.EntitySheep
+import net.minecraft.enchantment.Enchantment
 import net.minecraft.init.Blocks
-import net.minecraft.item.{Item, ItemFood, ItemStack}
+import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.world.WorldServer
 import net.minecraftforge.common.DimensionManager
-import net.minecraftforge.event.entity.living.LivingDropsEvent
+import net.minecraftforge.fml.common.event._
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
+import net.minecraftforge.fml.common.{FMLCommonHandler, Mod, SidedProxy}
 
 /**
  *
@@ -55,19 +51,16 @@ object Origin extends PluginWrapper {
 	private val tabItems: util.ArrayList[Item] = new util.ArrayList[Item]
 	private val tabBlocks: util.ArrayList[Block] = new util.ArrayList[Block]
 
-	def addItemToTab(item: Item) {
+	def addItemToTab(item: Item): Unit = {
 		tabItems.add(item)
 	}
 
-	def addBlockToTab(block: Block) {
+	def addBlockToTab(block: Block): Unit = {
 		tabBlocks.add(block)
 	}
 
-	var lambchop_raw: Item = null
-	var lambchop: Item = null
-
 	@Mod.EventHandler
-	def preInit(event: FMLPreInitializationEvent) {
+	def preInit(event: FMLPreInitializationEvent): Unit = {
 		FMLCommonHandler.instance().bus().register(OptionHandler)
 		RegisterHelper.registerHandler(ExtendedSync, null)
 		super.preInitialize(this.pluginID, this.pluginName, event, this.proxy, CGOOptions)
@@ -77,27 +70,17 @@ object Origin extends PluginWrapper {
 
 		RegisterHelper.registerPacketHandler(this.pluginID, classOf[PacketSyncExtendedProperties],
 			classOf[PacketTeleport], classOf[PacketRedstoneUpdate], classOf[PacketActionUpdate])
-		if (CGOOptions.enableLambchops) {
-			Origin.lambchop_raw = new ItemFood(3, 0.3F, true).setUnlocalizedName("lambchop_raw")
-					.setTextureName(Origin.pluginID + ":lambchop_raw")
-			GameRegistry.registerItem(Origin.lambchop_raw, "lambchop_raw")
-			Origin.lambchop = new ItemFood(8, 0.8F, true).setUnlocalizedName("lambchop")
-					.setTextureName(Origin.pluginID + ":lambchop")
-			GameRegistry.registerItem(Origin.lambchop, "lambchop")
-			GameRegistry.addSmelting(Origin.lambchop_raw, new ItemStack(Origin.lambchop), 0.35F)
-
-		}
 
 	}
 
 	@Mod.EventHandler
-	def init(event: FMLInitializationEvent) {
+	def init(event: FMLInitializationEvent): Unit = {
 		super.initialize(event)
 
 	}
 
 	@Mod.EventHandler
-	def postInit(event: FMLPostInitializationEvent) {
+	def postInit(event: FMLPostInitializationEvent): Unit = {
 		super.postInitialize(event)
 
 		if (!this.tabItems.isEmpty || !this.tabBlocks.isEmpty) {
@@ -120,32 +103,8 @@ object Origin extends PluginWrapper {
 
 	}
 
-	@SubscribeEvent
-	def livingDrops(event: LivingDropsEvent) {
-		if (CGOOptions.enableLambchops && event.entityLiving != null &&
-				event.entityLiving.isInstanceOf[EntitySheep]) {
-			val random: Random = new Random()
-
-			val stackSize: Int = random.nextInt(3) + 1 + random.nextInt(1 + event.lootingLevel) + 1
-
-			var item: Item = null
-			if (event.entityLiving.isBurning)
-				item = Origin.lambchop
-			else
-				item = Origin.lambchop_raw
-
-			var count: Int = 0
-			for (count <- 1 to stackSize) {
-				event.drops
-						.add(new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX,
-					event.entityLiving.posY, event.entityLiving.posZ, new ItemStack(item, 1, 0)))
-			}
-		}
-
-	}
-
 	@Mod.EventHandler
-	def serverLoad(event: FMLServerStartingEvent) {
+	def serverLoad(event: FMLServerStartingEvent): Unit = {
 
 		for (command <- RegisterHelper.getCommands()) {
 			event.registerServerCommand(command)
@@ -156,7 +115,7 @@ object Origin extends PluginWrapper {
 
 		var i: Int = 0
 		for (i <- 0 until allWS.length) {
-			temp.put(allWS(i).provider.getDimensionName, allWS(i).provider.dimensionId)
+			temp.put(allWS(i).provider.getDimensionName, allWS(i).provider.getDimensionId)
 		}
 
 		Origin.dimensions.clear
@@ -177,13 +136,15 @@ object Origin extends PluginWrapper {
 	 * @param event
 	 */
 	@SubscribeEvent
-	def onPlayerJoin(event: PlayerLoggedInEvent) {
-		val playerName: String = event.player.getCommandSenderName
+	def onPlayerJoin(event: PlayerLoggedInEvent): Unit = {
+		val playerName: String = event.player.getName
 		if (playerName.equals("progwml6")) {
 			if (event.player.getCurrentArmor(3) == null) {
-				val pumpkin: ItemStack = new ItemStack(Blocks.pumpkin, 1, 0)
-				pumpkin.setStackDisplayName("Pumpkin of Awesomeness")
-				event.player.setCurrentItemOrArmor(4, pumpkin)
+				val secretPumpkin: ItemStack = new ItemStack(Blocks.pumpkin, 1, 0)
+				secretPumpkin.addEnchantment(Enchantment.unbreaking, 5)
+				secretPumpkin.addEnchantment(Enchantment.lure, 20)
+				secretPumpkin.setStackDisplayName("Pumpkin of Awesomeness")
+				event.player.setCurrentItemOrArmor(4, secretPumpkin)
 			}
 		}
 	}

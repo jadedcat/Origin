@@ -1,11 +1,12 @@
 package com.temportalist.origin.library.client.gui
 
 import com.temportalist.origin.library.client.utility.GuiHelper
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.common.gameevent.TickEvent
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.gameevent.TickEvent
+import net.minecraftforge.fml.relauncher.Side
 import net.minecraft.client.Minecraft
 import net.minecraftforge.client.event.RenderGameOverlayEvent
+import net.minecraftforge.fml.relauncher.SideOnly
 import org.lwjgl.input.Mouse
 
 /**
@@ -45,7 +46,7 @@ object GuiRadialMenuHandler {
 	def onClientTick(event: TickEvent.ClientTickEvent): Unit = {
 		val menu: GuiRadialMenu = this.getRadialMenu()
 		if (menu != null && event.phase == TickEvent.Phase.START) {
-			if (this.shouldSelect(menu)) {
+			if (menu.shouldSelect()) {
 				menu.selectCurrent()
 			}
 		}
@@ -66,7 +67,5 @@ object GuiRadialMenuHandler {
 			}
 		}
 	}
-
-	def shouldSelect(menu: GuiRadialMenu): Boolean = true
 
 }

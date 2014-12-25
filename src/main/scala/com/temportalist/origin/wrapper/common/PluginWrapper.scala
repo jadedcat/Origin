@@ -6,8 +6,8 @@ import com.temportalist.origin.library.common.Origin
 import com.temportalist.origin.library.common.helpers.OptionHandler
 import com.temportalist.origin.library.common.lib.LogHelper
 import com.temportalist.origin.library.common.register._
-import cpw.mods.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
-import cpw.mods.fml.common.network.NetworkRegistry
+import net.minecraftforge.fml.common.event.{FMLPostInitializationEvent, FMLInitializationEvent, FMLPreInitializationEvent}
+import net.minecraftforge.fml.common.network.NetworkRegistry
 
 /**
  *
@@ -18,16 +18,16 @@ class PluginWrapper() {
 
 	var options: OptionRegister = null
 
+	private var sortedRegisters: util.HashMap[String, util.ArrayList[Register]] = null
+
 	protected def preInitialize(pluginID: String, pluginName: String,
 			event: FMLPreInitializationEvent, proxy: ProxyWrapper,
 			registers: Register*): Unit = {
 
-		val sortedRegisters: util.HashMap[String, util.ArrayList[Register]] = new
-						util.HashMap[String, util.ArrayList[Register]]()
+		this.sortedRegisters = new util.HashMap[String, util.ArrayList[Register]]()
 		this.organizeRegisters(sortedRegisters, registers)
 
 		var sortedRegArray: util.ArrayList[Register] = null
-		var index: Int = 0
 
 		sortedRegArray = sortedRegisters.get("option")
 		for (index <- 0 until sortedRegArray.size()) {
@@ -35,39 +35,24 @@ class PluginWrapper() {
 				sortedRegArray.get(index).asInstanceOf[OptionRegister], event)
 		}
 
-		index = 0
 		sortedRegArray = sortedRegisters.get("item")
 		for (index <- 0 until sortedRegArray.size()) {
 			sortedRegArray.get(index).register()
 		}
 
-		index = 0
 		sortedRegArray = sortedRegisters.get("block")
 		for (index <- 0 until sortedRegArray.size()) {
 			sortedRegArray.get(index).asInstanceOf[BlockRegister].registerTileEntities
 			sortedRegArray.get(index).register()
 		}
 
-		index = 0
 		sortedRegArray = sortedRegisters.get("item")
 		for (index <- 0 until sortedRegArray.size()) {
 			sortedRegArray.get(index).asInstanceOf[ItemRegister].registerItemsPostBlock
-			sortedRegArray.get(index).asInstanceOf[ItemRegister].registerCrafting
-			sortedRegArray.get(index).asInstanceOf[ItemRegister].registerSmelting
-			sortedRegArray.get(index).asInstanceOf[ItemRegister].registerOther
-		}
-
-		index = 0
-		sortedRegArray = sortedRegisters.get("block")
-		for (index <- 0 until sortedRegArray.size()) {
-			sortedRegArray.get(index).asInstanceOf[BlockRegister].registerCrafting
-			sortedRegArray.get(index).asInstanceOf[BlockRegister].registerSmelting
-			sortedRegArray.get(index).asInstanceOf[BlockRegister].registerOther
 		}
 
 		// TODO biomes
 
-		index = 0
 		sortedRegArray = sortedRegisters.get("entity")
 		for (index <- 0 until sortedRegArray.size()) {
 			sortedRegArray.get(index).register()
@@ -147,6 +132,21 @@ class PluginWrapper() {
 	}
 
 	protected def initialize(event: FMLInitializationEvent): Unit = {
+		var sortedRegArray: util.ArrayList[Register] = null
+
+		sortedRegArray = sortedRegisters.get("item")
+		for (index <- 0 until sortedRegArray.size()) {
+			sortedRegArray.get(index).asInstanceOf[ItemRegister].registerCrafting
+			sortedRegArray.get(index).asInstanceOf[ItemRegister].registerSmelting
+			sortedRegArray.get(index).asInstanceOf[ItemRegister].registerOther
+		}
+
+		sortedRegArray = sortedRegisters.get("block")
+		for (index <- 0 until sortedRegArray.size()) {
+			sortedRegArray.get(index).asInstanceOf[BlockRegister].registerCrafting
+			sortedRegArray.get(index).asInstanceOf[BlockRegister].registerSmelting
+			sortedRegArray.get(index).asInstanceOf[BlockRegister].registerOther
+		}
 
 	}
 

@@ -61,10 +61,6 @@ minecraft {
 // This is used to set the local version
 version = "${config.minecraft_version}-$version"
 
-dependencies {
-    compile "codechicken:CodeChickenLib:${config.minecraft_version}-${projectConfig.ccl_version}:dev"
-}
-
 // Used for processing, dont meddle
 processResources {
     // this will ensure that this task is redone when the versions change.

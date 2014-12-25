@@ -3,7 +3,9 @@ package com.temportalist.origin.wrapper.common.tile
 import java.util
 
 import net.minecraft.block.Block
+import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
+import net.minecraft.tileentity.TileEntity
 
 /**
  *
@@ -15,9 +17,9 @@ import net.minecraft.item.ItemStack
  *
  * @author TheTemportalist
  */
-trait ICustomDrops {
+trait ICustomDrops extends TileEntity {
 
-	def getDrops(drops: util.ArrayList[ItemStack], block: Block, metadata: Int) {
+	def getDrops(drops: util.List[ItemStack], block: Block, state: IBlockState) {
 	}
 
 }

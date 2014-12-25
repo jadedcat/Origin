@@ -2,8 +2,8 @@ package com.temportalist.origin.wrapper.client.render.model
 
 import java.util
 
-import com.temportalist.origin.library.client.render.model.IModel
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import com.temportalist.origin.library.client.render.model_old.IModel
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.model.{ModelBase, ModelRenderer}
 import net.minecraft.entity.Entity
 
