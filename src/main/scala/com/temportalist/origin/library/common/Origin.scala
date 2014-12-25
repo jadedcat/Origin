@@ -27,8 +27,7 @@ import net.minecraftforge.fml.common.{FMLCommonHandler, Mod, SidedProxy}
  */
 @Mod(modid = Origin.pluginID, name = Origin.pluginName, version = "@PLUGIN_VERSION@",
 	guiFactory = Origin.clientProxy,
-	modLanguage = "scala",
-	dependencies = "required-after:Forge@[11.14,)"
+	modLanguage = "scala"
 )
 object Origin extends PluginWrapper {
 
