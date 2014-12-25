@@ -337,7 +337,7 @@ task jenkinsTest() << {
 
 task curseTest() << {
     logger.quiet "--"
-    logger.quiet curseConfig.curseforge_key
+    logger.quiet project.curseforge_key
     logger.quiet curseforgeConfig.projectID
     logger.quiet curseforgeConfig.releaseType
     logger.quiet "--"
