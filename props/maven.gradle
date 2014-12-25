@@ -1,3 +1,34 @@
+// Load the config
+ext.gitFile = file "props/git.properties"
+gitFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.gitConfig = new ConfigSlurper().parse prop
+}
+
+configurations {
+    compile
+    deployJars
+}
+
+// If on the jenkins system, append the build number to the jar name
+if (System.getenv().BUILD_NUMBER != null) {
+    version = version + "_build-" + System.getenv().BUILD_NUMBER
+}
+
+// The next 3 tasks are little tasks for compiling different versions of the code
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java
+    classifier = 'src'
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives deobfJar
+}
+
 uploadArchives {    
     repositories {
         // publish using bamboo for a backup maven

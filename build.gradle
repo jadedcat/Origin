@@ -24,7 +24,6 @@ apply plugin: 'maven'
 apply from: './props/bamboo.gradle'
 apply from: './props/origin.gradle'
 apply from: './props/project.gradle'
-apply from: './props/jenkins.gradle'
 apply from: './props/maven.gradle'
 apply from: './props/curse.gradle'
 
