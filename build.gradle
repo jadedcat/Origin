@@ -206,7 +206,7 @@ def log = getChangelog()
 
 curse {
     if (System.getenv().BUILD_NUMBER == null) {
-        apiKey = project.dmodcurse
+        apiKey = project.curseforge_key
         projectId = curseforgeConfig.projectID
         changelog = log
         releaseType = curseforgeConfig.releaseType
