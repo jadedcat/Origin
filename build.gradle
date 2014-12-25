@@ -16,6 +16,14 @@ buildscript {
     }
 }
 
+task makePretty(type: Delete) {
+  delete 'output'
+}
+
+clean{
+   dependsOn makePretty
+}
+
 // this is scala source
 apply plugin: 'scala'
 apply plugin: 'forge'
@@ -79,6 +87,25 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude '**/*.info'
     }
+}
+
+//--- Jar things---
+
+task javadocJar(type: Jar, dependsOn: 'javadoc') {
+   
+    from javadoc.destinationDir
+    else classifier = "javadoc" 
+    destinationDir = file 'output'
+}
+
+jar { 
+    destinationDir = file 'output'
+    }
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    else classifier = "deobf" 
+    destinationDir = file 'output'
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start Jenkins Things ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
