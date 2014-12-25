@@ -34,6 +34,7 @@ Thumbs.db
 .gradle
 build
 idea
+jars
 *.iml
 *.ipr
 *.iws
