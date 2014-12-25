@@ -19,7 +19,6 @@ buildscript {
 // this is scala source
 apply plugin: 'scala'
 apply plugin: 'forge'
-apply plugin: 'maven'
 
 apply from: 'OriginGradle/index.gradle'
 
