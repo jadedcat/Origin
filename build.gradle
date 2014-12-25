@@ -26,6 +26,7 @@ apply from: './props/origin.gradle'
 apply from: './props/project.gradle'
 apply from: './props/maven.gradle'
 apply from: './props/curse.gradle'
+apply from: './props/jars.gradle'
 
 // Used for processing, dont meddle
 processResources {

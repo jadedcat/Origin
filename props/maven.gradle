@@ -16,19 +16,6 @@ if (System.getenv().BUILD_NUMBER != null) {
     version = version + "_build-" + System.getenv().BUILD_NUMBER
 }
 
-// The next 3 tasks are little tasks for compiling different versions of the code
-
-task sourcesJar(type: Jar) {
-    from sourceSets.main.java
-    classifier = 'src'
-}
-
-artifacts {
-    archives jar
-    archives sourcesJar
-    archives deobfJar
-}
-
 uploadArchives {    
     repositories {
         // publish using bamboo for a backup maven
