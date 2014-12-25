@@ -144,10 +144,12 @@ artifacts {
 uploadArchives {    
     repositories {
         // publish using bamboo for a backup maven
-        maven {
-            url "file:///var/www/html/maven"
+        if (project.getProperty("bambooshortPlanName") == "cg-orig-master") {
+            maven {
+                url "file:///var/www/html/maven"
+            }
         }
-        
+
         // official DDD maven stuffs
         if (project.hasProperty("dddUser") && project.hasProperty("dddPass")) {
             mavenDeployer {
