@@ -149,7 +149,7 @@ uploadArchives {
                 url "file:///var/www/html/maven"
             }
         }
-
+        else
         // official DDD maven stuffs
         if (project.hasProperty("dddUser") && project.hasProperty("dddPass")) {
             mavenDeployer {
