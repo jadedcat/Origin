@@ -21,7 +21,7 @@ apply plugin: 'scala'
 apply plugin: 'forge'
 apply plugin: 'maven'
 
-apply from: './OriginGradle/index.gradle'
+apply from: 'OriginGradle/index.gradle'
 
 // Used for processing, dont meddle
 processResources {
