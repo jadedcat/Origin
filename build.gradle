@@ -206,7 +206,7 @@ def log = getChangelog()
 
 curse {
     if (System.getenv().BUILD_NUMBER == null) {
-        if (project.curseforge_key != null) apiKey = project.curseforge_key
+        if (hasProperty('curseforge_key')) apiKey = project.curseforge_key
         else apiKey = 0
         projectId = curseforgeConfig.projectID
         changelog = log
@@ -338,7 +338,7 @@ task jenkinsTest() << {
 
 task curseTest() << {
     logger.quiet "--"
-    if (project.curseforge_key != null)
+    if (hasProperty('curseforge_key'))
         logger.quiet project.curseforge_key
     logger.quiet curseforgeConfig.projectID
     logger.quiet curseforgeConfig.releaseType
