@@ -21,12 +21,7 @@ apply plugin: 'scala'
 apply plugin: 'forge'
 apply plugin: 'maven'
 
-apply from: './plugins/bamboo.gradle'
-apply from: './plugins/origin.gradle'
-apply from: './plugins/project.gradle'
-apply from: './plugins/maven.gradle'
-apply from: './plugins/curse.gradle'
-apply from: './plugins/jars.gradle'
+apply from: './OriginGradle/index.gradle'
 
 // Used for processing, dont meddle
 processResources {
