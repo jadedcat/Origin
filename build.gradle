@@ -16,18 +16,18 @@ buildscript {
     }
 }
 
-task makePretty(type: Delete) {
-  delete 'output'
-}
-
-clean{
-   dependsOn makePretty
-}
-
 // this is scala source
 apply plugin: 'scala'
 apply plugin: 'forge'
 apply plugin: 'maven'
+
+task makePretty(type: Delete) {
+  delete 'output'
+}
+
+clean {
+   dependsOn makePretty
+}
 
 // Load the config for general stats
 ext.configFile = file "Origin.properties"
@@ -104,6 +104,7 @@ jar {
 task deobfJar(type: Jar) {
     from sourceSets.main.output
     destinationDir = file 'output'
+    classifier = 'dev'
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start Jenkins Things ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -131,15 +132,6 @@ if (System.getenv().BUILD_NUMBER != null) {
 task sourcesJar(type: Jar) {
     from sourceSets.main.java
     classifier = 'src'
-}
-
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    from(sourceSets.main.allSource.srcDirs) {
-        include '**/*.java'
-        include '**/*.scala'
-    }
-    classifier = 'dev'
 }
 
 artifacts {
@@ -202,8 +194,7 @@ uploadArchives {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start CurseForge Things ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 apply plugin: "curseforge"
 
-
-ext.curseforgeFile = file "props/curseforge.properties"
+ext.curseforgeFile = file "./props/curseforge.properties"
 curseforgeFile.withReader {
     def prop = new Properties()
     prop.load(it)
@@ -215,7 +206,7 @@ def log = getChangelog()
 
 curse {
     if (System.getenv().BUILD_NUMBER == null) {
-        apiKey = curseConfig.curseforge_key
+        apiKey = project.dmodcurse
         projectId = curseforgeConfig.projectID
         changelog = log
         releaseType = curseforgeConfig.releaseType
