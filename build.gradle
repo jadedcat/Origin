@@ -202,6 +202,17 @@ uploadArchives {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start CurseForge Things ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 apply plugin: "curseforge"
 
+// Only if not on jenkins, this loads the curseforge key
+if (System.getenv().BUILD_NUMBER == null) {
+    // Load the config
+    ext.curseFile = file "../curse.properties"
+    curseFile.withReader {
+        def prop = new Properties()
+        prop.load(it)
+        project.ext.curseConfig = new ConfigSlurper().parse prop
+    }
+}
+
 ext.curseforgeFile = file "props/curseforge.properties"
 curseforgeFile.withReader {
     def prop = new Properties()
