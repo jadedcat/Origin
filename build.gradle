@@ -141,9 +141,15 @@ artifacts {
 }
 
 // This links with jenkins system
-uploadArchives {
-    if (project.hasProperty("dddUser") && project.hasProperty("dddPass")) {
-        repositories {
+uploadArchives {    
+    repositories {
+        // publish using bamboo for a backup maven
+        maven {
+            url "file:///var/www/html/maven"
+        }
+        
+        // official DDD maven stuffs
+        if (project.hasProperty("dddUser") && project.hasProperty("dddPass")) {
             mavenDeployer {
                 repository(url: "http://doubledoordev.net:8081/artifactory/mods") {
                     authentication(userName: dddUser, password: dddPass)
