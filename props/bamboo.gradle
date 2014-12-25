@@ -1,0 +1,27 @@
+
+task makePretty(type: Delete) {
+  delete 'output'
+}
+
+clean {
+   dependsOn makePretty
+}
+
+//--- Jar things---
+
+task javadocJar(type: Jar, dependsOn: 'javadoc') {
+   
+    from javadoc.destinationDir
+    destinationDir = file 'output'
+}
+
+jar { 
+    destinationDir = file 'output'
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    destinationDir = file 'output'
+    classifier = 'dev'
+}
+

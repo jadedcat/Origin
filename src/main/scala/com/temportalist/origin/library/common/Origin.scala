@@ -5,7 +5,6 @@ import java.util
 import com.temportalist.origin.library.common.command.TeleportCommand
 import com.temportalist.origin.library.common.extended.ExtendedSync
 import com.temportalist.origin.library.common.helpers.{OptionHandler, RegisterHelper}
-import com.temportalist.origin.library.common.lib.DepLoader
 import com.temportalist.origin.library.common.network._
 import com.temportalist.origin.wrapper.common.PluginWrapper
 import net.minecraft.block.Block
@@ -30,8 +29,6 @@ import net.minecraftforge.fml.common.{FMLCommonHandler, Mod, SidedProxy}
 	modLanguage = "scala"
 )
 object Origin extends PluginWrapper {
-
-	DepLoader.load()
 
 	final val pluginID = "origin"
 	final val pluginName = "Origin"
