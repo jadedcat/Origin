@@ -1,7 +1,6 @@
 package com.temportalist.origin.library.common.register
 
 import net.minecraft.entity._
-import net.minecraft.world.biome.BiomeGenBase
 import net.minecraftforge.fml.common.registry.EntityRegistry
 
 /**
@@ -39,7 +38,7 @@ trait EntityRegister extends Register {
 
 	def addEntitySpawns(): Unit = {}
 
-	/**
+	/*
 	 *
 	 * @param entityClass The class of the entity
 	 * @param weightedProb The weighted probability that this entity will spawn
@@ -48,10 +47,5 @@ trait EntityRegister extends Register {
 	 * @param typeOfCreature The creature type
 	 * @param biomes A list of biomes that we can spawn in
 	 */
-	protected final def addSpawn(entityClass: Class[_ <: Entity],
-			weightedProb: Int, min: Int, max: Int, typeOfCreature: EnumCreatureType,
-			biomes: BiomeGenBase*): Unit = {
-		EntityRegistry.addSpawn(entityClass, weightedProb, min, max, typeOfCreature, biomes)
-	}
 
 }
