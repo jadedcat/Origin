@@ -14,13 +14,13 @@ import net.minecraftforge.fml.common.network.NetworkRegistry
  *
  * @author TheTemportalist
  */
-class PluginWrapper() {
+class ModWrapper() {
 
 	var options: OptionRegister = null
 
 	private var sortedRegisters: util.HashMap[String, util.ArrayList[Register]] = null
 
-	protected def preInitialize(pluginID: String, pluginName: String,
+	protected def preInitialize(modid: String, modname: String,
 			event: FMLPreInitializationEvent, proxy: ProxyWrapper,
 			registers: Register*): Unit = {
 
@@ -31,7 +31,7 @@ class PluginWrapper() {
 
 		sortedRegArray = sortedRegisters.get("option")
 		for (index <- 0 until sortedRegArray.size()) {
-			OptionHandler.handleConfiguration(pluginID, pluginName,
+			OptionHandler.handleConfiguration(modid, modname,
 				sortedRegArray.get(index).asInstanceOf[OptionRegister], event)
 		}
 
@@ -71,7 +71,7 @@ class PluginWrapper() {
 		//todo does not find any IPackets
 		val packageName: String = this.getClass.getPackage.getName
 		LogHelper.info(Origin.pluginName,
-			"Looking for packets to register for channel \'" + pluginID + "\' in package \'" +
+			"Looking for packets to register for channel \'" + modid + "\' in package \'" +
 					packageName + "\'."
 		)
 		try {

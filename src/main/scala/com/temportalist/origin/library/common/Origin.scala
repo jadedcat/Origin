@@ -6,7 +6,7 @@ import com.temportalist.origin.library.common.command.TeleportCommand
 import com.temportalist.origin.library.common.extended.ExtendedSync
 import com.temportalist.origin.library.common.helpers.{OptionHandler, RegisterHelper}
 import com.temportalist.origin.library.common.network._
-import com.temportalist.origin.wrapper.common.PluginWrapper
+import com.temportalist.origin.wrapper.common.ModWrapper
 import net.minecraft.block.Block
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.enchantment.Enchantment
@@ -28,7 +28,7 @@ import net.minecraftforge.fml.common.{FMLCommonHandler, Mod, SidedProxy}
 	guiFactory = Origin.clientProxy,
 	modLanguage = "scala"
 )
-object Origin extends PluginWrapper {
+object Origin extends ModWrapper {
 
 	final val pluginID = "origin"
 	final val pluginName = "Origin"
@@ -66,6 +66,8 @@ object Origin extends PluginWrapper {
 
 		RegisterHelper.registerPacketHandler(this.pluginID, classOf[PacketSyncExtendedProperties],
 			classOf[PacketTeleport], classOf[PacketRedstoneUpdate], classOf[PacketActionUpdate])
+
+
 
 	}
 

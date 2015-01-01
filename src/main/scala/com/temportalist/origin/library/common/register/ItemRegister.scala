@@ -5,9 +5,9 @@ package com.temportalist.origin.library.common.register
  *
  * @author TheTemportalist
  */
-class ItemRegister() extends Register {
+trait ItemRegister extends Register {
 
-	override def register(): Unit = {}
+	def registerRenders_Init(): Unit
 
 	def registerItemsPostBlock(): Unit = {}
 

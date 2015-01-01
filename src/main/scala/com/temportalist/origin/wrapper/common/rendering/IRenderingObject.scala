@@ -1,4 +1,4 @@
-package com.temportalist.origin.wrapper.common
+package com.temportalist.origin.wrapper.common.rendering
 
 import com.temportalist.origin.library.common.utility.WorldHelper
 import net.minecraft.client.Minecraft
@@ -14,19 +14,20 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  */
 trait IRenderingObject {
 
-	def initRendering(): Unit = if (WorldHelper.isClient()) this.registerRendering()
+	def initRendering(modid: String, name: String): Unit =
+		if (WorldHelper.isClient()) this.registerRendering(modid, name)
 
 	def getItem(): Item = null
 
 	@SideOnly(Side.CLIENT)
-	private def registerRendering(): Unit = {
+	private def registerRendering(modid: String, name: String): Unit = {
 		if (this.hasCustomItemMesh())
 			Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(
 				this.getItem(), this.getItemMesh()
 			)
 		else
 			Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(
-				this.getItem(), 0, this.getModelLocation()
+				this.getItem(), 0, this.getModelLocation(modid, name)
 			)
 	}
 
@@ -43,8 +44,10 @@ trait IRenderingObject {
 	}
 
 	@SideOnly(Side.CLIENT)
-	def getModelLocation(): ModelResourceLocation = {
-		null
+	def getModelLocation(modid: String, name: String): ModelResourceLocation = {
+		new ModelResourceLocation(modid + ":" + name, "inventory")
 	}
+
+
 
 }

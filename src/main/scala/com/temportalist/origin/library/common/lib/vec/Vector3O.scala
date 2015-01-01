@@ -87,6 +87,8 @@ class Vector3O(var x: Double, var y: Double, var z: Double) {
 
 	def toBlockCoord(world: World): BlockCoord = new BlockCoord(this, world.provider.getDimensionId)
 
+	def markForUpdate(world: World): Unit = this.toBlockCoord(world).markForUpdate()
+
 	def toVec3(): Vec3 = new Vec3(this.x, this.y, this.z)
 
 	def toVec3i(): Vec3i = new Vec3i(this.x_i(), this.y_i(), this.z_i())

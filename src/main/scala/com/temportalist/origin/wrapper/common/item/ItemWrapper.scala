@@ -2,8 +2,7 @@ package com.temportalist.origin.wrapper.common.item
 
 import java.util
 
-import com.temportalist.origin.wrapper.common.IRenderingObject
-import net.minecraft.client.resources.model.ModelResourceLocation
+import com.temportalist.origin.wrapper.common.rendering.IRenderingObject
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{Item, ItemStack}
@@ -15,25 +14,24 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 /**
  * A wrapper for Minecraft's Item
  *
- * @param pluginID
+ * @param modid
  * The plugin id of the owner plugin
  * @param name
  * The name of the item
  *
  * @author TheTemportalist
  */
-class ItemWrapper(val pluginID: String, name: String) extends Item with IRenderingObject {
+class ItemWrapper(val modid: String, name: String) extends Item with IRenderingObject {
 
 	this.setUnlocalizedName(name)
 	GameRegistry.registerItem(this, name)
-	this.initRendering()
+
+	/**
+	 * This is a wrapping method to be called on INITIALIZATION. Will throw NPE if called before hand.
+	 */
+	def initRender(): Unit = this.initRendering(this.modid, this.name)
 
 	override def getItem(): Item = this
-
-	@SideOnly(Side.CLIENT)
-	override def getModelLocation(): ModelResourceLocation = {
-		new ModelResourceLocation(this.pluginID + ":" + this.name, "inventory")
-	}
 
 	/**
 	 * Get the texture path of the item's icon
@@ -54,7 +52,7 @@ class ItemWrapper(val pluginID: String, name: String) extends Item with IRenderi
 	override def getUnlocalizedName: String = {
 		// return a formatted string using the format:
 		//   item.{pluginID}:{itemName}
-		String.format("item.%s%s", this.pluginID + ":",
+		String.format("item.%s%s", this.modid + ":",
 			this.getUnwrappedUnlocalizedName(super.getUnlocalizedName))
 	}
 
