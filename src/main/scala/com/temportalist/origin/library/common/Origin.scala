@@ -17,7 +17,7 @@ import net.minecraftforge.common.DimensionManager
 import net.minecraftforge.fml.common.event._
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
-import net.minecraftforge.fml.common.{FMLCommonHandler, Mod, SidedProxy}
+import net.minecraftforge.fml.common.{Mod, SidedProxy}
 
 /**
  *
@@ -57,11 +57,9 @@ object Origin extends ModWrapper {
 
 	@Mod.EventHandler
 	def preInit(event: FMLPreInitializationEvent): Unit = {
-		FMLCommonHandler.instance().bus().register(OptionHandler)
-		RegisterHelper.registerHandler(ExtendedSync, null)
+		RegisterHelper.registerHandlers(ExtendedSync, OptionHandler)
 		super.preInitialize(this.pluginID, this.pluginName, event, this.proxy, CGOOptions)
 
-		RegisterHelper.registerHandler(this, null)
 		RegisterHelper.registerCommand(TeleportCommand)
 
 		RegisterHelper.registerPacketHandler(this.pluginID, classOf[PacketSyncExtendedProperties],
@@ -73,7 +71,7 @@ object Origin extends ModWrapper {
 
 	@Mod.EventHandler
 	def init(event: FMLInitializationEvent): Unit = {
-		super.initialize(event)
+		super.initialize(event, this.proxy)
 
 	}
 

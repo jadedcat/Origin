@@ -69,15 +69,15 @@ object ExtendedEntityHandler {
 						"\n   EClass null: " + (extendedClass == null)
 					)
 					e.printStackTrace()
-				case _ =>
+				case _: Throwable =>
 			}
 		}
 		else {
 			System.out.println(
 				"ERROR: No ExtendedEntity class with the name of " + extendedClass.getSimpleName +
 						" registered.")
-			null
 		}
+		null
 	}
 
 	/**

@@ -130,7 +130,7 @@ class ModWrapper() {
 
 	}
 
-	protected def initialize(event: FMLInitializationEvent): Unit = {
+	protected def initialize(event: FMLInitializationEvent, proxy: ProxyWrapper): Unit = {
 		var sortedRegArray: util.ArrayList[Register] = null
 
 		sortedRegArray = sortedRegisters.get("item")
