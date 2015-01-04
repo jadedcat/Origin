@@ -57,7 +57,7 @@ object ExtendedEntityHandler {
 			extendedClass: Class[_ <: ExtendedEntity]): IExtendedEntityProperties = {
 		if (ExtendedEntityHandler.extendedProperties.containsKey(extendedClass)) {
 			try {
-				player.getExtendedProperties(
+				return player.getExtendedProperties(
 					ExtendedEntityHandler.extendedProperties.get(extendedClass)(0)
 				)
 			}
