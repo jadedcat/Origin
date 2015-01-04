@@ -3,6 +3,8 @@ package com.temportalist.origin.wrapper.common.extended
 import java.lang.reflect.InvocationTargetException
 import java.util
 
+import com.temportalist.origin.library.common.Origin
+import com.temportalist.origin.library.common.lib.LogHelper
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraftforge.common.IExtendedEntityProperties
 
@@ -54,9 +56,21 @@ object ExtendedEntityHandler {
 	final def getExtended(player: EntityPlayer,
 			extendedClass: Class[_ <: ExtendedEntity]): IExtendedEntityProperties = {
 		if (ExtendedEntityHandler.extendedProperties.containsKey(extendedClass)) {
-			player
-					.getExtendedProperties(
-			            ExtendedEntityHandler.extendedProperties.get(extendedClass)(0))
+			try {
+				player.getExtendedProperties(
+					ExtendedEntityHandler.extendedProperties.get(extendedClass)(0)
+				)
+			}
+			catch {
+				case e: Exception =>
+					LogHelper.info(Origin.pluginName,
+						"\n   Player null: " + (player == null) +
+						"\n   EnProp null: " + (ExtendedEntityHandler.extendedProperties == null) +
+						"\n   EClass null: " + (extendedClass == null)
+					)
+					e.printStackTrace()
+				case _ =>
+			}
 		}
 		else {
 			System.out.println(

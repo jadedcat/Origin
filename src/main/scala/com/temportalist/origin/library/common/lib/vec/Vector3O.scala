@@ -2,6 +2,7 @@ package com.temportalist.origin.library.common.lib.vec
 
 import com.google.common.io.ByteArrayDataInput
 import com.temportalist.origin.library.common.utility.MathFuncs
+import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.Tessellator
@@ -65,6 +66,10 @@ class Vector3O(var x: Double, var y: Double, var z: Double) {
 		this(data.readDouble(), data.readDouble(), data.readDouble())
 	}
 
+	def this(data: ByteBuf) {
+		this(data.readDouble(), data.readDouble(), data.readDouble())
+	}
+
 	def x_i(): Int = this.x.asInstanceOf[Int]
 
 	def y_i(): Int = this.y.asInstanceOf[Int]
@@ -76,6 +81,12 @@ class Vector3O(var x: Double, var y: Double, var z: Double) {
 	def y_f(): Float = this.y.asInstanceOf[Float]
 
 	def z_f(): Float = this.z.asInstanceOf[Float]
+
+	def toData(data: ByteBuf): Unit = {
+		data.writeDouble(this.x)
+		data.writeDouble(this.y)
+		data.writeDouble(this.z)
+	}
 
 	def toBlockPos(): BlockPos = {
 		new BlockPos(
@@ -376,5 +387,7 @@ object Vector3O {
 	def ZERO: Vector3O = new Vector3O(0, 0, 0)
 
 	def CENTER: Vector3O = new Vector3O(0.5, 0.5, 0.5)
+
+	def SINGLE: Vector3O = new Vector3O(1, 1, 1)
 
 }

@@ -64,7 +64,6 @@ class ModWrapper() {
 
 		// TODO achievement
 
-		proxy.registerRender()
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy)
 
 		// Packet Registration
@@ -147,6 +146,8 @@ class ModWrapper() {
 			sortedRegArray.get(index).asInstanceOf[BlockRegister].registerSmelting
 			sortedRegArray.get(index).asInstanceOf[BlockRegister].registerOther
 		}
+
+		proxy.registerRender()
 
 	}
 
