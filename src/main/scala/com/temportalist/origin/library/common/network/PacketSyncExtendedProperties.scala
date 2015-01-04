@@ -2,6 +2,8 @@ package com.temportalist.origin.library.common.network
 
 import java.util
 
+import com.temportalist.origin.library.common.Origin
+import com.temportalist.origin.library.common.lib.LogHelper
 import com.temportalist.origin.library.common.nethandler.IPacket
 import com.temportalist.origin.wrapper.common.extended.{ExtendedEntity, ExtendedEntityHandler}
 import io.netty.buffer.ByteBuf
@@ -57,16 +59,18 @@ class PacketSyncExtendedProperties(var extendedClass: Class[_ <: ExtendedEntity]
 
 	override def handleOnClient(player: EntityPlayer): Unit = {
 		this.handleSync(player)
-
 	}
 
 	override def handleOnServer(player: EntityPlayer): Unit = {
 		this.handleSync(player)
-
 	}
 
 	def handleSync(player: EntityPlayer): Unit = {
-		ExtendedEntityHandler.getExtended(player, this.extendedClass).loadNBTData(this.data)
+		if (player != null)
+			ExtendedEntityHandler.getExtended(player, this.extendedClass).loadNBTData(this.data)
+		else {
+			LogHelper.info(Origin.pluginName, "Null player!")
+		}
 	}
 
 }
