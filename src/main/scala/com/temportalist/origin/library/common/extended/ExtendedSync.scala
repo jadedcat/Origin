@@ -2,6 +2,8 @@ package com.temportalist.origin.library.common.extended
 
 import java.util
 
+import com.temportalist.origin.library.common.Origin
+import com.temportalist.origin.library.common.lib.LogHelper
 import com.temportalist.origin.wrapper.common.extended.{ExtendedEntity, ExtendedEntityHandler}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
@@ -110,29 +112,40 @@ object ExtendedSync {
 	 */
 	@SubscribeEvent
 	def onEntityJoinWorld(event: EntityJoinWorldEvent) {
-		if (event.entity == null || event.entity.worldObj.isRemote ||
-				!event.entity.isInstanceOf[EntityPlayer]) return
-		val player: EntityPlayer = event.entity.asInstanceOf[EntityPlayer]
-		val propertyMap: util.Map[Class[_ <: ExtendedEntity], Array[String]] = ExtendedEntityHandler
-				.getExtendedProperties
-		val iterator: util.Iterator[_] = propertyMap.keySet().iterator()
-		while (iterator.hasNext) {
-			val extendedClass: Class[_ <: ExtendedEntity] = iterator.next()
-					.asInstanceOf[Class[_ <: ExtendedEntity]]
-			val shouldPersist: String = propertyMap.get(extendedClass)(1)
-			val extendedPlayer: ExtendedEntity = ExtendedEntityHandler
-					.getExtended(player, extendedClass)
-					.asInstanceOf[ExtendedEntity]
-			if (extendedPlayer != null) {
-				if (shouldPersist.toBoolean) {
-					val extPlayerData: NBTTagCompound = ExtendedSync
-							.getEntityData(extendedClass, player)
-					if (extPlayerData != null) {
-						extendedPlayer.loadNBTData(extPlayerData)
+		if (event.entity != null) {
+			event.entity match {
+				case player: EntityPlayer =>
+					val propMap: util.Map[Class[_ <: ExtendedEntity], Array[String]] =
+						ExtendedEntityHandler.getExtendedProperties
+					val iterPropMap: util.Iterator[Class[_ <: ExtendedEntity]] =
+						propMap.keySet().iterator()
+					while (iterPropMap.hasNext) {
+						val extClass: Class[_ <: ExtendedEntity] = iterPropMap.next()
+						val extPlayer: ExtendedEntity = ExtendedEntityHandler.getExtended(
+							player, extClass
+						).asInstanceOf[ExtendedEntity]
+						if (extPlayer != null) {
+							try {
+								if (propMap.get(extClass)(1).toBoolean) {
+									val extPlayerData: NBTTagCompound =
+										ExtendedSync.getEntityData(extendedClass, player)
+									if (extPlayerData != null) {
+										extendedPlayer.loadNBTData(extPlayerData)
+									}
+								}
+								extPlayer.syncEntity()
+							}
+							catch {
+								case e: Exception => e.printStackTrace()
+							}
+						}
+
 					}
-				}
-				extendedPlayer.syncEntity()
+				case _ =>
 			}
+		}
+		else {
+			LogHelper.info(Origin.pluginName, "ERROR, null entity joined world")
 		}
 	}
 
