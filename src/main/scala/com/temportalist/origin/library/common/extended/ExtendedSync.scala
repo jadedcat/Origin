@@ -128,9 +128,9 @@ object ExtendedSync {
 							try {
 								if (propMap.get(extClass)(1).toBoolean) {
 									val extPlayerData: NBTTagCompound =
-										ExtendedSync.getEntityData(extendedClass, player)
+										ExtendedSync.getEntityData(extClass, player)
 									if (extPlayerData != null) {
-										extendedPlayer.loadNBTData(extPlayerData)
+										extPlayer.loadNBTData(extPlayerData)
 									}
 								}
 								extPlayer.syncEntity()
