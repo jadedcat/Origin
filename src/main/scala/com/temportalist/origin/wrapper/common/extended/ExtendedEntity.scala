@@ -1,6 +1,7 @@
 package com.temportalist.origin.wrapper.common.extended
 
 import com.temportalist.origin.library.common.Origin
+import com.temportalist.origin.library.common.lib.LogHelper
 import com.temportalist.origin.library.common.network.PacketSyncExtendedProperties
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
@@ -32,15 +33,13 @@ abstract class ExtendedEntity(var player: EntityPlayer) extends IExtendedEntityP
 
 	def syncEntity(): Unit = {
 		val tagCom: NBTTagCompound = new NBTTagCompound()
-
 		this.saveNBTData(tagCom)
-
-
-		val syncMessage: PacketSyncExtendedProperties = new
-						PacketSyncExtendedProperties(this.getClass, tagCom)
-
-		Origin.proxy.syncPacket(syncMessage, this.player)
-
+		val syncMessage: PacketSyncExtendedProperties =
+			new PacketSyncExtendedProperties(this.getClass, tagCom)
+		if (this.player != null)
+			Origin.proxy.syncPacket(syncMessage, this.player)
+		else
+			LogHelper.info(Origin.pluginName, "Error: Null player in extended entity")
 	}
 
 }

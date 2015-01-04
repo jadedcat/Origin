@@ -121,10 +121,16 @@ object ExtendedSync {
 						propMap.keySet().iterator()
 					while (iterPropMap.hasNext) {
 						val extClass: Class[_ <: ExtendedEntity] = iterPropMap.next()
-						val extPlayer: ExtendedEntity = ExtendedEntityHandler.getExtended(
+						var extPlayer: ExtendedEntity = ExtendedEntityHandler.getExtended(
 							player, extClass
 						).asInstanceOf[ExtendedEntity]
-						if (extPlayer != null) {
+						if (extPlayer == null) {
+							ExtendedEntityHandler.registerPlayer(player, extClass)
+							extPlayer = ExtendedEntityHandler.getExtended(
+								player, extClass
+							).asInstanceOf[ExtendedEntity]
+						}
+						if (extPlayer == null) {
 							try {
 								if (propMap.get(extClass)(1).toBoolean) {
 									val extPlayerData: NBTTagCompound =

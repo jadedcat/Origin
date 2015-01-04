@@ -55,11 +55,19 @@ object ExtendedEntityHandler {
 	 */
 	final def getExtended(player: EntityPlayer,
 			extendedClass: Class[_ <: ExtendedEntity]): IExtendedEntityProperties = {
+		if (player == null) {
+			LogHelper.info(Origin.pluginName, "Passed player was null in " + this.getClass + ".getExtended")
+			return null
+		}
 		if (ExtendedEntityHandler.extendedProperties.containsKey(extendedClass)) {
 			try {
-				return player.getExtendedProperties(
+				val props: IExtendedEntityProperties = player.getExtendedProperties(
 					ExtendedEntityHandler.extendedProperties.get(extendedClass)(0)
 				)
+				if (props != null) return props
+				else if (ExtendedEntityHandler.registerPlayer(player, extendedClass)) {
+					return this.getExtended(player, extendedClass)
+				}
 			}
 			catch {
 				case e: Exception =>
