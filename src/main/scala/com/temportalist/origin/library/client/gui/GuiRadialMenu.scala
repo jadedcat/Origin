@@ -2,10 +2,11 @@ package com.temportalist.origin.library.client.gui
 
 import java.util
 
+import com.temportalist.origin.library.client.utility.TessRenderer
 import com.temportalist.origin.library.common.lib.IRadialSelection
 import com.temportalist.origin.wrapper.client.gui.IGuiScreen
 import net.minecraft.client.gui.ScaledResolution
-import net.minecraft.client.renderer.{RenderHelper, Tessellator}
+import net.minecraft.client.renderer.RenderHelper
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 
@@ -65,8 +66,6 @@ abstract class GuiRadialMenu(
 		GL11.glPushMatrix()
 		GL11.glLoadIdentity()
 
-		val tessellator: Tessellator = Tessellator.getInstance()
-
 		val mouseAngle = this.correctAngle(this.getMouseAngle() - 270)
 
 		for (i <- 0 until quantity) {
@@ -95,30 +94,30 @@ abstract class GuiRadialMenu(
 				GL11.glColor4f(0F / 255F, 0F / 255F, 0F / 255F, 153F / 255F)
 			}
 
-			tessellator.getWorldRenderer.startDrawingQuads()
+			TessRenderer.startQuads()
 
-			tessellator.getWorldRenderer.addVertex(
+			TessRenderer.addVertex.addVertex(
 				Math.cos(currAngle) * resolution.getScaledHeight_double() /
 						resolution.getScaledWidth_double() * innerR,
 				Math.sin(currAngle) * innerR, 0
 			)
-			tessellator.getWorldRenderer.addVertex(
+			TessRenderer.addVertex.addVertex(
 				Math.cos(currAngle) * resolution.getScaledHeight_double() /
 						resolution.getScaledWidth_double() * outerR,
 				Math.sin(currAngle) * outerR, 0
 			)
-			tessellator.getWorldRenderer.addVertex(
+			TessRenderer.addVertex.addVertex(
 				Math.cos(nextAngle) * resolution.getScaledHeight_double() /
 						resolution.getScaledWidth_double() * outerR,
 				Math.sin(nextAngle) * outerR, 0
 			)
-			tessellator.getWorldRenderer.addVertex(
+			TessRenderer.addVertex.addVertex(
 				Math.cos(nextAngle) * resolution.getScaledHeight_double() /
 						resolution.getScaledWidth_double() * innerR,
 				Math.sin(nextAngle) * innerR, 0
 			)
 
-			tessellator.getWorldRenderer.draw()
+			TessRenderer.draw()
 
 		}
 

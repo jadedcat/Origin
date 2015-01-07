@@ -1,11 +1,10 @@
 package com.temportalist.origin.library.client.utility
 
-import net.minecraft.client.renderer.{WorldRenderer, Tessellator}
-import net.minecraft.client.renderer.texture.TextureAtlasSprite
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Gui
+import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.util.ResourceLocation
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  *
@@ -32,38 +31,36 @@ object Rendering {
 	}
 
 	def drawSprite(x: Double, y: Double, z: Double, sprite: TextureAtlasSprite, w: Double, h: Double): Unit = {
-		val tessellator: Tessellator = Tessellator.getInstance
-		val worldrenderer: WorldRenderer = tessellator.getWorldRenderer
-		worldrenderer.startDrawingQuads
-		worldrenderer.addVertexWithUV(
+		TessRenderer.startQuads()
+		TessRenderer.addVertexWithUV(
 			x + 0,
 			y + h,
 			z,
 			sprite.getMinU.asInstanceOf[Double],
 			sprite.getMaxV.asInstanceOf[Double]
 		)
-		worldrenderer.addVertexWithUV(
+		TessRenderer.addVertexWithUV(
 			x + w,
 			y + h,
 			z,
 			sprite.getMaxU.asInstanceOf[Double],
 			sprite.getMaxV.asInstanceOf[Double]
 		)
-		worldrenderer.addVertexWithUV(
+		TessRenderer.addVertexWithUV(
 			x + w,
 			y + 0,
 			z,
 			sprite.getMaxU.asInstanceOf[Double],
 			sprite.getMinV.asInstanceOf[Double]
 		)
-		worldrenderer.addVertexWithUV(
+		TessRenderer.addVertexWithUV(
 			x + 0,
 			y + 0,
 			z,
 			sprite.getMinU.asInstanceOf[Double],
 			sprite.getMinV.asInstanceOf[Double]
 		)
-		tessellator.draw
+		TessRenderer.draw()
 	}
 
 	def modelCoordsToVerticies(x: Float, y: Float, z: Float, color: Int, texture: TextureAtlasSprite, u: Float, v: Float): Array[Int] = {

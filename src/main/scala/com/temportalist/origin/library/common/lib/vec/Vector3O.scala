@@ -1,6 +1,7 @@
 package com.temportalist.origin.library.common.lib.vec
 
 import com.google.common.io.ByteArrayDataInput
+import com.temportalist.origin.library.client.utility.TessRenderer
 import com.temportalist.origin.library.common.utility.MathFuncs
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
@@ -157,7 +158,7 @@ class Vector3O(var x: Double, var y: Double, var z: Double) {
 
 	@SideOnly(Side.CLIENT)
 	def addVecUV(u: Double, v: Double): Unit = {
-		Tessellator.getInstance().getWorldRenderer.addVertexWithUV(this.x, this.y, this.z, u, v)
+		TessRenderer.addVertexWithUV(this.x, this.y, this.z, u, v)
 	}
 
 	def magSquared(): Double = {
