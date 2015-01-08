@@ -6,7 +6,6 @@ import com.temportalist.origin.library.common.utility.States
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.property.IUnlistedProperty
 
 /**
@@ -14,7 +13,7 @@ import net.minecraftforge.common.property.IUnlistedProperty
  *
  * @author TheTemportalist
  */
-trait ICamouflage extends TileEntity {
+trait ICamouflage extends TEWrapper {
 
 	private var blockState: IBlockState = null
 
@@ -30,6 +29,7 @@ trait ICamouflage extends TileEntity {
 
 	def setCamouflage(blockState: IBlockState): Unit = {
 		this.blockState = blockState
+		this.markforUpdate()
 	}
 
 	def saveCamouflageNBT(tagCom: NBTTagCompound): Unit = {
