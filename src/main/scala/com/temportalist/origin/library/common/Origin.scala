@@ -18,6 +18,7 @@ import net.minecraftforge.fml.common.event._
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
 import net.minecraftforge.fml.common.{Mod, SidedProxy}
+import net.minecraft.init.Items
 
 /**
  *
@@ -35,10 +36,7 @@ object Origin extends ModWrapper {
 	final val clientProxy = "com.temportalist.origin.library.client.ClientProxy"
 	final val serverProxy = "com.temportalist.origin.library.server.ServerProxy"
 
-	@SidedProxy(
-		clientSide = this.clientProxy,
-		serverSide = this.serverProxy
-	)
+	@SidedProxy(clientSide = this.clientProxy, serverSide = this.serverProxy)
 	var proxy: CommonProxy = null
 
 	var dimensions: util.HashMap[String, Int] = new util.HashMap[String, Int]
@@ -62,10 +60,12 @@ object Origin extends ModWrapper {
 
 		RegisterHelper.registerCommand(TeleportCommand)
 
-		RegisterHelper.registerPacketHandler(this.pluginID, classOf[PacketSyncExtendedProperties],
-			classOf[PacketTeleport], classOf[PacketRedstoneUpdate], classOf[PacketActionUpdate])
-
-
+		RegisterHelper.registerPacketHandler(this.pluginID,
+			classOf[PacketSyncExtendedProperties],
+			classOf[PacketTeleport],
+			classOf[PacketRedstoneUpdate],
+			classOf[PacketActionUpdate]
+		)
 
 	}
 
@@ -82,11 +82,9 @@ object Origin extends ModWrapper {
 		if (!this.tabItems.isEmpty || !this.tabBlocks.isEmpty) {
 			val originTab: CreativeTabs = new CreativeTabs(Origin.pluginID) {
 				override def getTabIconItem: Item = {
-					net.minecraft.init.Items.iron_pickaxe
+					Items.carrot_on_a_stick
 				}
 			}
-
-			var index: Int = 0
 
 			for (index <- 0 until this.tabBlocks.size()) {
 				this.tabBlocks.get(index).setCreativeTab(originTab)
@@ -109,7 +107,6 @@ object Origin extends ModWrapper {
 		val allWS: Array[WorldServer] = DimensionManager.getWorlds
 		val temp: util.HashMap[String, Integer] = new util.HashMap[String, Integer]
 
-		var i: Int = 0
 		for (i <- 0 until allWS.length) {
 			temp.put(allWS(i).provider.getDimensionName, allWS(i).provider.getDimensionId)
 		}

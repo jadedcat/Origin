@@ -37,13 +37,15 @@ object NameParser {
 	}
 
 	def getItemStack(name: String): ItemStack = {
+		if (!name.matches("(.*):(.*)")) return null
 		var endNameIndex: Int = name.length
 		var metadata: Int = OreDictionary.WILDCARD_VALUE
-		// has meta
+
 		if (name.matches("(.*):(.*):(.*)")) {
 			endNameIndex = name.lastIndexOf(':')
 			metadata = name.substring(endNameIndex + 1, name.length()).toInt
 		}
+
 		val modid: String = name.substring(0, name.indexOf(':'))
 		val itemName: String = name.substring(name.indexOf(':') + 1, endNameIndex)
 		val block: Block = GameRegistry.findBlock(modid, itemName)

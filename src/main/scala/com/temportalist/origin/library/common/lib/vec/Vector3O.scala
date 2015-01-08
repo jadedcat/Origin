@@ -6,7 +6,6 @@ import com.temportalist.origin.library.common.utility.MathFuncs
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
-import net.minecraft.client.renderer.Tessellator
 import net.minecraft.entity.Entity
 import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound
@@ -158,7 +157,7 @@ class Vector3O(var x: Double, var y: Double, var z: Double) {
 
 	@SideOnly(Side.CLIENT)
 	def addVecUV(u: Double, v: Double): Unit = {
-		TessRenderer.addVertexWithUV(this.x, this.y, this.z, u, v)
+		TessRenderer.addVertex(this.x, this.y, this.z, u, v)
 	}
 
 	def magSquared(): Double = {

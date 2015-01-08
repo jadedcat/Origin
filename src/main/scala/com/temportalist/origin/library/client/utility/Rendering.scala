@@ -32,28 +32,28 @@ object Rendering {
 
 	def drawSprite(x: Double, y: Double, z: Double, sprite: TextureAtlasSprite, w: Double, h: Double): Unit = {
 		TessRenderer.startQuads()
-		TessRenderer.addVertexWithUV(
+		TessRenderer.addVertex(
 			x + 0,
 			y + h,
 			z,
 			sprite.getMinU.asInstanceOf[Double],
 			sprite.getMaxV.asInstanceOf[Double]
 		)
-		TessRenderer.addVertexWithUV(
+		TessRenderer.addVertex(
 			x + w,
 			y + h,
 			z,
 			sprite.getMaxU.asInstanceOf[Double],
 			sprite.getMaxV.asInstanceOf[Double]
 		)
-		TessRenderer.addVertexWithUV(
+		TessRenderer.addVertex(
 			x + w,
 			y + 0,
 			z,
 			sprite.getMaxU.asInstanceOf[Double],
 			sprite.getMinV.asInstanceOf[Double]
 		)
-		TessRenderer.addVertexWithUV(
+		TessRenderer.addVertex(
 			x + 0,
 			y + 0,
 			z,

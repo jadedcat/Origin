@@ -68,10 +68,10 @@ object Cursor {
 		var blockZ: Int = 0
 		var side: Int = 0
 		if (mop.typeOfHit == MovingObjectType.BLOCK) {
-			blockX = mop.func_178782_a().getX
-			blockY = mop.func_178782_a().getY
-			blockZ = mop.func_178782_a().getZ
-			side = mop.field_178784_b.getIndex
+			blockX = mop.getBlockPos().getX
+			blockY = mop.getBlockPos().getY
+			blockZ = mop.getBlockPos().getZ
+			side = mop.sideHit.getIndex()
 		}
 		else {
 			blockX = mop.hitVec.xCoord.asInstanceOf[Int]

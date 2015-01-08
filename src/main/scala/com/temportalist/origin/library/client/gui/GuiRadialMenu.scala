@@ -96,22 +96,22 @@ abstract class GuiRadialMenu(
 
 			TessRenderer.startQuads()
 
-			TessRenderer.addVertex.addVertex(
+			TessRenderer.addVertex(
 				Math.cos(currAngle) * resolution.getScaledHeight_double() /
 						resolution.getScaledWidth_double() * innerR,
 				Math.sin(currAngle) * innerR, 0
 			)
-			TessRenderer.addVertex.addVertex(
+			TessRenderer.addVertex(
 				Math.cos(currAngle) * resolution.getScaledHeight_double() /
 						resolution.getScaledWidth_double() * outerR,
 				Math.sin(currAngle) * outerR, 0
 			)
-			TessRenderer.addVertex.addVertex(
+			TessRenderer.addVertex(
 				Math.cos(nextAngle) * resolution.getScaledHeight_double() /
 						resolution.getScaledWidth_double() * outerR,
 				Math.sin(nextAngle) * outerR, 0
 			)
-			TessRenderer.addVertex.addVertex(
+			TessRenderer.addVertex(
 				Math.cos(nextAngle) * resolution.getScaledHeight_double() /
 						resolution.getScaledWidth_double() * innerR,
 				Math.sin(nextAngle) * innerR, 0

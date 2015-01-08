@@ -13,16 +13,9 @@ import net.minecraft.util.BlockPos
  */
 class PacketTEWrapper(private var pos: BlockPos) extends IPacket {
 
-	// Default Constructor
-
-	// End Constructor
-
-	// Other Constructors
 	def this() {
 		this(BlockPos.ORIGIN)
 	}
-
-	// End Constructors
 
 	override def writeTo(buffer: ByteBuf): Unit = {
 		buffer.writeInt(this.pos.getX)
