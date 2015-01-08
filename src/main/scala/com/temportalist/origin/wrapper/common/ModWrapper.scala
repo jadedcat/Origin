@@ -112,7 +112,6 @@ class ModWrapper() {
 		map.put("entity", new util.ArrayList[Register])
 		map.put("option", new util.ArrayList[Register])
 
-		var registerIndex: Int = 0
 		for (registerIndex <- 0 until registers.length) {
 			registers(registerIndex) match {
 				case _: ItemRegister =>

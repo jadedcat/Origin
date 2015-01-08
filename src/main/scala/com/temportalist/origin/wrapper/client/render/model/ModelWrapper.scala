@@ -17,14 +17,8 @@ class ModelWrapper(texWidth: Int, texHeight: Int) extends ModelBase with IModel 
 
 	val modelList: util.ArrayList[ModelRenderer] = new util.ArrayList[ModelRenderer]()
 
-	// Default Constructor
-	{
-		this.textureWidth = texWidth
-		this.textureHeight = texHeight
-
-	}
-
-	// End Constructor
+	this.textureWidth = texWidth
+	this.textureHeight = texHeight
 
 	override def addModel(model: ModelRenderer): Unit = {
 		this.modelList.add(model)

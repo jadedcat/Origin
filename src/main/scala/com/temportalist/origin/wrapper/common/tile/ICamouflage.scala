@@ -36,7 +36,7 @@ trait ICamouflage extends TileEntity {
 
 		tagCom.setBoolean("ICamouflage_has", this.hasCamouflage)
 		if (this.hasCamouflage) {
-			tagCom.setString("ICamouflage_name", States.getBlockName(this.getCamouflage))
+			tagCom.setString("ICamouflage_name", States.getNameFromState(this.getCamouflage))
 		}
 
 	}

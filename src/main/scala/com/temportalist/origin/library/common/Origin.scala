@@ -6,6 +6,7 @@ import com.temportalist.origin.library.common.command.TeleportCommand
 import com.temportalist.origin.library.common.extended.ExtendedSync
 import com.temportalist.origin.library.common.helpers.{OptionHandler, RegisterHelper}
 import com.temportalist.origin.library.common.network._
+import com.temportalist.origin.library.common.utility.ItemRenderingHelper
 import com.temportalist.origin.wrapper.common.ModWrapper
 import net.minecraft.block.Block
 import net.minecraft.creativetab.CreativeTabs
@@ -72,6 +73,8 @@ object Origin extends ModWrapper {
 	@Mod.EventHandler
 	def init(event: FMLInitializationEvent): Unit = {
 		super.initialize(event, this.proxy)
+
+		ItemRenderingHelper.registerItemRenders()
 
 	}
 

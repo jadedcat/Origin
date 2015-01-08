@@ -2,6 +2,7 @@ package com.temportalist.origin.wrapper.common.item
 
 import java.util
 
+import com.temportalist.origin.library.common.utility.ItemRenderingHelper
 import com.temportalist.origin.wrapper.common.rendering.IRenderingObject
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
@@ -25,6 +26,7 @@ class ItemWrapper(val modid: String, name: String) extends Item with IRenderingO
 
 	this.setUnlocalizedName(name)
 	GameRegistry.registerItem(this, name)
+	ItemRenderingHelper.registerItemForRender(this)
 
 	/**
 	 * This is a wrapping method to be called on INITIALIZATION. Will throw NPE if called before hand.

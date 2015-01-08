@@ -20,7 +20,7 @@ object States {
 	}
 
 	def getStateFromName(name: String): IBlockState = {
-		val camoStack: ItemStack = NameParser.getItemStack(camoName)
+		val camoStack: ItemStack = NameParser.getItemStack(name)
 		if (camoStack != null && camoStack.getItem != null) {
 			val block: Block = Block.getBlockFromItem(camoStack.getItem)
 			if (block != null) {
