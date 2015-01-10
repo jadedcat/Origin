@@ -74,7 +74,7 @@ object Origin extends ModWrapper {
 	def init(event: FMLInitializationEvent): Unit = {
 		super.initialize(event, this.proxy)
 
-		ItemRenderingHelper.registerItemRenders()
+
 
 	}
 

@@ -7,6 +7,7 @@ import com.temportalist.origin.library.client.gui.config.GuiConfig
 import com.temportalist.origin.library.common.helpers.RegisterHelper
 import com.temportalist.origin.library.common.nethandler.PacketHandler
 import com.temportalist.origin.library.common.network.PacketSyncExtendedProperties
+import com.temportalist.origin.library.common.utility.ItemRenderingHelper
 import com.temportalist.origin.library.common.{CommonProxy, Origin}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
@@ -27,6 +28,8 @@ class ClientProxy() extends CommonProxy with IModGuiFactory {
 	override def registerRender(): Unit = {
 		// todo bind the camo rendering
 		//RenderingRegistry.registerBlockHandler(BlockCamouflageRender)
+
+		ItemRenderingHelper.registerItemRenders()
 
 		RegisterHelper.registerHandler(GuiRadialMenuHandler, null)
 
