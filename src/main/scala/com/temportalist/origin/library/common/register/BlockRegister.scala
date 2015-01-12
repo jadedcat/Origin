@@ -1,5 +1,8 @@
 package com.temportalist.origin.library.common.register
 
+import net.minecraft.tileentity.TileEntity
+import net.minecraftforge.fml.common.registry.GameRegistry
+
 /**
  *
  *
@@ -12,6 +15,9 @@ trait BlockRegister extends Register {
 	 * Recommendation: Use GameRegistry.registerTileEntity
 	 */
 	def registerTileEntities(): Unit = {}
+
+	def register(id: String, clazz: Class[_ <: TileEntity]): Unit =
+		GameRegistry.registerTileEntity(clazz, id)
 
 	/**
 	 * This method is used to register crafting recipes

@@ -1,11 +1,9 @@
 package com.temportalist.origin.wrapper.client.render.model
 
-import java.util
-
-import com.temportalist.origin.library.client.render.model_old.IModel
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import com.temportalist.origin.library.common.lib.vec.Vector3O
 import net.minecraft.client.model.{ModelBase, ModelRenderer}
 import net.minecraft.entity.Entity
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  *
@@ -13,47 +11,50 @@ import net.minecraft.entity.Entity
  * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
-class ModelWrapper(texWidth: Int, texHeight: Int) extends ModelBase with IModel {
-
-	val modelList: util.ArrayList[ModelRenderer] = new util.ArrayList[ModelRenderer]()
+class ModelWrapper(texWidth: Int, texHeight: Int) extends ModelBase {
 
 	this.textureWidth = texWidth
 	this.textureHeight = texHeight
 
-	override def addModel(model: ModelRenderer): Unit = {
-		this.modelList.add(model)
-	}
-
 	/**
 	 *
 	 * @param model The model
-	 * @param x Rotation around x axis in radians
-	 * @param y Rotation around y axis in radians
-	 * @param z Rotation around z axis in radians
+	 * @param rot Rotation around xyz axis' in degrees
 	 */
-	override def setRotation(model: ModelRenderer, x: Float, y: Float, z: Float): Unit = {
-		model.rotateAngleX = x
-		model.rotateAngleY = y
-		model.rotateAngleZ = z
-
+	def setRotation(model: ModelRenderer, rot: Vector3O): Unit = {
+		model.rotateAngleX = Math.toRadians(rot.x).toFloat
+		model.rotateAngleY = Math.toRadians(rot.y).toFloat
+		model.rotateAngleZ = Math.toRadians(rot.z).toFloat
 	}
 
-	override def render(entity: Entity, f: Float, f1: Float, f2: Float, f3: Float, f4: Float,
-			f5: Float): Unit = {
-		super.render(entity, f, f1, f2, f3, f4, f5)
-		this.renderModel(f5)
-
+	override def render(entity: Entity, parTime: Float, parSwingSuppress: Float, unknown1: Float,
+			headAngleY: Float, headAngleX: Float, unknown2: Float): Unit = {
+		this.renderModel(unknown2)
 	}
 
-	def renderModel(f5: Float): Unit = {
-		for (i <- 0 until this.modelList.size()) {
-			this.modelList.get(i).render(f5)
-		}
-	}
+	def renderModel(f5: Float): Unit = {}
 
 	@Deprecated
-	override def setRotationAngles(f: Float, f1: Float, f2: Float, f3: Float, f4: Float, f5: Float,
-			entity: Entity): Unit = {
+	override def setRotationAngles(parTime: Float, parSwingSuppress: Float, unknown1: Float,
+			headAngleY: Float, headAngleX: Float, unknown2: Float, entity: Entity): Unit = {}
+
+	protected def add(parent: ModelRenderer, child: ModelRenderer): Unit = {
+		parent.addChild(child)
+	}
+
+	protected def createModel(origin: Vector3O, offset: Vector3O,
+			bounds: Vector3O, rot: Vector3O, u: Int, v: Int): ModelRenderer = {
+		val mr: ModelRenderer = new ModelRenderer(this, u, v)
+		mr.setRotationPoint(origin.x_f(), origin.y_f(), origin.z_f())
+		mr.addBox(
+			-offset.x_f(), -offset.y_f(), -offset.z_f(),
+			bounds.x_i(), bounds.y_i(), bounds.z_i()
+		)
+		mr.setTextureSize(this.textureWidth, this.textureHeight)
+		mr.rotateAngleX = Math.toRadians(rot.x).asInstanceOf[Float]
+		mr.rotateAngleY = Math.toRadians(rot.y).asInstanceOf[Float]
+		mr.rotateAngleZ = Math.toRadians(rot.z).asInstanceOf[Float]
+		mr
 	}
 
 }

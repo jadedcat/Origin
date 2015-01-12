@@ -6,7 +6,7 @@ import com.temportalist.origin.library.client.utility.TessRenderer
 import com.temportalist.origin.library.common.lib.IRadialSelection
 import com.temportalist.origin.wrapper.client.gui.IGuiScreen
 import net.minecraft.client.gui.ScaledResolution
-import net.minecraft.client.renderer.RenderHelper
+import net.minecraft.client.renderer.{GlStateManager, RenderHelper}
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 
@@ -51,20 +51,20 @@ abstract class GuiRadialMenu(
 
 	def renderRadial(resolution: ScaledResolution, zLevel: Double,
 			quantity: Int, anglePer: Double): Unit = {
-		GL11.glPushMatrix()
+		GlStateManager.pushMatrix()
 
-		GL11.glDisable(GL11.GL_TEXTURE_2D)
+		GlStateManager.disableTexture2D()
 
-		GL11.glEnable(GL11.GL_BLEND)
+		GlStateManager.enableBlend()
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
 
 		GL11.glMatrixMode(GL11.GL_MODELVIEW)
-		GL11.glPushMatrix()
-		GL11.glLoadIdentity()
+		GlStateManager.pushMatrix()
+		GlStateManager.loadIdentity()
 
 		GL11.glMatrixMode(GL11.GL_PROJECTION)
-		GL11.glPushMatrix()
-		GL11.glLoadIdentity()
+		GlStateManager.pushMatrix()
+		GlStateManager.loadIdentity()
 
 		val mouseAngle = this.correctAngle(this.getMouseAngle() - 270)
 
@@ -87,11 +87,11 @@ abstract class GuiRadialMenu(
 						(257F / resolution.getScaledHeight.toFloat)
 
 			if (isMouseIn) {
-				GL11.glColor4f(28F / 255F, 232F / 255F, 31F / 255F, 153F / 255F)
+				GlStateManager.color(28F / 255F, 232F / 255F, 31F / 255F, 153F / 255F)
 				this.selectedLocalIndex = i
 			}
 			else {
-				GL11.glColor4f(0F / 255F, 0F / 255F, 0F / 255F, 153F / 255F)
+				GlStateManager.color(0F / 255F, 0F / 255F, 0F / 255F, 153F / 255F)
 			}
 
 			TessRenderer.startQuads()
@@ -121,22 +121,22 @@ abstract class GuiRadialMenu(
 
 		}
 
-		GL11.glPopMatrix()
+		GlStateManager.popMatrix()
 		GL11.glMatrixMode(GL11.GL_MODELVIEW)
-		GL11.glPopMatrix()
+		GlStateManager.popMatrix()
 
-		GL11.glDisable(GL11.GL_BLEND)
+		GlStateManager.disableBlend()
 
-		GL11.glEnable(GL11.GL_TEXTURE_2D)
+		GlStateManager.enableTexture2D()
 
-		GL11.glPopMatrix()
+		GlStateManager.popMatrix()
 	}
 
 	def renderIconsAndText(resolution: ScaledResolution, zLevel: Double,
 			quantity: Int, anglePer: Double): Unit = {
-		GL11.glPushMatrix()
+		GlStateManager.pushMatrix()
 
-		GL11.glTranslated(resolution.getScaledWidth_double() / 2,
+		GlStateManager.translate(resolution.getScaledWidth_double() / 2,
 			resolution.getScaledHeight_double() / 2, 0)
 		RenderHelper.enableGUIStandardItemLighting()
 
@@ -167,7 +167,7 @@ abstract class GuiRadialMenu(
 		}
 		RenderHelper.disableStandardItemLighting()
 
-		GL11.glPopMatrix()
+		GlStateManager.popMatrix()
 	}
 
 	def getMouseAngle(): Double = {

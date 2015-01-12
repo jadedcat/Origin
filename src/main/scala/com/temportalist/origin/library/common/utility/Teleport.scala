@@ -185,4 +185,9 @@ object Teleport {
 		true
 	}
 
+	def toDimensionPoint(player: EntityPlayer, pos: Vector3O, dimid: Int): Unit = {
+		this.toDimension(player, dimid)
+		this.toPoint(player, pos)
+	}
+
 }

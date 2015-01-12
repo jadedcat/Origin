@@ -4,9 +4,9 @@ import com.temportalist.origin.library.client.utility.Rendering
 import com.temportalist.origin.library.common.Origin
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiButton
+import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-import org.lwjgl.opengl.GL11
 
 /**
  *
@@ -41,7 +41,7 @@ class GuiButtonArrow(id: Int, x: Int, y: Int, buttonType: ArrowButtonType)
 	override def drawButton(minecraft: Minecraft, mouseX: Int, mouseY: Int): Unit = {
 		if (this.visible) {
 			Rendering.bindResource(this.texture)
-			GL11.glColor3f(1.0F, 1.0F, 1.0F)
+			GlStateManager.color(1.0F, 1.0F, 1.0F)
 			val isHoveredOn: Boolean = mouseX >= this.xPosition && mouseY >= this.yPosition &&
 					mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height
 			val u: Int = 0

@@ -25,7 +25,7 @@ object TeleportCommand extends CommandBase {
 		this.aliases
 	}
 
-	override def getUsage(p1: ICommandSender): String = {
+	override def getCommandUsage(p1: ICommandSender): String = {
 		"origin tp < [x] [y] [z] <Dimension Name:_> >"
 	}
 
