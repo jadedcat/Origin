@@ -2,7 +2,7 @@ package com.temportalist.origin.library.common
 
 import java.util
 
-import com.temportalist.origin.library.common.command.TeleportCommand
+import com.temportalist.origin.library.server.command.TeleportCommand
 import com.temportalist.origin.library.common.extended.ExtendedSync
 import com.temportalist.origin.library.common.helpers.{OptionHandler, RegisterHelper}
 import com.temportalist.origin.library.common.network._

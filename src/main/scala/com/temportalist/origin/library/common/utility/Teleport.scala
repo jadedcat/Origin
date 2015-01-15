@@ -3,7 +3,7 @@ package com.temportalist.origin.library.common.utility
 import java.util.Random
 
 import com.temportalist.origin.library.common.lib.TeleporterCore
-import com.temportalist.origin.library.common.lib.vec.Vector3O
+import com.temportalist.origin.library.common.lib.vec.{V3O, V3O$}
 import net.minecraft.block.Block
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.util._
@@ -65,7 +65,7 @@ object Teleport {
 	 * @param maxDistance
 	 */
 	def toCursorPosition(entityPlayer: EntityPlayer, maxDistance: Double): Boolean = {
-		val point: Vector3O = Cursor.getRaytracedBlock(
+		val point: V3O = Cursor.getRaytracedBlock(
 			entityPlayer.worldObj, entityPlayer, maxDistance
 		)
 		Teleport.toPoint(
@@ -90,12 +90,12 @@ object Teleport {
 		val heightOffset: Double = -player.getYOffset//player.ySize - player.getYOffset
 		var yVar: Int = random.nextInt(128)
 
-		var point: Vector3O = null
+		var point: V3O = null
 		var playerNewBB: AxisAlignedBB = null
 		do {
 			yVar += 1
 
-			point = new Vector3O(
+			point = new V3O(
 				MathFuncs.getRandomBetweenBounds(minRadius, maxRadius) +
 						MathHelper.floor_double(player.posX) + 0.5,
 				yVar,
@@ -152,7 +152,7 @@ object Teleport {
 	 * @param z
 	 */
 	def toPoint(player: EntityPlayer, x: Double, y: Double, z: Double): Boolean = {
-		this.toPoint(player, new Vector3O(x, y, z))
+		this.toPoint(player, new V3O(x, y, z))
 	}
 
 	/**
@@ -164,7 +164,7 @@ object Teleport {
 	 * @param player
 	 * @param point
 	 */
-	def toPoint(player: EntityPlayer, point: Vector3O): Boolean = {
+	def toPoint(player: EntityPlayer, point: V3O): Boolean = {
 		// todo fall damage
 
 		val event: EnderTeleportEvent = new EnderTeleportEvent(
@@ -185,7 +185,7 @@ object Teleport {
 		true
 	}
 
-	def toDimensionPoint(player: EntityPlayer, pos: Vector3O, dimid: Int): Unit = {
+	def toDimensionPoint(player: EntityPlayer, pos: V3O, dimid: Int): Unit = {
 		this.toDimension(player, dimid)
 		this.toPoint(player, pos)
 	}

@@ -16,6 +16,7 @@ import net.minecraft.world.World
 import net.minecraftforge.client.model.{ISmartBlockModel, ISmartItemModel}
 import net.minecraftforge.common.property.IExtendedBlockState
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+
 /**
  *
  *

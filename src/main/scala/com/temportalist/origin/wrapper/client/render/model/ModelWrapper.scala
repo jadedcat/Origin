@@ -1,8 +1,11 @@
 package com.temportalist.origin.wrapper.client.render.model
 
-import com.temportalist.origin.library.common.lib.vec.Vector3O
+import com.temportalist.origin.library.common.lib.vec.{V3O, V3O$}
+import net.minecraft.block.state.{IBlockState, BlockState}
 import net.minecraft.client.model.{ModelBase, ModelRenderer}
 import net.minecraft.entity.Entity
+import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.BlockPos
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -21,7 +24,7 @@ class ModelWrapper(texWidth: Int, texHeight: Int) extends ModelBase {
 	 * @param model The model
 	 * @param rot Rotation around xyz axis' in degrees
 	 */
-	def setRotation(model: ModelRenderer, rot: Vector3O): Unit = {
+	def setRotation(model: ModelRenderer, rot: V3O): Unit = {
 		model.rotateAngleX = Math.toRadians(rot.x).toFloat
 		model.rotateAngleY = Math.toRadians(rot.y).toFloat
 		model.rotateAngleZ = Math.toRadians(rot.z).toFloat
@@ -29,12 +32,19 @@ class ModelWrapper(texWidth: Int, texHeight: Int) extends ModelBase {
 
 	override def render(entity: Entity, parTime: Float, parSwingSuppress: Float, unknown1: Float,
 			headAngleY: Float, headAngleX: Float, unknown2: Float): Unit = {
+		this.setRotationAngles(
+			parTime, parSwingSuppress, unknown1, headAngleY, headAngleX, unknown2, entity
+		)
 		this.renderModel(unknown2)
+	}
+
+	def render(te: TileEntity): Unit = {
+		this.setRotationAngles(0, 0, 0, 0, 0, ModelWrapper.f5, null.asInstanceOf[Entity])
+		this.renderModel(ModelWrapper.f5)
 	}
 
 	def renderModel(f5: Float): Unit = {}
 
-	@Deprecated
 	override def setRotationAngles(parTime: Float, parSwingSuppress: Float, unknown1: Float,
 			headAngleY: Float, headAngleX: Float, unknown2: Float, entity: Entity): Unit = {}
 
@@ -42,8 +52,8 @@ class ModelWrapper(texWidth: Int, texHeight: Int) extends ModelBase {
 		parent.addChild(child)
 	}
 
-	protected def createModel(origin: Vector3O, offset: Vector3O,
-			bounds: Vector3O, rot: Vector3O, u: Int, v: Int): ModelRenderer = {
+	protected def createModel(origin: V3O, offset: V3O,
+			bounds: V3O, rot: V3O, u: Int, v: Int): ModelRenderer = {
 		val mr: ModelRenderer = new ModelRenderer(this, u, v)
 		mr.setRotationPoint(origin.x_f(), origin.y_f(), origin.z_f())
 		mr.addBox(

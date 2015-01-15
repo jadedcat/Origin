@@ -1,4 +1,4 @@
-package com.temportalist.origin.library.common.command
+package com.temportalist.origin.library.server.command
 
 import java.util
 
@@ -25,7 +25,7 @@ object TeleportCommand extends CommandBase {
 		this.aliases
 	}
 
-	override def getCommandUsage(p1: ICommandSender): String = {
+	override def getUsage(p1: ICommandSender): String = {
 		"origin tp < [x] [y] [z] <Dimension Name:_> >"
 	}
 

@@ -3,11 +3,9 @@ package com.temportalist.origin.library.common.lib
 import java.util
 
 import net.minecraft.block.Block
-import net.minecraft.item.Item
-import net.minecraft.init.Blocks
-import net.minecraft.item.ItemStack
-import net.minecraftforge.fml.common.registry.{GameRegistry, GameData}
+import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.fml.common.registry.GameRegistry.UniqueIdentifier
+import net.minecraftforge.fml.common.registry.{GameData, GameRegistry}
 import net.minecraftforge.oredict.OreDictionary
 
 /**
@@ -23,7 +21,7 @@ object NameParser {
 		}
 
 		val name: String =
-			if (Block.getBlockFromItem(itemStack.getItem) == Blocks.air) {
+			if (Block.getBlockFromItem(itemStack.getItem) == null) {
 				GameData.getItemRegistry.getNameForObject(itemStack.getItem).asInstanceOf[String]
 			}
 			else {

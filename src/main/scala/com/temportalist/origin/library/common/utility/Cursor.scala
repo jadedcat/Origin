@@ -1,6 +1,6 @@
 package com.temportalist.origin.library.common.utility
 
-import com.temportalist.origin.library.common.lib.vec.Vector3O
+import com.temportalist.origin.library.common.lib.vec.{V3O, V3O$}
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.util.{EnumFacing, MovingObjectPosition}
@@ -19,8 +19,8 @@ object Cursor {
 	 * @param entity
 	 * @return
 	 */
-	def getHeadPos(entity: EntityLivingBase): Vector3O = {
-		val vec: Vector3O = new Vector3O(entity)
+	def getHeadPos(entity: EntityLivingBase): V3O = {
+		val vec: V3O = new V3O(entity)
 		vec.add(0, entity.getEyeHeight, 0)
 		entity match {
 			case player: EntityPlayer =>
@@ -38,17 +38,17 @@ object Cursor {
 	 * @return
 	 */
 	def getCursorPosVec(
-			entity: EntityLivingBase, reachDistance: Double, headVec: Vector3O
-			): Vector3O = {
+			entity: EntityLivingBase, reachDistance: Double, headVec: V3O
+			): V3O = {
 		// scale the look vector by the reach distance and translate it by the head/eye vector
-		new Vector3O(entity.getLook(1.0F)).scale(reachDistance).add(headVec)
+		new V3O(entity.getLook(1.0F)).scale(reachDistance).add(headVec)
 	}
 
-	def getCursorPosVec(entity: EntityLivingBase, reachDistance: Double): Vector3O = {
+	def getCursorPosVec(entity: EntityLivingBase, reachDistance: Double): V3O = {
 		this.getCursorPosVec(entity, reachDistance, this.getHeadPos(entity))
 	}
 
-	def getCursorPosVec(entity: EntityLivingBase): Vector3O = {
+	def getCursorPosVec(entity: EntityLivingBase): V3O = {
 		entity match {
 			case player: EntityPlayer =>
 				this.getCursorPosVec(entity, Player.getReachDistance(player))
@@ -57,9 +57,9 @@ object Cursor {
 		}
 	}
 
-	def getRaytracedBlock(world: World, entity: EntityLivingBase, reachLength: Double): Vector3O = {
-		val head: Vector3O = this.getHeadPos(entity)
-		val cursorPosVec: Vector3O = this.getCursorPosVec(entity, reachLength, head)
+	def getRaytracedBlock(world: World, entity: EntityLivingBase, reachLength: Double): V3O = {
+		val head: V3O = this.getHeadPos(entity)
+		val cursorPosVec: V3O = this.getCursorPosVec(entity, reachLength, head)
 		val mop: MovingObjectPosition = world
 				.rayTraceBlocks(head.toVec3(), cursorPosVec.toVec3(), false)
 		if (mop == null) return null
@@ -79,7 +79,7 @@ object Cursor {
 			blockZ = mop.hitVec.zCoord.asInstanceOf[Int]
 			side = 1
 		}
-		new Vector3O(blockX, blockY, blockZ).add(EnumFacing.getFront(side))
+		new V3O(blockX, blockY, blockZ).add(EnumFacing.getFront(side))
 	}
 
 }

@@ -16,7 +16,7 @@ import net.minecraft.world.chunk.Chunk
  */
 class BlockCoord(_x: Int, _y: Int, _z: Int, var dim: Int) extends BlockPos(_x, _y, _z) {
 
-	def this(vec: Vector3O, dim: Int) {
+	def this(vec: V3O, dim: Int) {
 		this(vec.x_i(), vec.y_i(), vec.z_i(), dim)
 	}
 

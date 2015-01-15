@@ -1,6 +1,6 @@
 package com.temportalist.origin.library.common.utility
 
-import com.temportalist.origin.library.common.lib.vec.Vector3O
+import com.temportalist.origin.library.common.lib.vec.{V3O, V3O$}
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
@@ -36,20 +36,20 @@ object WorldHelper {
 	def getWorld_client(): World = Minecraft.getMinecraft.theWorld
 
 	def getBlock(world: World, x: Int, y: Int, z: Int, dir: EnumFacing): Block = {
-		Vector3O.from(x, y, z, dir).getBlock(world)
+		V3O.from(x, y, z, dir).getBlock(world)
 	}
 
 	def getBlockState(world: World, x: Int, y: Int, z: Int, dir: EnumFacing): IBlockState = {
-		Vector3O.from(x, y, z, dir).getBlockState(world)
+		V3O.from(x, y, z, dir).getBlockState(world)
 	}
 
 	def getTileEntity(world: World, x: Int, y: Int, z: Int, dir: EnumFacing): TileEntity = {
-		Vector3O.from(x, y, z, dir).getTile(world)
+		V3O.from(x, y, z, dir).getTile(world)
 	}
 
 	def isInFieldOfView(viewer: Entity, viewee: Entity): Boolean = {
-		val entityLookVec: Vector3O = new Vector3O(viewer.getLook(1.0F)) //.normalize()
-		val differenceVec: Vector3O = new Vector3O(
+		val entityLookVec: V3O = new V3O(viewer.getLook(1.0F)) //.normalize()
+		val differenceVec: V3O = new V3O(
 				viewee.posX - viewer.posX,
 				viewee.posY + viewee.height.asInstanceOf[Double] -
 						(viewer.posY + viewer.getEyeHeight().asInstanceOf[Double]),
