@@ -1,6 +1,9 @@
 package com.temportalist.origin.library.common.utility
 
-import com.google.gson.JsonArray
+import java.io.{FileReader, File}
+
+import com.google.common.io.Files
+import com.google.gson.{JsonParser, Gson, JsonElement, JsonArray}
 import com.temportalist.origin.library.common.lib.NameParser
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -11,6 +14,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry
  * @author TheTemportalist
  */
 object Json {
+
+	val gson: Gson = new Gson()
+	val parser: JsonParser = new JsonParser()
 
 	def toReadableString(json: String): String = {
 		var readable: String = ""
@@ -85,5 +91,14 @@ object Json {
 			}
 		}
 	}
+
+	def writeToFile(jsonElement: JsonElement, file: File, formatted: Boolean): Unit = {
+		val jsonStr = this.gson.toJson(jsonElement)
+		val fileStr = if (formatted) this.toReadableString(jsonStr) else jsonStr
+		Files.write(fileStr.getBytes, file)
+	}
+
+	def getJson(file: File): JsonElement = this.parser.parse(new FileReader(file))
+
 
 }
