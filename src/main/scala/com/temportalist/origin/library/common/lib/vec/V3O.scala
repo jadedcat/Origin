@@ -148,7 +148,7 @@ class V3O(var x: Double, var y: Double, var z: Double) {
 	}
 
 	def distance(vec: V3O): Double = {
-		this.copy().subtract(vec).mag()
+		this.copy().subtract(vec).magnitude()
 	}
 
 	def distance(x: Double, y: Double, z: Double): Double = {
@@ -164,11 +164,9 @@ class V3O(var x: Double, var y: Double, var z: Double) {
 		this.x * this.x + this.y * this.y + this.z * this.z
 	}
 
-	def mag(): Double = {
+	def magnitude(): Double = {
 		Math.sqrt(this.magSquared())
 	}
-
-	def add(dir: EnumFacing): V3O = this.add(new V3O(dir))
 
 	def set(x1: Double, y1: Double, z1: Double): V3O = {
 		this.x = x1
@@ -188,7 +186,35 @@ class V3O(var x: Double, var y: Double, var z: Double) {
 
 	def add(vec: V3O): V3O = this.add(vec.x, vec.y, vec.z)
 
+	def add(dir: EnumFacing, amount: Double): V3O = this.add(new V3O(dir).scale(amount))
+
+	def add(dir: EnumFacing): V3O = this.add(dir, 1)
+
 	def add(d: Double): V3O = this.add(d, d, d)
+
+	def down(amount: Double): V3O = this.add(EnumFacing.DOWN, amount)
+
+	def down(): V3O = this.down(1)
+
+	def up(amount: Double): V3O = this.add(EnumFacing.UP, amount)
+
+	def up(): V3O = this.up(1)
+
+	def north(amount: Double): V3O = this.add(EnumFacing.NORTH, amount)
+
+	def north(): V3O = this.north(1)
+
+	def south(amount: Double): V3O = this.add(EnumFacing.SOUTH, amount)
+
+	def south(): V3O = this.south(1)
+
+	def east(amount: Double): V3O = this.add(EnumFacing.EAST, amount)
+
+	def east(): V3O = this.east(1)
+
+	def west(amount: Double): V3O = this.add(EnumFacing.WEST, amount)
+
+	def west(): V3O = this.west(1)
 
 	def subtract(x1: Double, y1: Double, z1: Double): V3O = {
 		this.x -= x1
@@ -220,7 +246,7 @@ class V3O(var x: Double, var y: Double, var z: Double) {
 	def multiply(f: V3O): V3O = this.multiply(f.x, f.y, f.z)
 
 	def normalize(): V3O = {
-		val mag: Double = this.mag()
+		val mag: Double = this.magnitude()
 		if (mag != 0.0D) {
 			this.multiply(1.0D / mag)
 		}
@@ -370,6 +396,10 @@ object V3O {
 
 	def from(x: Double, y: Double, z: Double, dir: EnumFacing): V3O = {
 		new V3O(x, y, z).add(new V3O(dir))
+	}
+
+	def from(aabb: AxisAlignedBB): V3O = {
+		new V3O(aabb.maxX, aabb.maxY, aabb.maxZ) - new V3O(aabb.minX, aabb.minY, aabb.minZ)
 	}
 
 	def UP: V3O = new V3O(EnumFacing.UP)

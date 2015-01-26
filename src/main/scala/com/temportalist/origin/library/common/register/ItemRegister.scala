@@ -7,8 +7,6 @@ package com.temportalist.origin.library.common.register
  */
 trait ItemRegister extends Register {
 
-	def registerRenders_Init(): Unit
-
 	def registerItemsPostBlock(): Unit = {}
 
 	def registerCrafting(): Unit = {}

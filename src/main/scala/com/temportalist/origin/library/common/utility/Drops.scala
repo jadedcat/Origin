@@ -3,6 +3,7 @@ package com.temportalist.origin.library.common.utility
 import java.util
 import java.util.Random
 
+import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -16,7 +17,7 @@ import net.minecraft.world.World
  */
 object Drops {
 
-	def spawnDrops(world: World, pos: BlockPos, drops: util.List[ItemStack]) {
+	def spawnDrops(world: World, pos: BlockPos, drops: util.List[ItemStack]): Unit = {
 		if (!drops.isEmpty) {
 			val random: Random = new Random
 			var drop: ItemStack = null
@@ -29,7 +30,8 @@ object Drops {
 		}
 	}
 
-	def spawnItemStack(world: World, pos: BlockPos, itemStack: ItemStack, random: Random, delay: Int) {
+	def spawnItemStack(world: World, pos: BlockPos, itemStack: ItemStack, random: Random,
+			delay: Int): Unit = {
 		if (itemStack != null) {
 			val f: Float = random.nextFloat * 0.8F + 0.1F
 			val f1: Float = random.nextFloat * 0.8F + 0.1F
@@ -54,4 +56,10 @@ object Drops {
 			if (!world.isRemote) world.spawnEntityInWorld(entityitem)
 		}
 	}
+
+	def spawnItemStack(world: World, pos: BlockPos, state: IBlockState, random: Random,
+			delay: Int): Unit = {
+		this.spawnItemStack(world, pos, States.getItemStackFromState(state), random, delay)
+	}
+
 }

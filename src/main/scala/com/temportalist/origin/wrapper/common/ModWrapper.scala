@@ -56,7 +56,6 @@ class ModWrapper() {
 		sortedRegArray = sortedRegisters.get("entity")
 		for (index <- 0 until sortedRegArray.size()) {
 			sortedRegArray.get(index).register()
-			sortedRegArray.get(index).asInstanceOf[EntityRegister].addEntityMappings
 			sortedRegArray.get(index).asInstanceOf[EntityRegister].addEntitySpawns
 		}
 

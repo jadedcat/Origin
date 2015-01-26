@@ -3,7 +3,7 @@ package com.temportalist.origin.wrapper.common.block
 import java.util
 import java.util.Random
 
-import com.temportalist.origin.library.common.utility.Drops
+import com.temportalist.origin.library.common.utility.{WorldHelper, Drops}
 import com.temportalist.origin.wrapper.common.tile.{ICustomDrops, IPowerable}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -54,7 +54,7 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 	 * @return
 	 */
 	override def createTileEntity(world: World, state: IBlockState): TileEntity = {
-		if (this.tileEntityClass != null) {
+		if (this.hasTileEntity(state)) {
 			try {
 				// Try to create a new instance of this tile entity's class
 				return this.tileEntityClass.newInstance()
@@ -69,11 +69,6 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 		null
 	}
 
-	/**
-	 * Check to see if this block has a tile entity
-	 * @param metadata
-	 * @return
-	 */
 	override def hasTileEntity(state: IBlockState): Boolean = {
 		this.tileEntityClass != null
 	}
@@ -86,16 +81,6 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 		super.onBlockAdded(worldIn, pos, state)
 	}
 
-	/**
-	 * Lets the block know when one of its neighbor changes.
-	 * Doesn't know which neighbor changed (coordinates passed are their own)
-	 *
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param block the neighbor block
-	 */
 	override def onNeighborBlockChange(worldIn: World, pos: BlockPos, state: IBlockState,
 			neighborBlock: Block): Unit = {
 		// check the powewr when nearby blocks change
@@ -134,7 +119,7 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 
 	/**
 	 * Allows for drops from an ICustomDrops tile entity
-	 * @param metadata
+	 * @param state
 	 * @return
 	 */
 	def hasTileEntityDrops(state: IBlockState): Boolean = {
@@ -160,5 +145,8 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 
 		super.breakBlock(worldIn, pos, state)
 	}
+
+	def isClient(): Boolean = WorldHelper.isClient()
+	def isServer(): Boolean = WorldHelper.isServer()
 
 }

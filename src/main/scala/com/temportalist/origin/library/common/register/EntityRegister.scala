@@ -1,5 +1,8 @@
 package com.temportalist.origin.library.common.register
 
+import java.util
+
+import net.minecraft.entity.EntityList.EntityEggInfo
 import net.minecraft.entity._
 import net.minecraftforge.fml.common.registry.EntityRegistry
 
@@ -11,8 +14,8 @@ import net.minecraftforge.fml.common.registry.EntityRegistry
 trait EntityRegister extends Register {
 
 	var entID: Int = 0
-
-	def addEntityMappings(): Unit = {}
+	private val idMap: util.HashMap[Class[_ <: Entity], Int] =
+		new util.HashMap[Class[_ <: Entity], Int]()
 
 	protected final def addEntity(entityClass: Class[_ <: Entity], entityName: String,
 			mod: Object): Unit = {
@@ -32,8 +35,18 @@ trait EntityRegister extends Register {
 		EntityRegistry.registerModEntity(entityClass, entityName, entID, mod,
 			trackingRange, updateFrequency, sendsVelocityUpdates
 		)
+		this.idMap.put(entityClass, entID)
 
 		entID += 1
+	}
+
+	protected final def addEgg(
+			entityClass: Class[_ <: Entity], foreColor: Int, backColor: Int
+			): Unit = {
+		val id: Int = this.idMap.get(entityClass)
+		EntityList.entityEggs.asInstanceOf[util.LinkedHashMap[Int, EntityEggInfo]].put(
+			id, new EntityEggInfo(id, foreColor, backColor)
+		)
 	}
 
 	def addEntitySpawns(): Unit = {}

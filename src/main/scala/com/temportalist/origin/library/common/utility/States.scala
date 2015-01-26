@@ -30,4 +30,9 @@ object States {
 		null
 	}
 
+	def getItemStackFromState(state: IBlockState): ItemStack = {
+		new ItemStack(state.getBlock, 1, state.getBlock.getMetaFromState(state))
+		// todo add unlisted usability?
+	}
+
 }
