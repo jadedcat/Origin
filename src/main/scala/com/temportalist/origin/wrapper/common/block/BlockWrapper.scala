@@ -68,6 +68,8 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 		unlocalizedName.substring(unlocalizedName.indexOf(".") + 1)
 	}
 
+	def getName(): String = this.name
+
 	/**
 	 * Get the non-local name of this block
 	 * @return
