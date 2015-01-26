@@ -2,16 +2,16 @@ package com.temportalist.origin.library.common
 
 import java.util
 
-import com.temportalist.origin.library.server.command.TeleportCommand
 import com.temportalist.origin.library.common.extended.ExtendedSync
 import com.temportalist.origin.library.common.helpers.{OptionHandler, RegisterHelper}
 import com.temportalist.origin.library.common.network._
-import com.temportalist.origin.library.common.utility.ItemRenderingHelper
+import com.temportalist.origin.library.server.command.TeleportCommand
 import com.temportalist.origin.wrapper.common.ModWrapper
+import com.temportalist.origin.wrapper.common.item.ItemPlacer
 import net.minecraft.block.Block
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.enchantment.Enchantment
-import net.minecraft.init.Blocks
+import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.world.WorldServer
 import net.minecraftforge.common.DimensionManager
@@ -19,21 +19,20 @@ import net.minecraftforge.fml.common.event._
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
 import net.minecraftforge.fml.common.{Mod, SidedProxy}
-import net.minecraft.init.Items
 
 /**
  *
  *
  * @author TheTemportalist
  */
-@Mod(modid = Origin.pluginID, name = Origin.pluginName, version = "@PLUGIN_VERSION@",
+@Mod(modid = Origin.MODID, name = Origin.MODNAME, version = "@PLUGIN_VERSION@",
 	guiFactory = Origin.clientProxy,
 	modLanguage = "scala"
 )
 object Origin extends ModWrapper {
 
-	final val pluginID = "origin"
-	final val pluginName = "Origin"
+	final val MODID = "origin"
+	final val MODNAME = "Origin"
 	final val clientProxy = "com.temportalist.origin.library.client.ClientProxy"
 	final val serverProxy = "com.temportalist.origin.library.server.ServerProxy"
 
@@ -54,28 +53,29 @@ object Origin extends ModWrapper {
 		tabBlocks.add(block)
 	}
 
+	var placer: ItemPlacer = null
+
 	@Mod.EventHandler
 	def preInit(event: FMLPreInitializationEvent): Unit = {
 		RegisterHelper.registerHandlers(ExtendedSync, OptionHandler)
-		super.preInitialize(this.pluginID, this.pluginName, event, this.proxy, CGOOptions)
+		super.preInitialize(this.MODID, this.MODNAME, event, this.proxy, CGOOptions)
 
 		RegisterHelper.registerCommand(TeleportCommand)
 
-		RegisterHelper.registerPacketHandler(this.pluginID,
+		RegisterHelper.registerPacketHandler(this.MODID,
 			classOf[PacketSyncExtendedProperties],
 			classOf[PacketTeleport],
 			classOf[PacketRedstoneUpdate],
 			classOf[PacketActionUpdate]
 		)
 
+		this.placer = new ItemPlacer(Origin.MODID, "placer")
+
 	}
 
 	@Mod.EventHandler
 	def init(event: FMLInitializationEvent): Unit = {
 		super.initialize(event, this.proxy)
-
-
-
 	}
 
 	@Mod.EventHandler
@@ -83,7 +83,7 @@ object Origin extends ModWrapper {
 		super.postInitialize(event)
 
 		if (!this.tabItems.isEmpty || !this.tabBlocks.isEmpty) {
-			val originTab: CreativeTabs = new CreativeTabs(Origin.pluginID) {
+			val originTab: CreativeTabs = new CreativeTabs(Origin.MODID) {
 				override def getTabIconItem: Item = {
 					Items.carrot_on_a_stick
 				}

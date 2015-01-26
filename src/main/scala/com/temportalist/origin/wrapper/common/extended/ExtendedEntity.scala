@@ -39,7 +39,7 @@ abstract class ExtendedEntity(var player: EntityPlayer) extends IExtendedEntityP
 		if (this.player != null)
 			Origin.proxy.syncPacket(syncMessage, this.player)
 		else
-			LogHelper.info(Origin.pluginName, "Error: Null player in extended entity")
+			LogHelper.info(Origin.MODNAME, "Error: Null player in extended entity")
 	}
 
 }

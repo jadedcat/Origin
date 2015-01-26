@@ -151,7 +151,7 @@ object ExtendedSync {
 			}
 		}
 		else {
-			LogHelper.info(Origin.pluginName, "ERROR, null entity joined world")
+			LogHelper.info(Origin.MODNAME, "ERROR, null entity joined world")
 		}
 	}
 

@@ -20,7 +20,7 @@ class GuiButtonArrow(id: Int, x: Int, y: Int, buttonType: ArrowButtonType)
 	val longSide: Int = 15
 	val shortSide: Int = 10
 	val texture: ResourceLocation = new
-					ResourceLocation(Origin.pluginID, "textures/gui/buttons.png")
+					ResourceLocation(Origin.MODID, "textures/gui/buttons.png")
 	// Default Constructor
 	if (this.buttonType.equals(ArrowButtonType.LEFT) ||
 			this.buttonType.equals(ArrowButtonType.RIGHT)) {

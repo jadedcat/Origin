@@ -33,11 +33,11 @@ object Crash {
 		)
 
 		if (report.saveToFile(file1)) {
-			LogHelper.info(Origin.pluginName,
+			LogHelper.info(Origin.MODNAME,
 				"This crash report has been saved to: " + file1.getAbsolutePath)
 		}
 		else {
-			LogHelper.error(Origin.pluginName, "We were unable to save this crash report to disk.")
+			LogHelper.error(Origin.MODNAME, "We were unable to save this crash report to disk.")
 		}
 
 		FMLCommonHandler.instance.expectServerStopped

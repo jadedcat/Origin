@@ -2,7 +2,7 @@ package com.temportalist.origin.library.common.register
 
 import java.util
 
-import net.minecraft.entity.EntityList.EntityEggInfo
+import com.temportalist.origin.wrapper.common.item.ItemPlacer
 import net.minecraft.entity._
 import net.minecraftforge.fml.common.registry.EntityRegistry
 
@@ -41,12 +41,9 @@ trait EntityRegister extends Register {
 	}
 
 	protected final def addEgg(
-			entityClass: Class[_ <: Entity], foreColor: Int, backColor: Int
+			entityClass: Class[_ <: Entity], primary: Int, secondary: Int
 			): Unit = {
-		val id: Int = this.idMap.get(entityClass)
-		EntityList.entityEggs.asInstanceOf[util.LinkedHashMap[Int, EntityEggInfo]].put(
-			id, new EntityEggInfo(id, foreColor, backColor)
-		)
+		ItemPlacer.register(entityClass, primary, secondary)
 	}
 
 	def addEntitySpawns(): Unit = {}

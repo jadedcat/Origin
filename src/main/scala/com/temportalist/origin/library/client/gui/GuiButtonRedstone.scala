@@ -20,7 +20,7 @@ class GuiButtonRedstone(id: Int, x: Int, y: Int, val state: RedstoneState, val u
 		extends GuiButton(id, x, y, 18, 18, "") {
 
 	val texture: ResourceLocation = new
-					ResourceLocation(Origin.pluginID, "textures/gui/buttons.png")
+					ResourceLocation(Origin.MODID, "textures/gui/buttons.png")
 	// Default Constructor
 
 	// End Constructor

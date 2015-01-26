@@ -27,7 +27,7 @@ class CommonProxy extends ProxyWrapper {
 	}
 
 	def syncPacket(message: PacketSyncExtendedProperties, player: EntityPlayer) {
-		PacketHandler.sendToPlayer(Origin.pluginID, message, player)
+		PacketHandler.sendToPlayer(Origin.MODID, message, player)
 	}
 
 	def addArmor(armor: String): Int = {

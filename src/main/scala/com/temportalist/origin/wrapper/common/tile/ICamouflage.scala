@@ -49,7 +49,7 @@ trait ICamouflage extends TEWrapper {
 			} catch {
 				case e: Exception =>
 					if (e.isInstanceOf[NullPointerException]) {
-						LogHelper.info(Origin.pluginName,
+						LogHelper.info(Origin.MODNAME,
 							"No block for " + tagCom.getString("ICamouflage_name")
 						)
 					}

@@ -11,6 +11,6 @@ import net.minecraftforge.fml.relauncher.{SideOnly, Side}
  * @author TheTemportalist
  */
 @SideOnly(Side.CLIENT)
-class GuiConfig(guiScreen: GuiScreen) extends GuiConfigWrapper(guiScreen, Origin, Origin.pluginID) {
+class GuiConfig(guiScreen: GuiScreen) extends GuiConfigWrapper(guiScreen, Origin, Origin.MODID) {
 
 }

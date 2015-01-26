@@ -56,7 +56,7 @@ object ExtendedEntityHandler {
 	final def getExtended(player: EntityPlayer,
 			extendedClass: Class[_ <: ExtendedEntity]): IExtendedEntityProperties = {
 		if (player == null) {
-			LogHelper.info(Origin.pluginName, "Passed player was null in " + this.getClass + ".getExtended")
+			LogHelper.info(Origin.MODNAME, "Passed player was null in " + this.getClass + ".getExtended")
 			return null
 		}
 		if (ExtendedEntityHandler.extendedProperties.containsKey(extendedClass)) {
@@ -71,7 +71,7 @@ object ExtendedEntityHandler {
 			}
 			catch {
 				case e: Exception =>
-					LogHelper.info(Origin.pluginName,
+					LogHelper.info(Origin.MODNAME,
 						"\n   Player null: " + (player == null) +
 						"\n   EnProp null: " + (ExtendedEntityHandler.extendedProperties == null) +
 						"\n   EClass null: " + (extendedClass == null)

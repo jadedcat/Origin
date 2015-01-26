@@ -69,7 +69,7 @@ class PacketSyncExtendedProperties(var extendedClass: Class[_ <: ExtendedEntity]
 		if (player != null)
 			ExtendedEntityHandler.getExtended(player, this.extendedClass).loadNBTData(this.data)
 		else {
-			LogHelper.info(Origin.pluginName, "Null player!")
+			LogHelper.info(Origin.MODNAME, "Null player!")
 		}
 	}
 

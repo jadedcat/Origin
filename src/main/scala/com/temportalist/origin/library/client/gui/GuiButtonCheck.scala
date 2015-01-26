@@ -18,7 +18,7 @@ class GuiButtonCheck(id: Int, x: Int, y: Int, val isCheckmark: Boolean)
 		extends GuiButton(id, x, y, 20, 20, "") {
 
 	val texture: ResourceLocation = new
-					ResourceLocation(Origin.pluginID, "textures/gui/buttons.png")
+					ResourceLocation(Origin.MODID, "textures/gui/buttons.png")
 	// Default Constructor
 
 	// End Constructor

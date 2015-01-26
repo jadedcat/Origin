@@ -50,7 +50,7 @@ trait IGuiScreen extends GuiScreen {
 			this.title = ""
 
 		if (this.background == null) {
-			this.background = new ResourceLocation(Origin.pluginID, "textures/gui/blank.png")
+			this.background = new ResourceLocation(Origin.MODID, "textures/gui/blank.png")
 		}
 
 	}

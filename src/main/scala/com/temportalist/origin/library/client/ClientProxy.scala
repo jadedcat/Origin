@@ -42,7 +42,7 @@ class ClientProxy() extends CommonProxy with IModGuiFactory {
 
 	override def syncPacket(message: PacketSyncExtendedProperties, player: EntityPlayer) {
 		if (FMLCommonHandler.instance.getEffectiveSide.isClient) {
-			PacketHandler.sendToServer(Origin.pluginID, message)
+			PacketHandler.sendToServer(Origin.MODID, message)
 		}
 		else {
 			super.syncPacket(message, player)

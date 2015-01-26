@@ -3,7 +3,7 @@ package com.temportalist.origin.wrapper.common
 import java.util
 
 import com.temportalist.origin.library.common.Origin
-import com.temportalist.origin.library.common.helpers.OptionHandler
+import com.temportalist.origin.library.common.helpers.{RegisterHelper, OptionHandler}
 import com.temportalist.origin.library.common.lib.LogHelper
 import com.temportalist.origin.library.common.register._
 import net.minecraftforge.fml.common.event.{FMLPostInitializationEvent, FMLInitializationEvent, FMLPreInitializationEvent}
@@ -63,12 +63,14 @@ class ModWrapper() {
 
 		// TODO achievement
 
+		RegisterHelper.registerHandlers(this, proxy)
+
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy)
 
 		// Packet Registration
 		//todo does not find any IPackets
 		val packageName: String = this.getClass.getPackage.getName
-		LogHelper.info(Origin.pluginName,
+		LogHelper.info(Origin.MODNAME,
 			"Looking for packets to register for channel \'" + modid + "\' in package \'" +
 					packageName + "\'."
 		)
