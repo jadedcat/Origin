@@ -31,6 +31,7 @@ trait ICamo extends Block {
 				val name: String = NameParser.getName(
 					new ItemStack(block, meta, 1), hasID = true, hasMeta = true
 				)
+
 				return state.asInstanceOf[IExtendedBlockState].withProperty(
 					ICamouflage.CAMO_PROP, name
 				)

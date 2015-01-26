@@ -38,7 +38,8 @@ trait IRenderingObject {
 	def getItemMesh(): ItemMeshDefinition = {
 		new ItemMeshDefinition {
 			override def getModelLocation(itemStack: ItemStack): ModelResourceLocation = {
-				getModelLocation(itemStack)
+				//todo new ModelResourceLocation()
+				null
 			}
 		}
 	}
