@@ -105,25 +105,59 @@ class ItemPlacer(modid: String, name: String) extends ItemWrapper(modid, name) {
 		false
 	}
 
+	/**
+	 * Returns true if the item can be used on the given entity, e.g. shears on sheep.
+	 *
+	 * @param itemStack
+	 * @param player
+	 * @param entity
+	 * @return
+	 */
+	override def itemInteractionForEntity(itemStack: ItemStack, player: EntityPlayer,
+			entity: EntityLivingBase): Boolean = {
+		if (itemStack.hasTagCompound) {
+			val entityName: String = itemStack.getTagCompound.getString("EntityName")
+			val thatEntityName: String = EntityList.classToStringMapping.get(
+				entity.getClass
+			).asInstanceOf[String]
+			if (thatEntityName.equals(entityName)) {
+				entity match {
+					case ageable: EntityAgeable =>
+						return this.spawnEntity(
+							ageable.createChild(null), new V3O(entity.getPositionVector)
+						)
+				}
+			}
+		}
+		false
+	}
+
 	def spawnEntity(world: World, name: String, pos: V3O): Entity = {
 		val entity: Entity = EntityList.createEntityByName(name, world)
+		this.spawnEntity(entity, pos)
+		entity
+	}
+
+	def spawnEntity(entity: Entity, pos: V3O): Boolean = {
 		entity match {
 			case living: EntityLivingBase =>
 				living.setLocationAndAngles(
 					pos.x, pos.y, pos.z,
-					MathHelper.wrapAngleTo180_float(world.rand.nextFloat * 360.0F), 0.0F
+					MathHelper.wrapAngleTo180_float(entity.getEntityWorld.rand.nextFloat * 360.0F),
+					0.0F
 				)
 				living.rotationYawHead = living.rotationYaw
 				living.renderYawOffset = living.rotationYaw
 				living.asInstanceOf[EntityLiving].onSpawnFirstTime(
-					world.getDifficultyForLocation(pos.toBlockPos()),
+					entity.getEntityWorld.getDifficultyForLocation(pos.toBlockPos()),
 					null
 				)
-				world.spawnEntityInWorld(entity)
+				entity.getEntityWorld.spawnEntityInWorld(entity)
 				living.asInstanceOf[EntityLiving].playLivingSound()
+				true
 			case _ =>
+				false
 		}
-		entity
 	}
 
 }

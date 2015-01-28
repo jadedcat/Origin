@@ -3,7 +3,7 @@ package com.temportalist.origin.library.common.utility
 import java.util.Random
 
 import com.temportalist.origin.library.common.lib.TeleporterCore
-import com.temportalist.origin.library.common.lib.vec.{V3O, V3O$}
+import com.temportalist.origin.library.common.lib.vec.V3O
 import net.minecraft.block.Block
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.util._
@@ -11,6 +11,7 @@ import net.minecraft.world.chunk.Chunk
 import net.minecraft.world.{World, WorldServer}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.EnderTeleportEvent
+import net.minecraftforge.fml.common.FMLLog
 
 /**
  *
@@ -68,6 +69,8 @@ object Teleport {
 		val point: V3O = Cursor.getRaytracedBlock(
 			entityPlayer.worldObj, entityPlayer, maxDistance
 		)
+		if (point == null) return false
+		FMLLog.info("[WeepingAngels] Teleporting with point = " + point)
 		Teleport.toPoint(
 			entityPlayer, point.add(0.5D, 0.0D, 0.5D)
 		)
