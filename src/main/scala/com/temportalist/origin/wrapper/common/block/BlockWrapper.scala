@@ -37,8 +37,6 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 		GameRegistry.registerBlock(this, name)
 	}
 
-	def initRendering(): Unit = this.initRendering(this.modid, this.name)
-
 	// Other Constructors
 	def this(material: Material, pluginID: String, name: String) {
 		this(material, pluginID, name, null)
@@ -56,19 +54,7 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 
 	override def getItem(): Item = Item.getItemFromBlock(this)
 
-	/**
-	 * Get the texture path of the block's icon
-	 * @return
-	 * The path of this block's icon
-	 */
-	protected def getTexturePath: String = {
-		// Get the unlocalized name of this block
-		val unlocalizedName: String = this.getUnlocalizedName
-		// return the result of the unlocalized name, making sure to get rid of the "tile." prefix
-		unlocalizedName.substring(unlocalizedName.indexOf(".") + 1)
-	}
-
-	override def getName(): String = this.name
+	override def getCompoundName(): String = this.modid + ":" + this.name
 
 	/**
 	 * Get the non-local name of this block
@@ -77,18 +63,7 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 	override def getUnlocalizedName: String = {
 		// return a formatted string using the format:
 		//   tile.{pluginID}:{blockName}
-		String.format("tile.%s%s", this.modid + ":",
-			this.getUnwrappedUnlocalizedName(super.getUnlocalizedName))
-	}
-
-	/**
-	 * Unwrap the passed string's name (gets rid of the prefix)
-	 * @param unlocalizedName
-	 * @return
-	 */
-	def getUnwrappedUnlocalizedName(unlocalizedName: String): String = {
-		// Get rid of the "tile." prefix and return the result
-		unlocalizedName.substring(unlocalizedName.indexOf(".") + 1)
+		"tile." + this.getCompoundName()
 	}
 
 	// ~~~~~~~~~~~~~~~ Start supered wrappers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -103,4 +78,5 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 			fortune: Int): util.List[ItemStack] = {
 		super.getDrops(world, pos, state, fortune)
 	}
+
 }

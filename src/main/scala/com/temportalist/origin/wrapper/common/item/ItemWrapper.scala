@@ -28,26 +28,9 @@ class ItemWrapper(val modid: String, name: String) extends Item with IRenderingO
 	GameRegistry.registerItem(this, name)
 	ItemRenderingHelper.registerItemForRender(this)
 
-	/**
-	 * This is a wrapping method to be called on INITIALIZATION. Will throw NPE if called before hand.
-	 */
-	def initRender(): Unit = this.initRendering(this.modid, this.name)
-
 	override def getItem(): Item = this
 
-	override def getName(): String = this.name
-
-	/**
-	 * Get the texture path of the item's icon
-	 * @return
-	 * The path of this item's icon
-	 */
-	protected def getTexturePath: String = {
-		// Get the unlocalized name of this item
-		val unlocalizedName: String = this.getUnlocalizedName
-		// return the result of the unlocalized name, making sure to get rid of the "item." prefix
-		unlocalizedName.substring(unlocalizedName.indexOf(".") + 1)
-	}
+	override def getCompoundName(): String = this.modid + ":" + this.name
 
 	/**
 	 * Get the non-local name of this item
@@ -56,8 +39,7 @@ class ItemWrapper(val modid: String, name: String) extends Item with IRenderingO
 	override def getUnlocalizedName: String = {
 		// return a formatted string using the format:
 		//   item.{pluginID}:{itemName}
-		String.format("item.%s%s", this.modid + ":",
-			this.getUnwrappedUnlocalizedName(super.getUnlocalizedName))
+		"item." + this.getCompoundName()
 	}
 
 	/**
@@ -67,16 +49,6 @@ class ItemWrapper(val modid: String, name: String) extends Item with IRenderingO
 	 */
 	override def getUnlocalizedName(itemStack: ItemStack): String = {
 		this.getUnlocalizedName
-	}
-
-	/**
-	 * Unwrap the passed string's name (gets rid of the prefix)
-	 * @param unlocalizedName
-	 * @return
-	 */
-	def getUnwrappedUnlocalizedName(unlocalizedName: String): String = {
-		// Get rid of the "item." prefix and return the result
-		unlocalizedName.substring(unlocalizedName.indexOf(".") + 1)
 	}
 
 	// ~~~~~~~~~~~~~~~ Start supered wrappers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

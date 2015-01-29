@@ -14,15 +14,15 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  */
 trait IRenderingObject {
 
-	def initRendering(modid: String, name: String): Unit =
-		if (WorldHelper.isClient()) this.registerRendering(modid, name)
+	def initRendering(): Unit =
+		if (WorldHelper.isClient()) this.registerRendering()
 
 	def getItem(): Item
 
-	def getName(): String
+	def getCompoundName(): String
 
 	@SideOnly(Side.CLIENT)
-	private def registerRendering(modid: String, name: String): Unit = {
+	private def registerRendering(): Unit = {
 		Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(
 			this.getItem(), this.getItemMesh()
 		)
@@ -39,7 +39,7 @@ trait IRenderingObject {
 
 	@SideOnly(Side.CLIENT)
 	def getModelLoc(): ModelResourceLocation = {
-		new ModelResourceLocation(this.getName(), null)
+		new ModelResourceLocation(this.getCompoundName(), "inventory")
 	}
 
 
