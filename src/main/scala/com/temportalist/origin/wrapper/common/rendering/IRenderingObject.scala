@@ -17,36 +17,29 @@ trait IRenderingObject {
 	def initRendering(modid: String, name: String): Unit =
 		if (WorldHelper.isClient()) this.registerRendering(modid, name)
 
-	def getItem(): Item = null
+	def getItem(): Item
+
+	def getName(): String
 
 	@SideOnly(Side.CLIENT)
 	private def registerRendering(modid: String, name: String): Unit = {
-		if (this.hasCustomItemMesh())
-			Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(
-				this.getItem(), this.getItemMesh()
-			)
-		else
-			Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(
-				this.getItem(), 0, this.getModelLocation(modid, name)
-			)
+		Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(
+			this.getItem(), this.getItemMesh()
+		)
 	}
-
-	@SideOnly(Side.CLIENT)
-	def hasCustomItemMesh(): Boolean = false
 
 	@SideOnly(Side.CLIENT)
 	def getItemMesh(): ItemMeshDefinition = {
 		new ItemMeshDefinition {
 			override def getModelLocation(itemStack: ItemStack): ModelResourceLocation = {
-				//todo new ModelResourceLocation()
-				null
+				getModelLoc()
 			}
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	def getModelLocation(modid: String, name: String): ModelResourceLocation = {
-		new ModelResourceLocation(modid + ":" + name, "inventory")
+	def getModelLoc(): ModelResourceLocation = {
+		new ModelResourceLocation(this.getName(), null)
 	}
 
 

@@ -35,6 +35,8 @@ class ItemWrapper(val modid: String, name: String) extends Item with IRenderingO
 
 	override def getItem(): Item = this
 
+	override def getName(): String = this.name
+
 	/**
 	 * Get the texture path of the item's icon
 	 * @return
