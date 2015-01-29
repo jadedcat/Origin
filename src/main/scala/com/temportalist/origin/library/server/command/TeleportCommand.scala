@@ -17,19 +17,16 @@ object TeleportCommand extends CommandBase {
 	var aliases: util.List[String] = new util.ArrayList[String]()
 	this.aliases.add("origin")
 
-	override def getName: String = {
-		this.aliases.get(0)
-	}
+	override def getCommandName: String = this.aliases.get(0)
 
 	override def getAliases: util.List[_] = {
 		this.aliases
 	}
 
-	override def getUsage(p1: ICommandSender): String = {
+	override def getCommandUsage(sender: ICommandSender): String =
 		"origin tp < [x] [y] [z] <Dimension Name:_> >"
-	}
 
-	override def execute(sender: ICommandSender, args: Array[String]): Unit = {
+	override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
 		if (args.length == 0) {
 			return
 		}
@@ -121,5 +118,6 @@ object TeleportCommand extends CommandBase {
 		}
 
 	}
+
 
 }
