@@ -26,7 +26,7 @@ class ItemWrapper(val modid: String, name: String) extends Item with IRenderingO
 
 	this.setUnlocalizedName(name)
 	GameRegistry.registerItem(this, name)
-	ItemRenderingHelper.registerItemForRender(this)
+	ItemRenderingHelper.register(this)
 
 	override def getItem(): Item = this
 

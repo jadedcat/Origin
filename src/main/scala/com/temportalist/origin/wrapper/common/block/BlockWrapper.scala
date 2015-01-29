@@ -2,6 +2,7 @@ package com.temportalist.origin.wrapper.common.block
 
 import java.util
 
+import com.temportalist.origin.library.common.utility.ItemRenderingHelper
 import com.temportalist.origin.wrapper.common.rendering.IRenderingObject
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -36,6 +37,7 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 	else {
 		GameRegistry.registerBlock(this, name)
 	}
+	ItemRenderingHelper.register(this)
 
 	// Other Constructors
 	def this(material: Material, pluginID: String, name: String) {

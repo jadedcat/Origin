@@ -2,7 +2,8 @@ package com.temportalist.origin.library.common.utility
 
 import java.util
 
-import com.temportalist.origin.wrapper.common.item.ItemWrapper
+import com.temportalist.origin.wrapper.common.rendering.IRenderingObject
+
 /**
  *
  *
@@ -10,13 +11,13 @@ import com.temportalist.origin.wrapper.common.item.ItemWrapper
  */
 object ItemRenderingHelper {
 
-	val registeredItems: util.List[ItemWrapper] = new util.ArrayList[ItemWrapper]()
+	val registeredItems: util.List[IRenderingObject] = new util.ArrayList[IRenderingObject]()
 
-	def registerItemForRender(item: ItemWrapper): Unit = this.registeredItems.add(item)
+	def register(item: IRenderingObject): Unit = this.registeredItems.add(item)
 
 	def registerItemRenders(): Unit =
 		for (i <- 0 until this.registeredItems.size()) {
-			this.registeredItems.get(i).initRender()
+			this.registeredItems.get(i).initRendering()
 		}
 
 }
