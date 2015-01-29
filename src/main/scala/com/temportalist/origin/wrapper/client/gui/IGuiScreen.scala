@@ -105,7 +105,7 @@ trait IGuiScreen extends GuiScreen {
 		var containsField: Boolean = false
 		for (i <- 0 until this.textFieldList.size()) {
 			val textField: GuiTextField = this.textFieldList.get(i)
-			if (this.canKeyType(textField, letter) && textField.textboxKeyTyped(letter, key)) {
+			if (this.canKeyType(textField, letter, key) && textField.textboxKeyTyped(letter, key)) {
 				this.sendKeyPacket(textField)
 				this.onKeyTyped(textField)
 				containsField = true
@@ -116,7 +116,7 @@ trait IGuiScreen extends GuiScreen {
 		}
 	}
 
-	def canKeyType(textField: GuiTextField, letter: Char): Boolean = {
+	def canKeyType(textField: GuiTextField, letter: Char, key: Int): Boolean = {
 		true
 	}
 
