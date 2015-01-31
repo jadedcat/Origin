@@ -26,13 +26,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler
 class ClientProxy() extends CommonProxy with IModGuiFactory {
 
 	override def registerRender(): Unit = {
-		// todo bind the camo rendering
-		//RenderingRegistry.registerBlockHandler(BlockCamouflageRender)
-
 		ItemRenderingHelper.registerItemRenders()
-
 		RegisterHelper.registerHandler(GuiRadialMenuHandler, null)
-
 	}
 
 	override def getClientElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int,

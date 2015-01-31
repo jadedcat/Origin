@@ -77,7 +77,7 @@ with IInv with ITank with IPowerable with ICustomDrops {
 	override def getDescriptionPacket: Packet = {
 		val tagCom: NBTTagCompound = new NBTTagCompound
 		this.writeToNBT(tagCom)
-		new S35PacketUpdateTileEntity(new BlockCoord(this), 0, tagCom)
+		new S35PacketUpdateTileEntity(new BlockCoord(this), this.getBlockMetadata, tagCom)
 	}
 
 	def markforUpdate(): Unit = {

@@ -142,7 +142,7 @@ abstract class GuiRadialMenu(
 
 		//val tessellator: Tessellator = Tessellator.getInstance()
 
-		// todo bind what used to be TextureMap.locationItemsTexture
+		// bind what used to be TextureMap.locationItemsTexture
 		//this.mc.renderEngine.bindTexture(TextureMap.locationItemsTexture)
 		//Rendering.bindResource(TextureMap.)
 

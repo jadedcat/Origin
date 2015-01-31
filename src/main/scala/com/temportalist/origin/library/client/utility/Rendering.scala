@@ -2,6 +2,8 @@ package com.temportalist.origin.library.client.utility
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Gui
+import net.minecraft.client.renderer.{ItemModelMesher, BlockModelShapes, BlockRendererDispatcher}
+import net.minecraft.client.renderer.entity.{RenderItem, RenderManager}
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -13,6 +15,13 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  */
 @SideOnly(Side.CLIENT)
 object Rendering {
+
+	def mc: Minecraft = Minecraft.getMinecraft
+	def renderManager: RenderManager = this.mc.getRenderManager
+	def blockDispatcher: BlockRendererDispatcher = this.mc.getBlockRendererDispatcher
+	def blockShapes: BlockModelShapes = this.blockDispatcher.getBlockModelShapes
+	def renderItem: RenderItem = this.mc.getRenderItem
+	def itemMesher: ItemModelMesher = this.renderItem.getItemModelMesher
 
 	def bindResource(rl: ResourceLocation): Unit = {
 		Minecraft.getMinecraft.getTextureManager.bindTexture(rl)
