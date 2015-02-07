@@ -66,6 +66,7 @@ object NameParser {
 
 	def getState(name: String): IBlockState = {
 		val stack: ItemStack = this.getItemStack(name)
+		if (stack == null) return null
 		val block: Block = Block.getBlockFromItem(stack.getItem)
 		if (block != null) block.getStateFromMeta(stack.getItemDamage)
 		else null
