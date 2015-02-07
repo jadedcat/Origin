@@ -176,7 +176,6 @@ object Json {
 		}
 
 		def toString(element: JsonElement, comments: util.Map[String, _], tab: Int): String = {
-			println (comments.size())
 			var indents: Int = tab
 			element match {
 				case prim: JsonPrimitive =>

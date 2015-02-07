@@ -5,6 +5,7 @@ import java.util
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.{Item, ItemStack}
+import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fml.common.registry.GameRegistry.UniqueIdentifier
 import net.minecraftforge.fml.common.registry.{GameData, GameRegistry}
 import net.minecraftforge.oredict.OreDictionary
@@ -21,16 +22,18 @@ object NameParser {
 			return ""
 		}
 
-		val name: String =
+		val fullname: String =
 			if (Block.getBlockFromItem(itemStack.getItem) == null) {
-				GameData.getItemRegistry.getNameForObject(itemStack.getItem).asInstanceOf[String]
+				GameData.getItemRegistry.getNameForObject(
+					itemStack.getItem
+				).asInstanceOf[ResourceLocation].toString
 			}
 			else {
 				GameData.getBlockRegistry.getNameForObject(
 					Block.getBlockFromItem(itemStack.getItem)
-				).asInstanceOf[String]
+				).asInstanceOf[ResourceLocation].toString
 			}
-		val ui: UniqueIdentifier = new UniqueIdentifier(name)
+		val ui: UniqueIdentifier = new UniqueIdentifier(fullname)
 		(if (hasID) ui.modId + ":" else "") + ui.name +
 				(if (hasMeta) ":" + itemStack.getItemDamage else "")
 	}
