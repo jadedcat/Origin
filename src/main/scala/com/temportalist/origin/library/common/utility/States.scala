@@ -12,27 +12,35 @@ import net.minecraft.item.ItemStack
  */
 object States {
 
-	def getNameFromState(state: IBlockState): String = {
-		val block: Block = state.getBlock
-		NameParser.getName(
-			new ItemStack(block, 1, block.getMetaFromState(state)), hasID = true, hasMeta = true
+	def toState(stack: ItemStack): IBlockState = {
+		if (this.isBlock(stack.getItem))
+			Block.getBlockFromItem(stack.getItem).getStateFromMeta(stack.getMetadata)
+		else null
+	}
+
+	def toStack(state: IBlockState): ItemStack = {
+		val stack: ItemStack = new ItemStack(
+			state.getBlock, 1, state.getBlock.getMetaFromState(state)
 		)
-	}
+		/* todo find a decent way to save the tag properly
+		state match {
+			case extended: IExtendedBlockState =>
+				val tag: NBTTagCompound = new NBTTagCompound
+				val unlisteds = extended.getUnlistedProperties
+				for (entry <- JavaConversions.asScalaIterator(unlisteds.entrySet().iterator())) {
+					val prop: IUnlistedProperty[_] = entry.getKey
+					val opt: Optional[_] = entry.getValue
 
-	def getStateFromName(name: String): IBlockState = {
-		val camoStack: ItemStack = NameParser.getItemStack(name)
-		if (camoStack != null && camoStack.getItem != null) {
-			val block: Block = Block.getBlockFromItem(camoStack.getItem)
-			if (block != null) {
-				return block.getStateFromMeta(camoStack.getMetadata)
-			}
+				}
+				stack.setTagCompound(tag)
+			case _ =>
 		}
-		null
+		*/
+		stack
 	}
 
-	def getItemStackFromState(state: IBlockState): ItemStack = {
-		new ItemStack(state.getBlock, 1, state.getBlock.getMetaFromState(state))
-		// todo add unlisted usability?
-	}
+	def getName(state: IBlockState): String = NameParser.getName(state, true, true)
+
+	def getState(name: String): IBlockState = NameParser.getState(name)
 
 }

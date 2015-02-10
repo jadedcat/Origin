@@ -5,6 +5,8 @@ import net.minecraft.client.gui.Gui
 import net.minecraft.client.renderer.{ItemModelMesher, BlockModelShapes, BlockRendererDispatcher}
 import net.minecraft.client.renderer.entity.{RenderItem, RenderManager}
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
+import net.minecraft.client.resources.model.IBakedModel
+import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -82,6 +84,13 @@ object Rendering {
 			java.lang.Float.floatToRawIntBits(texture.getInterpolatedV(v)),
 			0
 		)
+	}
+
+	def getModel(stack: ItemStack, isItem: Boolean): IBakedModel = {
+		if (!isItem && this.isBlock(stack.getItem))
+			Rendering.blockShapes.getModelForState(this.toState(stack))
+		else
+			Rendering.itemMesher.getItemModel(stack)
 	}
 
 }
