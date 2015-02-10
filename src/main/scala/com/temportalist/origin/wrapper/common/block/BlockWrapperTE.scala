@@ -1,14 +1,13 @@
 package com.temportalist.origin.wrapper.common.block
 
-import java.util
 import java.util.Random
 
-import com.temportalist.origin.library.common.utility.{WorldHelper, Drops}
-import com.temportalist.origin.wrapper.common.tile.{ICustomDrops, IPowerable}
+import com.temportalist.origin.library.common.utility.WorldHelper
+import com.temportalist.origin.wrapper.common.tile.IPowerable
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
-import net.minecraft.item.{ItemBlock, ItemStack}
+import net.minecraft.item.ItemBlock
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.BlockPos
 import net.minecraft.world.World
@@ -115,35 +114,6 @@ class BlockWrapperTE(material: Material, pluginID: String, name: String,
 				}
 			}
 		}
-	}
-
-	/**
-	 * Allows for drops from an ICustomDrops tile entity
-	 * @param state
-	 * @return
-	 */
-	def hasTileEntityDrops(state: IBlockState): Boolean = {
-		false
-	}
-
-	override def breakBlock(worldIn: World, pos: BlockPos, state: IBlockState): Unit = {
-		// get the super's drops (gets this block as a drop)
-		val drops: util.List[ItemStack] = this.getDrops(worldIn, pos, state, 0)
-		// get the tile entity
-		val tileEntity: TileEntity = worldIn.getTileEntity(pos)
-
-		// check if valid tile entity
-		if (tileEntity != null) tileEntity match {
-			case cuDo: ICustomDrops =>
-				if (this.hasTileEntityDrops(state)) cuDo.getDrops(drops, state.getBlock, state)
-		}
-
-		// Spawn the drops
-		Drops.spawnDrops(worldIn, pos: BlockPos, drops)
-		// remove the tile
-		worldIn.removeTileEntity(pos)
-
-		super.breakBlock(worldIn, pos, state)
 	}
 
 	def isClient(): Boolean = WorldHelper.isClient()

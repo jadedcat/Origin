@@ -15,8 +15,7 @@ import net.minecraft.tileentity.TileEntity
  *
  * @author TheTemportalist
  */
-class TEWrapper(var name: String) extends TileEntity()
-with IInv with ITank with IPowerable with ICustomDrops {
+class TEWrapper(var name: String) extends TileEntity() with IInv with ITank with IPowerable {
 
 	def this() {
 		this("")
@@ -77,7 +76,7 @@ with IInv with ITank with IPowerable with ICustomDrops {
 	override def getDescriptionPacket: Packet = {
 		val tagCom: NBTTagCompound = new NBTTagCompound
 		this.writeToNBT(tagCom)
-		new S35PacketUpdateTileEntity(new BlockCoord(this), this.getBlockMetadata, tagCom)
+		new S35PacketUpdateTileEntity(this.getPos, this.getBlockMetadata, tagCom)
 	}
 
 	def markforUpdate(): Unit = {

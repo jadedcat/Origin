@@ -19,4 +19,9 @@ object Generic {
 		list.asInstanceOf[List[T]].add(obj)
 	}
 
+	def round(value: Double, step: Double): Double = {
+		val mult: Double = 1d / step
+		Math.floor(value * mult) / mult
+	}
+
 }

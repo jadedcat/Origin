@@ -2,13 +2,14 @@ package com.temportalist.origin.wrapper.common.block
 
 import java.util
 
-import com.temportalist.origin.library.common.utility.ItemRenderingHelper
+import com.temportalist.origin.library.common.utility.{Drops, ItemRenderingHelper}
 import com.temportalist.origin.wrapper.common.rendering.IRenderingObject
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemBlock, ItemStack}
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -76,9 +77,20 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 		super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ)
 	}
 
-	override def getDrops(world: IBlockAccess, pos: BlockPos, state: IBlockState,
-			fortune: Int): util.List[ItemStack] = {
-		super.getDrops(world, pos, state, fortune)
+	override def breakBlock(worldIn: World, pos: BlockPos, state: IBlockState): Unit = {
+		Drops.spawnDrops(worldIn, pos,
+			this.getDrops_Pre(worldIn, pos, state, worldIn.getTileEntity(pos))
+		)
+		super.breakBlock(worldIn, pos, state)
 	}
+
+	def getDrops_Pre(world: World, pos: BlockPos,
+			state: IBlockState, tile: TileEntity): util.List[ItemStack] = {
+		super.getDrops(world, pos, state, 0)
+	}
+
+	/* Runs on POST block destruction */
+	override def getDrops(world: IBlockAccess, pos: BlockPos, state: IBlockState,
+			fortune: Int): util.List[ItemStack] = new util.ArrayList[ItemStack]()
 
 }
