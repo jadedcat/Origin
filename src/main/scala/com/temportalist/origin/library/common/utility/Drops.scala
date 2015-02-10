@@ -59,7 +59,7 @@ object Drops {
 
 	def spawnItemStack(world: World, pos: BlockPos, state: IBlockState, random: Random,
 			delay: Int): Unit = {
-		this.spawnItemStack(world, pos, States.getItemStackFromState(state), random, delay)
+		this.spawnItemStack(world, pos, States.getStack(state), random, delay)
 	}
 
 }

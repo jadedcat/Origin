@@ -12,13 +12,13 @@ import net.minecraft.item.ItemStack
  */
 object States {
 
-	def toState(stack: ItemStack): IBlockState = {
-		if (this.isBlock(stack.getItem))
+	def getState(stack: ItemStack): IBlockState = {
+		if (WorldHelper.isBlock(stack.getItem))
 			Block.getBlockFromItem(stack.getItem).getStateFromMeta(stack.getMetadata)
 		else null
 	}
 
-	def toStack(state: IBlockState): ItemStack = {
+	def getStack(state: IBlockState): ItemStack = {
 		val stack: ItemStack = new ItemStack(
 			state.getBlock, 1, state.getBlock.getMetaFromState(state)
 		)

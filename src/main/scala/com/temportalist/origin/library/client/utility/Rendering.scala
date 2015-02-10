@@ -1,10 +1,11 @@
 package com.temportalist.origin.library.client.utility
 
+import com.temportalist.origin.library.common.utility.{States, WorldHelper}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Gui
-import net.minecraft.client.renderer.{ItemModelMesher, BlockModelShapes, BlockRendererDispatcher}
 import net.minecraft.client.renderer.entity.{RenderItem, RenderManager}
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
+import net.minecraft.client.renderer.{BlockModelShapes, BlockRendererDispatcher, ItemModelMesher}
 import net.minecraft.client.resources.model.IBakedModel
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
@@ -87,8 +88,8 @@ object Rendering {
 	}
 
 	def getModel(stack: ItemStack, isItem: Boolean): IBakedModel = {
-		if (!isItem && this.isBlock(stack.getItem))
-			Rendering.blockShapes.getModelForState(this.toState(stack))
+		if (!isItem && WorldHelper.isBlock(stack.getItem))
+			Rendering.blockShapes.getModelForState(States.getState(stack))
 		else
 			Rendering.itemMesher.getItemModel(stack)
 	}
