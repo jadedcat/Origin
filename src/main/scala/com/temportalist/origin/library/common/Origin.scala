@@ -13,8 +13,10 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.{Item, ItemStack}
+import net.minecraft.util._
 import net.minecraft.world.WorldServer
 import net.minecraftforge.common.DimensionManager
+import net.minecraftforge.event.ServerChatEvent
 import net.minecraftforge.fml.common.event._
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
@@ -144,5 +146,31 @@ object Origin extends ModWrapper {
 			}
 		}
 	}
+
+	///*
+	@SubscribeEvent
+	def serverChat(event: ServerChatEvent): Unit = {
+		if (event.username.equals("TheTemportalist")) { // todo use uuid
+			var color: EnumChatFormatting = null
+			while (color == null) {
+				color = EnumChatFormatting.values()(
+					event.player.worldObj.rand.nextInt(EnumChatFormatting.values().length)
+				)
+				if (!color.isColor) color = null
+			}
+			event.component.setChatStyle(new ChatStyle().setColor(color))
+		}
+	}
+	//*/
+
+	/*
+	@SubscribeEvent
+	def onChat(event: ClientChatReceivedEvent): Unit = {
+		val parent: IChatComponent = event.message
+		println(event.message.getUnformattedText)
+		println(event.message.getUnformattedTextForChat)
+		println(event.message.getFormattedText)
+	}
+	*/
 
 }
