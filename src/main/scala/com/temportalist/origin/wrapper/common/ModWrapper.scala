@@ -2,11 +2,9 @@ package com.temportalist.origin.wrapper.common
 
 import java.util
 
-import com.temportalist.origin.library.common.Origin
-import com.temportalist.origin.library.common.helpers.{RegisterHelper, OptionHandler}
-import com.temportalist.origin.library.common.lib.LogHelper
+import com.temportalist.origin.library.common.helpers.{OptionHandler, RegisterHelper}
 import com.temportalist.origin.library.common.register._
-import net.minecraftforge.fml.common.event.{FMLPostInitializationEvent, FMLInitializationEvent, FMLPreInitializationEvent}
+import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
 import net.minecraftforge.fml.common.network.NetworkRegistry
 
 /**
@@ -66,40 +64,6 @@ class ModWrapper() {
 		RegisterHelper.registerHandlers(this, proxy)
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy)
-
-		// Packet Registration
-		//todo does not find any IPackets
-		val packageName: String = this.getClass.getPackage.getName
-		LogHelper.info(Origin.MODNAME,
-			"Looking for packets to register for channel \'" + modid + "\' in package \'" +
-					packageName + "\'."
-		)
-		try {
-			/*
-			val fullurl: String = packageName + classOf[IPacket].getName
-			val classLoader: ClassLoader = Thread.currentThread().getContextClassLoader
-			// todo does this recursively get resources?
-			val resources: Enumeration[URL] = classLoader.getResource(fullurl)
-
-
-
-			val packets: Array[Class[_ <: IPacket]] =
-				new ResourceFinder(this.getClass.getPackage.getName)
-						.findAllImplementations(classOf[IPacket]).toArray()
-						.asInstanceOf[Array[Class[_ <: IPacket]]]
-			if (packets.length > 0) {
-				LogHelper.info(Origin.pluginName,
-					"Found " + packets.length + " packets in overall package " +
-							packageName + ". Registering to channel \'" + pluginID + "\'."
-				)
-				PacketHandler.registerHandler(pluginID, packets)
-			}
-			*/
-		}
-		catch {
-			case e: Exception =>
-
-		}
 
 	}
 

@@ -91,6 +91,10 @@ trait IGuiScreen extends GuiScreen {
 		this.guiY
 	}
 
+	def getCenterX(): Int = (this.getX() + this.width) / 2
+
+	def getCenterY(): Int = (this.getY() + this.height) / 2
+
 	override def initGui(): Unit = {
 		super.initGui()
 

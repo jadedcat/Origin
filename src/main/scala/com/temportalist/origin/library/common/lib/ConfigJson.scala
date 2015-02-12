@@ -15,20 +15,24 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper
  *
  * @author TheTemportalist 1/31/15
  */
-class ConfigJson(file: File) extends Configuration(file) {
+class ConfigJson(file: File) extends Configuration(file, true) {
 
 	def this(parentFile: File, name: String) {
 		this(new File(parentFile, name))
 	}
 
-	val PARENT: Configuration = ObfuscationReflectionHelper.getPrivateValue(
-		classOf[Configuration], null, 10)
-	val categories: util.Map[String, ConfigCategory] = ObfuscationReflectionHelper.getPrivateValue(
-		classOf[Configuration], this, 12)
-	val children: util.Map[String, Configuration] = ObfuscationReflectionHelper.getPrivateValue(
-		classOf[Configuration], this, 13)
+	var PARENT: Configuration = null
+	var categories: util.Map[String, ConfigCategory] = null
+	var children: util.Map[String, Configuration] = null
+
+	def fetchPrivates(): Unit = {
+		PARENT = ObfuscationReflectionHelper.getPrivateValue(classOf[Configuration], null, 10)
+		categories = ObfuscationReflectionHelper.getPrivateValue(classOf[Configuration], this, 12)
+		children = ObfuscationReflectionHelper.getPrivateValue(classOf[Configuration], this, 13)
+	}
 
 	override def save(): Unit = {
+		this.fetchPrivates()
 		if (PARENT != null && PARENT != this) {
 			PARENT.save()
 			return
@@ -80,6 +84,7 @@ class ConfigJson(file: File) extends Configuration(file) {
 	}
 
 	override def load(): Unit = {
+		this.fetchPrivates()
 		if (PARENT != null && PARENT != this) {
 			return
 		}

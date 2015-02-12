@@ -27,7 +27,7 @@ import net.minecraftforge.fml.common.{Mod, SidedProxy}
  *
  * @author TheTemportalist
  */
-@Mod(modid = Origin.MODID, name = Origin.MODNAME, version = "@PLUGIN_VERSION@",
+@Mod(modid = Origin.MODID, name = Origin.MODNAME, version = Origin.VERSION,
 	guiFactory = Origin.clientProxy,
 	modLanguage = "scala"
 )
@@ -35,6 +35,7 @@ object Origin extends ModWrapper {
 
 	final val MODID = "origin"
 	final val MODNAME = "Origin"
+	final val VERSION = "4.0"//"@PLUGIN_VERSION@"
 	final val clientProxy = "com.temportalist.origin.library.client.ClientProxy"
 	final val serverProxy = "com.temportalist.origin.library.server.ServerProxy"
 

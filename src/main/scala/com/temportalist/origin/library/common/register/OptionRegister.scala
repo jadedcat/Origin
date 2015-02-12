@@ -25,6 +25,8 @@ class OptionRegister() extends Register with IModGuiFactory {
 	 */
 	var config: Configuration = null
 
+	def getExtension(): String = "cfg"
+
 	def getConfigDirectory(configDir: File): File = {
 		configDir
 	}
