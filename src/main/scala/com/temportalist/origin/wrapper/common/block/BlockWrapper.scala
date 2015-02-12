@@ -77,11 +77,13 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 		super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ)
 	}
 
-	override def breakBlock(worldIn: World, pos: BlockPos, state: IBlockState): Unit = {
-		Drops.spawnDrops(worldIn, pos,
-			this.getDrops_Pre(worldIn, pos, state, worldIn.getTileEntity(pos))
-		)
-		super.breakBlock(worldIn, pos, state)
+	override def removedByPlayer(world: World, pos: BlockPos, player: EntityPlayer,
+			willHarvest: Boolean): Boolean = {
+		if (!player.capabilities.isCreativeMode)
+			Drops.spawnDrops(world, pos,
+				this.getDrops_Pre(world, pos, world.getBlockState(pos), world.getTileEntity(pos))
+			)
+		super.removedByPlayer(world, pos, player, willHarvest)
 	}
 
 	def getDrops_Pre(world: World, pos: BlockPos,
