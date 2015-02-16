@@ -1,4 +1,4 @@
-package com.temportalist.origin.library.common.helpers
+package com.temportalist.origin.library.common.handlers
 
 import java.io.File
 import java.util
@@ -25,16 +25,18 @@ object OptionHandler {
 		if (options.config == null) {
 			val dir: File = options.getConfigDirectory(event.getModConfigurationDirectory)
 			var cfgFile: File = null
-			options.getExtension() match {
-				case "cfg" =>
-					cfgFile = new File(dir, pluginName + ".cfg")
-					options.config = new Configuration(cfgFile, true)
-				case "json" =>
-					cfgFile = new File(dir, pluginName + ".json")
-					options.config = new ConfigJson(cfgFile)
-				case _ =>
-					options.customizeConfiguration(event)
-			}
+			if (options.hasDefaultConfig())
+				options.customizeConfiguration(event)
+			else
+				options.getExtension() match {
+					case "cfg" =>
+						cfgFile = new File(dir, pluginName + ".cfg")
+						options.config = new Configuration(cfgFile, true)
+					case "json" =>
+						cfgFile = new File(dir, pluginName + ".json")
+						options.config = new ConfigJson(cfgFile)
+					case _ =>
+				}
 		}
 		options.loadConfiguration()
 		this.handlers.put(pluginID, options)

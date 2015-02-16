@@ -32,14 +32,6 @@ class OptionRegister() extends Register with IModGuiFactory {
 	}
 
 	/**
-	 * Tell the core that this register has a custom configuration to handle
-	 * @return false for normal configuration
-	 */
-	def hasCustomConfiguration(): Boolean = {
-		false
-	}
-
-	/**
 	 * Do custom things to create/use a config file(s).
 	 * @see OptionHandler.handleConfiguration
 	 * @param event

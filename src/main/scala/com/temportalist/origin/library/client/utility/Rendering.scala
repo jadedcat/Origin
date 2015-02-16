@@ -2,10 +2,10 @@ package com.temportalist.origin.library.client.utility
 
 import com.temportalist.origin.library.common.utility.{States, WorldHelper}
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.Gui
+import net.minecraft.client.gui.ScaledResolution
+import net.minecraft.client.renderer._
 import net.minecraft.client.renderer.entity.{RenderItem, RenderManager}
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
-import net.minecraft.client.renderer.{BlockModelShapes, BlockRendererDispatcher, ItemModelMesher}
 import net.minecraft.client.resources.model.IBakedModel
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
@@ -20,19 +20,63 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 object Rendering {
 
 	def mc: Minecraft = Minecraft.getMinecraft
+
 	def renderManager: RenderManager = this.mc.getRenderManager
+
 	def blockDispatcher: BlockRendererDispatcher = this.mc.getBlockRendererDispatcher
+
 	def blockShapes: BlockModelShapes = this.blockDispatcher.getBlockModelShapes
+
 	def renderItem: RenderItem = this.mc.getRenderItem
+
 	def itemMesher: ItemModelMesher = this.renderItem.getItemModelMesher
 
 	def bindResource(rl: ResourceLocation): Unit = {
 		Minecraft.getMinecraft.getTextureManager.bindTexture(rl)
 	}
 
-	def drawTextureWithOffsets(gui: Gui, x: Int, y: Int, u: Int, v: Int, w: Int, h: Int,
+	def drawTextureRect(x: Int, y: Int, u: Int, v: Int, width: Int, height: Int): Unit = {
+		// todo this is super bugged
+		val f: Float = 0.00390625F
+		val f1: Float = f
+		val z: Int = -90
+		TessRenderer.startQuads()
+		TessRenderer.addVertex(
+			(x + 0).asInstanceOf[Double],
+			(y + height).asInstanceOf[Double],
+			z,
+			((u + 0).asInstanceOf[Float] * f).asInstanceOf[Double],
+			((v + height).asInstanceOf[Float] * f1).asInstanceOf[Double]
+		)
+		TessRenderer.addVertex(
+			(x + width).asInstanceOf[Double],
+			(y + height).asInstanceOf[Double],
+			z,
+			((u + width).asInstanceOf[Float] * f).asInstanceOf[Double],
+			((v + height).asInstanceOf[Float] * f1).asInstanceOf[Double]
+		)
+		TessRenderer.addVertex(
+			(x + width).asInstanceOf[Double],
+			(y + 0).asInstanceOf[Double],
+			z,
+			((u + width).asInstanceOf[Float] * f).asInstanceOf[Double],
+			((v + 0).asInstanceOf[Float] * f1).asInstanceOf[Double]
+		)
+		TessRenderer.addVertex(
+			(x + 0).asInstanceOf[Double],
+			(y + 0).asInstanceOf[Double],
+			z,
+			((u + 0).asInstanceOf[Float] * f).asInstanceOf[Double],
+			((v + 0).asInstanceOf[Float] * f1).asInstanceOf[Double]
+		)
+
+
+		TessRenderer.draw()
+	}
+
+	def drawTextureWithOffsets(x: Int, y: Int, u: Int, v: Int, w: Int, h: Int,
 			leftOffset: Int, rightOffset: Int, topOffset: Int, bottomOffset: Int): Unit = {
-		gui.drawTexturedModalRect(
+		Rendering.drawTextureRect(
 			x + leftOffset,
 			y + topOffset,
 			u + leftOffset,
@@ -42,7 +86,8 @@ object Rendering {
 		)
 	}
 
-	def drawSprite(x: Double, y: Double, z: Double, sprite: TextureAtlasSprite, w: Double, h: Double): Unit = {
+	def drawSprite(x: Double, y: Double, z: Double, sprite: TextureAtlasSprite, w: Double,
+			h: Double): Unit = {
 		TessRenderer.startQuads()
 		TessRenderer.addVertex(
 			x + 0,
@@ -75,8 +120,9 @@ object Rendering {
 		TessRenderer.draw()
 	}
 
-	def modelCoordsToVerticies(x: Float, y: Float, z: Float, color: Int, texture: TextureAtlasSprite, u: Float, v: Float): Array[Int] = {
-		Array[Int] (
+	def modelCoordsToVerticies(x: Float, y: Float, z: Float, color: Int,
+			texture: TextureAtlasSprite, u: Float, v: Float): Array[Int] = {
+		Array[Int](
 			java.lang.Float.floatToRawIntBits(x),
 			java.lang.Float.floatToRawIntBits(y),
 			java.lang.Float.floatToRawIntBits(z),
@@ -93,5 +139,8 @@ object Rendering {
 		else
 			Rendering.itemMesher.getItemModel(stack)
 	}
+
+	def getScaledResoultion(): ScaledResolution =
+		new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight)
 
 }

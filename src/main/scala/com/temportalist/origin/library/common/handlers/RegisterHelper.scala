@@ -1,4 +1,4 @@
-package com.temportalist.origin.library.common.helpers
+package com.temportalist.origin.library.common.handlers
 
 import java.util
 
@@ -18,15 +18,10 @@ import net.minecraftforge.fml.common.{FMLCommonHandler, IFuelHandler}
  */
 object RegisterHelper {
 
-	def registerHandlers(handlers: Object*): Unit = {
-		for (o: Object <- handlers)
-			this.registerHandler(o)
-	}
-
-	def registerHandler(eventHandler: Object): Unit = {
-		if (eventHandler != null) {
-			MinecraftForge.EVENT_BUS.register(eventHandler)
-			FMLCommonHandler.instance().bus().register(eventHandler)
+	def registerHandler(handlers: Object*): Unit = {
+		for (o: Object <- handlers) if (o != null) {
+			MinecraftForge.EVENT_BUS.register(o)
+			FMLCommonHandler.instance().bus().register(o)
 		}
 	}
 

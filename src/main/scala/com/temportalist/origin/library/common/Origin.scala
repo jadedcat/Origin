@@ -3,7 +3,7 @@ package com.temportalist.origin.library.common
 import java.util
 
 import com.temportalist.origin.library.common.extended.ExtendedSync
-import com.temportalist.origin.library.common.helpers.{OptionHandler, RegisterHelper}
+import com.temportalist.origin.library.common.handlers.{OptionHandler, RegisterHelper}
 import com.temportalist.origin.library.common.network._
 import com.temportalist.origin.library.server.command.TeleportCommand
 import com.temportalist.origin.wrapper.common.ModWrapper
@@ -35,7 +35,8 @@ object Origin extends ModWrapper {
 
 	final val MODID = "origin"
 	final val MODNAME = "Origin"
-	final val VERSION = "4.0"//"@PLUGIN_VERSION@"
+	final val VERSION = "4.0"
+	//todo"@PLUGIN_VERSION@"
 	final val clientProxy = "com.temportalist.origin.library.client.ClientProxy"
 	final val serverProxy = "com.temportalist.origin.library.server.ServerProxy"
 
@@ -60,7 +61,7 @@ object Origin extends ModWrapper {
 
 	@Mod.EventHandler
 	def preInit(event: FMLPreInitializationEvent): Unit = {
-		RegisterHelper.registerHandlers(ExtendedSync, OptionHandler)
+		RegisterHelper.registerHandler(ExtendedSync, OptionHandler)
 		super.preInitialize(this.MODID, this.MODNAME, event, this.proxy, CGOOptions)
 
 		RegisterHelper.registerCommand(TeleportCommand)
@@ -151,7 +152,8 @@ object Origin extends ModWrapper {
 	///*
 	@SubscribeEvent
 	def serverChat(event: ServerChatEvent): Unit = {
-		if (event.username.equals("TheTemportalist")) { // todo use uuid
+		if (event.username.equals("TheTemportalist")) {
+			// todo use uuid
 			var color: EnumChatFormatting = null
 			while (color == null) {
 				color = EnumChatFormatting.values()(
@@ -162,6 +164,7 @@ object Origin extends ModWrapper {
 			event.component.setChatStyle(new ChatStyle().setColor(color))
 		}
 	}
+
 	//*/
 
 	/*

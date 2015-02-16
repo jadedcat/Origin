@@ -2,9 +2,9 @@ package com.temportalist.origin.library.client
 
 import java.util
 
-import com.temportalist.origin.library.client.gui.GuiRadialMenuHandler
+import com.temportalist.origin.library.client.gui.{HealthOverlay, GuiRadialMenuHandler}
 import com.temportalist.origin.library.client.gui.config.GuiConfig
-import com.temportalist.origin.library.common.helpers.RegisterHelper
+import com.temportalist.origin.library.common.handlers.RegisterHelper
 import com.temportalist.origin.library.common.nethandler.PacketHandler
 import com.temportalist.origin.library.common.network.PacketSyncExtendedProperties
 import com.temportalist.origin.library.common.utility.ItemRenderingHelper
@@ -27,7 +27,8 @@ class ClientProxy() extends CommonProxy with IModGuiFactory {
 
 	override def registerRender(): Unit = {
 		ItemRenderingHelper.registerItemRenders()
-		RegisterHelper.registerHandler(GuiRadialMenuHandler, null)
+		RegisterHelper.registerHandler(GuiRadialMenuHandler, HealthOverlay)
+
 	}
 
 	override def getClientElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int,

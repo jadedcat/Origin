@@ -70,6 +70,14 @@ class V3O(var x: Double, var y: Double, var z: Double) {
 		this(data.readDouble(), data.readDouble(), data.readDouble())
 	}
 
+	def this(u: Int, v: Int) {
+		this(u, v, 0)
+	}
+
+	def u(): Int = this.x_i()
+
+	def v(): Int = this.y_i()
+
 	def x_i(): Int = this.x.asInstanceOf[Int]
 
 	def y_i(): Int = this.y.asInstanceOf[Int]
@@ -177,6 +185,12 @@ class V3O(var x: Double, var y: Double, var z: Double) {
 
 	def set(vec: V3O): V3O = this.set(vec.x, vec.y, vec.z)
 
+	def add_(x1: Double, y1: Double, z1: Double): V3O = new V3O(
+		this.x + x1, this.y + y1, this.z + y1
+	)
+
+	def add_(v: V3O): V3O = this.add_(v.x, v.y, v.z)
+
 	def add(x1: Double, y1: Double, z1: Double): V3O = {
 		this.x += x1
 		this.y += y1
@@ -215,6 +229,12 @@ class V3O(var x: Double, var y: Double, var z: Double) {
 	def west(amount: Double): V3O = this.add(EnumFacing.WEST, amount)
 
 	def west(): V3O = this.west(1)
+
+	def subtract_(x1: Double, y1: Double, z1: Double): V3O = new V3O(
+		this.x - x1, this.y - y1, this.z - z1
+	)
+
+	def subtract_(vec: V3O): V3O = this.subtract_(vec.x, vec.y, vec.z)
 
 	def subtract(x1: Double, y1: Double, z1: Double): V3O = {
 		this.x -= x1
@@ -361,13 +381,15 @@ class V3O(var x: Double, var y: Double, var z: Double) {
 
 	def $tilde(): V3O = this.normalize()
 
-	def $minus(v: V3O): V3O = this.subtract(v)
+	def $plus(v: V3O): V3O = this.add_(v)
 
-	def $plus(v: V3O): V3O = this.add(v)
+	def $minus(v: V3O): V3O = this.subtract_(v)
 
-	def $times(d: Double): V3O = this.multiply(d)
+	def $times(d: Double): V3O = new V3O(
+		this.x * d, this.y * d, this.z * d
+	)
 
-	def $div(d: Double): V3O = this.multiply(1 / d)
+	def $div(d: Double): V3O = this.$times(1 / d)
 
 	def $times(v: V3O): V3O = this.crossProduct(v)
 

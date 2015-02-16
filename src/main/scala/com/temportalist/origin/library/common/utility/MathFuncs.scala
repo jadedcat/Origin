@@ -2,6 +2,8 @@ package com.temportalist.origin.library.common.utility
 
 import java.util.Random
 
+import org.lwjgl.util.Color
+
 /**
  *
  *
@@ -38,6 +40,17 @@ object MathFuncs {
 			default
 		else
 			n
+	}
+
+	def getColor(prefix: String, hexstring: String): Color = {
+		val r_Start: Int = prefix.length
+		val g_Start: Int = r_Start + 2
+		val b_Start: Int = g_Start + 2
+		new Color(
+			Integer.parseInt(hexstring.substring(r_Start, r_Start + 2), 16),
+			Integer.parseInt(hexstring.substring(g_Start, g_Start + 2), 16),
+			Integer.parseInt(hexstring.substring(b_Start, b_Start + 2), 16)
+		)
 	}
 
 }

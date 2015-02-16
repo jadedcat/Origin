@@ -2,7 +2,7 @@ package com.temportalist.origin.library.client.utility
 
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
-import org.lwjgl.input.Keyboard
+import org.lwjgl.input.{Mouse, Keyboard}
 
 /**
  *
@@ -45,5 +45,11 @@ object Keys {
 	def isAltKey(keyCode: Int): Boolean = {
 		keyCode == this.alt1 || keyCode == this.alt2
 	}
+
+	def isMouseDownLeft(): Boolean = Mouse.isButtonDown(0)
+
+	def isMouseDownRight(): Boolean = Mouse.isButtonDown(0)
+
+	def isMouseDownCenter(): Boolean = Mouse.isButtonDown(0)
 
 }

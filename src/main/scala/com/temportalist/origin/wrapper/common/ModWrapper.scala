@@ -2,7 +2,7 @@ package com.temportalist.origin.wrapper.common
 
 import java.util
 
-import com.temportalist.origin.library.common.helpers.{OptionHandler, RegisterHelper}
+import com.temportalist.origin.library.common.handlers.{RegisterHelper, OptionHandler}
 import com.temportalist.origin.library.common.register._
 import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
 import net.minecraftforge.fml.common.network.NetworkRegistry
@@ -61,7 +61,7 @@ class ModWrapper() {
 
 		// TODO achievement
 
-		RegisterHelper.registerHandlers(this, proxy)
+		RegisterHelper.registerHandler(this, proxy)
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy)
 

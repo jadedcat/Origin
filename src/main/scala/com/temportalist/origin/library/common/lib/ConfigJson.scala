@@ -176,7 +176,10 @@ class ConfigJson(file: File) extends Configuration(file, true) {
 			case obj: JsonObject =>
 				null
 			case _ =>
-				Property.Type.STRING
+				if (prop.getAsString.startsWith("#"))
+					Property.Type.COLOR
+				else
+					Property.Type.STRING
 		}
 	}
 
