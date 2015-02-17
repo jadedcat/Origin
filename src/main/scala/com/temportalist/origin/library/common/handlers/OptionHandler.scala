@@ -25,7 +25,7 @@ object OptionHandler {
 		if (options.config == null) {
 			val dir: File = options.getConfigDirectory(event.getModConfigurationDirectory)
 			var cfgFile: File = null
-			if (options.hasDefaultConfig())
+			if (!options.hasDefaultConfig())
 				options.customizeConfiguration(event)
 			else
 				options.getExtension() match {

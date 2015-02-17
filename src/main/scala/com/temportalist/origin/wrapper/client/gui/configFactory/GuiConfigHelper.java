@@ -6,6 +6,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.config.ConfigGuiType;
 import net.minecraftforge.fml.client.config.DummyConfigElement;
 import net.minecraftforge.fml.client.config.IConfigElement;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -32,8 +33,8 @@ public class GuiConfigHelper {
 				continue;
 
 			ConfigCategory category = configuration.getCategory(categoryName);
-			ConfigElement categoryElement = new ConfigElement(
-					category);
+			ConfigElement categoryElement = new ConfigElement(category);
+			//FMLLog.info(category.getValues().toString());
 
 			List<IConfigElement> categoryList = new ArrayList<IConfigElement>();
 

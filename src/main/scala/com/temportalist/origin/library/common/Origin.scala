@@ -2,6 +2,7 @@ package com.temportalist.origin.library.common
 
 import java.util
 
+import com.temportalist.origin.library.client.utility.Rendering
 import com.temportalist.origin.library.common.extended.ExtendedSync
 import com.temportalist.origin.library.common.handlers.{OptionHandler, RegisterHelper}
 import com.temportalist.origin.library.common.network._
@@ -9,6 +10,7 @@ import com.temportalist.origin.library.server.command.TeleportCommand
 import com.temportalist.origin.wrapper.common.ModWrapper
 import com.temportalist.origin.wrapper.common.item.ItemPlacer
 import net.minecraft.block.Block
+import net.minecraft.client.audio.SoundCategory
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.init.{Blocks, Items}
@@ -101,6 +103,11 @@ object Origin extends ModWrapper {
 			}
 
 		}
+
+		// todo client side
+		CGOOptions.volumeControls.foreach({ case (name: String, volume: Float) =>
+			Rendering.mc.gameSettings.setSoundLevel(SoundCategory.getCategory(name), volume)
+		})
 
 	}
 

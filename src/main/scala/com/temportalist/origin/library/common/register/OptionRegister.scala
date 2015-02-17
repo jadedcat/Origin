@@ -84,53 +84,53 @@ class OptionRegister() extends Register with IModGuiFactory {
 	// Configuration Things
 	def getAndComment(cate: String, name: String, comment: String, value: Int): Int = {
 		val property: Property = this.config.get(cate, name, value)
-		if (!(comment == "")) property.comment = comment
+		if (comment != null && !comment.isEmpty) property.comment = comment
 		property.getInt
 	}
 
 	def getAndComment(cate: String, name: String, comment: String, value: String): String = {
 		val property: Property = this.config.get(cate, name, value)
-		if (!(comment == "")) property.comment = comment
+		if (comment != null && !comment.isEmpty) property.comment = comment
 		property.getString
 	}
 
 	def getAndComment(cate: String, name: String, comment: String, value: Boolean): Boolean = {
 		val property: Property = this.config.get(cate, name, value)
-		if (!(comment == "")) property.comment = comment
+		if (comment != null && !comment.isEmpty) property.comment = comment
 		property.getBoolean(false)
 	}
 
 	def getAndComment(cate: String, name: String, comment: String, value: Double): Double = {
 		val property: Property = this.config.get(cate, name, value)
-		if (!(comment == "")) property.comment = comment
+		if (comment != null && !comment.isEmpty) property.comment = comment
 		property.getDouble
 	}
 
 	def getAndComment(cate: String, name: String, comment: String,
 			value: Array[Boolean]): Array[Boolean] = {
 		val property: Property = this.config.get(cate, name, value)
-		if (!(comment == "")) property.comment = comment
+		if (comment != null && !comment.isEmpty) property.comment = comment
 		property.getBooleanList
 	}
 
 	def getAndComment(cate: String, name: String, comment: String,
 			value: Array[Int]): Array[Int] = {
 		val property: Property = this.config.get(cate, name, value)
-		if (!(comment == "")) property.comment = comment
+		if (comment != null && !comment.isEmpty) property.comment = comment
 		property.getIntList
 	}
 
 	def getAndComment(cate: String, name: String, comment: String,
 			value: Array[Double]): Array[Double] = {
 		val property: Property = this.config.get(cate, name, value)
-		if (!(comment == "")) property.comment = comment
+		if (comment != null && !comment.isEmpty) property.comment = comment
 		property.getDoubleList
 	}
 
 	def getAndComment(cate: String, name: String, comment: String,
 			value: Array[String]): Array[String] = {
-		val property: Property = this.config.get(cate, name, value)
-		if (!(comment == "")) property.comment = comment
+		val property: Property = this.config.get(cate, name, value, comment)
+		//if (comment != null && !comment.isEmpty) property.comment = comment
 		property.getStringList
 	}
 

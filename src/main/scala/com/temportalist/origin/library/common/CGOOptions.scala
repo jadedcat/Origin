@@ -1,9 +1,12 @@
 package com.temportalist.origin.library.common
 
+import scala.collection.mutable
+
 import com.temportalist.origin.library.client.gui.config.GuiConfig
 import com.temportalist.origin.library.common.register.OptionRegister
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import com.temportalist.origin.library.common.utility.WorldHelper
 import net.minecraft.client.gui.GuiScreen
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  *
@@ -20,29 +23,54 @@ object CGOOptions extends OptionRegister {
 		"#ea77fb", "#fb77a0", "#fbd177", "#fbd177", "#fbd177",
 		"#fbd177"
 	)
+	var volumeControls: mutable.Map[String, Float] = mutable.Map[String, Float]()
 
 	override def register(): Unit = {
 
+		///*
 		this.secretPumpkin = this.getAndComment(
 			"general",
 			"Secret Pumpkin",
 			"Shhhhh!",
 			value = this.secretPumpkin
 		)
+		//*/
+
+		if (WorldHelper.isClient())
+			this.registerClient()
+
+	}
+
+	@SideOnly(Side.CLIENT)
+	def registerClient() {
 		this.coloredHearts = this.getAndComment(
-			"general",
+			"client",
 			// coloured because hilburn
 			"Coloured Hearts",
 			"Collapses the vanilla multiple rows of hearts into a colour coded single layer",
 			value = this.coloredHearts
 		)
 		this.heartColors = this.getAndComment(
-			"general",
-			"Hear Colours",
+			"client",
+			"Heart Colours",
 			"The colors of the hearts. The quantity of colors here represents the tiers of hearts." +
 					"(quantity * 20 + 20 = total max health accounted for)",
 			value = this.heartColors
 		)
+		/*
+		SoundCategory.values().foreach((sound: SoundCategory) => {
+			val volume: Float = Rendering.mc.gameSettings.getSoundLevel(sound) * 100f
+			this.volumeControls(sound.getCategoryName) = this.getAndComment(
+				"client", sound.getCategoryName + " volume", "", volume.toDouble
+			).toFloat / 100f
+		})
+		*/
+		/*
+		this.getAndComment(
+			"client", "something volume", "", 100d
+		)
+		*/
+		this.config.get("client", "volume", 100d)
 
 	}
 

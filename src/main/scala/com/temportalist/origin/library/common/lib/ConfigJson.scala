@@ -102,7 +102,13 @@ class ConfigJson(file: File) extends Configuration(file, true) {
 			}
 
 			if (file.canRead) {
-				val json: JsonObject = Json.getJson(this.file).getAsJsonObject
+				var json: JsonObject = null
+				try {
+					json = Json.getJson(this.file).getAsJsonObject
+				}
+				catch {
+					case e: Exception => json = new JsonObject
+				}
 				Scala.foreach(json.entrySet(), (entry: Entry[String, JsonElement]) => {
 					val cateName: String = entry.getKey
 					val cate: ConfigCategory = this.getCategory(cateName)
@@ -144,13 +150,17 @@ class ConfigJson(file: File) extends Configuration(file, true) {
 		val datatype: Property.Type = this.getType(element)
 		element match {
 			case array: JsonArray =>
-				classOf[Property].getDeclaredConstructor(
+				val con = classOf[Property].getDeclaredConstructor(
 					classOf[String], classOf[Array[String]], classOf[Property.Type],
 					classOf[Boolean]
 				)
-				null
+				con.setAccessible(true)
+				con.newInstance(
+					name, this.fromJson(array).asInstanceOf[AnyRef], datatype,
+					Boolean.box(true)
+				)
 			case obj: JsonObject =>
-				null
+				new Property(name, element.getAsString, datatype, true)
 			case _ =>
 				new Property(name, element.getAsString, datatype, true)
 		}
@@ -159,6 +169,7 @@ class ConfigJson(file: File) extends Configuration(file, true) {
 	private def getType(prop: JsonElement): Property.Type = {
 		prop match {
 			case prim: JsonPrimitive =>
+				//println (prim.getAsString + ":" + prim.isBoolean)
 				if (prim.isBoolean)
 					Property.Type.BOOLEAN
 				else if (prim.isNumber) {
@@ -174,7 +185,7 @@ class ConfigJson(file: File) extends Configuration(file, true) {
 				else
 					Property.Type.STRING
 			case obj: JsonObject =>
-				null
+				Property.Type.STRING
 			case _ =>
 				if (prop.getAsString.startsWith("#"))
 					Property.Type.COLOR
