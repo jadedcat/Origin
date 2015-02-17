@@ -5,8 +5,8 @@ import java.util
 import java.util.Map.Entry
 
 import com.google.gson.{JsonArray, JsonElement, JsonObject, JsonPrimitive}
-import com.temportalist.origin.library.common.utility.{Scala, Json}
 import com.temportalist.origin.library.common.utility.Json.Config
+import com.temportalist.origin.library.common.utility.{Json, Scala}
 import net.minecraftforge.common.config.{ConfigCategory, Configuration, Property}
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper
 
@@ -110,13 +110,13 @@ class ConfigJson(file: File) extends Configuration(file, true) {
 					case e: Exception => json = new JsonObject
 				}
 				Scala.foreach(json.entrySet(), (entry: Entry[String, JsonElement]) => {
-					val cateName: String = entry.getKey
-					val cate: ConfigCategory = this.getCategory(cateName)
+					val cate: ConfigCategory = this.getCategory(entry.getKey)
 					Scala.foreach(entry.getValue.getAsJsonObject.entrySet(),
 						(propEntry: Entry[String, JsonElement]) => {
 							val name: String = propEntry.getKey
 							val jsonElement: JsonElement = propEntry.getValue
-							cate.put(name, this.getProperty(name, jsonElement))
+							if (!jsonElement.isInstanceOf[JsonObject])
+								cate.put(name, this.getProperty(name, jsonElement))
 
 						}
 					)

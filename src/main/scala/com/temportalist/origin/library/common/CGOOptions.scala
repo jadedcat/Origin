@@ -3,8 +3,10 @@ package com.temportalist.origin.library.common
 import scala.collection.mutable
 
 import com.temportalist.origin.library.client.gui.config.GuiConfig
+import com.temportalist.origin.library.client.utility.Rendering
 import com.temportalist.origin.library.common.register.OptionRegister
 import com.temportalist.origin.library.common.utility.WorldHelper
+import net.minecraft.client.audio.SoundCategory
 import net.minecraft.client.gui.GuiScreen
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -43,6 +45,7 @@ object CGOOptions extends OptionRegister {
 
 	@SideOnly(Side.CLIENT)
 	def registerClient() {
+		///*
 		this.coloredHearts = this.getAndComment(
 			"client",
 			// coloured because hilburn
@@ -57,20 +60,21 @@ object CGOOptions extends OptionRegister {
 					"(quantity * 20 + 20 = total max health accounted for)",
 			value = this.heartColors
 		)
-		/*
+		//*/
+		///*
 		SoundCategory.values().foreach((sound: SoundCategory) => {
 			val volume: Float = Rendering.mc.gameSettings.getSoundLevel(sound) * 100f
 			this.volumeControls(sound.getCategoryName) = this.getAndComment(
 				"client", sound.getCategoryName + " volume", "", volume.toDouble
 			).toFloat / 100f
 		})
-		*/
+		//*/
 		/*
 		this.getAndComment(
 			"client", "something volume", "", 100d
 		)
 		*/
-		this.config.get("client", "volume", 100d)
+		//this.config.get("client", "volume", 100d)
 
 	}
 
