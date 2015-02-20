@@ -43,7 +43,7 @@ trait IRenderingObject {
 	@SideOnly(Side.CLIENT)
 	def bakeModel(reg: IRegistry): Unit = {
 		if (this.getBakedModel() != null) {
-			reg.getObject(this.getBakedModel())
+			reg.getObject(this.getModelLoc(), this.getBakedModel())
 		}
 	}
 
