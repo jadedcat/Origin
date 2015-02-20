@@ -3,6 +3,8 @@ package com.temportalist.origin.library.common.utility
 import java.util
 
 import com.temportalist.origin.wrapper.common.rendering.IRenderingObject
+import net.minecraft.util.IRegistry
+import net.minecraftforge.fml.relauncher.{SideOnly, Side}
 
 /**
  *
@@ -11,13 +13,20 @@ import com.temportalist.origin.wrapper.common.rendering.IRenderingObject
  */
 object ItemRenderingHelper {
 
-	val registeredItems: util.List[IRenderingObject] = new util.ArrayList[IRenderingObject]()
+	val registered: util.List[IRenderingObject] = new util.ArrayList[IRenderingObject]()
 
-	def register(item: IRenderingObject): Unit = this.registeredItems.add(item)
+	def register(item: IRenderingObject): Unit = this.registered.add(item)
 
+	@SideOnly(Side.CLIENT)
 	def registerItemRenders(): Unit =
-		for (i <- 0 until this.registeredItems.size()) {
-			this.registeredItems.get(i).initRendering()
+		for (i <- 0 until this.registered.size()) {
+			this.registered.get(i).registerRendering()
+		}
+
+	@SideOnly(Side.CLIENT)
+	def bake(reg: IRegistry): Unit =
+		for (i <- 0 until this.registered.size()) {
+			this.registered.get(i).bakeModel(reg)
 		}
 
 }

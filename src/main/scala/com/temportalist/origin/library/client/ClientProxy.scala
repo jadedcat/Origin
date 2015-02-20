@@ -14,9 +14,11 @@ import net.minecraft.client.gui.GuiScreen
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
+import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.fml.client.IModGuiFactory
 import net.minecraftforge.fml.client.IModGuiFactory.{RuntimeOptionCategoryElement, RuntimeOptionGuiHandler}
 import net.minecraftforge.fml.common.FMLCommonHandler
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
 /**
  *
@@ -29,6 +31,11 @@ class ClientProxy() extends CommonProxy with IModGuiFactory {
 		ItemRenderingHelper.registerItemRenders()
 		RegisterHelper.registerHandler(GuiRadialMenuHandler, HealthOverlay)
 
+	}
+
+	@SubscribeEvent
+	def bake(event: ModelBakeEvent): Unit = {
+		ItemRenderingHelper.bake(event.modelRegistry)
 	}
 
 	override def getClientElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int,

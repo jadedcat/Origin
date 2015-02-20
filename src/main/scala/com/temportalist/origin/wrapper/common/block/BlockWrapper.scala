@@ -55,6 +55,8 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 
 	// End Constructors
 
+	override def getBlock(): Block = this
+
 	override def getItem(): Item = Item.getItemFromBlock(this)
 
 	override def getCompoundName(): String = this.modid + ":" + this.name
