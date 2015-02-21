@@ -85,11 +85,12 @@ class ItemPlacer(modid: String, name: String) extends ItemWrapper(modid, name) {
 			}
 		}
 
-		val placePos: V3O = new V3O(pos).add(side)
-		if (side == EnumFacing.UP && state.isInstanceOf[BlockFence])
-			placePos.add(0, .5, 0)
+		val placePos: V3O = new V3O(pos) + side + new V3O(
+			0.5,
+			if (side == EnumFacing.UP && state.isInstanceOf[BlockFence]) 0.5 else 0,
+			0.5
+		)
 
-		placePos.add(.5, 0, .5)
 		val entity: Entity = this.spawnEntity(worldIn, entityName, placePos)
 
 		if (entity != null) {
