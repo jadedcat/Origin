@@ -134,39 +134,117 @@ class V3O(var x: Double, var y: Double, var z: Double) {
 		this.setBlock(world, Blocks.air)
 	}
 
-	def scale(x: Double, y: Double, z: Double): V3O = {
-		this.x *= x
-		this.y *= y
-		this.z *= z
-		this
-	}
-
-	def scale(amount: Double): V3O = this.scale(amount, amount, amount)
-
-	def scale(vec: V3O): V3O = this.scale(vec.x, vec.y, vec.z)
-
-	def invert(): V3O = this.scale(-1)
-
-	def copy(): V3O = new V3O(this.x, this.y, this.z)
-
 	def toNBT(nbt: NBTTagCompound) {
 		nbt.setDouble("x", this.x)
 		nbt.setDouble("y", this.y)
 		nbt.setDouble("z", this.z)
 	}
 
-	def distance(vec: V3O): Double = {
-		this.copy().subtract(vec).magnitude()
-	}
-
-	def distance(x: Double, y: Double, z: Double): Double = {
-		this.distance(new V3O(x, y, z))
-	}
-
 	@SideOnly(Side.CLIENT)
 	def addVecUV(u: Double, v: Double): Unit = {
 		TessRenderer.addVertex(this.x, this.y, this.z, u, v)
 	}
+
+	def set(x1: Double, y1: Double, z1: Double): Unit = {
+		this.x = x1
+		this.y = y
+		this.z = z
+	}
+
+	def set(vec: V3O): Unit = this.set(vec.x, vec.y, vec.z)
+
+	// Additive things. Plus(+) & Add(+=) http://stackoverflow.com/questions/16644988/why-is-the-unary-prefix-needed-in-scala
+
+	// Additive +, does not modify this vector
+
+	def plus(x1: Double, y1: Double, z1: Double): V3O = new V3O(
+		this.x + x1, this.y + y1, this.z + y1
+	)
+
+	def +(v: V3O): V3O = this.plus(v.x, v.y, v.z)
+
+	def +(d: Double): V3O = this.plus(d, d, d)
+
+	def +(dir: EnumFacing): V3O = this + new V3O(dir)
+
+	// Additive +=
+
+	def add(x1: Double, y1: Double, z1: Double): Unit = {
+		this.set(this.plus(x1, y1, z1))
+	}
+
+	def +=(vec: V3O): Unit = this.add(vec.x, vec.y, vec.z)
+
+	def +=(d: Double): Unit = this.add(d, d, d)
+
+	def add(dir: EnumFacing, amount: Double): Unit =
+		this += new V3O(dir) * amount
+
+	def +=(dir: EnumFacing): Unit = this.add(dir, 1)
+
+	def down(amount: Double): Unit = this.add(EnumFacing.DOWN, amount)
+
+	def down(): Unit = this.down(1)
+
+	def up(amount: Double): Unit = this.add(EnumFacing.UP, amount)
+
+	def up(): Unit = this.up(1)
+
+	def north(amount: Double): Unit = this.add(EnumFacing.NORTH, amount)
+
+	def north(): Unit = this.north(1)
+
+	def south(amount: Double): Unit = this.add(EnumFacing.SOUTH, amount)
+
+	def south(): Unit = this.south(1)
+
+	def east(amount: Double): Unit = this.add(EnumFacing.EAST, amount)
+
+	def east(): Unit = this.east(1)
+
+	def west(amount: Double): Unit = this.add(EnumFacing.WEST, amount)
+
+	def west(): Unit = this.west(1)
+
+	// Subtractive +, does not modify
+
+	def minus(x1: Double, y1: Double, z1: Double): V3O = new V3O(
+		this.x - x1, this.y - y1, this.z - z1
+	)
+
+	def -(vec: V3O): V3O = this.minus(vec.x, vec.y, vec.z)
+
+	def -(d: Double): V3O = this.minus(d, d, d)
+
+	// Subtractive +=
+
+	def subtract(x1: Double, y1: Double, z1: Double): Unit = this.set(this.minus(x1, y1, z1))
+
+	def -=(vec: V3O): Unit = this.subtract(vec.x, vec.y, vec.z)
+
+	def -=(d: Double): Unit = this.subtract(d, d, d)
+
+	// Multiplicitive *
+
+	def times(x1: Double, y1: Double, z1: Double): V3O = new V3O(
+		this.x * x1, this.y * y1, this.z * z1
+	)
+
+	def *(vec: V3O): V3O = this.times(vec.x, vec.y, vec.z)
+
+	def *(d: Double): V3O = this.times(d, d, d)
+
+	// Multiplicitive *=
+
+	def multiply(x1: Double, y1: Double, z1: Double): Unit = this.set(this.times(x1, y1, z1))
+
+	def *=(vec: V3O): Unit = this.multiply(vec.x, vec.y, vec.z)
+
+	def *=(d: Double): Unit = this.multiply(d, d, d)
+
+	def invert(): Unit = this.+=(-1)
+
+	// 3D Functions
 
 	def magSquared(): Double = {
 		this.x * this.x + this.y * this.y + this.z * this.z
@@ -176,101 +254,17 @@ class V3O(var x: Double, var y: Double, var z: Double) {
 		Math.sqrt(this.magSquared())
 	}
 
-	def set(x1: Double, y1: Double, z1: Double): V3O = {
-		this.x = x1
-		this.y = y
-		this.z = z
-		this
+	def distance(vec: V3O): Double = {
+		(this - vec).magnitude()
 	}
 
-	def set(vec: V3O): V3O = this.set(vec.x, vec.y, vec.z)
-
-	def add_(x1: Double, y1: Double, z1: Double): V3O = new V3O(
-		this.x + x1, this.y + y1, this.z + y1
-	)
-
-	def add_(v: V3O): V3O = this.add_(v.x, v.y, v.z)
-
-	def add(x1: Double, y1: Double, z1: Double): V3O = {
-		this.x += x1
-		this.y += y1
-		this.z += z1
-		this
+	def distance(x: Double, y: Double, z: Double): Double = {
+		this.distance(new V3O(x, y, z))
 	}
-
-	def add(vec: V3O): V3O = this.add(vec.x, vec.y, vec.z)
-
-	def add(dir: EnumFacing, amount: Double): V3O = this.add(new V3O(dir).scale(amount))
-
-	def add(dir: EnumFacing): V3O = this.add(dir, 1)
-
-	def add(d: Double): V3O = this.add(d, d, d)
-
-	def down(amount: Double): V3O = this.add(EnumFacing.DOWN, amount)
-
-	def down(): V3O = this.down(1)
-
-	def up(amount: Double): V3O = this.add(EnumFacing.UP, amount)
-
-	def up(): V3O = this.up(1)
-
-	def north(amount: Double): V3O = this.add(EnumFacing.NORTH, amount)
-
-	def north(): V3O = this.north(1)
-
-	def south(amount: Double): V3O = this.add(EnumFacing.SOUTH, amount)
-
-	def south(): V3O = this.south(1)
-
-	def east(amount: Double): V3O = this.add(EnumFacing.EAST, amount)
-
-	def east(): V3O = this.east(1)
-
-	def west(amount: Double): V3O = this.add(EnumFacing.WEST, amount)
-
-	def west(): V3O = this.west(1)
-
-	def subtract_(x1: Double, y1: Double, z1: Double): V3O = new V3O(
-		this.x - x1, this.y - y1, this.z - z1
-	)
-
-	def subtract_(vec: V3O): V3O = this.subtract_(vec.x, vec.y, vec.z)
-
-	def subtract(x1: Double, y1: Double, z1: Double): V3O = {
-		this.x -= x1
-		this.y -= y1
-		this.z -= z1
-		this
-	}
-
-	def subtract(vec: V3O): V3O = this.subtract(vec.x, vec.y, vec.z)
-
-	def subtract(d: Double): V3O = this.subtract(d, d, d)
-
-	def negate(): V3O = {
-		this.x = -this.x
-		this.y = -this.y
-		this.z = -this.z
-		this
-	}
-
-	def multiply(x1: Double, y1: Double, z1: Double): V3O = {
-		this.x *= x1
-		this.y *= y1
-		this.z *= z1
-		this
-	}
-
-	def multiply(d: Double): V3O = this.multiply(d, d, d)
-
-	def multiply(f: V3O): V3O = this.multiply(f.x, f.y, f.z)
 
 	def normalize(): V3O = {
 		val mag: Double = this.magnitude()
-		if (mag != 0.0D) {
-			this.multiply(1.0D / mag)
-		}
-		else this
+		this * (if (mag != 0.0D) 1.0d / mag else 1d)
 	}
 
 	def dotProduct(vec: V3O): Double = {
@@ -381,19 +375,9 @@ class V3O(var x: Double, var y: Double, var z: Double) {
 
 	def $tilde(): V3O = this.normalize()
 
-	def $plus(v: V3O): V3O = this.add_(v)
+	def /(d: Double): V3O = this * (1 / d)
 
-	def $minus(v: V3O): V3O = this.subtract_(v)
-
-	def $times(d: Double): V3O = new V3O(
-		this.x * d, this.y * d, this.z * d
-	)
-
-	def $div(d: Double): V3O = this.$times(1 / d)
-
-	def $times(v: V3O): V3O = this.crossProduct(v)
-
-	def $dot$times(v: V3O): Double = this.dotProduct(v)
+	def copy(): V3O = new V3O(this.x, this.y, this.z)
 
 	override def equals(o: scala.Any): Boolean = {
 		o match {
@@ -417,7 +401,7 @@ class V3O(var x: Double, var y: Double, var z: Double) {
 object V3O {
 
 	def from(x: Double, y: Double, z: Double, dir: EnumFacing): V3O = {
-		new V3O(x, y, z).add(new V3O(dir))
+		new V3O(x, y, z) + new V3O(dir)
 	}
 
 	def from(aabb: AxisAlignedBB): V3O = {
