@@ -11,7 +11,6 @@ import net.minecraft.world.chunk.Chunk
 import net.minecraft.world.{World, WorldServer}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.EnderTeleportEvent
-import net.minecraftforge.fml.common.FMLLog
 
 /**
  *
@@ -70,9 +69,8 @@ object Teleport {
 			entityPlayer.worldObj, entityPlayer, maxDistance
 		)
 		if (point == null) return false
-		FMLLog.info("[WeepingAngels] Teleporting with point = " + point)
 		Teleport.toPoint(
-			entityPlayer, point.add(0.5D, 0.0D, 0.5D)
+			entityPlayer, point.plus(0.5D, 0.0D, 0.5D)
 		)
 	}
 

@@ -1,6 +1,6 @@
 package com.temportalist.origin.library.common.utility
 
-import com.temportalist.origin.library.common.lib.vec.{V3O, V3O$}
+import com.temportalist.origin.library.common.lib.vec.V3O
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.util.{EnumFacing, MovingObjectPosition}
@@ -41,7 +41,7 @@ object Cursor {
 			entity: EntityLivingBase, reachDistance: Double, headVec: V3O
 			): V3O = {
 		// scale the look vector by the reach distance and translate it by the head/eye vector
-		new V3O(entity.getLook(1.0F)).scale(reachDistance).add(headVec)
+		new V3O(entity.getLook(1.0F)) * reachDistance + headVec
 	}
 
 	def getCursorPosVec(entity: EntityLivingBase, reachDistance: Double): V3O = {
@@ -79,7 +79,7 @@ object Cursor {
 			blockZ = mop.hitVec.zCoord.asInstanceOf[Int]
 			side = 1
 		}
-		new V3O(blockX, blockY, blockZ).add(EnumFacing.getFront(side))
+		new V3O(blockX, blockY, blockZ) + EnumFacing.getFront(side)
 	}
 
 }
