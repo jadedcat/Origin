@@ -158,7 +158,7 @@ class V3O(var x: Double, var y: Double, var z: Double) {
 	// Additive +, does not modify this vector
 
 	def plus(x1: Double, y1: Double, z1: Double): V3O = new V3O(
-		this.x + x1, this.y + y1, this.z + y1
+		this.x + x1, this.y + y1, this.z + z1
 	)
 
 	def +(v: V3O): V3O = this.plus(v.x, v.y, v.z)

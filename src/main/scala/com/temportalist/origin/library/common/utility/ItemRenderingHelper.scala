@@ -2,6 +2,7 @@ package com.temportalist.origin.library.common.utility
 
 import java.util
 
+import com.temportalist.origin.library.common.lib.LogHelper
 import com.temportalist.origin.wrapper.common.rendering.IRenderingObject
 import net.minecraft.util.IRegistry
 import net.minecraftforge.fml.relauncher.{SideOnly, Side}
@@ -26,6 +27,7 @@ object ItemRenderingHelper {
 	@SideOnly(Side.CLIENT)
 	def bake(reg: IRegistry): Unit =
 		for (i <- 0 until this.registered.size()) {
+			LogHelper.info("Origin", "Baking " + this.registered.get(i).getCompoundName())
 			this.registered.get(i).bakeModel(reg)
 		}
 
