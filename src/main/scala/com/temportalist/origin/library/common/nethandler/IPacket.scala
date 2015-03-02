@@ -40,61 +40,63 @@ trait IPacket {
 		}
 	}
 
-	final def add(any: Any): IPacket = {
-		if (any == null) return this
-		try {
-			any match {
-				case bool: Boolean =>
-					this.writeData.writeBoolean(bool)
-				case byte: Byte =>
-					this.writeData.writeByte(byte)
-				case short: Short =>
-					this.writeData.writeShort(short)
-				case int: Int =>
-					this.writeData.writeInt(int)
-				case char: Char =>
-					this.writeData.writeChar(char)
-				case float: Float =>
-					this.writeData.writeFloat(float)
-				case double: Double =>
-					this.writeData.writeDouble(double)
-				case long: Long =>
-					this.writeData.writeLong(long)
-				case str: String =>
-					this.writeData.writeUTF(str)
-				case array: Array[Double] =>
-					this.add(array.length)
-					for (d: Double <- array)
-						this.add(d)
-				case uuid: UUID =>
-					this.add(uuid.getMostSignificantBits)
-					this.add(uuid.getLeastSignificantBits)
-				case nbt: NBTTagCompound =>
-					CompressedStreamTools.writeCompressed(nbt, this.writeData)
-				case stack: ItemStack =>
-					this.add(NameParser.getName(stack))
-					this.add(stack.hasTagCompound)
-					if (stack.hasTagCompound) this.add(stack.getTagCompound)
-				case pos: BlockPos =>
-					this.add(pos.getX)
-					this.add(pos.getY)
-					this.add(pos.getZ)
-				case v: V3O =>
-					this.add(v.x)
-					this.add(v.y)
-					this.add(v.z)
-				case tile: TileEntity =>
-					this.add(tile.getPos)
-				case saver: INBTSaver =>
-					val tag: NBTTagCompound = new NBTTagCompound
-					saver.writeTo(tag)
-					this.add(tag)
-				case _ =>
+	final def add(all: Any*): IPacket = {
+		if (all == null) return this
+		for (any: Any <- all) if (any != null) {
+			try {
+				any match {
+					case bool: Boolean =>
+						this.writeData.writeBoolean(bool)
+					case byte: Byte =>
+						this.writeData.writeByte(byte)
+					case short: Short =>
+						this.writeData.writeShort(short)
+					case int: Int =>
+						this.writeData.writeInt(int)
+					case char: Char =>
+						this.writeData.writeChar(char)
+					case float: Float =>
+						this.writeData.writeFloat(float)
+					case double: Double =>
+						this.writeData.writeDouble(double)
+					case long: Long =>
+						this.writeData.writeLong(long)
+					case str: String =>
+						this.writeData.writeUTF(str)
+					case array: Array[Double] =>
+						this.add(array.length)
+						for (d: Double <- array)
+							this.add(d)
+					case uuid: UUID =>
+						this.add(uuid.getMostSignificantBits)
+						this.add(uuid.getLeastSignificantBits)
+					case nbt: NBTTagCompound =>
+						CompressedStreamTools.writeCompressed(nbt, this.writeData)
+					case stack: ItemStack =>
+						this.add(NameParser.getName(stack))
+						this.add(stack.hasTagCompound)
+						if (stack.hasTagCompound) this.add(stack.getTagCompound)
+					case pos: BlockPos =>
+						this.add(pos.getX)
+						this.add(pos.getY)
+						this.add(pos.getZ)
+					case v: V3O =>
+						this.add(v.x)
+						this.add(v.y)
+						this.add(v.z)
+					case tile: TileEntity =>
+						this.add(tile.getPos)
+					case saver: INBTSaver =>
+						val tag: NBTTagCompound = new NBTTagCompound
+						saver.writeTo(tag)
+						this.add(tag)
+					case _ =>
+				}
 			}
-		}
-		catch {
-			case e: Exception =>
-				e.printStackTrace()
+			catch {
+				case e: Exception =>
+					e.printStackTrace()
+			}
 		}
 		this
 	}

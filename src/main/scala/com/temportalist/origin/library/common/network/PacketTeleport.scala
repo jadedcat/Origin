@@ -13,7 +13,7 @@ class PacketTeleport() extends IPacket {
 
 	def this(dimId: Int, coords: Array[Double], fall: Boolean, particles: Boolean) {
 		this()
-		this.add(dimid)
+		this.add(dimId)
 		this.add(coords)
 		this.add(fall)
 		this.add(particles)

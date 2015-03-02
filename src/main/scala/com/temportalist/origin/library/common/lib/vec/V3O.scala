@@ -1,6 +1,7 @@
 package com.temportalist.origin.library.common.lib.vec
 
 import com.google.common.io.ByteArrayDataInput
+import com.temportalist.origin.api.INBTSaver
 import com.temportalist.origin.library.client.utility.TessRenderer
 import com.temportalist.origin.library.common.utility.MathFuncs
 import io.netty.buffer.ByteBuf
@@ -20,7 +21,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  *
  * @author TheTemportalist
  */
-class V3O(var x: Double, var y: Double, var z: Double) {
+class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 
 	def this(array: Array[Double]) {
 		this(array(0), array(1), array(2))
@@ -94,6 +95,18 @@ class V3O(var x: Double, var y: Double, var z: Double) {
 		data.writeDouble(this.x)
 		data.writeDouble(this.y)
 		data.writeDouble(this.z)
+	}
+
+	override def writeTo(tag: NBTTagCompound): Unit = {
+		tag.setDouble("x", this.x)
+		tag.setDouble("y", this.y)
+		tag.setDouble("z", this.z)
+	}
+
+	override def readFrom(tag: NBTTagCompound): Unit = {
+		this.x = tag.getInteger("x")
+		this.y = tag.getInteger("y")
+		this.z = tag.getInteger("z")
 	}
 
 	def toBlockPos(): BlockPos = {

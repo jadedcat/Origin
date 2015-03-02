@@ -22,6 +22,6 @@ abstract class PacketTile() extends IPacket {
 		if (tile != null) this.handle(player, tile, isServer)
 	}
 
-	abstract def handle(player: EntityPlayer, tileEntity: TileEntity, isServer: Boolean): Unit
+	def handle(player: EntityPlayer, tileEntity: TileEntity, isServer: Boolean): Unit
 
 }
