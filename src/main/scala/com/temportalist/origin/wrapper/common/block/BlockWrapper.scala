@@ -1,9 +1,8 @@
 package com.temportalist.origin.wrapper.common.block
 
 import java.util
-
+import com.temportalist.origin.api.rendering.IRenderingObject
 import com.temportalist.origin.library.common.utility.{Drops, ItemRenderingHelper}
-import com.temportalist.origin.wrapper.common.rendering.IRenderingObject
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState

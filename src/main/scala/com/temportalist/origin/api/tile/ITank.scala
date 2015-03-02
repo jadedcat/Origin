@@ -1,8 +1,8 @@
-package com.temportalist.origin.wrapper.common.tile
+package com.temportalist.origin.api.tile
 
 import java.util
 
-import net.minecraft.nbt.{NBTTagList, NBTTagCompound}
+import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids._

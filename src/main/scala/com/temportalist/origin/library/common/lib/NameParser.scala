@@ -17,6 +17,8 @@ import net.minecraftforge.oredict.OreDictionary
  */
 object NameParser {
 
+	def getName(stack: ItemStack): String = this.getName(stack, hasID = true, hasMeta = true)
+
 	def getName(itemStack: ItemStack, hasID: Boolean, hasMeta: Boolean): String = {
 		if (itemStack == null) {
 			return ""

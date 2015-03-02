@@ -1,8 +1,8 @@
 package com.temportalist.origin.library.common
 
+import com.temportalist.origin.api.IProxy
 import com.temportalist.origin.library.common.nethandler.PacketHandler
 import com.temportalist.origin.library.common.network.PacketSyncExtendedProperties
-import com.temportalist.origin.wrapper.common.ProxyWrapper
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
@@ -12,7 +12,7 @@ import net.minecraft.world.World
  *
  * @author TheTemportalist
  */
-class CommonProxy extends ProxyWrapper {
+class ProxyCommon extends IProxy {
 
 	override def registerRender(): Unit = {}
 

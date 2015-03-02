@@ -43,7 +43,7 @@ object Origin extends ModWrapper {
 	final val serverProxy = "com.temportalist.origin.library.server.ServerProxy"
 
 	@SidedProxy(clientSide = this.clientProxy, serverSide = this.serverProxy)
-	var proxy: CommonProxy = null
+	var proxy: ProxyCommon = null
 
 	var dimensions: util.HashMap[String, Int] = new util.HashMap[String, Int]
 	var dimensions1: util.HashMap[Int, String] = new util.HashMap[Int, String]

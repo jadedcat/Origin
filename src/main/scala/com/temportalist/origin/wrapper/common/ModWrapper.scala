@@ -2,6 +2,7 @@ package com.temportalist.origin.wrapper.common
 
 import java.util
 
+import com.temportalist.origin.api.IProxy
 import com.temportalist.origin.library.common.handlers.{RegisterHelper, OptionHandler}
 import com.temportalist.origin.library.common.register._
 import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
@@ -19,7 +20,7 @@ class ModWrapper() {
 	private var sortedRegisters: util.HashMap[String, util.ArrayList[Register]] = null
 
 	protected def preInitialize(modid: String, modname: String,
-			event: FMLPreInitializationEvent, proxy: ProxyWrapper,
+			event: FMLPreInitializationEvent, proxy: IProxy,
 			registers: Register*): Unit = {
 
 		this.sortedRegisters = new util.HashMap[String, util.ArrayList[Register]]()
@@ -94,7 +95,7 @@ class ModWrapper() {
 
 	}
 
-	protected def initialize(event: FMLInitializationEvent, proxy: ProxyWrapper): Unit = {
+	protected def initialize(event: FMLInitializationEvent, proxy: IProxy): Unit = {
 		var sortedRegArray: util.ArrayList[Register] = null
 
 		sortedRegArray = sortedRegisters.get("item")

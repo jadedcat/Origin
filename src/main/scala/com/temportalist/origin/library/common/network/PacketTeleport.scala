@@ -2,7 +2,6 @@ package com.temportalist.origin.library.common.network
 
 import com.temportalist.origin.library.common.nethandler.IPacket
 import com.temportalist.origin.library.common.utility.Teleport
-import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 
 /**
@@ -10,45 +9,24 @@ import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
  *
  * @author TheTemportalist
  */
-class PacketTeleport(var dimId: Int, var coords: Array[Double], var fall: Boolean,
-		var particles: Boolean) extends IPacket {
+class PacketTeleport() extends IPacket {
 
-	// Default Constructor
-
-	// End Constructor
-
-	// Other Constructors
-	def this() {
-		this(0, null, false, false)
+	def this(dimId: Int, coords: Array[Double], fall: Boolean, particles: Boolean) {
+		this()
+		this.add(dimid)
+		this.add(coords)
+		this.add(fall)
+		this.add(particles)
 	}
 
-	// End Constructors
-	override def writeTo(buffer: ByteBuf): Unit = {
-		buffer.writeInt(this.dimId)
-		buffer.writeDouble(coords(0))
-		buffer.writeDouble(coords(1))
-		buffer.writeDouble(coords(2))
-		buffer.writeBoolean(this.fall)
-		buffer.writeBoolean(this.particles)
-
-	}
-
-	override def readFrom(buffer: ByteBuf): Unit = {
-		this.dimId = buffer.readInt()
-		this.coords(0) = buffer.readDouble()
-		this.coords(1) = buffer.readDouble()
-		this.coords(2) = buffer.readDouble()
-		this.fall = buffer.readBoolean()
-		this.particles = buffer.readBoolean()
-
-	}
-
-	override def handleOnClient(player: EntityPlayer): Unit = {}
-
-	override def handleOnServer(player: EntityPlayer): Unit = {
-		Teleport.toDimension(player, this.dimId)
-		Teleport.toPoint(player.asInstanceOf[EntityPlayerMP], coords(0), coords(1), coords(2))
-
+	override def handle(player: EntityPlayer, isServer: Boolean): Unit = {
+		if (isServer) {
+			Teleport.toDimension(player, this.get[Int])
+			val coord: Array[Double] = this.get[Array[Double]]
+			val fall: Boolean = this.get[Boolean]
+			val particles: Boolean = this.get[Boolean]
+			Teleport.toPoint(player.asInstanceOf[EntityPlayerMP], coord(0), coord(1), coord(2))
+		}
 	}
 
 }

@@ -53,7 +53,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<IPacket> {
 		}
 	}
 
-	public static boolean sendToAll(String channel, IPacket packet) {
+	public static boolean sendToClients(String channel, IPacket packet) {
 		if (PacketHandler.TRACKER.containsKey(channel.toLowerCase())) {
 			EnumMap<Side, FMLEmbeddedChannel> channels = PacketHandler.TRACKER.get(channel
 					.toLowerCase()).channels;
@@ -128,7 +128,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<IPacket> {
 	}
 
 	public static boolean sync(String channel, IPacket packet) {
-		return PacketHandler.sendToServer(channel, packet) && PacketHandler.sendToAll(channel,
+		return PacketHandler.sendToServer(channel, packet) && PacketHandler.sendToClients(channel,
 				packet);
 	}
 
@@ -159,7 +159,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<IPacket> {
 			throws Exception {
 		try {
 			// side = FMLCommonHandler.instance().getEffectiveSide()
-			msg.writeTo_do(target);
+			msg.writeTo(target);
 		} catch (Exception e) {
 			System.out.println("Error writing to packet for channel: " + channel);
 			e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.temportalist.origin.wrapper.common.tile
+package com.temportalist.origin.api.tile
 
 import com.temportalist.origin.library.common.lib.enums.RedstoneState
 import net.minecraft.nbt.NBTTagCompound

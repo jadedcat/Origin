@@ -1,5 +1,6 @@
 package com.temportalist.origin.wrapper.common.inventory
 
+import com.temportalist.origin.api.inventory.IInv
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 

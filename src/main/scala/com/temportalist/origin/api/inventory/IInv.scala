@@ -1,10 +1,10 @@
-package com.temportalist.origin.wrapper.common.inventory
+package com.temportalist.origin.api.inventory
 
 import com.temportalist.origin.library.common.utility.MathFuncs
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.inventory.{ISidedInventory, IInventory}
+import net.minecraft.inventory.{IInventory, ISidedInventory}
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.{NBTTagList, NBTTagCompound}
+import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.util._
 
 /**

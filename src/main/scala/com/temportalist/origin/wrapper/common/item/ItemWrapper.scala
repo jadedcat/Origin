@@ -1,9 +1,8 @@
 package com.temportalist.origin.wrapper.common.item
 
 import java.util
-
+import com.temportalist.origin.api.rendering.IRenderingObject
 import com.temportalist.origin.library.common.utility.ItemRenderingHelper
-import com.temportalist.origin.wrapper.common.rendering.IRenderingObject
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{Item, ItemStack}

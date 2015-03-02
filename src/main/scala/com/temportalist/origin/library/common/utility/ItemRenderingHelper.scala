@@ -1,9 +1,8 @@
 package com.temportalist.origin.library.common.utility
 
 import java.util
-
+import com.temportalist.origin.api.rendering.IRenderingObject
 import com.temportalist.origin.library.common.lib.LogHelper
-import com.temportalist.origin.wrapper.common.rendering.IRenderingObject
 import net.minecraft.util.IRegistry
 import net.minecraftforge.fml.relauncher.{SideOnly, Side}
 

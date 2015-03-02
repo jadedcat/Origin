@@ -2,8 +2,8 @@ package com.temportalist.origin.wrapper.common.block
 
 import java.util.Random
 
+import com.temportalist.origin.api.tile.IPowerable
 import com.temportalist.origin.library.common.utility.WorldHelper
-import com.temportalist.origin.wrapper.common.tile.IPowerable
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState

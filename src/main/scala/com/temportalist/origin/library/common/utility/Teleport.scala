@@ -23,19 +23,15 @@ object Teleport {
 	 * Teleports players to inputted dimensionID. Returns true if player is
 	 * successfully teleported.
 	 *
-	 * @param entityPlayer The player being teleported
+	 * @param player The player being teleported
 	 * @param dimID The dimension's ID
 	 */
-	def toDimension(entityPlayer: EntityPlayer, dimID: Int): Boolean = {
-		if (entityPlayer.dimension != dimID) {
-			entityPlayer match {
+	def toDimension(player: EntityPlayer, dimID: Int): Boolean = {
+		if (player.dimension != dimID) {
+			player match {
 				case player: EntityPlayerMP =>
 					val world: WorldServer = player.worldObj.asInstanceOf[WorldServer]
 					if (player.ridingEntity == null && player.riddenByEntity == null) {
-						val event: EnderTeleportEvent = new EnderTeleportEvent(
-							player, player.posX, player.posY, player.posZ, 0.0F
-						)
-						if (MinecraftForge.EVENT_BUS.post(event)) return false
 						player.mcServer.getConfigurationManager.transferPlayerToDimension(
 							player, dimID, new TeleporterCore(world)
 						)

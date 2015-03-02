@@ -1,4 +1,4 @@
-package com.temportalist.origin.wrapper.common.rendering
+package com.temportalist.origin.api.rendering
 
 import com.temportalist.origin.library.client.utility.Rendering
 import net.minecraft.block.Block
@@ -6,7 +6,7 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.ItemMeshDefinition
 import net.minecraft.client.renderer.block.statemap.StateMapperBase
 import net.minecraft.client.resources.model.{IBakedModel, ModelResourceLocation}
-import net.minecraft.item.{ItemStack, Item}
+import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.util.IRegistry
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}

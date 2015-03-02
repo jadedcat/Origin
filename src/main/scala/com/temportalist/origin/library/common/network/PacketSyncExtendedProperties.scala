@@ -2,46 +2,28 @@ package com.temportalist.origin.library.common.network
 
 import java.util
 
-import com.temportalist.origin.library.common.Origin
-import com.temportalist.origin.library.common.lib.LogHelper
 import com.temportalist.origin.library.common.nethandler.IPacket
 import com.temportalist.origin.wrapper.common.extended.{ExtendedEntity, ExtendedEntityHandler}
-import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraftforge.fml.common.network.ByteBufUtils
 
 /**
  *
  *
  * @author TheTemportalist
  */
-class PacketSyncExtendedProperties(var extendedClass: Class[_ <: ExtendedEntity],
-		var data: NBTTagCompound) extends IPacket {
+class PacketSyncExtendedProperties() extends IPacket {
 
-	// Default Constructor
-
-	// End Constructor
-
-	// Other Constructors
-	def this() {
-		this(null, null)
+	def this(extendedClass: Class[_ <: ExtendedEntity], data: NBTTagCompound) {
+		this()
+		this.add(ExtendedEntityHandler.getExtendedProperties.get(extendedClass)(0))
+		this.add(data)
 	}
 
-	// End Constructors
-
-	override def writeTo(buffer: ByteBuf): Unit = {
-		ByteBufUtils.writeTag(buffer, data)
-		ByteBufUtils.writeUTF8String(buffer,
-			ExtendedEntityHandler.getExtendedProperties.get(this.extendedClass)(0))
-
-	}
-
-	override def readFrom(buffer: ByteBuf): Unit = {
-		this.data = ByteBufUtils.readTag(buffer)
-		val key: String = ByteBufUtils.readUTF8String(buffer)
-		this.extendedClass = this.getClassWithKey(key)
-
+	override def handle(player: EntityPlayer, isServer: Boolean): Unit = {
+		ExtendedEntityHandler.getExtended(
+			player, this.getClassWithKey(this.get[String])
+		).loadNBTData(this.get[NBTTagCompound])
 	}
 
 	private def getClassWithKey(key: String): Class[_ <: ExtendedEntity] = {
@@ -55,22 +37,6 @@ class PacketSyncExtendedProperties(var extendedClass: Class[_ <: ExtendedEntity]
 			}
 		}
 		null
-	}
-
-	override def handleOnClient(player: EntityPlayer): Unit = {
-		this.handleSync(player)
-	}
-
-	override def handleOnServer(player: EntityPlayer): Unit = {
-		this.handleSync(player)
-	}
-
-	def handleSync(player: EntityPlayer): Unit = {
-		if (player != null)
-			ExtendedEntityHandler.getExtended(player, this.extendedClass).loadNBTData(this.data)
-		else {
-			LogHelper.info(Origin.MODNAME, "Null player!")
-		}
 	}
 
 }

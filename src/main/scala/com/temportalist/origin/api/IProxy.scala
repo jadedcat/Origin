@@ -1,4 +1,4 @@
-package com.temportalist.origin.wrapper.common
+package com.temportalist.origin.api
 
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.network.IGuiHandler
  *
  * @author TheTemportalist
  */
-trait ProxyWrapper extends IGuiHandler {
+trait IProxy extends IGuiHandler {
 
 	def registerRender(): Unit
 

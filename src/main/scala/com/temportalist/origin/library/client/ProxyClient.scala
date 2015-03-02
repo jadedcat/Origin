@@ -8,7 +8,7 @@ import com.temportalist.origin.library.common.handlers.RegisterHelper
 import com.temportalist.origin.library.common.nethandler.PacketHandler
 import com.temportalist.origin.library.common.network.PacketSyncExtendedProperties
 import com.temportalist.origin.library.common.utility.ItemRenderingHelper
-import com.temportalist.origin.library.common.{CommonProxy, Origin}
+import com.temportalist.origin.library.common.{ProxyCommon, Origin}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.entity.player.EntityPlayer
@@ -25,7 +25,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
  *
  * @author TheTemportalist
  */
-class ClientProxy() extends CommonProxy with IModGuiFactory {
+class ProxyClient() extends ProxyCommon with IModGuiFactory {
 
 	override def registerRender(): Unit = {
 		ItemRenderingHelper.registerItemRenders()
