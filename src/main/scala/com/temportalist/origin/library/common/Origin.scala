@@ -39,8 +39,8 @@ object Origin extends ModWrapper {
 	final val MODNAME = "Origin"
 	final val VERSION = "4.0"
 	//todo"@PLUGIN_VERSION@"
-	final val clientProxy = "com.temportalist.origin.library.client.ClientProxy"
-	final val serverProxy = "com.temportalist.origin.library.server.ServerProxy"
+	final val clientProxy = "com.temportalist.origin.library.client.ProxyClient"
+	final val serverProxy = "com.temportalist.origin.library.server.ProxyServer"
 
 	@SidedProxy(clientSide = this.clientProxy, serverSide = this.serverProxy)
 	var proxy: ProxyCommon = null

@@ -169,11 +169,11 @@ object Teleport {
 		)
 		if (MinecraftForge.EVENT_BUS.post(event)) return false
 
-		val chunk: Chunk = point.getChunk(player.getEntityWorld)
+		//val chunk: Chunk = point.getChunk(player.getEntityWorld)
 		// todo proper chunk loading
-		if (!chunk.isLoaded) {
+		//if (!chunk.isLoaded) {
 			//player.getEntityWorld.getChunkProvider.loadChunk(chunk.xPosition, chunk.zPosition)
-		}
+		//}
 
 		player.setPositionAndUpdate(point.x_i(), point.y_i(), point.z_i())
 

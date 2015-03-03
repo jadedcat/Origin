@@ -421,6 +421,12 @@ object V3O {
 		new V3O(aabb.maxX, aabb.maxY, aabb.maxZ) - new V3O(aabb.minX, aabb.minY, aabb.minZ)
 	}
 
+	def readFrom(tag: NBTTagCompound, key: String): V3O = {
+		val vec: V3O = V3O.ZERO
+		vec.readFrom(tag, key)
+		vec
+	}
+
 	def UP: V3O = new V3O(EnumFacing.UP)
 
 	def DOWN: V3O = new V3O(EnumFacing.DOWN)
