@@ -116,8 +116,8 @@ class ModWrapper() {
 
 	}
 
-	protected def postInitialize(event: FMLPostInitializationEvent): Unit = {
-
+	protected def postInitialize(event: FMLPostInitializationEvent, proxy: IProxy): Unit = {
+		proxy.postInit()
 	}
 
 }

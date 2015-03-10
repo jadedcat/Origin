@@ -15,6 +15,8 @@ trait IProxy extends IGuiHandler {
 
 	def registerRender(): Unit
 
+	def postInit(): Unit = {}
+
 	override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int,
 			z: Int): AnyRef = {
 		this.getClientElement(

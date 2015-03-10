@@ -4,12 +4,14 @@ import java.util
 
 import com.temportalist.origin.library.client.gui.{HealthOverlay, GuiRadialMenuHandler}
 import com.temportalist.origin.library.client.gui.config.GuiConfig
+import com.temportalist.origin.library.client.utility.Rendering
 import com.temportalist.origin.library.common.handlers.RegisterHelper
 import com.temportalist.origin.library.common.nethandler.PacketHandler
 import com.temportalist.origin.library.common.network.PacketSyncExtendedProperties
 import com.temportalist.origin.library.common.utility.ItemRenderingHelper
-import com.temportalist.origin.library.common.{ProxyCommon, Origin}
+import com.temportalist.origin.library.common.{CGOOptions, ProxyCommon, Origin}
 import net.minecraft.client.Minecraft
+import net.minecraft.client.audio.SoundCategory
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
@@ -31,6 +33,12 @@ class ProxyClient() extends ProxyCommon with IModGuiFactory {
 		ItemRenderingHelper.registerItemRenders()
 		RegisterHelper.registerHandler(GuiRadialMenuHandler, HealthOverlay)
 
+	}
+
+	override def postInit(): Unit = {
+		CGOOptions.volumeControls.foreach({ case (name: String, volume: Float) =>
+			Rendering.mc.gameSettings.setSoundLevel(SoundCategory.getCategory(name), volume)
+		})
 	}
 
 	@SubscribeEvent

@@ -1,8 +1,9 @@
 package com.temportalist.origin.library.common
 
 import java.util
+import java.util.UUID
 
-import com.temportalist.origin.library.client.utility.Rendering
+import com.temportalist.origin.api.IProxy
 import com.temportalist.origin.library.common.extended.ExtendedSync
 import com.temportalist.origin.library.common.handlers.{OptionHandler, RegisterHelper}
 import com.temportalist.origin.library.common.network._
@@ -10,7 +11,6 @@ import com.temportalist.origin.library.server.command.CommandOrigin
 import com.temportalist.origin.wrapper.common.ModWrapper
 import com.temportalist.origin.wrapper.common.item.ItemPlacer
 import net.minecraft.block.Block
-import net.minecraft.client.audio.SoundCategory
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.init.{Blocks, Items}
@@ -43,7 +43,7 @@ object Origin extends ModWrapper {
 	final val serverProxy = "com.temportalist.origin.library.server.ProxyServer"
 
 	@SidedProxy(clientSide = this.clientProxy, serverSide = this.serverProxy)
-	var proxy: ProxyCommon = null
+	var proxy: IProxy = null
 
 	var dimensions: util.HashMap[String, Int] = new util.HashMap[String, Int]
 	var dimensions1: util.HashMap[Int, String] = new util.HashMap[Int, String]
@@ -86,7 +86,7 @@ object Origin extends ModWrapper {
 
 	@Mod.EventHandler
 	def postInit(event: FMLPostInitializationEvent): Unit = {
-		super.postInitialize(event)
+		super.postInitialize(event, this.proxy)
 
 		if (!this.tabItems.isEmpty || !this.tabBlocks.isEmpty) {
 			val originTab: CreativeTabs = new CreativeTabs(Origin.MODID) {
@@ -103,11 +103,6 @@ object Origin extends ModWrapper {
 			}
 
 		}
-
-		// todo client side
-		CGOOptions.volumeControls.foreach({ case (name: String, volume: Float) =>
-			Rendering.mc.gameSettings.setSoundLevel(SoundCategory.getCategory(name), volume)
-		})
 
 	}
 
@@ -138,14 +133,16 @@ object Origin extends ModWrapper {
 
 	}
 
+	private final val temportalist: UUID = UUID.fromString("dcb7f6a8-9f0d-4d6d-81f0-356e7b05f78f")
+	private final val progwml6: UUID = UUID.fromString("83898b28-6118-4900-9137-41ffc46b6e10")
+
 	/**
 	 * SHHHHHHHH! SECRET PUMPKIN!
 	 * @param event
 	 */
 	@SubscribeEvent
 	def onPlayerJoin(event: PlayerLoggedInEvent): Unit = {
-		val playerName: String = event.player.getName
-		if (playerName.equals("progwml6")) {
+		if (event.player.getGameProfile.getId.equals(this.progwml6)) {
 			if (event.player.getCurrentArmor(3) == null) {
 				val secretPumpkin: ItemStack = new ItemStack(Blocks.pumpkin, 1, 0)
 				secretPumpkin.addEnchantment(Enchantment.unbreaking, 5)
@@ -156,11 +153,9 @@ object Origin extends ModWrapper {
 		}
 	}
 
-	///*
 	@SubscribeEvent
 	def serverChat(event: ServerChatEvent): Unit = {
-		if (event.username.equals("TheTemportalist")) {
-			// todo use uuid
+		if (event.player.getGameProfile.getId.equals(this.temportalist)) {
 			var color: EnumChatFormatting = null
 			while (color == null) {
 				color = EnumChatFormatting.values()(
@@ -171,17 +166,5 @@ object Origin extends ModWrapper {
 			event.component.setChatStyle(new ChatStyle().setColor(color))
 		}
 	}
-
-	//*/
-
-	/*
-	@SubscribeEvent
-	def onChat(event: ClientChatReceivedEvent): Unit = {
-		val parent: IChatComponent = event.message
-		println(event.message.getUnformattedText)
-		println(event.message.getUnformattedTextForChat)
-		println(event.message.getFormattedText)
-	}
-	*/
 
 }

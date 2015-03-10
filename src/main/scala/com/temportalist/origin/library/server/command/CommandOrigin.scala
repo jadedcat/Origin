@@ -5,6 +5,7 @@ import java.util
 import com.temportalist.origin.library.common.Origin
 import com.temportalist.origin.library.common.utility.{Player, Teleport}
 import net.minecraft.command.{CommandBase, ICommandSender}
+import net.minecraft.entity.SharedMonsterAttributes
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.BlockPos
@@ -26,7 +27,7 @@ object CommandOrigin extends CommandBase {
 	}
 
 	override def getCommandUsage(sender: ICommandSender): String =
-		"origin < tp < [x] [y] [z] <Dimension Name:_> > >|< set <player> <health|hunger|sat> <number> >"
+		"origin < tp < [x] [y] [z] <Dimension Name:_> > >|< set <player> <health|hunger|sat> <number> >|< setMaxHealth <player> <amount> >"
 
 	override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
 		if (args.length == 0) {
@@ -137,6 +138,19 @@ object CommandOrigin extends CommandBase {
 				else if (args(2).equals("sat")) {
 					player.getFoodStats.setFoodSaturationLevel(amount)
 				}
+			}
+		}
+		else if (commandType.equals("setMaxHealth")) {
+			val player: EntityPlayer = Player.getPlayer(args(1))
+			val amount: Int =
+				try {
+					args(2).toInt
+				}
+				catch {
+					case e: Exception => -1
+				}
+			if (amount > 0) {
+				player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(amount)
 			}
 		}
 
