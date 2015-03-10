@@ -6,7 +6,7 @@ import com.temportalist.origin.library.client.utility.Rendering
 import com.temportalist.origin.library.common.extended.ExtendedSync
 import com.temportalist.origin.library.common.handlers.{OptionHandler, RegisterHelper}
 import com.temportalist.origin.library.common.network._
-import com.temportalist.origin.library.server.command.TeleportCommand
+import com.temportalist.origin.library.server.command.CommandOrigin
 import com.temportalist.origin.wrapper.common.ModWrapper
 import com.temportalist.origin.wrapper.common.item.ItemPlacer
 import net.minecraft.block.Block
@@ -66,7 +66,7 @@ object Origin extends ModWrapper {
 		RegisterHelper.registerHandler(ExtendedSync, OptionHandler)
 		super.preInitialize(this.MODID, this.MODNAME, event, this.proxy, CGOOptions)
 
-		RegisterHelper.registerCommand(TeleportCommand)
+		RegisterHelper.registerCommand(CommandOrigin)
 
 		RegisterHelper.registerPacketHandler(this.MODID,
 			classOf[PacketSyncExtendedProperties],

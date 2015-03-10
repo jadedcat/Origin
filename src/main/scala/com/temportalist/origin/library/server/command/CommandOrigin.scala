@@ -6,13 +6,15 @@ import com.temportalist.origin.library.common.Origin
 import com.temportalist.origin.library.common.utility.{Player, Teleport}
 import net.minecraft.command.{CommandBase, ICommandSender}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.server.MinecraftServer
+import net.minecraft.util.BlockPos
 
 /**
  *
  *
  * @author TheTemportalist
  */
-object TeleportCommand extends CommandBase {
+object CommandOrigin extends CommandBase {
 
 	var aliases: util.List[String] = new util.ArrayList[String]()
 	this.aliases.add("origin")
@@ -24,7 +26,7 @@ object TeleportCommand extends CommandBase {
 	}
 
 	override def getCommandUsage(sender: ICommandSender): String =
-		"origin tp < [x] [y] [z] <Dimension Name:_> >"
+		"origin < tp < [x] [y] [z] <Dimension Name:_> > >|< set <player> <health|hunger|sat> <number> >"
 
 	override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
 		if (args.length == 0) {
@@ -116,8 +118,37 @@ object TeleportCommand extends CommandBase {
 				case _ =>
 			}
 		}
+		else if (commandType.equals("set") && args.length == 4) {
+			val player: EntityPlayer = Player.getPlayer(args(1))
+			val amount: Int =
+				try {
+					args(3).toInt
+				}
+				catch {
+					case e: Exception => -1
+				}
+			if (amount > -1) {
+				if (args(2).equals("health")) {
+					player.setHealth(amount)
+				}
+				else if (args(2).equals("hunger")) {
+					player.getFoodStats.setFoodLevel(amount)
+				}
+				else if (args(2).equals("sat")) {
+					player.getFoodStats.setFoodSaturationLevel(amount)
+				}
+			}
+		}
 
 	}
 
+	override def addTabCompletionOptions(sender: ICommandSender, args: Array[String],
+			pos: BlockPos): util.List[_] = {
+		if (args.length > 1 && args(0).equals("set"))
+			CommandBase.getListOfStringsMatchingLastWord(
+				args, util.Arrays.asList(MinecraftServer.getServer.getAllUsernames)
+			)
+		else null
+	}
 
 }

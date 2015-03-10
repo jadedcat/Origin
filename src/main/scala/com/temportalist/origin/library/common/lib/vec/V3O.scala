@@ -125,6 +125,8 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 
 	def toVec3i(): Vec3i = new Vec3i(this.x_i(), this.y_i(), this.z_i())
 
+	def toChunkPair(): ChunkCoordIntPair = new ChunkCoordIntPair(this.x_i(), this.z_i())
+
 	def getChunk(world: World): Chunk = this.toBlockCoord(world).getChunk()
 
 	def getBlockState(world: World): IBlockState = this.toBlockCoord(world).getBlockState()
@@ -258,6 +260,10 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 	def invert(): Unit = this.+=(-1)
 
 	// 3D Functions
+
+	def suppressedYAxis(): V3O = {
+		new V3O(this.x, 0, this.z)
+	}
 
 	def magSquared(): Double = {
 		this.x * this.x + this.y * this.y + this.z * this.z
@@ -408,6 +414,8 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 		hash = hash * 31 + this.z.hashCode()
 		hash
 	}
+
+	override def toString: String = "V3O{" + this.x + "|" + this.y + "|" + this.z + "}"
 
 }
 

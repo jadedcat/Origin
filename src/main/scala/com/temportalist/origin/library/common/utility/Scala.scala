@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack
 object Scala {
 
 	def foreach[T](collection: util.Collection[T], callback:(T) => Unit): Unit = {
+		if (collection == null) return
 		collection match {
 			case list: util.List[T] =>
 				for (item <- JavaConversions.asScalaBuffer(list)) callback(item)
@@ -28,18 +29,26 @@ object Scala {
 	}
 
 	def foreach(inv: IInventory, callback: (Int, ItemStack) => Unit): Unit = {
+		if (inv == null) return
 		for (i <- 0 until inv.getSizeInventory) callback(i, inv.getStackInSlot(i))
 	}
 
 	def foreach[T](data: Array[T], callback: (Int, T) => Unit): Unit = {
+		if (data == null) return
 		for (i <- 0 until data.length) {
 			callback(i, data(i))
 		}
 	}
 
 	def foreach[T](iter: lang.Iterable[T], callback: (Int, T) => Unit): Unit = {
+		if (iter == null) return
+		this.foreach(iter.iterator(), callback)
+	}
+
+	def foreach[T](iter: util.Iterator[T], callback: (Int, T) => Unit): Unit = {
+		if (iter == null) return
 		var i: Int = 0
-		JavaConversions.asScalaIterator(iter.iterator()).foreach(
+		JavaConversions.asScalaIterator(iter).foreach(
 			(t: T) => {
 				i += 1
 				callback(i, t)

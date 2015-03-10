@@ -6,8 +6,8 @@ import com.temportalist.origin.library.common.lib.TeleporterCore
 import com.temportalist.origin.library.common.lib.vec.V3O
 import net.minecraft.block.Block
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
+import net.minecraft.server.MinecraftServer
 import net.minecraft.util._
-import net.minecraft.world.chunk.Chunk
 import net.minecraft.world.{World, WorldServer}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.EnderTeleportEvent
@@ -32,7 +32,7 @@ object Teleport {
 				case player: EntityPlayerMP =>
 					val world: WorldServer = player.worldObj.asInstanceOf[WorldServer]
 					if (player.ridingEntity == null && player.riddenByEntity == null) {
-						player.mcServer.getConfigurationManager.transferPlayerToDimension(
+						MinecraftServer.getServer.getConfigurationManager.transferPlayerToDimension(
 							player, dimID, new TeleporterCore(world)
 						)
 						if (player.dimension == dimID) {
