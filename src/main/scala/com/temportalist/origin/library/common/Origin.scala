@@ -3,7 +3,6 @@ package com.temportalist.origin.library.common
 import java.util
 import java.util.UUID
 
-import com.temportalist.origin.api.IProxy
 import com.temportalist.origin.library.common.extended.ExtendedSync
 import com.temportalist.origin.library.common.handlers.{OptionHandler, RegisterHelper}
 import com.temportalist.origin.library.common.network._
@@ -43,7 +42,7 @@ object Origin extends ModWrapper {
 	final val serverProxy = "com.temportalist.origin.library.server.ProxyServer"
 
 	@SidedProxy(clientSide = this.clientProxy, serverSide = this.serverProxy)
-	var proxy: IProxy = null
+	var proxy: ProxyCommon = null
 
 	var dimensions: util.HashMap[String, Int] = new util.HashMap[String, Int]
 	var dimensions1: util.HashMap[Int, String] = new util.HashMap[Int, String]
