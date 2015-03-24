@@ -1,6 +1,6 @@
 package com.temportalist.origin.library.common.utility
 
-import java.io.{FileReader, File}
+import java.io.{Reader, File, FileReader}
 import java.util
 import java.util.Map.Entry
 
@@ -8,6 +8,7 @@ import com.google.common.io.Files
 import com.google.gson._
 import com.temportalist.origin.library.common.lib.NameParser
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt._
 import net.minecraftforge.common.config.Property
 import net.minecraftforge.fml.common.registry.GameRegistry
 
@@ -102,6 +103,135 @@ object Json {
 	}
 
 	def getJson(file: File): JsonElement = this.parser.parse(new FileReader(file))
+
+	def getJson(reader: Reader): JsonElement = this.parser.parse(reader)
+
+	def jsonToNBT(file: File): NBTBase = {
+		this.jsonToNBT(this.getJson(file))
+	}
+
+	val primitivePostfixes: List[Char] = List[Char]('B', 'S', 'I', 'L', 'F', 'D')
+
+	def jsonToNBT(json: JsonElement): NBTBase = {
+		var ret: NBTBase = null
+		json match {
+			case prim: JsonPrimitive =>
+				if (prim.isBoolean)
+					ret = new NBTTagByte(if (prim.getAsBoolean) 1 else 0)
+				else {
+					val value: String = prim.getAsString
+					val valueType: Char = value.last
+					if (this.primitivePostfixes.contains(valueType)) {
+						try {
+							val number: Double = value.substring(0, value.length - 1).toDouble
+							if (number.toByte == number)
+								ret = new NBTTagByte(number.toByte)
+							else if (number.toShort == number)
+								ret = new NBTTagShort(number.toShort)
+							else if (number.toInt == number)
+								ret = new NBTTagInt(number.toInt)
+							else if (number.toLong == number)
+								ret = new NBTTagLong(number.toLong)
+							else if (number.toFloat == number)
+								ret = new NBTTagFloat(number.toFloat)
+							else ret = new NBTTagDouble(number)
+						}
+						catch {
+							case e: NumberFormatException =>
+						}
+					}
+					if (ret == null)
+						ret = new NBTTagString(value)
+				}
+			case array: JsonArray =>
+
+				/**
+				 * 1 = Byte Array
+				 * 2 = Int Array
+				 * 3 = Tag List
+				 */
+				val localRetType: Byte =
+					if (array.size() > 0) {
+						val arrayType: Byte = this.jsonToNBT(array.get(0)).getId
+						if (arrayType == 1) 1
+						else if (arrayType == 3) 2
+						else 3
+					}
+					else 3
+				val data =
+					if (localRetType == 1) new Array[Byte](array.size())
+					else if (localRetType == 2) new Array[Int](array.size())
+					else new NBTTagList
+				Scala.foreach(array, (index: Int, element: JsonElement) => {
+					if (localRetType == 1)
+						data.asInstanceOf[Array[Byte]](index) =
+								this.jsonToNBT(element).asInstanceOf[NBTTagByte].getByte
+					else if (localRetType == 2)
+						data.asInstanceOf[Array[Int]](index) =
+								this.jsonToNBT(element).asInstanceOf[NBTTagInt].getInt
+					else data.asInstanceOf[NBTTagList].appendTag(this.jsonToNBT(element))
+				})
+				ret = if (localRetType == 1) new NBTTagByteArray(data.asInstanceOf[Array[Byte]])
+				else if (localRetType == 2) new NBTTagIntArray(data.asInstanceOf[Array[Int]])
+				else data.asInstanceOf[NBTTagList]
+			case obj: JsonObject =>
+				val tag: NBTTagCompound = new NBTTagCompound
+				Scala.foreach(obj.entrySet(), (entry: Entry[String, JsonElement]) => {
+					tag.setTag(entry.getKey, this.jsonToNBT(entry.getValue))
+				})
+				ret = tag
+			case _ =>
+		}
+		ret
+	}
+
+	def nbtToJson(nbt: NBTBase): JsonElement = {
+		nbt match {
+			case b: NBTTagByte => this.objectToJson(b.getByte)
+			case s: NBTTagShort => this.objectToJson(s.getShort)
+			case i: NBTTagInt => this.objectToJson(i.getInt)
+			case l: NBTTagLong => this.objectToJson(l.getLong)
+			case f: NBTTagFloat => this.objectToJson(f.getFloat)
+			case d: NBTTagDouble => this.objectToJson(d.getDouble)
+			case ab: NBTTagByteArray => this.objectToJson(ab.getByteArray)
+			case s: NBTTagString => this.objectToJson(s.getString)
+			case list: NBTTagList =>
+				val array: JsonArray = new JsonArray
+				Scala.foreach(list, (index: Int, any: Any) => {
+					array.add(this.nbtToJson(any.asInstanceOf[NBTBase]))
+				}: Unit)
+				array
+			case comp: NBTTagCompound =>
+				val json: JsonObject = new JsonObject
+				Scala.foreach(comp, (key: String, nbt: NBTBase) => {
+					json.add(key, this.nbtToJson(nbt))
+				}: Unit)
+				json
+			case ai: NBTTagIntArray => this.objectToJson(ai.getIntArray)
+			case _ => null
+		}
+	}
+
+	def objectToJson(any: Any): JsonElement = {
+		any match {
+			case b: Byte => this.objectToJson(b.toString + this.primitivePostfixes(0))
+			case s: Short => this.objectToJson(s.toString + this.primitivePostfixes(1))
+			case i: Int => this.objectToJson(i.toString + this.primitivePostfixes(2))
+			case l: Long => this.objectToJson(l.toString + this.primitivePostfixes(3))
+			case f: Float => this.objectToJson(f.toString + this.primitivePostfixes(4))
+			case d: Double => this.objectToJson(d.toString + this.primitivePostfixes(5))
+			case ab: Array[Byte] =>
+				val array: JsonArray = new JsonArray
+				for (b: Byte <- ab) array.add(this.objectToJson(b))
+				array
+			case s: String => new JsonPrimitive(s)
+			case ai: Array[Int] =>
+				val array: JsonArray = new JsonArray
+				for (i: Int <- ai) array.add(this.objectToJson(i))
+				array
+			case _ => null
+		}
+	}
 
 	object Config {
 

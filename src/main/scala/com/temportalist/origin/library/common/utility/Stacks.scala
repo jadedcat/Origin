@@ -15,7 +15,7 @@ import net.minecraft.world.World
  *
  * @author TheTemportalist
  */
-object Drops {
+object Stacks {
 
 	def spawnDrops(world: World, pos: BlockPos, drops: util.List[ItemStack]): Unit = {
 		if (!drops.isEmpty) {
@@ -24,7 +24,7 @@ object Drops {
 			for (i <- 0 until drops.size()) {
 				drop = drops.get(i)
 				if (drop != null && drop.getItem != null) {
-					Drops.spawnItemStack(world, pos, drop, random, 10)
+					Stacks.spawnItemStack(world, pos, drop, random, 10)
 				}
 			}
 		}
@@ -60,6 +60,16 @@ object Drops {
 	def spawnItemStack(world: World, pos: BlockPos, state: IBlockState, random: Random,
 			delay: Int): Unit = {
 		this.spawnItemStack(world, pos, States.getStack(state), random, delay)
+	}
+
+	def areStacksMatching(a: ItemStack, b: ItemStack): Boolean =
+		this.areStacksMatching(a, b, checkSize = false, checkNBT = true)
+
+	def areStacksMatching(a: ItemStack, b: ItemStack, checkSize: Boolean,
+			checkNBT: Boolean): Boolean = {
+		a.getItem == b.getItem && a.getItemDamage == b.getItemDamage &&
+				(!checkSize || a.stackSize == b.stackSize) &&
+				(!checkNBT || ItemStack.areItemStackTagsEqual(a, b))
 	}
 
 }

@@ -30,14 +30,14 @@ trait IRenderingObject {
 			this.getItem(),
 			new ItemMeshDefinition {
 				override def getModelLocation(stack: ItemStack): ModelResourceLocation =
-					getModelLoc(isItem = true)
+					getModelLoc(isItem = true, stack)
 			}
 		)
 		if (this.getBlock() != null) ModelLoader.setCustomStateMapper(
 			this.getBlock(), new StateMapperBase {
 				override def getModelResourceLocation(
 						iBlockState: IBlockState): ModelResourceLocation =
-					getModelLoc(isItem = false)
+					getModelLoc(isItem = false, null)
 			}
 		)
 	}
@@ -45,12 +45,12 @@ trait IRenderingObject {
 	@SideOnly(Side.CLIENT)
 	def bakeModel(reg: IRegistry): Unit = {
 		if (this.getBakedModel() != null) {
-			reg.getObject(this.getModelLoc(this.isInstanceOf[Item]), this.getBakedModel())
+			reg.getObject(this.getModelLoc(this.isInstanceOf[Item], null), this.getBakedModel())
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	def getModelLoc(isItem: Boolean): ModelResourceLocation = {
+	def getModelLoc(isItem: Boolean, stack: ItemStack): ModelResourceLocation = {
 		new ModelResourceLocation(this.getCompoundName(),
 			if (isItem) "inventory" else "normal"
 		)

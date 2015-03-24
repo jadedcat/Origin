@@ -32,7 +32,7 @@ object Rendering {
 	def itemMesher: ItemModelMesher = this.renderItem.getItemModelMesher
 
 	def bindResource(rl: ResourceLocation): Unit = {
-		Minecraft.getMinecraft.getTextureManager.bindTexture(rl)
+		Rendering.mc.getTextureManager.bindTexture(rl)
 	}
 
 	def drawTextureRect(x: Int, y: Int, u: Int, v: Int, width: Int, height: Int): Unit = {
@@ -84,6 +84,14 @@ object Rendering {
 			w - rightOffset - leftOffset,
 			h - bottomOffset - topOffset
 		)
+	}
+
+	def getSprite(iconName: String): TextureAtlasSprite =
+		Rendering.mc.getTextureMapBlocks.getAtlasSprite(iconName)
+
+	def drawSprite(x: Double, y: Double, z: Double, location: ResourceLocation, w: Double,
+			h: Double): Unit = {
+		this.drawSprite(x, y, z, this.getSprite(location.toString), w, h)
 	}
 
 	def drawSprite(x: Double, y: Double, z: Double, sprite: TextureAtlasSprite, w: Double,

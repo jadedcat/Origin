@@ -143,8 +143,4 @@ class ItemWrapper(val modid: String, name: String) extends Item with IRenderingO
 		super.addInformation(itemStack, player, list, isAdvanced)
 	}
 
-	protected def addInfo(list: util.List[_], obj: Any): Unit = {
-		list.asInstanceOf[util.List[Any]].add(obj)
-	}
-
 }

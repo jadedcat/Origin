@@ -7,6 +7,7 @@ import com.temportalist.origin.library.common.extended.ExtendedSync
 import com.temportalist.origin.library.common.handlers.{OptionHandler, RegisterHelper}
 import com.temportalist.origin.library.common.network._
 import com.temportalist.origin.library.server.command.CommandOrigin
+import com.temportalist.origin.test.{PacketUpdateMode, Sonic}
 import com.temportalist.origin.wrapper.common.ModWrapper
 import com.temportalist.origin.wrapper.common.item.ItemPlacer
 import net.minecraft.block.Block
@@ -71,16 +72,18 @@ object Origin extends ModWrapper {
 			classOf[PacketSyncExtendedProperties],
 			classOf[PacketTeleport],
 			classOf[PacketRedstoneUpdate],
-			classOf[PacketActionUpdate]
+			classOf[PacketActionUpdate], classOf[PacketUpdateMode]
 		)
 
 		this.placer = new ItemPlacer(Origin.MODID, "placer")
+		Sonic.preInit(event.getModConfigurationDirectory)
 
 	}
 
 	@Mod.EventHandler
 	def init(event: FMLInitializationEvent): Unit = {
 		super.initialize(event, this.proxy)
+		println(Sonic.entityStates)
 	}
 
 	@Mod.EventHandler
@@ -102,6 +105,8 @@ object Origin extends ModWrapper {
 			}
 
 		}
+
+		Sonic.postInit()
 
 	}
 

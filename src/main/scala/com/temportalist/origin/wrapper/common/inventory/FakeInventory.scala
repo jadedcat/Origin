@@ -64,15 +64,15 @@ class FakeInventory(var holderStack: ItemStack, var inventorySize: Int, var stac
 		this.markDirty
 	}
 
-	override def getName: String = if (this.holderStack != null) this.holderStack.getDisplayName else ""
+	override def getCommandSenderName: String = if (this.holderStack != null) this.holderStack.getDisplayName else ""
 
 	override def hasCustomName: Boolean = false
 
 	override def getDisplayName: IChatComponent =
 		(if (this.hasCustomName)
-			new ChatComponentText(this.getName)
+			new ChatComponentText(this.getCommandSenderName)
 		else
-			new ChatComponentTranslation(this.getName, new Array[AnyRef](0))
+			new ChatComponentTranslation(this.getCommandSenderName, new Array[AnyRef](0))
 		).asInstanceOf[IChatComponent]
 
 	def getInventoryStackLimit: Int = {

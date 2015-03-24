@@ -1,5 +1,4 @@
 itemGroup.origin=Temportal
 
-item.lambchop.name=Lambchop
-item.lambchop_raw.name=Lambchop Raw
+item.origin:screwdriver.name=Screwdriver
 

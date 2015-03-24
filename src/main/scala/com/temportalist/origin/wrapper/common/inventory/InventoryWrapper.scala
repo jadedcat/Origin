@@ -21,7 +21,7 @@ class InventoryWrapper(var name: String, var inventorySize: Int, var ownerStack:
 
 	}
 
-	override def getName: String = this.name
+	override def getCommandSenderName: String = this.name
 
 	def isItemInventory: Boolean = {
 		this.ownerStack != null

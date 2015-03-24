@@ -24,7 +24,7 @@ import org.lwjgl.opengl.GL11
 trait IGuiScreen extends GuiScreen {
 
 	protected val defaultTextColor: Int = 4210752
-	
+
 	/** Starting X position for the Gui. Inconsistent use for Gui backgrounds. */
 	protected var guiX: Int = 0
 	/** Starting Y position for the Gui. Inconsistent use for Gui backgrounds. */
@@ -224,8 +224,7 @@ trait IGuiScreen extends GuiScreen {
 	}
 
 	protected def addInformationOnHover(mouseX: Int, mouseY: Int,
-			renderPartialTicks: Float, hoverInfo: util.List[String]): Unit = {
-	}
+			renderPartialTicks: Float, hoverInfo: util.List[String]): Unit = {}
 
 	protected def renderHoverInformation(mouseX: Int, mouseY: Int,
 			hoverInfo: util.List[String]): Unit

@@ -7,6 +7,7 @@ import scala.collection.{mutable, JavaConversions}
 
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.{NBTBase, NBTTagCompound, NBTTagList}
 
 /**
  *
@@ -50,10 +51,22 @@ object Scala {
 		var i: Int = 0
 		JavaConversions.asScalaIterator(iter).foreach(
 			(t: T) => {
-				i += 1
 				callback(i, t)
+				i += 1
 			}
 		)
+	}
+
+	def foreach[T](tagList: NBTTagList, callback: (Int, Any) => Unit): Unit = {
+		for (i <- 0 until tagList.tagCount()) {
+			callback(i, NBTHelper.getTagValueAt(tagList, i))
+		}
+	}
+
+	def foreach(tagCom: NBTTagCompound, callback: (String, NBTBase) => Unit): Unit = {
+		Scala.foreach(tagCom.getKeySet, (i: Int, key: Any) => {
+			callback(key.asInstanceOf[String], tagCom.getTag(key.asInstanceOf[String]))
+		}: Unit)
 	}
 
 	def fill[B](size: Int, obj: B): Map[Int, B] = {

@@ -3,7 +3,7 @@ package com.temportalist.origin.wrapper.common.item
 import java.util
 
 import com.temportalist.origin.library.common.lib.vec.V3O
-import com.temportalist.origin.library.common.utility.WorldHelper
+import com.temportalist.origin.library.common.utility.{Generic, WorldHelper}
 import net.minecraft.block.BlockFence
 import net.minecraft.block.state.IBlockState
 import net.minecraft.creativetab.CreativeTabs
@@ -36,7 +36,7 @@ class ItemPlacer(modid: String, name: String) extends ItemWrapper(modid, name) {
 				EntityList.classToStringMapping.get(ItemPlacer.classes.get(i)).toString
 			)
 			stack.setTagCompound(tag)
-			this.addInfo(subItems, stack)
+			Generic.addToList(subItems, stack)
 		}
 	}
 
@@ -149,7 +149,7 @@ class ItemPlacer(modid: String, name: String) extends ItemWrapper(modid, name) {
 				)
 				living.rotationYawHead = living.rotationYaw
 				living.renderYawOffset = living.rotationYaw
-				living.asInstanceOf[EntityLiving].onSpawnFirstTime(
+				living.asInstanceOf[EntityLiving].onInitialSpawn(
 					entity.getEntityWorld.getDifficultyForLocation(pos.toBlockPos()),
 					null
 				)

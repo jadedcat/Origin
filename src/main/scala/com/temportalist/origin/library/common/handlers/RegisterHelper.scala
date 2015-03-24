@@ -4,6 +4,8 @@ import java.util
 
 import scala.collection.JavaConversions._
 
+import com.temportalist.origin.api.rendering.ISpriteMapper
+import com.temportalist.origin.library.common.Origin
 import com.temportalist.origin.library.common.nethandler.{IPacket, PacketHandler}
 import com.temportalist.origin.wrapper.common.extended.{ExtendedEntity, ExtendedEntityHandler}
 import net.minecraft.command.ICommand
@@ -40,6 +42,10 @@ object RegisterHelper {
 	def registerExtendedPlayer(classKey: String, extendedClass: Class[_ <: ExtendedEntity],
 			deathPersistance: Boolean): Unit = {
 		ExtendedEntityHandler.registerExtended(classKey, extendedClass, deathPersistance)
+	}
+
+	def registerSpritee(spritee: ISpriteMapper): Unit = {
+		Origin.proxy.registerSpritee(spritee)
 	}
 
 	private val commands: util.List[ICommand] = new util.ArrayList[ICommand]()

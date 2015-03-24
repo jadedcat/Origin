@@ -5,8 +5,8 @@ import java.util
 import com.temportalist.origin.library.client.utility.TessRenderer
 import com.temportalist.origin.library.common.lib.IRadialSelection
 import com.temportalist.origin.wrapper.client.gui.IGuiScreen
-import net.minecraft.client.gui.ScaledResolution
-import net.minecraft.client.renderer.{GlStateManager, RenderHelper}
+import net.minecraft.client.gui.{GuiButton, ScaledResolution}
+import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 
@@ -22,20 +22,20 @@ abstract class GuiRadialMenu(
 
 	this.setSize(outerRadius * 2, outerRadius * 2)
 
-	val animationTimer: Int = 20
+	val animationTimer: Int = 0
 
 	var selectedLocalIndex: Int = -1
 
 	def shouldSelect(): Boolean
 
 	def selectCurrent(): Unit = {
-		if (this.selectedLocalIndex >= 0) {
-			this.sendPacket(this.selectedLocalIndex)
-		}
 		this.dismiss()
+		if (this.selectedLocalIndex >= 0) {
+			this.onSelectionOf(this.selectedLocalIndex, this.selections.get(this.selectedLocalIndex))
+		}
 	}
 
-	def sendPacket(index: Int): Unit
+	def onSelectionOf(index: Int, item: IRadialSelection): Unit
 
 	def renderMenu(): Unit = {
 		val zLevel: Double = 0.05D
@@ -52,19 +52,37 @@ abstract class GuiRadialMenu(
 	def renderRadial(resolution: ScaledResolution, zLevel: Double,
 			quantity: Int, anglePer: Double): Unit = {
 		GlStateManager.pushMatrix()
+		//GL11.glPushMatrix()
 
 		GlStateManager.disableTexture2D()
+		//GL11.glDisable(GL11.GL_TEXTURE_2D)
 
 		GlStateManager.enableBlend()
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+		//GL11.glEnable(GL11.GL_BLEND)
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
 
+		///*
+		GlStateManager.matrixMode(GL11.GL_MODELVIEW)
+		GlStateManager.pushMatrix()
+		GlStateManager.loadIdentity()
+		//*/
+		/*
 		GL11.glMatrixMode(GL11.GL_MODELVIEW)
-		GlStateManager.pushMatrix()
-		GlStateManager.loadIdentity()
+		GL11.glPushMatrix()
+		GL11.glLoadIdentity()
+		*/
 
-		GL11.glMatrixMode(GL11.GL_PROJECTION)
+		///*
+		GlStateManager.matrixMode(GL11.GL_PROJECTION)
 		GlStateManager.pushMatrix()
 		GlStateManager.loadIdentity()
+		//*/
+		/*
+		GL11.glMatrixMode(GL11.GL_PROJECTION)
+		GL11.glPushMatrix()
+		GL11.glLoadIdentity()
+		*/
 
 		val mouseAngle = this.correctAngle(this.getMouseAngle() - 270)
 
@@ -86,24 +104,34 @@ abstract class GuiRadialMenu(
 				((this.outerRadius - animationTimer + (if (isMouseIn) 1 else 2)) / 100F) *
 						(257F / resolution.getScaledHeight.toFloat)
 
+			TessRenderer.startQuads()
+
+			///*
 			if (isMouseIn) {
-				GlStateManager.color(28F / 255F, 232F / 255F, 31F / 255F, 153F / 255F)
+				TessRenderer.getRenderer().setColorRGBA_F(
+					28F / 255F, 232F / 255F, 31F / 255F, 153F / 255F
+				)
 				this.selectedLocalIndex = i
 			}
 			else {
-				GlStateManager.color(0F / 255F, 0F / 255F, 0F / 255F, 153F / 255F)
+				TessRenderer.getRenderer().setColorRGBA_F(
+					0F / 255F, 0F / 255F, 0F / 255F, 153F / 255F
+				)
 			}
-
-			TessRenderer.startQuads()
+			//*/
 
 			TessRenderer.addVertex(
-				Math.cos(currAngle) * resolution.getScaledHeight_double() /
-						resolution.getScaledWidth_double() * innerR,
+				Math.cos(currAngle) *
+						resolution.getScaledHeight_double /
+						resolution.getScaledWidth_double *
+						innerR,
 				Math.sin(currAngle) * innerR, 0
 			)
 			TessRenderer.addVertex(
-				Math.cos(currAngle) * resolution.getScaledHeight_double() /
-						resolution.getScaledWidth_double() * outerR,
+				Math.cos(currAngle) *
+						resolution.getScaledHeight_double /
+						resolution.getScaledWidth_double *
+						outerR,
 				Math.sin(currAngle) * outerR, 0
 			)
 			TessRenderer.addVertex(
@@ -121,8 +149,9 @@ abstract class GuiRadialMenu(
 
 		}
 
+		///*
 		GlStateManager.popMatrix()
-		GL11.glMatrixMode(GL11.GL_MODELVIEW)
+		GlStateManager.matrixMode(GL11.GL_MODELVIEW)
 		GlStateManager.popMatrix()
 
 		GlStateManager.disableBlend()
@@ -130,21 +159,26 @@ abstract class GuiRadialMenu(
 		GlStateManager.enableTexture2D()
 
 		GlStateManager.popMatrix()
+		//*/
+		/*
+		GL11.glPopMatrix()
+		GL11.glMatrixMode(GL11.GL_MODELVIEW)
+		GL11.glPopMatrix()
+		GL11.glDisable(GL11.GL_BLEND)
+		GL11.glEnable(GL11.GL_TEXTURE_2D)
+		GL11.glPopMatrix()
+		*/
+
 	}
 
 	def renderIconsAndText(resolution: ScaledResolution, zLevel: Double,
 			quantity: Int, anglePer: Double): Unit = {
 		GlStateManager.pushMatrix()
 
-		GlStateManager.translate(resolution.getScaledWidth_double() / 2,
-			resolution.getScaledHeight_double() / 2, 0)
-		RenderHelper.enableGUIStandardItemLighting()
-
-		//val tessellator: Tessellator = Tessellator.getInstance()
-
-		// bind what used to be TextureMap.locationItemsTexture
-		//this.mc.renderEngine.bindTexture(TextureMap.locationItemsTexture)
-		//Rendering.bindResource(TextureMap.)
+		GlStateManager.translate(
+			resolution.getScaledWidth_double / 2,
+			resolution.getScaledHeight_double / 2, 0
+		)
 
 		var selection: IRadialSelection = null
 		for (i <- 0 until quantity) {
@@ -159,13 +193,12 @@ abstract class GuiRadialMenu(
 				drawX = length * Math.cos(StrictMath.toRadians(angle))
 				drawY = length * Math.sin(StrictMath.toRadians(angle))
 				val dif: Double = this.outerRadius.toDouble / this.innerRadius.toDouble
-				val iconX: Double = drawX * dif
-				val iconY: Double = drawY * dif * 0.9D
+				val iconX: Double = drawX * dif * 0.7D
+				val iconY: Double = drawY * dif * 0.7D
 
 				selection.draw(this.mc, iconX, iconY, zLevel, 32, 32)
 			}
 		}
-		RenderHelper.disableStandardItemLighting()
 
 		GlStateManager.popMatrix()
 	}
@@ -209,5 +242,18 @@ abstract class GuiRadialMenu(
 	}
 
 	override def drawScreen(mouseX: Int, mouseY: Int, renderPartialTicks: Float): Unit = {}
+
+	override protected def addButton(button: GuiButton): Unit = {}
+
+	override protected def renderHoverInformation(mouseX: Int, mouseY: Int,
+			hoverInfo: util.List[String]): Unit = {
+		this.drawHoveringText(hoverInfo, mouseX, mouseY)
+		this.drawHoveringText(hoverInfo, mouseX, mouseY, this.fontRendererObj)
+	}
+
+	override def drawString(string: String, x: Int, y: Int, color: Int): Unit =
+		this.fontRendererObj.drawString(string, x, y, color)
+
+	override def getStringWidth(string: String): Int = this.fontRendererObj.getStringWidth(string)
 
 }

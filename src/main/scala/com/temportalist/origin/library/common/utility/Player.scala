@@ -19,7 +19,7 @@ object Player {
 		for (i <- 0 until players.size()) {
 			players.get(i) match {
 				case player: EntityPlayerMP =>
-					if (player.getName.equals(senderNameORuuid) ||
+					if (player.getCommandSenderName.equals(senderNameORuuid) ||
 							player.getUniqueID.equals(senderNameORuuid)) {
 						return player
 					}

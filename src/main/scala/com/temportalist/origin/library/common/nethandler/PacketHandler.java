@@ -127,6 +127,11 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<IPacket> {
 		return false;
 	}
 
+	public static void sendToServerAndClients(String channel, IPacket packet) {
+		PacketHandler.sendToServer(channel, packet);
+		PacketHandler.sendToClients(channel, packet);
+	}
+
 	public static boolean sync(String channel, IPacket packet) {
 		return PacketHandler.sendToServer(channel, packet) && PacketHandler.sendToClients(channel,
 				packet);

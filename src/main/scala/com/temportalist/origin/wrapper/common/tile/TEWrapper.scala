@@ -26,9 +26,7 @@ class TEWrapper(var name: String) extends TileEntity() with IInv with ITank with
 	 * Returns the name of this tile entity
 	 * @return
 	 */
-	def getName: String = {
-		this.name
-	}
+	override def getCommandSenderName: String = this.name
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Write/Read NBT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -111,9 +111,9 @@ trait IInv extends IInventory with ISidedInventory {
 
 	override def getDisplayName: IChatComponent =
 		(if (this.hasCustomName)
-			new ChatComponentText(this.getName)
+			new ChatComponentText(this.getCommandSenderName)
 		else
-			new ChatComponentTranslation(this.getName, new Array[AnyRef](0))
+			new ChatComponentTranslation(this.getCommandSenderName, new Array[AnyRef](0))
 				).asInstanceOf[IChatComponent]
 
 	override def getSlotsForFace(side: EnumFacing): Array[Int] =

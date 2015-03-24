@@ -2,7 +2,7 @@ package com.temportalist.origin.wrapper.common.block
 
 import java.util
 import com.temportalist.origin.api.rendering.IRenderingObject
-import com.temportalist.origin.library.common.utility.{Drops, ItemRenderingHelper}
+import com.temportalist.origin.library.common.utility.{Stacks, ItemRenderingHelper}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
@@ -81,7 +81,7 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 	override def removedByPlayer(world: World, pos: BlockPos, player: EntityPlayer,
 			willHarvest: Boolean): Boolean = {
 		if (!player.capabilities.isCreativeMode)
-			Drops.spawnDrops(world, pos,
+			Stacks.spawnDrops(world, pos,
 				this.getDrops_Pre(world, pos, world.getBlockState(pos), world.getTileEntity(pos))
 			)
 		super.removedByPlayer(world, pos, player, willHarvest)

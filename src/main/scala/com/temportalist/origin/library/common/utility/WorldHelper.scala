@@ -33,6 +33,8 @@ object WorldHelper {
 		else this.getWorld_client()
 	}
 
+	def isOverworld(world: World): Boolean = world.provider.getDimensionId == 0
+
 	@SideOnly(Side.CLIENT)
 	def getWorld_client(): World = Minecraft.getMinecraft.theWorld
 

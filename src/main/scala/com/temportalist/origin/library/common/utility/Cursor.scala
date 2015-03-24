@@ -1,9 +1,11 @@
 package com.temportalist.origin.library.common.utility
 
+import java.util
+
 import com.temportalist.origin.library.common.lib.vec.V3O
-import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
-import net.minecraft.util.{EnumFacing, MovingObjectPosition}
+import net.minecraft.util._
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraft.world.World
 
@@ -20,8 +22,7 @@ object Cursor {
 	 * @return
 	 */
 	def getHeadPos(entity: EntityLivingBase): V3O = {
-		val vec: V3O = new V3O(entity)
-		vec.add(0, entity.getEyeHeight, 0)
+		val vec: V3O = new V3O(entity) + new V3O(0, entity.getEyeHeight, 0)
 		entity match {
 			case player: EntityPlayer =>
 				if (player.worldObj.isRemote)
@@ -80,6 +81,74 @@ object Cursor {
 			side = 1
 		}
 		new V3O(blockX, blockY, blockZ) + EnumFacing.getFront(side)
+	}
+
+	def raytraceWorld(world: World, player: EntityPlayer): MovingObjectPosition = {
+		val reach: Double = Player.getReachDistance(player)
+		val head: V3O = Cursor.getHeadPos(player)
+		val look: V3O = new V3O(player.getLook(1f))
+		val lookReach: V3O = look * reach
+		val cursorPos: V3O = head + lookReach
+
+		var retMop: MovingObjectPosition = world.rayTraceBlocks(
+			head.toVec3(), cursorPos.toVec3(), false, false, false
+		)
+
+		// the rest is for entities
+
+		val expansion: Float = 1f
+		val entities: util.List[Entity] = world.getEntitiesWithinAABBExcludingEntity(
+			player, player.getEntityBoundingBox.addCoord(lookReach.x, lookReach.y, lookReach.z)
+					.expand(expansion, expansion, expansion)
+		).asInstanceOf[util.List[Entity]]
+		var lastDistance: Double = reach
+
+		var pointedEntity: Entity = null
+		var entityVector: Vec3 = null
+
+		Scala.foreach(entities, (index: Int, entity: Entity) => {
+
+			if (entity.canBeCollidedWith) {
+
+				val entityExpansion: Double = entity.getCollisionBorderSize
+				val aabb: AxisAlignedBB = entity.getEntityBoundingBox
+						.expand(entityExpansion, entityExpansion, entityExpansion)
+				val mop: MovingObjectPosition = aabb
+						.calculateIntercept(head.toVec3(), cursorPos.toVec3())
+
+				if (aabb.isVecInside(head.toVec3())) {
+					if (lastDistance >= 0.0D) {
+						pointedEntity = entity
+						entityVector = if (mop == null) head.toVec3() else mop.hitVec
+						lastDistance = 0.0D
+					}
+				}
+				else if (mop != null) {
+					val distanceToEntity: Double = head.toVec3().distanceTo(mop.hitVec)
+					if (distanceToEntity < lastDistance || lastDistance == 0.0D) {
+						if (entity == player.ridingEntity && !player.canRiderInteract) {
+							if (lastDistance == 0.0D) {
+								pointedEntity = entity
+								entityVector = mop.hitVec
+							}
+						}
+						else {
+							pointedEntity = entity
+							entityVector = mop.hitVec
+							lastDistance = distanceToEntity
+						}
+					}
+				}
+
+			}
+
+		})
+
+		if (pointedEntity != null && (lastDistance < reach || retMop == null)) {
+			retMop = new MovingObjectPosition(pointedEntity, entityVector)
+		}
+
+		retMop
 	}
 
 }

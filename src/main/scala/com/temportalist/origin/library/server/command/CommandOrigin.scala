@@ -22,7 +22,7 @@ object CommandOrigin extends CommandBase {
 
 	override def getCommandName: String = this.aliases.get(0)
 
-	override def getAliases: util.List[_] = {
+	override def getCommandAliases: util.List[_] = {
 		this.aliases
 	}
 
