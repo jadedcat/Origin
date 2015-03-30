@@ -242,6 +242,8 @@ trait IGuiScreen extends GuiScreen {
 		(x <= mouseX) && (mouseX <= x + w) && (y <= mouseY) && (mouseY <= y + h)
 	}
 
+	protected def bindTexture(rl: ResourceLocation): Unit = this.mc.renderEngine.bindTexture(rl)
+
 	protected def drawLine(x1: Int, y1: Int, x2: Int, y2: Int, thickness: Int, color: Int): Unit = {
 		GL11.glDisable(3553)
 

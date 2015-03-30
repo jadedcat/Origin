@@ -28,7 +28,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<IPacket> {
 	private static final Map<String, PacketHandler> TRACKER = new HashMap<String, PacketHandler>();
 
 	public static boolean registerHandler(String pluginID,
-			Class<? extends IPacket>[] packetClasses) {
+			Class<? extends IPacket>... packetClasses) {
 		if (!PacketHandler.TRACKER.containsKey(pluginID.toLowerCase())) {
 			PacketHandler handler = new PacketHandler(pluginID, packetClasses);
 

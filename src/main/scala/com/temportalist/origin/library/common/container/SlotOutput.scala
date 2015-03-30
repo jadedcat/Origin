@@ -1,4 +1,4 @@
-package com.temportalist.origin.wrapper.common.inventory
+package com.temportalist.origin.library.common.container
 
 import net.minecraft.inventory.{IInventory, Slot}
 import net.minecraft.item.ItemStack
@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack
  *
  * @author TheTemportalist
  */
-class OutputSlot(inv: IInventory, id: Int, x: Int, y: Int) extends Slot(inv, id, x, y) {
+class SlotOutput(inv: IInventory, id: Int, x: Int, y: Int) extends Slot(inv, id, x, y) {
 
 	override def isItemValid(par1ItemStack: ItemStack): Boolean = {
 		false

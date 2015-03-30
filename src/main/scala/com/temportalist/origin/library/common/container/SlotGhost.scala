@@ -1,4 +1,4 @@
-package com.temportalist.origin.wrapper.common.inventory
+package com.temportalist.origin.library.common.container
 
 import net.minecraft.entity.player.{EntityPlayer, InventoryPlayer}
 import net.minecraft.inventory.{IInventory, Slot}
@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack
  *
  * @author TheTemportalist
  */
-class GhostSlot(inv: IInventory, slotID: Int, x: Int, y: Int) extends Slot(inv, slotID, x, y) {
+class SlotGhost(inv: IInventory, slotID: Int, x: Int, y: Int) extends Slot(inv, slotID, x, y) {
 
 	var maxStackSize: Int = -1
 

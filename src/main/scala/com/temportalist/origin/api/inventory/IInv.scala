@@ -47,50 +47,36 @@ trait IInv extends IInventory with ISidedInventory {
 
 	override def getStackInSlotOnClosing(index: Int): ItemStack = this.getStackInSlot(index)
 
-	override def setInventorySlotContents(index: Int, stack: ItemStack): Unit = {
-		if (this.isValidSlot(index)) {
-			if (stack == null) this.slots(index) = null
-			else this.slots(index) = stack.copy()
+	override def setInventorySlotContents(slot: Int, stack: ItemStack): Unit = {
+		if (this.isValidSlot(slot)) {
+			this.slots(slot) = stack
+			if ((stack != null) && (stack.stackSize > getInventoryStackLimit))
+				stack.stackSize = getInventoryStackLimit
+			this.onStackChange(slot)
+			this.markChunkModified()
 		}
 	}
 
-	override def decrStackSize(slotID: Int, decrement: Int): ItemStack = {
-		if (this.isValidSlot(slotID)) {
-			// check to see of stack in slot is occupied
-			if (this.slots(slotID) != null) {
-				// get a copy of stack in slot
-				var itemStack: ItemStack = this.slots(slotID).copy()
-				// if extracting more than exists
-				if (itemStack.stackSize <= decrement) {
-					// remove internal stack
-					this.slots(slotID) = null
-					// mark for resync
-					this.markDirty()
-					// return the extracted stack
-					return itemStack
-				}
-				else {
-					// split the stack in slot by the decrement,
-					// leaving (stack in slot's stack size - decrement)
-					// of the internal stack behind
-					itemStack = this.slots(slotID).splitStack(decrement)
-
-					// if the stack in slot is non existant
-					if (this.slots(slotID).stackSize <= 0) {
-						// remove the dead stack
-						this.slots(slotID) = null
-					}
-
-					// mark for resync
-					this.markDirty()
-					// return the extracted stack
-					return itemStack
-				}
+	override def decrStackSize(slot: Int, decrement: Int): ItemStack = {
+		if (this.isValidSlot(slot)) {
+			if (this.slots(slot) == null) return null
+			val amount: Int =
+				if (this.slots(slot).stackSize <= decrement) this.slots(slot).stackSize
+				else decrement
+			val localItemStack: ItemStack = this.slots(slot).splitStack(amount)
+			if (this.slots(slot).stackSize <= 0) {
+				this.slots(slot) = null
 			}
+			this.onStackChange(slot)
+			return localItemStack
 		}
 		// return nothing, since nothing was taken
 		null
 	}
+
+	def onStackChange(slot: Int): Unit = {}
+
+	def markChunkModified(): Unit
 
 	override def openChest(): Unit = {}
 
@@ -99,25 +85,6 @@ trait IInv extends IInventory with ISidedInventory {
 	override def isUseableByPlayer(playerIn: EntityPlayer): Boolean = true
 
 	override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = this.isValidSlot(index)
-
-	/*
-	override def getField(id: Int): Int = 0
-
-	override def setField(id: Int, value: Int): Unit = {}
-
-	override def getFieldCount: Int = 0
-
-	override def hasCustomName: Boolean = false
-
-	override def getDisplayName: IChatComponent =
-		(if (this.hasCustomName)
-			new ChatComponentText(this.getInventoryName)
-		else
-			new ChatComponentTranslation(this.getInventoryName, new Array[AnyRef](0))
-				).asInstanceOf[IChatComponent]
-	*/
-
-
 
 	override def getSlotsForFace(side: Int): Array[Int] =
 		if (this.hasInventory()) {
@@ -137,7 +104,17 @@ trait IInv extends IInventory with ISidedInventory {
 	override def canExtractItem(index: Int, stack: ItemStack, direction: Int): Boolean =
 		this.isValidSlot(index)
 
-	def toNBT_IInv(tagCom: NBTTagCompound): Unit = {
+	protected def writeNBT_Inv(nbt: NBTTagCompound, key: String): Unit = {
+		val tagCom: NBTTagCompound = new NBTTagCompound
+		this.writeNBT_IInv(tagCom)
+		nbt.setTag(key, tagCom)
+	}
+
+	protected def readNBT_Inv(nbt: NBTTagCompound, key: String): Unit = {
+		this.readNBT_IInv(nbt.getCompoundTag(key))
+	}
+
+	private def writeNBT_IInv(tagCom: NBTTagCompound): Unit = {
 		tagCom.setBoolean("has", this.hasInventory())
 		if (this.hasInventory()) {
 			tagCom.setInteger("size", this.getSizeInventory)
@@ -157,7 +134,7 @@ trait IInv extends IInventory with ISidedInventory {
 		}
 	}
 
-	def fromNBT_IInv(tagCom: NBTTagCompound): Unit = {
+	private def readNBT_IInv(tagCom: NBTTagCompound): Unit = {
 		if (tagCom.getBoolean("has")) {
 			this.slots = new Array[ItemStack](tagCom.getInteger("size"))
 

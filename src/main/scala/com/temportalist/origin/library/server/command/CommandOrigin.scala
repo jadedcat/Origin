@@ -3,7 +3,7 @@ package com.temportalist.origin.library.server.command
 import java.util
 
 import com.temportalist.origin.library.common.Origin
-import com.temportalist.origin.library.common.utility.{Player, Teleport}
+import com.temportalist.origin.library.common.utility.{Players, Teleport}
 import net.minecraft.command.{CommandBase, ICommandSender}
 import net.minecraft.entity.SharedMonsterAttributes
 import net.minecraft.entity.player.EntityPlayer
@@ -52,7 +52,7 @@ object CommandOrigin extends CommandBase {
 					// origin tp player x y z       dimName
 
 					if (args.length < 4) {
-						Player.message(player, "Not enough arguments")
+						Players.message(player, "Not enough arguments")
 						return
 					}
 
@@ -68,7 +68,7 @@ object CommandOrigin extends CommandBase {
 					var coordStartIndex: Int = 1
 					if (hasAlternatePlayer) {
 						coordStartIndex += 1
-						player = Player.getPlayer(args(1))
+						player = Players.getPlayer(args(1))
 					}
 
 					var x: Double = 0.0D
@@ -81,7 +81,7 @@ object CommandOrigin extends CommandBase {
 					}
 					catch {
 						case e: NumberFormatException =>
-							Player.message(player1,
+							Players.message(player1,
 								"Something went terribly wrong...")
 							return
 					}
@@ -100,7 +100,7 @@ object CommandOrigin extends CommandBase {
 						catch {
 							case e: Exception =>
 								if (!Origin.dimensions.containsKey(dimName)) {
-									Player.message(player1,
+									Players.message(player1,
 										"\"" + dimName + "\"" + " is not a valid dimension name!")
 									return
 								}
@@ -119,7 +119,7 @@ object CommandOrigin extends CommandBase {
 			}
 		}
 		else if (commandType.equals("set") && args.length == 4) {
-			val player: EntityPlayer = Player.getPlayer(args(1))
+			val player: EntityPlayer = Players.getPlayer(args(1))
 			val amount: Int =
 				try {
 					args(3).toInt
@@ -140,7 +140,7 @@ object CommandOrigin extends CommandBase {
 			}
 		}
 		else if (commandType.equals("setMaxHealth")) {
-			val player: EntityPlayer = Player.getPlayer(args(1))
+			val player: EntityPlayer = Players.getPlayer(args(1))
 			val amount: Int =
 				try {
 					args(2).toInt

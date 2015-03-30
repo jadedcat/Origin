@@ -4,6 +4,7 @@ import java.util
 import com.temportalist.origin.api.rendering.IRenderingObject
 import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.{SideOnly, Side}
+import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{Item, ItemStack}
@@ -25,6 +26,11 @@ class ItemWrapper(val modid: String, name: String) extends Item with IRenderingO
 	GameRegistry.registerItem(this, name)
 
 	override def getCompoundName(): String = this.modid + ":" + this.name
+
+	@SideOnly(Side.CLIENT)
+	override def registerIcons(reg: IIconRegister): Unit = {
+		this.itemIcon = reg.registerIcon(this.getCompoundName())
+	}
 
 	/**
 	 * Get the non-local name of this item

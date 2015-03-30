@@ -7,8 +7,10 @@ import com.temportalist.origin.library.common.lib.BlockState
 import com.temportalist.origin.library.common.lib.vec.BlockPos
 import com.temportalist.origin.library.common.utility.Stacks
 import cpw.mods.fml.common.registry.GameRegistry
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
+import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
@@ -55,6 +57,11 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 	// End Constructors
 
 	override def getCompoundName(): String = this.modid + ":" + this.name
+
+	@SideOnly(Side.CLIENT)
+	override def registerIcons(reg: IIconRegister): Unit = {
+		this.blockIcon = reg.registerIcon(this.getCompoundName())
+	}
 
 	/**
 	 * Get the non-local name of this block

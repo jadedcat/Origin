@@ -33,9 +33,7 @@ class TEWrapper(var name: String) extends TileEntity() with IInv with ITank with
 
 		tagCom.setString("TEWrapper_teName", this.name)
 
-		val invTag: NBTTagCompound = new NBTTagCompound
-		this.toNBT_IInv(invTag)
-		tagCom.setTag("inventory", invTag)
+		this.writeNBT_Inv(tagCom, "inventory")
 
 		val tanksTag: NBTTagCompound = new NBTTagCompound
 		this.toNBT_ITank(tanksTag)
@@ -48,7 +46,7 @@ class TEWrapper(var name: String) extends TileEntity() with IInv with ITank with
 
 		this.name = tagCom.getString("TEWrapper_teName")
 
-		this.fromNBT_IInv(tagCom.getCompoundTag("inventory"))
+		this.readNBT_Inv(tagCom, "inventory")
 
 		this.fromNBT_ITank(tagCom.getCompoundTag("tanks"))
 
@@ -63,6 +61,8 @@ class TEWrapper(var name: String) extends TileEntity() with IInv with ITank with
 		thisCoord.markForUpdate()
 
 	}
+
+	override def markChunkModified(): Unit = new V3O(this).markChunkModified(this)
 
 	override def onDataPacket(net: NetworkManager, pkt: S35PacketUpdateTileEntity) {
 		this.readFromNBT(pkt.getNbtCompound)

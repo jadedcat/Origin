@@ -5,8 +5,9 @@ import java.util.Random
 
 import com.temportalist.origin.library.common.lib.BlockState
 import com.temportalist.origin.library.common.lib.vec.BlockPos
+import net.minecraft.block.Block
 import net.minecraft.entity.item.EntityItem
-import net.minecraft.item.ItemStack
+import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 
@@ -62,14 +63,62 @@ object Stacks {
 		this.spawnItemStack(world, pos, States.getStack(state), random, delay)
 	}
 
+	@Deprecated
 	def areStacksMatching(a: ItemStack, b: ItemStack): Boolean =
 		this.areStacksMatching(a, b, checkSize = false, checkNBT = true)
 
+	@Deprecated
 	def areStacksMatching(a: ItemStack, b: ItemStack, checkSize: Boolean,
 			checkNBT: Boolean): Boolean = {
 		a.getItem == b.getItem && a.getMetadata == b.getMetadata &&
 				(!checkSize || a.stackSize == b.stackSize) &&
 				(!checkNBT || ItemStack.areItemStackTagsEqual(a, b))
+	}
+
+	def createStack(obj: AnyRef, data: Map[String, Any]): ItemStack =
+		this.createStack(obj, 1, 0, data)
+
+	def createStack(obj: AnyRef, size: Int, meta: Int, data: Map[String, Any]): ItemStack = {
+		val stack: ItemStack = obj match {
+			case b: Block => new ItemStack(b, size, meta)
+			case i: Item => new ItemStack(i, size, meta)
+			case _ => throw new IllegalArgumentException(
+				"Illegal argument " + obj.toString + " of class " + obj.getClass.getCanonicalName)
+		}
+		if (data != null) {
+			val nbt: NBTTagCompound = new NBTTagCompound
+			for ((key: String, value: Any) <- data) {
+				value match {
+					case i: Int => nbt.setInteger(key, i)
+					case stack: ItemStack =>
+						val stackTag: NBTTagCompound = new NBTTagCompound
+						stack.writeToNBT(stackTag)
+						nbt.setTag(key, stackTag)
+					case _ =>
+				}
+			}
+			stack.setTagCompound(nbt)
+		}
+		stack
+	}
+
+	def doStacksMatch(a: ItemStack, b: ItemStack,
+			meta: Boolean, size: Boolean, nbt: Boolean, nil: Boolean): Boolean = {
+		if ((a == null && b != null) || (b == null && a != null)) nil
+		else if (a != null && b != null) {
+			a.getItem == b.getItem &&
+					(!meta || a.getMetadata == b.getMetadata) &&
+					(!size || a.stackSize == b.stackSize) &&
+					(!nbt || ItemStack.areItemStackTagsEqual(a, b))
+		}
+		else true
+	}
+
+	def canFit(a: ItemStack, b: ItemStack): Boolean = this.canFit(a, b, a.stackSize)
+
+	def canFit(a: ItemStack, b: ItemStack, amt: Int): Boolean = {
+		a != null && this.doStacksMatch(a, b, meta = true, size = false, nbt = true, nil = true) &&
+				(b == null || b.stackSize + amt <= b.getMaxStackSize)
 	}
 
 }

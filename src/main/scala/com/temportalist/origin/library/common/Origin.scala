@@ -6,6 +6,7 @@ import java.util.UUID
 import com.temportalist.origin.library.common.extended.ExtendedSync
 import com.temportalist.origin.library.common.handlers.{OptionHandler, RegisterHelper}
 import com.temportalist.origin.library.common.network._
+import com.temportalist.origin.library.common.utility.Players
 import com.temportalist.origin.library.server.command.CommandOrigin
 import com.temportalist.origin.test.{PacketUpdateMode, Sonic}
 import com.temportalist.origin.wrapper.common.ModWrapper
@@ -63,7 +64,7 @@ object Origin extends ModWrapper {
 
 	@Mod.EventHandler
 	def preInit(event: FMLPreInitializationEvent): Unit = {
-		RegisterHelper.registerHandler(ExtendedSync, OptionHandler)
+		RegisterHelper.registerHandler(ExtendedSync, OptionHandler, Players)
 		super.preInitialize(this.MODID, this.MODNAME, event, this.proxy, CGOOptions)
 
 		RegisterHelper.registerCommand(CommandOrigin)

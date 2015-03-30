@@ -1,5 +1,10 @@
 package com.temportalist.origin.library.common.utility
 
+import java.util
+import java.util.UUID
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.common.gameevent.PlayerEvent
 import cpw.mods.fml.relauncher.{SideOnly, Side}
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
@@ -11,8 +16,46 @@ import net.minecraft.util.ChatComponentText
  *
  * @author TheTemportalist
  */
-object Player {
+object Players {
 
+	final val onlinePlayers: util.List[UUID] = new util.ArrayList[UUID]
+	// todo save to disk
+	final val idToUsername: util.HashMap[UUID, String] = new util.HashMap[UUID, String]
+	final val usernameToId: util.HashMap[String, UUID] = new util.HashMap[String, UUID]
+
+	def getUserName(id: String): String = this.getUserName(UUID.fromString(id))
+
+	def getUserName(id: UUID): String = {
+		this.idToUsername.get(id)
+	}
+
+	def isOnline(uuid: UUID): Boolean = this.onlinePlayers.contains(uuid)
+
+	def getPlayer(username: String): EntityPlayer = this.getPlayerOnline(this.usernameToId.get(username))
+
+	def getPlayerOnline(uuid: UUID): EntityPlayer = {
+		if (uuid == null) System.out.println("null uuid")
+		Scala.foreach(MinecraftServer.getServer.getConfigurationManager.playerEntityList
+				.asInstanceOf[util.List[EntityPlayer]], (index: Int, player: EntityPlayer) => {
+			if (player.getGameProfile.getId == uuid) return player
+		})
+		null
+	}
+
+	@SubscribeEvent
+	def login(event: PlayerEvent.PlayerLoggedInEvent) {
+		val id: UUID = event.player.getGameProfile.getId
+		this.idToUsername.put(id, event.player.getCommandSenderName)
+		this.usernameToId.put(event.player.getCommandSenderName, id)
+		this.onlinePlayers.add(id)
+	}
+
+	@SubscribeEvent
+	def logout(event: PlayerEvent.PlayerLoggedOutEvent) {
+		this.onlinePlayers.remove(event.player.getGameProfile.getId)
+	}
+
+	/*
 	def getPlayer(senderNameORuuid: AnyRef): EntityPlayerMP = {
 		val players: java.util.List[_] =
 			MinecraftServer.getServer.getConfigurationManager.playerEntityList
@@ -28,6 +71,7 @@ object Player {
 		}
 		null
 	}
+	*/
 
 	def forceMoveInDirection(player: EntityPlayerMP, distance: Double,
 			considerObstacles: Boolean): Unit = {

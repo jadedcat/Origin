@@ -53,7 +53,7 @@ object Cursor {
 	def getCursorPosVec(entity: EntityLivingBase): V3O = {
 		entity match {
 			case player: EntityPlayer =>
-				this.getCursorPosVec(entity, Player.getReachDistance(player))
+				this.getCursorPosVec(entity, Players.getReachDistance(player))
 			case _ =>
 				this.getCursorPosVec(entity, 5D)
 		}
@@ -85,7 +85,7 @@ object Cursor {
 	}
 
 	def raytraceWorld(world: World, player: EntityPlayer): MovingObjectPosition = {
-		val reach: Double = Player.getReachDistance(player)
+		val reach: Double = Players.getReachDistance(player)
 		val head: V3O = Cursor.getHeadPos(player)
 		val look: V3O = new V3O(player.getLook(1f))
 		val lookReach: V3O = look * reach

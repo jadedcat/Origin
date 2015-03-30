@@ -27,7 +27,8 @@ class TERenderer(val texture: ResourceLocation) extends TileEntitySpecialRendere
 		if (this.texture != null)
 			Rendering.bindResource(this.texture)
 
-		this.render(tileEntity, renderPartialTicks, 0.0625F)
+		if (tileEntity != null)
+			this.render(tileEntity, renderPartialTicks, 0.0625F)
 
 		GL11.glPopMatrix()
 	}
