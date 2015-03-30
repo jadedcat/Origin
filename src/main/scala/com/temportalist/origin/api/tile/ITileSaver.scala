@@ -19,7 +19,7 @@ trait ITileSaver extends TileEntity {
 	}
 
 	override def onDataPacket(net: NetworkManager, pkt: S35PacketUpdateTileEntity) {
-		this.readFromNBT(pkt.getNbtCompound)
+		this.readFromNBT(pkt.func_148857_g())
 	}
 
 }

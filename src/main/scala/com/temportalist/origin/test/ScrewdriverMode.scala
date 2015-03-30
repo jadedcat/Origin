@@ -68,10 +68,10 @@ class ScrewdriverMode(private val name: String, private val textureName: String,
 			val scale: Float = 0.5F
 			val aScale: Float = 1.0F / scale
 			GL11.glScaled(scale, scale, scale)
-			mc.fontRendererObj.drawStringWithShadow(
+			mc.fontRenderer.drawStringWithShadow(
 				this.getName(),
 				(x * aScale).toInt -
-						(mc.fontRendererObj.getStringWidth(this.getName()) / 2.0F).toInt,
+						(mc.fontRenderer.getStringWidth(this.getName()) / 2.0F).toInt,
 				((y + (h / 2)) * aScale).toInt + 2,
 				16777215
 			)
@@ -95,7 +95,7 @@ class ScrewdriverMode(private val name: String, private val textureName: String,
 	def getName(): String = this.name
 
 	def canEnableOn(stack: ItemStack): Boolean = {
-		this.minTier <= stack.getMetadata
+		this.minTier <= stack.getItemDamage
 	}
 
 	def onRightClick(stack: ItemStack, world: World, player: EntityPlayer,

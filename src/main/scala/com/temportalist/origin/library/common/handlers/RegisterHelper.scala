@@ -36,7 +36,7 @@ object RegisterHelper {
 
 	def registerPacketHandler(pluginID: String, messages: Class[_ <: IPacket]*) {
 		if (FMLCommonHandler.instance().getEffectiveSide.isClient) {
-			PacketHandler.registerHandler(pluginID, messages.toArray)
+			PacketHandler.registerHandler(pluginID, messages.seq)
 		}
 	}
 

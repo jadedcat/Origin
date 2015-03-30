@@ -78,15 +78,15 @@ trait IInv extends IInventory with ISidedInventory {
 
 	def markChunkModified(): Unit
 
-	override def openChest(): Unit = {}
+	override def openInventory(): Unit = {}
 
-	override def closeChest(): Unit = {}
+	override def closeInventory(): Unit = {}
 
 	override def isUseableByPlayer(playerIn: EntityPlayer): Boolean = true
 
 	override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = this.isValidSlot(index)
 
-	override def getSlotsForFace(side: Int): Array[Int] =
+	override def getAccessibleSlotsFromSide(side: Int): Array[Int] =
 		if (this.hasInventory()) {
 			val slotsFromSide: Array[Int] = new Array[Int](this.getSizeInventory)
 			for (i <- 0 to this.getSizeInventory) {
@@ -155,6 +155,6 @@ trait IInv extends IInventory with ISidedInventory {
 		}
 	}
 
-	override def isCustomInventoryName: Boolean = false
+	override def hasCustomInventoryName: Boolean = false
 
 }

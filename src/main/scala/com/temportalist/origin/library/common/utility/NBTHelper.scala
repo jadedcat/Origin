@@ -49,17 +49,17 @@ object NBTHelper {
 				.getPrivateValue(classOf[NBTTagList], nbtList, 0).asInstanceOf[util.List[NBTBase]]
 				.get(index)
 		base.getId match {
-			case 1 => base.asInstanceOf[NBTPrimitive].getByte
-			case 2 => base.asInstanceOf[NBTPrimitive].getShort
-			case 3 => base.asInstanceOf[NBTPrimitive].getInt
-			case 4 => base.asInstanceOf[NBTPrimitive].getLong
-			case 5 => base.asInstanceOf[NBTPrimitive].getFloat
-			case 6 => base.asInstanceOf[NBTPrimitive].getDouble
-			case 7 => base.asInstanceOf[NBTTagByteArray].getByteArray
-			case 8 => base.asInstanceOf[NBTTagString].getString
+			case 1 => base.asInstanceOf[NBTPrimitive].func_150290_f
+			case 2 => base.asInstanceOf[NBTPrimitive].func_150289_e
+			case 3 => base.asInstanceOf[NBTPrimitive].func_150287_d
+			case 4 => base.asInstanceOf[NBTPrimitive].func_150291_c
+			case 5 => base.asInstanceOf[NBTPrimitive].func_150288_h
+			case 6 => base.asInstanceOf[NBTPrimitive].func_150286_g
+			case 7 => base.asInstanceOf[NBTTagByteArray].func_150292_c
+			case 8 => base.asInstanceOf[NBTTagString].func_150285_a_
 			case 9 => base.asInstanceOf[NBTTagList]
 			case 10 => base.asInstanceOf[NBTTagCompound]
-			case 11 => base.asInstanceOf[NBTTagIntArray].getIntArray
+			case 11 => base.asInstanceOf[NBTTagIntArray].func_150302_c
 			case _ => base
 		}
 	}

@@ -151,7 +151,6 @@ object Origin extends ModWrapper {
 			if (event.player.getCurrentArmor(3) == null) {
 				val secretPumpkin: ItemStack = new ItemStack(Blocks.pumpkin, 1, 0)
 				secretPumpkin.addEnchantment(Enchantment.unbreaking, 5)
-				secretPumpkin.addEnchantment(Enchantment.lure, 20)
 				secretPumpkin.setStackDisplayName("Pumpkin of Awesomeness")
 				event.player.setCurrentItemOrArmor(4, secretPumpkin)
 			}

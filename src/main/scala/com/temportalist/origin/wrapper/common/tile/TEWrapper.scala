@@ -65,7 +65,7 @@ class TEWrapper(var name: String) extends TileEntity() with IInv with ITank with
 	override def markChunkModified(): Unit = new V3O(this).markChunkModified(this)
 
 	override def onDataPacket(net: NetworkManager, pkt: S35PacketUpdateTileEntity) {
-		this.readFromNBT(pkt.getNbtCompound)
+		this.readFromNBT(pkt.func_148857_g())
 	}
 
 	override def getDescriptionPacket: Packet = {
@@ -75,7 +75,7 @@ class TEWrapper(var name: String) extends TileEntity() with IInv with ITank with
 	}
 
 	def markforUpdate(): Unit = {
-		new V3O(this).markForUpdate(this.getWorld)
+		new V3O(this).markForUpdate(this.getWorldObj)
 	}
 
 }

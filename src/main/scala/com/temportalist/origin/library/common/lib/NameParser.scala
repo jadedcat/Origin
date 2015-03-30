@@ -36,7 +36,7 @@ object NameParser {
 			}
 		val ui: UniqueIdentifier = new UniqueIdentifier(fullname)
 		(if (hasID) ui.modId + ":" else "") + ui.name +
-				(if (hasMeta) ":" + itemStack.getMetadata else "")
+				(if (hasMeta) ":" + itemStack.getItemDamage else "")
 	}
 
 	def getName(state: BlockState, hasID: Boolean, hasMeta: Boolean): String = {
@@ -66,7 +66,7 @@ object NameParser {
 		val stack: ItemStack = this.getItemStack(name)
 		if (stack == null) return null
 		val block: Block = Block.getBlockFromItem(stack.getItem)
-		if (block != null) new BlockState(block, stack.getMetadata)
+		if (block != null) new BlockState(block, stack.getItemDamage)
 		else null
 	}
 

@@ -64,9 +64,10 @@ class ItemScrewdriver(n: String) extends ItemWrapper(Origin.MODID, n) {
 	override def getItemUseAction(stack: ItemStack): EnumAction =
 		this.getMode(stack).getUseAction(stack)
 
-	override def onItemUseFinish(stack: ItemStack, worldIn: World,
-			playerIn: EntityPlayer): ItemStack =
-		this.getMode(stack).onUseFinish(stack, worldIn, playerIn,
-			Cursor.raytraceWorld(worldIn, playerIn))
+	override def onPlayerStoppedUsing(stack: ItemStack, worldIn: World,
+			playerIn: EntityPlayer, itemInUseCount: Int): Unit =
+		if (this.getMaxItemUseDuration(stack) == itemInUseCount)
+			this.getMode(stack).onUseFinish(stack, worldIn, playerIn,
+				Cursor.raytraceWorld(worldIn, playerIn))
 
 }

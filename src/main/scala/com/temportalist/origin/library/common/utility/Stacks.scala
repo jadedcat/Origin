@@ -70,7 +70,7 @@ object Stacks {
 	@Deprecated
 	def areStacksMatching(a: ItemStack, b: ItemStack, checkSize: Boolean,
 			checkNBT: Boolean): Boolean = {
-		a.getItem == b.getItem && a.getMetadata == b.getMetadata &&
+		a.getItem == b.getItem && a.getItemDamage == b.getItemDamage &&
 				(!checkSize || a.stackSize == b.stackSize) &&
 				(!checkNBT || ItemStack.areItemStackTagsEqual(a, b))
 	}
@@ -107,7 +107,7 @@ object Stacks {
 		if ((a == null && b != null) || (b == null && a != null)) nil
 		else if (a != null && b != null) {
 			a.getItem == b.getItem &&
-					(!meta || a.getMetadata == b.getMetadata) &&
+					(!meta || a.getItemDamage == b.getItemDamage) &&
 					(!size || a.stackSize == b.stackSize) &&
 					(!nbt || ItemStack.areItemStackTagsEqual(a, b))
 		}

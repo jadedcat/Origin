@@ -15,7 +15,7 @@ object States {
 
 	def getState(stack: ItemStack): BlockState = {
 		if (WorldHelper.isBlock(stack.getItem))
-			new BlockState(Block.getBlockFromItem(stack.getItem), stack.getMetadata)
+			new BlockState(Block.getBlockFromItem(stack.getItem), stack.getItemDamage)
 		else null
 	}
 

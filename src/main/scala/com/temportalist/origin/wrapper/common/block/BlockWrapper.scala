@@ -33,7 +33,7 @@ import net.minecraft.world.World
 class BlockWrapper(material: Material, val modid: String, name: String,
 		itemBlock: Class[_ <: ItemBlock]) extends Block(material) with IRenderingObject {
 
-	this.setUnlocalizedName(name)
+	this.setBlockName(name)
 	if (itemBlock != null) {
 		GameRegistry.registerBlock(this, itemBlock, name)
 	}
@@ -59,7 +59,7 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 	override def getCompoundName(): String = this.modid + ":" + this.name
 
 	@SideOnly(Side.CLIENT)
-	override def registerIcons(reg: IIconRegister): Unit = {
+	override def registerBlockIcons(reg: IIconRegister): Unit = {
 		this.blockIcon = reg.registerIcon(this.getCompoundName())
 	}
 

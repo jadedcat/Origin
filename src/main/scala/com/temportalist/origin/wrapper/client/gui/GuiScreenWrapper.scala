@@ -18,8 +18,7 @@ class GuiScreenWrapper() extends GuiScreen() with IGuiScreen {
 
 	override protected def renderHoverInformation(mouseX: Int, mouseY: Int,
 			hoverInfo: util.List[String]): Unit = {
-		this.drawHoveringText(hoverInfo, mouseX, mouseY)
-		this.drawHoveringText(hoverInfo, mouseX, mouseY, this.fontRendererObj)
+		this.func_146283_a(hoverInfo, mouseX, mouseY)
 	}
 
 	override def drawString(string: String, x: Int, y: Int, color: Int): Unit = {

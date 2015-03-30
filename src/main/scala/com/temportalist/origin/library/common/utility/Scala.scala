@@ -64,7 +64,7 @@ object Scala {
 	}
 
 	def foreach(tagCom: NBTTagCompound, callback: (String, NBTBase) => Unit): Unit = {
-		Scala.foreach(tagCom.getKeySet, (i: Int, key: Any) => {
+		Scala.foreach(tagCom.func_150296_c, (i: Int, key: Any) => {
 			callback(key.asInstanceOf[String], tagCom.getTag(key.asInstanceOf[String]))
 		}: Unit)
 	}

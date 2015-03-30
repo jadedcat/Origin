@@ -24,7 +24,7 @@ class BlockCoord(_x: Int, _y: Int, _z: Int, var dim: Int) extends BlockPos(_x, _
 	}
 
 	def this(tile: TileEntity) {
-		this(tile.xCoord, tile.yCoord, tile.zCoord, tile.getWorld.provider.dimensionId)
+		this(tile.xCoord, tile.yCoord, tile.zCoord, tile.getWorldObj.provider.dimensionId)
 	}
 
 	override def toString: String = {

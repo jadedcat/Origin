@@ -91,7 +91,7 @@ object Cursor {
 		val lookReach: V3O = look * reach
 		val cursorPos: V3O = head + lookReach
 
-		var retMop: MovingObjectPosition = world.rayTraceBlocks(
+		var retMop: MovingObjectPosition = world.func_147447_a(
 			head.toVec3(), cursorPos.toVec3(), false, false, false
 		)
 

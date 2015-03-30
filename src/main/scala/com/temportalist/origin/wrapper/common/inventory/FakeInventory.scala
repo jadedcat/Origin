@@ -63,11 +63,11 @@ class FakeInventory(var holderStack: ItemStack, var inventorySize: Int, var stac
 		this.markDirty
 	}
 
-	override def closeChest(): Unit = {}
+	override def closeInventory(): Unit = {}
 
-	override def isCustomInventoryName: Boolean = false
+	override def openInventory(): Unit = {}
 
-	override def openChest(): Unit = {}
+	override def hasCustomInventoryName: Boolean = false
 
 	override def getInventoryName: String =
 		if (this.holderStack != null) this.holderStack.getDisplayName else ""
@@ -95,7 +95,6 @@ class FakeInventory(var holderStack: ItemStack, var inventorySize: Int, var stac
 	def isUseableByPlayer(var1: EntityPlayer): Boolean = {
 		true
 	}
-
 
 	def isItemValidForSlot(slot: Int, stack: ItemStack): Boolean = {
 		true

@@ -165,10 +165,10 @@ object Json {
 				Scala.foreach(array, (index: Int, element: JsonElement) => {
 					if (localRetType == 1)
 						data.asInstanceOf[Array[Byte]](index) =
-								this.jsonToNBT(element).asInstanceOf[NBTTagByte].getByte
+								this.jsonToNBT(element).asInstanceOf[NBTTagByte].func_150290_f
 					else if (localRetType == 2)
 						data.asInstanceOf[Array[Int]](index) =
-								this.jsonToNBT(element).asInstanceOf[NBTTagInt].getInt
+								this.jsonToNBT(element).asInstanceOf[NBTTagInt].func_150287_d
 					else data.asInstanceOf[NBTTagList].appendTag(this.jsonToNBT(element))
 				})
 				ret = if (localRetType == 1) new NBTTagByteArray(data.asInstanceOf[Array[Byte]])
@@ -187,14 +187,14 @@ object Json {
 
 	def nbtToJson(nbt: NBTBase): JsonElement = {
 		nbt match {
-			case b: NBTTagByte => this.objectToJson(b.getByte)
-			case s: NBTTagShort => this.objectToJson(s.getShort)
-			case i: NBTTagInt => this.objectToJson(i.getInt)
-			case l: NBTTagLong => this.objectToJson(l.getLong)
-			case f: NBTTagFloat => this.objectToJson(f.getFloat)
-			case d: NBTTagDouble => this.objectToJson(d.getDouble)
-			case ab: NBTTagByteArray => this.objectToJson(ab.getByteArray)
-			case s: NBTTagString => this.objectToJson(s.getString)
+			case b: NBTTagByte => this.objectToJson(b.func_150290_f)
+			case s: NBTTagShort => this.objectToJson(s.func_150289_e)
+			case i: NBTTagInt => this.objectToJson(i.func_150287_d)
+			case l: NBTTagLong => this.objectToJson(l.func_150291_c)
+			case f: NBTTagFloat => this.objectToJson(f.func_150288_h)
+			case d: NBTTagDouble => this.objectToJson(d.func_150286_g)
+			case ab: NBTTagByteArray => this.objectToJson(ab.func_150292_c)
+			case s: NBTTagString => this.objectToJson(s.func_150285_a_)
 			case list: NBTTagList =>
 				val array: JsonArray = new JsonArray
 				Scala.foreach(list, (index: Int, any: Any) => {
@@ -207,7 +207,7 @@ object Json {
 					json.add(key, this.nbtToJson(nbt))
 				}: Unit)
 				json
-			case ai: NBTTagIntArray => this.objectToJson(ai.getIntArray)
+			case ai: NBTTagIntArray => this.objectToJson(ai.func_150302_c)
 			case _ => null
 		}
 	}

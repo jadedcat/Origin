@@ -119,7 +119,7 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 	def markForUpdate(world: World): Unit = this.toBlockCoord(world).markForUpdate()
 
 	def markChunkModified(tile: TileEntity): Unit =
-		tile.getWorld.markTileEntityChunkModified(this.x_i(), this.y_i(), this.z_i(), tile)
+		tile.getWorldObj.markTileEntityChunkModified(this.x_i(), this.y_i(), this.z_i(), tile)
 
 	def toVec3(): Vec3 = Vec3.createVectorHelper(this.x, this.y, this.z)
 

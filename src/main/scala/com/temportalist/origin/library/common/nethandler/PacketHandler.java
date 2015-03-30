@@ -15,10 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author TheTemportalist
@@ -26,6 +23,11 @@ import java.util.Map;
 public class PacketHandler extends FMLIndexedMessageToMessageCodec<IPacket> {
 
 	private static final Map<String, PacketHandler> TRACKER = new HashMap<String, PacketHandler>();
+
+	public static boolean registerHandler(String pluginID,
+			List<Class<? extends IPacket>> packetClasses) {
+		return PacketHandler.registerHandler(pluginID, packetClasses);
+	}
 
 	public static boolean registerHandler(String pluginID,
 			Class<? extends IPacket>... packetClasses) {
