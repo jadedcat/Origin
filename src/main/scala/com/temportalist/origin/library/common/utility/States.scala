@@ -1,7 +1,6 @@
 package com.temportalist.origin.library.common.utility
 
-import com.temportalist.origin.library.common.lib.NameParser
-import net.minecraft.block.state.IBlockState
+import com.temportalist.origin.library.common.lib.{BlockState, NameParser}
 import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
 
@@ -12,15 +11,17 @@ import net.minecraft.item.ItemStack
  */
 object States {
 
-	def getState(stack: ItemStack): IBlockState = {
+	// todo move all this into BlockState
+
+	def getState(stack: ItemStack): BlockState = {
 		if (WorldHelper.isBlock(stack.getItem))
-			Block.getBlockFromItem(stack.getItem).getStateFromMeta(stack.getMetadata)
+			new BlockState(Block.getBlockFromItem(stack.getItem), stack.getMetadata)
 		else null
 	}
 
-	def getStack(state: IBlockState): ItemStack = {
+	def getStack(state: BlockState): ItemStack = {
 		val stack: ItemStack = new ItemStack(
-			state.getBlock, 1, state.getBlock.getMetaFromState(state)
+			state.getBlock, 1, state.getMeta()
 		)
 		/* todo find a decent way to save the tag properly
 		state match {
@@ -39,8 +40,8 @@ object States {
 		stack
 	}
 
-	def getName(state: IBlockState): String = NameParser.getName(state, true, true)
+	def getName(state: BlockState): String = NameParser.getName(state, true, true)
 
-	def getState(name: String): IBlockState = NameParser.getState(name)
+	def getState(name: String): BlockState = NameParser.getState(name)
 
 }

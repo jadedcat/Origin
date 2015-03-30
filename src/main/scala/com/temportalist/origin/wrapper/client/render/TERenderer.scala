@@ -1,11 +1,11 @@
 package com.temportalist.origin.wrapper.client.render
 
 import com.temportalist.origin.library.client.utility.Rendering
-import net.minecraft.client.renderer.GlStateManager
+import cpw.mods.fml.relauncher.{SideOnly, Side}
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ResourceLocation
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import org.lwjgl.opengl.GL11
 
 /**
  *
@@ -20,16 +20,16 @@ class TERenderer(val texture: ResourceLocation) extends TileEntitySpecialRendere
 	}
 
 	override def renderTileEntityAt(tileEntity: TileEntity, viewX: Double, viewY: Double,
-			viewZ: Double, renderPartialTicks: Float, int: Int): Unit = {
-		GlStateManager.pushMatrix()
-		GlStateManager.translate(viewX + 0.5, viewY + 0.5, viewZ + 0.5)
+			viewZ: Double, renderPartialTicks: Float): Unit = {
+		GL11.glPushMatrix()
+		GL11.glTranslated(viewX + 0.5, viewY + 0.5, viewZ + 0.5)
 
 		if (this.texture != null)
 			Rendering.bindResource(this.texture)
 
 		this.render(tileEntity, renderPartialTicks, 0.0625F)
 
-		GlStateManager.popMatrix()
+		GL11.glPopMatrix()
 	}
 
 	protected def render(tileEntity: TileEntity, renderPartialTicks: Float, f5: Float): Unit = {

@@ -2,10 +2,10 @@ package com.temportalist.origin.library.client.gui.widget;
 
 import com.temportalist.origin.library.client.utility.Rendering;
 import com.temportalist.origin.wrapper.client.gui.GuiScreenWrapper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;

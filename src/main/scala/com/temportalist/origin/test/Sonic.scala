@@ -1,22 +1,21 @@
 package com.temportalist.origin.test
 
 import java.io._
-import java.net.{URLConnection, URL}
-import java.util.{UUID, Random}
-
-import scala.collection.mutable
+import java.net.{URL, URLConnection}
+import java.util.{Random, UUID}
 
 import com.google.gson.{JsonArray, JsonElement, JsonObject}
 import com.temportalist.origin.library.common.Origin
 import com.temportalist.origin.library.common.handlers.RegisterHelper
 import com.temportalist.origin.library.common.utility._
+import cpw.mods.fml.common.FMLCommonHandler
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.entity.Entity
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.MathHelper
 import net.minecraftforge.event.world.WorldEvent
-import net.minecraftforge.fml.common.FMLCommonHandler
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+
+import scala.collection.mutable
 
 /**
  *
@@ -88,14 +87,14 @@ object Sonic {
 				val url: String = "https://api.github.com/repos/TheTemportalist/Origin/commits"
 				val fileIn: Reader = new InputStreamReader(new URL(url).openStream())
 				val commitJson: JsonElement = Json.getJson(fileIn)
-				fileIn.clone()
+				fileIn.close()
 				Sonic.currentCommitSha = commitJson.getAsJsonArray.get(0).
 						getAsJsonObject.get("sha").getAsString
 			}
 
 			def findEntities(): Unit = {
-				val fullPathPrefix: String = "https://raw.githubusercontent.com/TheTemportalist/Origin/master/src/main/resources/assets/origin/resources/states/"
-				val statesURL: String = "https://api.github.com/repos/TheTemportalist/Origin/git/trees/6faf6158eaf7c727e16fc9fecee438184ed4995d"
+				val fullPathPrefix: String = "https://raw.githubusercontent.com/TheTemportalist/Origin-DataCore-Resources/master/"
+				val statesURL: String = "https://api.github.com/repos/TheTemportalist/Origin-DataCore-Resources/git/trees/" // todo fix this
 				this.doTreeIterationFromGitContents(statesURL,
 					(index: Int, element: JsonElement) => {
 						val folderName: String = element.getAsJsonObject.get("path").getAsString
@@ -142,7 +141,7 @@ object Sonic {
 	}
 
 	def overwriteWithDefaultEntityNBT(nbt: NBTTagCompound): Unit = {
-		val id: UUID = MathHelper.getRandomUuid(random)
+		val id: UUID = UUID.randomUUID()
 		nbt.setLong("UUIDMost", id.getMostSignificantBits)
 		nbt.setLong("UUIDLeast", id.getLeastSignificantBits)
 

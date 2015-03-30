@@ -8,7 +8,6 @@ import net.minecraft.command.{CommandBase, ICommandSender}
 import net.minecraft.entity.SharedMonsterAttributes
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.server.MinecraftServer
-import net.minecraft.util.BlockPos
 
 /**
  *
@@ -156,10 +155,10 @@ object CommandOrigin extends CommandBase {
 
 	}
 
-	override def addTabCompletionOptions(sender: ICommandSender, args: Array[String],
-			pos: BlockPos): util.List[_] = {
+	override def addTabCompletionOptions(sender: ICommandSender,
+			args: Array[String]): util.List[_] = {
 		if (args.length > 1 && args(0).equals("set"))
-			CommandBase.getListOfStringsMatchingLastWord(
+			CommandBase.getListOfStringsFromIterableMatchingLastWord(
 				args, util.Arrays.asList(MinecraftServer.getServer.getAllUsernames)
 			)
 		else null

@@ -1,6 +1,6 @@
 package com.temportalist.origin.library.client.utility
 
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import cpw.mods.fml.relauncher.{SideOnly, Side}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 

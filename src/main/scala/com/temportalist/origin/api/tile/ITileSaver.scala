@@ -15,7 +15,7 @@ trait ITileSaver extends TileEntity {
 	override def getDescriptionPacket: Packet = {
 		val tagCom: NBTTagCompound = new NBTTagCompound
 		this.writeToNBT(tagCom)
-		new S35PacketUpdateTileEntity(this.getPos, this.getBlockMetadata, tagCom)
+		new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, this.getBlockMetadata, tagCom)
 	}
 
 	override def onDataPacket(net: NetworkManager, pkt: S35PacketUpdateTileEntity) {

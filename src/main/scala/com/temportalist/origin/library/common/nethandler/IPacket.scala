@@ -7,13 +7,12 @@ import scala.reflect.runtime.universe._
 
 import com.temportalist.origin.api.INBTSaver
 import com.temportalist.origin.library.common.lib.NameParser
-import com.temportalist.origin.library.common.lib.vec.V3O
+import com.temportalist.origin.library.common.lib.vec.{BlockPos, V3O}
 import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt._
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.BlockPos
 
 /**
  *
@@ -85,7 +84,7 @@ trait IPacket {
 						this.add(v.y)
 						this.add(v.z)
 					case tile: TileEntity =>
-						this.add(tile.getPos)
+						this.add(new V3O(tile))
 					case saver: INBTSaver =>
 						val tag: NBTTagCompound = new NBTTagCompound
 						saver.writeTo(tag)

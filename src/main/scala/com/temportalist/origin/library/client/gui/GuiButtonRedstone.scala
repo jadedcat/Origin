@@ -3,8 +3,8 @@ package com.temportalist.origin.library.client.gui
 import com.temportalist.origin.library.client.utility.Rendering
 import com.temportalist.origin.library.common.Origin
 import com.temportalist.origin.library.common.lib.enums.RedstoneState
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import cpw.mods.fml.relauncher.SideOnly
+import cpw.mods.fml.relauncher.Side
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.util.ResourceLocation
@@ -34,7 +34,7 @@ class GuiButtonRedstone(id: Int, x: Int, y: Int, val state: RedstoneState, val u
 	override def drawButton(minecraft: Minecraft, mouseX: Int, mouseY: Int): Unit = {
 		if (this.visible) {
 			Rendering.bindResource(this.texture)
-			GlStateManager.color(1.0F, 1.0F, 1.0F)
+			GL11.glColor3f(1.0F, 1.0F, 1.0F)
 			val isHoveredOn: Boolean = mouseX >= this.xPosition && mouseY >= this.yPosition &&
 					mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height
 			var u: Int = 100

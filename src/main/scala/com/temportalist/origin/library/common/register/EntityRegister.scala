@@ -3,8 +3,8 @@ package com.temportalist.origin.library.common.register
 import java.util
 
 import com.temportalist.origin.wrapper.common.item.ItemPlacer
+import cpw.mods.fml.common.registry.EntityRegistry
 import net.minecraft.entity._
-import net.minecraftforge.fml.common.registry.EntityRegistry
 
 /**
  *

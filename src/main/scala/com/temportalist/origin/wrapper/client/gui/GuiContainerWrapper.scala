@@ -3,10 +3,10 @@ package com.temportalist.origin.wrapper.client.gui
 import java.util
 
 import com.temportalist.origin.library.common.utility.Generic
+import cpw.mods.fml.relauncher.{SideOnly, Side}
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.inventory.Container
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  *

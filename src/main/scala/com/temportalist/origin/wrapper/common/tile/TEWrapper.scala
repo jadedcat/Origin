@@ -1,8 +1,8 @@
 package com.temportalist.origin.wrapper.common.tile
 
 import com.temportalist.origin.api.inventory.IInv
-import com.temportalist.origin.api.tile.{ITank, IPowerable}
-import com.temportalist.origin.library.common.lib.vec.BlockCoord
+import com.temportalist.origin.api.tile.{IPowerable, ITank}
+import com.temportalist.origin.library.common.lib.vec.{BlockCoord, V3O}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity
 import net.minecraft.network.{NetworkManager, Packet}
@@ -22,11 +22,7 @@ class TEWrapper(var name: String) extends TileEntity() with IInv with ITank with
 		this("")
 	}
 
-	/**
-	 * Returns the name of this tile entity
-	 * @return
-	 */
-	override def getCommandSenderName: String = this.name
+	override def getInventoryName: String = this.name
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Write/Read NBT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -75,11 +71,11 @@ class TEWrapper(var name: String) extends TileEntity() with IInv with ITank with
 	override def getDescriptionPacket: Packet = {
 		val tagCom: NBTTagCompound = new NBTTagCompound
 		this.writeToNBT(tagCom)
-		new S35PacketUpdateTileEntity(this.getPos, this.getBlockMetadata, tagCom)
+		new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, this.getBlockMetadata, tagCom)
 	}
 
 	def markforUpdate(): Unit = {
-		this.getWorld.markBlockForUpdate(this.getPos)
+		new V3O(this).markForUpdate(this.getWorld)
 	}
 
 }

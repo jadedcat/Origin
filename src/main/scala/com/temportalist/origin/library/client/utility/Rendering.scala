@@ -1,15 +1,11 @@
 package com.temportalist.origin.library.client.utility
 
-import com.temportalist.origin.library.common.utility.{States, WorldHelper}
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
-import net.minecraft.client.renderer._
-import net.minecraft.client.renderer.entity.{RenderItem, RenderManager}
+import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
-import net.minecraft.client.resources.model.IBakedModel
-import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  *
@@ -21,15 +17,15 @@ object Rendering {
 
 	def mc: Minecraft = Minecraft.getMinecraft
 
-	def renderManager: RenderManager = this.mc.getRenderManager
+	def renderManager: RenderManager = RenderManager.instance
 
-	def blockDispatcher: BlockRendererDispatcher = this.mc.getBlockRendererDispatcher
+	//def blockDispatcher: BlockRendererDispatcher = this.mc.getBlockRendererDispatcher
 
-	def blockShapes: BlockModelShapes = this.blockDispatcher.getBlockModelShapes
+	//def blockShapes: BlockModelShapes = this.blockDispatcher.getBlockModelShapes
 
-	def renderItem: RenderItem = this.mc.getRenderItem
+	//def renderItem: RenderItem = this.mc.rende
 
-	def itemMesher: ItemModelMesher = this.renderItem.getItemModelMesher
+	//def itemMesher: ItemModelMesher = this.renderItem.getItemModelMesher
 
 	def bindResource(rl: ResourceLocation): Unit = {
 		Rendering.mc.getTextureManager.bindTexture(rl)
@@ -141,12 +137,14 @@ object Rendering {
 		)
 	}
 
+	/*
 	def getModel(stack: ItemStack, isItem: Boolean): IBakedModel = {
 		if (!isItem && WorldHelper.isBlock(stack.getItem))
 			Rendering.blockShapes.getModelForState(States.getState(stack))
 		else
 			Rendering.itemMesher.getItemModel(stack)
 	}
+	*/
 
 	def getScaledResoultion(): ScaledResolution =
 		new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight)

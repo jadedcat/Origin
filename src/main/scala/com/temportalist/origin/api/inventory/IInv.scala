@@ -5,7 +5,6 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.{IInventory, ISidedInventory}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
-import net.minecraft.util._
 
 /**
  *
@@ -26,7 +25,7 @@ trait IInv extends IInventory with ISidedInventory {
 		this.setSlots(size, 64)
 	}
 
-	override def clear(): Unit = {
+	def clear(): Unit = {
 		for (i <- 0 until this.getSizeInventory) this.slots(i) = null
 	}
 
@@ -93,14 +92,15 @@ trait IInv extends IInventory with ISidedInventory {
 		null
 	}
 
-	override def openInventory(playerIn: EntityPlayer): Unit = {}
+	override def openChest(): Unit = {}
 
-	override def closeInventory(playerIn: EntityPlayer): Unit = {}
+	override def closeChest(): Unit = {}
 
 	override def isUseableByPlayer(playerIn: EntityPlayer): Boolean = true
 
 	override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = this.isValidSlot(index)
 
+	/*
 	override def getField(id: Int): Int = 0
 
 	override def setField(id: Int, value: Int): Unit = {}
@@ -111,12 +111,15 @@ trait IInv extends IInventory with ISidedInventory {
 
 	override def getDisplayName: IChatComponent =
 		(if (this.hasCustomName)
-			new ChatComponentText(this.getCommandSenderName)
+			new ChatComponentText(this.getInventoryName)
 		else
-			new ChatComponentTranslation(this.getCommandSenderName, new Array[AnyRef](0))
+			new ChatComponentTranslation(this.getInventoryName, new Array[AnyRef](0))
 				).asInstanceOf[IChatComponent]
+	*/
 
-	override def getSlotsForFace(side: EnumFacing): Array[Int] =
+
+
+	override def getSlotsForFace(side: Int): Array[Int] =
 		if (this.hasInventory()) {
 			val slotsFromSide: Array[Int] = new Array[Int](this.getSizeInventory)
 			for (i <- 0 to this.getSizeInventory) {
@@ -128,10 +131,10 @@ trait IInv extends IInventory with ISidedInventory {
 			null
 
 	override def canInsertItem(
-			index: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean =
+			index: Int, itemStackIn: ItemStack, direction: Int): Boolean =
 		this.isValidSlot(index)
 
-	override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean =
+	override def canExtractItem(index: Int, stack: ItemStack, direction: Int): Boolean =
 		this.isValidSlot(index)
 
 	def toNBT_IInv(tagCom: NBTTagCompound): Unit = {
@@ -174,5 +177,7 @@ trait IInv extends IInventory with ISidedInventory {
 			this.stackSize = 64
 		}
 	}
+
+	override def isCustomInventoryName: Boolean = false
 
 }

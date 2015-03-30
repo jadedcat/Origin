@@ -4,13 +4,13 @@ import java.util
 
 import com.temportalist.origin.library.client.utility.Rendering
 import com.temportalist.origin.library.common.Origin
+import cpw.mods.fml.relauncher.{SideOnly, Side}
 import io.netty.buffer.Unpooled
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.{GuiButton, GuiScreen, GuiTextField}
 import net.minecraft.network.PacketBuffer
 import net.minecraft.network.play.client.C17PacketCustomPayload
 import net.minecraft.util.ResourceLocation
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.apache.logging.log4j.LogManager
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
@@ -129,7 +129,7 @@ trait IGuiScreen extends GuiScreen {
 	private def sendKeyPacket(textField: GuiTextField): Unit = {
 		val packetBuffer: PacketBuffer = new PacketBuffer(Unpooled.buffer())
 		try {
-			packetBuffer.writeString(textField.getText)
+			packetBuffer.writeStringToBuffer(textField.getText)
 			this.mc.getNetHandler
 					.addToSendQueue(new C17PacketCustomPayload("MC|ItemName", packetBuffer))
 		}

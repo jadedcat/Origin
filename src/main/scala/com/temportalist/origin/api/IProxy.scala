@@ -1,10 +1,9 @@
 package com.temportalist.origin.api
 
+import cpw.mods.fml.common.network.IGuiHandler
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.BlockPos
 import net.minecraft.world.World
-import net.minecraftforge.fml.common.network.IGuiHandler
 
 /**
  *
@@ -20,14 +19,14 @@ trait IProxy extends IGuiHandler {
 	override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int,
 			z: Int): AnyRef = {
 		this.getClientElement(
-			ID, player, world, x, y, z, world.getTileEntity(new BlockPos(x, y, z))
+			ID, player, world, x, y, z, world.getTileEntity(x, y, z)
 		)
 	}
 
 	override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int,
 			z: Int): AnyRef = {
 		this.getServerElement(
-			ID, player, world, x, y, z, world.getTileEntity(new BlockPos(x, y, z))
+			ID, player, world, x, y, z, world.getTileEntity(x, y, z)
 		)
 	}
 

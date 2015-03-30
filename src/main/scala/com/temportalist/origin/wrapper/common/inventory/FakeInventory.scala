@@ -3,7 +3,6 @@ package com.temportalist.origin.wrapper.common.inventory
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{ChatComponentTranslation, ChatComponentText, IChatComponent}
 
 /**
  * A default fake inventory for easy access
@@ -64,6 +63,16 @@ class FakeInventory(var holderStack: ItemStack, var inventorySize: Int, var stac
 		this.markDirty
 	}
 
+	override def closeChest(): Unit = {}
+
+	override def isCustomInventoryName: Boolean = false
+
+	override def openChest(): Unit = {}
+
+	override def getInventoryName: String =
+		if (this.holderStack != null) this.holderStack.getDisplayName else ""
+
+	/*
 	override def getCommandSenderName: String = if (this.holderStack != null) this.holderStack.getDisplayName else ""
 
 	override def hasCustomName: Boolean = false
@@ -74,6 +83,7 @@ class FakeInventory(var holderStack: ItemStack, var inventorySize: Int, var stac
 		else
 			new ChatComponentTranslation(this.getCommandSenderName, new Array[AnyRef](0))
 		).asInstanceOf[IChatComponent]
+	*/
 
 	def getInventoryStackLimit: Int = {
 		this.stackLimit
@@ -86,21 +96,10 @@ class FakeInventory(var holderStack: ItemStack, var inventorySize: Int, var stac
 		true
 	}
 
-	override def openInventory(playerIn: EntityPlayer): Unit = {}
-
-	override def closeInventory(playerIn: EntityPlayer): Unit = {}
 
 	def isItemValidForSlot(slot: Int, stack: ItemStack): Boolean = {
 		true
 	}
-
-	override def clear(): Unit = ???
-
-	override def getField(id: Int): Int = 0
-
-	override def getFieldCount: Int = 0
-
-	override def setField(id: Int, value: Int): Unit = {}
 
 }
 

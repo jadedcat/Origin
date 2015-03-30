@@ -5,8 +5,8 @@ import java.util
 import com.temportalist.origin.api.IProxy
 import com.temportalist.origin.library.common.handlers.{RegisterHelper, OptionHandler}
 import com.temportalist.origin.library.common.register._
-import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
-import net.minecraftforge.fml.common.network.NetworkRegistry
+import cpw.mods.fml.common.event.{FMLPostInitializationEvent, FMLPreInitializationEvent, FMLInitializationEvent}
+import cpw.mods.fml.common.network.NetworkRegistry
 
 /**
  *

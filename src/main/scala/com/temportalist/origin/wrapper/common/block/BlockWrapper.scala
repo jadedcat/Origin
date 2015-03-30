@@ -1,17 +1,18 @@
 package com.temportalist.origin.wrapper.common.block
 
 import java.util
+
 import com.temportalist.origin.api.rendering.IRenderingObject
-import com.temportalist.origin.library.common.utility.{Stacks, ItemRenderingHelper}
+import com.temportalist.origin.library.common.lib.BlockState
+import com.temportalist.origin.library.common.lib.vec.BlockPos
+import com.temportalist.origin.library.common.utility.Stacks
+import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{Item, ItemBlock, ItemStack}
+import net.minecraft.item.{ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{BlockPos, EnumFacing}
-import net.minecraft.world.{IBlockAccess, World}
-import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraft.world.World
 
 /**
  * A wrapper class for the Minecraft Block.
@@ -37,7 +38,6 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 	else {
 		GameRegistry.registerBlock(this, name)
 	}
-	ItemRenderingHelper.register(this)
 
 	// Other Constructors
 	def this(material: Material, pluginID: String, name: String) {
@@ -54,10 +54,6 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 
 	// End Constructors
 
-	override def getBlock(): Block = this
-
-	override def getItem(): Item = Item.getItemFromBlock(this)
-
 	override def getCompoundName(): String = this.modid + ":" + this.name
 
 	/**
@@ -72,28 +68,29 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 
 	// ~~~~~~~~~~~~~~~ Start supered wrappers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	override def onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState,
-			playerIn: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float,
-			hitZ: Float): Boolean = {
-		super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ)
+	override def onBlockActivated(worldIn: World, x: Int, y: Int, z: Int, player: EntityPlayer,
+			side: Int, subX: Float, subY: Float, subZ: Float): Boolean = {
+		super.onBlockActivated(worldIn, x, y, z, player, side, subX, subY, subZ)
 	}
 
-	override def removedByPlayer(world: World, pos: BlockPos, player: EntityPlayer,
+	override def removedByPlayer(world: World, player: EntityPlayer, x: Int, y: Int, z: Int,
 			willHarvest: Boolean): Boolean = {
+		val pos: BlockPos = new BlockPos(x, y, z)
 		if (!player.capabilities.isCreativeMode)
 			Stacks.spawnDrops(world, pos,
-				this.getDrops_Pre(world, pos, world.getBlockState(pos), world.getTileEntity(pos))
+				this.getDrops_Pre(world, pos, pos.getBlockState(world), pos.getTile(world))
 			)
-		super.removedByPlayer(world, pos, player, willHarvest)
+		super.removedByPlayer(world, player, x, y, z, willHarvest)
 	}
 
-	def getDrops_Pre(world: World, pos: BlockPos,
-			state: IBlockState, tile: TileEntity): util.List[ItemStack] = {
-		super.getDrops(world, pos, state, 0)
+	def getDrops_Pre(world: World, pos: BlockPos, state: BlockState,
+			tile: TileEntity): util.List[ItemStack] = {
+		super.getDrops(world, pos.getX(), pos.getY(), pos.getZ(), state.getMeta(), 0)
 	}
 
 	/* Runs on POST block destruction */
-	override def getDrops(world: IBlockAccess, pos: BlockPos, state: IBlockState,
-			fortune: Int): util.List[ItemStack] = new util.ArrayList[ItemStack]()
+	override def getDrops(world: World, x: Int, y: Int, z: Int, metadata: Int,
+			fortune: Int): util.ArrayList[ItemStack] = new util.ArrayList[ItemStack]()
+
 
 }

@@ -6,12 +6,13 @@ import com.temportalist.origin.library.client.utility.Rendering
 import com.temportalist.origin.library.common.utility.Scala
 import com.temportalist.origin.test._
 import com.temportalist.origin.wrapper.client.gui.GuiScreenWrapper
-import net.minecraft.client.renderer.{GlStateManager, OpenGlHelper, RenderHelper}
+import net.minecraft.client.renderer.{OpenGlHelper, RenderHelper}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.boss.EntityDragon
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagList
+import org.lwjgl.opengl.GL11
 
 /**
  *
@@ -44,10 +45,10 @@ class GuiDataCore(player: EntityPlayer) extends GuiScreenWrapper {
 		super.drawGuiForegroundLayer(mouseX, mouseY, renderPartialTicks)
 
 		if (this.index.size() > 0) {
-			GlStateManager.pushMatrix()
-			GlStateManager.translate(mouseX, mouseY, 0D)
+			GL11.glPushMatrix()
+			GL11.glTranslated(mouseX, mouseY, 0D)
 			this.drawEntityState(this.index.get(0).getValue(), 15)
-			GlStateManager.popMatrix()
+			GL11.glPopMatrix()
 		}
 
 	}
@@ -56,16 +57,17 @@ class GuiDataCore(player: EntityPlayer) extends GuiScreenWrapper {
 		val entity: Entity = state.getEntity()
 		if (entity == null) return
 
-		GlStateManager.enableColorMaterial()
-		GlStateManager.pushMatrix()
+		GL11.glEnable(GL11.GL_COLOR_MATERIAL)
+		GL11.glPushMatrix()
+		GL11.glPushMatrix()
 
-		GlStateManager.disableAlpha()
+		GL11.glDisable(GL11.GL_ALPHA)
 
 		//GL11.glTranslatef((float)posX, (float)posY, 50.0F);
 
 		//GL11.glScalef((float)(-scale), (float)scale, (float)scale);
-		GlStateManager.scale(-scale, scale, scale)
-		GlStateManager.rotate(180f, 0f, 0f, 1f)
+		GL11.glScaled(-scale, scale, scale)
+		GL11.glRotatef(180f, 0f, 0f, 1f)
 		/*
 		val yawOffset: Float = entity.renderYawOffset
 		val yaw: Float = entity.rotationYaw
@@ -73,22 +75,22 @@ class GuiDataCore(player: EntityPlayer) extends GuiScreenWrapper {
 		val yawHead: Float = entity.rotationYawHead
 		*/
 
-		GlStateManager.rotate(135f, 0f, 1f, 0f)
+		GL11.glRotatef(135f, 0f, 1f, 0f)
 		RenderHelper.enableStandardItemLighting()
-		GlStateManager.rotate(-135f, 0f, 1f, 0f)
-		GlStateManager.rotate((-Math.atan(1 / 20f) * 20f).toFloat, 1f, 0f, 0f)
-		GlStateManager.rotate(15f, 1f, 0f, 0f)
-		GlStateManager.rotate(25f, 0f, 1f, 0f)
+		GL11.glRotatef(-135f, 0f, 1f, 0f)
+		GL11.glRotatef((-Math.atan(1 / 20f) * 20f).toFloat, 1f, 0f, 0f)
+		GL11.glRotatef(15f, 1f, 0f, 0f)
+		GL11.glRotatef(25f, 0f, 1f, 0f)
 
-		GlStateManager.translate(0f, entity.getYOffset, 0f)
+		GL11.glTranslated(0f, entity.getYOffset, 0f)
 
-		GlStateManager.color(1f, 1f, 1f, 1f)
+		GL11.glColor4f(1f, 1f, 1f, 1f)
 
-		if (entity.isInstanceOf[EntityDragon]) GlStateManager.rotate(180f, 0f, 1f, 0f)
+		if (entity.isInstanceOf[EntityDragon]) GL11.glRotatef(180f, 0f, 1f, 0f)
 
-		val viewY: Float = Rendering.mc.getRenderManager.playerViewY
-		Rendering.mc.getRenderManager.playerViewY = 180.0F
-		Rendering.mc.getRenderManager.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F)
+		val viewY: Float = Rendering.renderManager.playerViewY
+		Rendering.renderManager.playerViewY = 180.0F
+		Rendering.renderManager.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F)
 
 		/*
 		if (entity.isInstanceOf[EntityDragon]) GlStateManager.rotate(180f, 0f, -1f, 0f)
@@ -99,17 +101,17 @@ class GuiDataCore(player: EntityPlayer) extends GuiScreenWrapper {
 		TessRenderer.getRenderer().setBrightness(240)
 		*/
 
-		Rendering.mc.getRenderManager.playerViewY = viewY
+		Rendering.renderManager.playerViewY = viewY
 
-		GlStateManager.popMatrix()
+		GL11.glPopMatrix()
 
 		RenderHelper.disableStandardItemLighting()
 
-		GlStateManager.enableAlpha()
+		GL11.glEnable(GL11.GL_ALPHA)
 
-		GlStateManager.disableRescaleNormal()
+		//GlStateManager.disableRescaleNormal()
 		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit)
-		GlStateManager.disableTexture2D()
+		GL11.glDisable(GL11.GL_TEXTURE_2D)
 		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit)
 
 	}

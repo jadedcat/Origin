@@ -1,17 +1,18 @@
 package com.temportalist.origin.library.common.utility
 
+import com.temportalist.origin.library.common.lib.BlockState
 import com.temportalist.origin.library.common.lib.vec.V3O
+import cpw.mods.fml.common.FMLCommonHandler
+import cpw.mods.fml.relauncher.{SideOnly, Side}
 import net.minecraft.block.Block
-import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
-import net.minecraft.entity.Entity
+import net.minecraft.entity.{EntityLivingBase, Entity}
 import net.minecraft.item.Item
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{EnumFacing, Vec3}
+import net.minecraft.util.Vec3
 import net.minecraft.world.World
 import net.minecraftforge.common.DimensionManager
-import net.minecraftforge.fml.common.FMLCommonHandler
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.common.util.ForgeDirection
 
 /**
  *
@@ -33,26 +34,26 @@ object WorldHelper {
 		else this.getWorld_client()
 	}
 
-	def isOverworld(world: World): Boolean = world.provider.getDimensionId == 0
+	def isOverworld(world: World): Boolean = world.provider.dimensionId == 0
 
 	@SideOnly(Side.CLIENT)
 	def getWorld_client(): World = Minecraft.getMinecraft.theWorld
 
 	def isBlock(item: Item): Boolean = Block.getBlockFromItem(item) != null
 
-	def getBlock(world: World, x: Int, y: Int, z: Int, dir: EnumFacing): Block = {
+	def getBlock(world: World, x: Int, y: Int, z: Int, dir: ForgeDirection): Block = {
 		V3O.from(x, y, z, dir).getBlock(world)
 	}
 
-	def getBlockState(world: World, x: Int, y: Int, z: Int, dir: EnumFacing): IBlockState = {
+	def getBlockState(world: World, x: Int, y: Int, z: Int, dir: ForgeDirection): BlockState = {
 		V3O.from(x, y, z, dir).getBlockState(world)
 	}
 
-	def getTileEntity(world: World, x: Int, y: Int, z: Int, dir: EnumFacing): TileEntity = {
+	def getTileEntity(world: World, x: Int, y: Int, z: Int, dir: ForgeDirection): TileEntity = {
 		V3O.from(x, y, z, dir).getTile(world)
 	}
 
-	def isInFieldOfView(viewer: Entity, viewee: Entity): Boolean = {
+	def isInFieldOfView(viewer: EntityLivingBase, viewee: EntityLivingBase): Boolean = {
 		val entityLookVec: V3O = new V3O(viewer.getLook(1.0F)) //.normalize()
 		val differenceVec: V3O = new V3O(
 				viewee.posX - viewer.posX,
@@ -76,11 +77,11 @@ object WorldHelper {
 	}
 
 	def canEntityBeSeen(viewer: Entity, viewee: Entity): Boolean = {
-		viewee.getEntityWorld.rayTraceBlocks(
-			new Vec3(
+		viewee.worldObj.rayTraceBlocks(
+			Vec3.createVectorHelper(
 				viewee.posX, viewee.posY + viewee.getEyeHeight.asInstanceOf[Double], viewee.posZ)
 			,
-			new Vec3(
+			Vec3.createVectorHelper(
 				viewer.posX, viewer.posY + viewer.getEyeHeight.asInstanceOf[Double], viewer.posZ
 			)
 		) == null

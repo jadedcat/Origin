@@ -3,6 +3,10 @@ package com.temportalist.origin.test
 import java.util
 import java.util.UUID
 
+import com.temportalist.origin.library.common.lib.vec.V3O
+import cpw.mods.fml.relauncher.{SideOnly, Side}
+import org.lwjgl.opengl.GL11
+
 import scala.collection.mutable
 
 import com.temportalist.origin.api.rendering.ISpriteMapper
@@ -12,7 +16,6 @@ import com.temportalist.origin.library.common.handlers.RegisterHelper
 import com.temportalist.origin.library.common.lib.IRadialSelection
 import com.temportalist.origin.library.common.utility.{WorldHelper, Scala, NBTHelper}
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.texture.{TextureAtlasSprite, TextureMap}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{EntityList, EntityLivingBase}
@@ -21,7 +24,6 @@ import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraft.util.{MovingObjectPosition, ResourceLocation}
 import net.minecraft.world.World
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  *
@@ -35,7 +37,7 @@ class ScrewdriverMode(private val name: String, private val textureName: String,
 	RegisterHelper.registerSpritee(this)
 
 	private val texture: ResourceLocation = new ResourceLocation(Origin.MODID,
-		"items/screwdriver/addon/" + textureName)
+		"/screwdriver/addon/" + textureName)
 
 	// Radial Selection things
 
@@ -49,19 +51,23 @@ class ScrewdriverMode(private val name: String, private val textureName: String,
 		if (this.canEnableOn(stack)) {
 			val w2: Double = w / 2D
 			val h2: Double = h / 2D
-			GlStateManager.pushMatrix()
+			GL11.glPushMatrix()
 
 			val sprite: TextureAtlasSprite = Rendering.getSprite(this.texture.toString)
 
 			Rendering.bindResource(TextureMap.locationBlocksTexture)
-			mc.currentScreen.drawTexturedModalRect((x - w2).toInt, (y - h2).toInt, sprite, 32, 32)
+			/* todo fix the sprite render
+			mc.currentScreen.drawTexturedModalRect(
+				(x - w2).toInt, (y - h2).toInt, sprite, 32, 32
+			)
+			*/
 
-			GlStateManager.popMatrix()
+			GL11.glPopMatrix()
 
-			GlStateManager.pushMatrix()
+			GL11.glPushMatrix()
 			val scale: Float = 0.5F
 			val aScale: Float = 1.0F / scale
-			GlStateManager.scale(scale, scale, scale)
+			GL11.glScaled(scale, scale, scale)
 			mc.fontRendererObj.drawStringWithShadow(
 				this.getName(),
 				(x * aScale).toInt -
@@ -69,7 +75,7 @@ class ScrewdriverMode(private val name: String, private val textureName: String,
 				((y + (h / 2)) * aScale).toInt + 2,
 				16777215
 			)
-			GlStateManager.popMatrix()
+			GL11.glPopMatrix()
 
 		}
 	}
@@ -89,7 +95,7 @@ class ScrewdriverMode(private val name: String, private val textureName: String,
 	def getName(): String = this.name
 
 	def canEnableOn(stack: ItemStack): Boolean = {
-		this.minTier <= stack.getItemDamage
+		this.minTier <= stack.getMetadata
 	}
 
 	def onRightClick(stack: ItemStack, world: World, player: EntityPlayer,
@@ -97,7 +103,7 @@ class ScrewdriverMode(private val name: String, private val textureName: String,
 		stack
 	}
 
-	def getUseAction(stack: ItemStack): EnumAction = EnumAction.NONE
+	def getUseAction(stack: ItemStack): EnumAction = EnumAction.none
 
 	def onUseFinish(stack: ItemStack, worldIn: World, playerIn: EntityPlayer,
 			mop: MovingObjectPosition): ItemStack = stack
@@ -234,8 +240,8 @@ object ScrewdriverMode {
 
 		override def onSelection(stack: ItemStack, player: EntityPlayer): Unit = {
 			//println("Open the core")
-			player.openGui(Origin, 0, player.worldObj,
-				player.getPosition.getX, player.getPosition.getY, player.getPosition.getZ)
+			val pos: V3O = new V3O(player)
+			player.openGui(Origin, 0, player.worldObj, pos.x_i(), pos.y_i(), pos.z_i())
 		}
 
 	}

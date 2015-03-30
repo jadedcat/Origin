@@ -4,15 +4,15 @@ import com.temportalist.origin.library.client.utility.Rendering
 import com.temportalist.origin.library.common.lib.vec.V3O
 import com.temportalist.origin.library.common.utility.MathFuncs
 import com.temportalist.origin.library.common.{CGOOptions, Origin}
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.common.Loader
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.gui.{GuiIngame, ScaledResolution}
-import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.potion.Potion
 import net.minecraft.util.{MathHelper, ResourceLocation}
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
-import net.minecraftforge.fml.common.Loader
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import org.lwjgl.opengl.GL11
 import org.lwjgl.util.Color
 
 /**
@@ -60,7 +60,7 @@ object HealthOverlay extends GuiIngame(Rendering.mc) {
 
 		val tier: Int = (health - 1) / 20
 
-		GlStateManager.enableBlend()
+		GL11.glEnable(GL11.GL_BLEND)
 		Rendering.bindResource(this.hearts)
 
 		if (tier <= 0) {
@@ -91,7 +91,7 @@ object HealthOverlay extends GuiIngame(Rendering.mc) {
 		else
 			this.drawHearts(tier, healthToDraw, xHearts, yHearts, highlight, this.base)
 
-		GlStateManager.disableBlend()
+		GL11.glDisable(GL11.GL_BLEND)
 
 		Rendering.bindResource(this.icons)
 		event.setCanceled(true)
@@ -115,12 +115,12 @@ object HealthOverlay extends GuiIngame(Rendering.mc) {
 				if (tier < CGOOptions.heartColors.length) tier else
 					this.rand.nextInt(CGOOptions.heartColors.length)
 			))
-			GlStateManager.color(this.r(color), this.g(color), this.b(color))
+			GL11.glColor3f(this.r(color), this.g(color), this.b(color))
 		}
 		this.drawHeartsLayer(xBase, yBase, fullHearts, halfHeart, baseLayerUV)
 
 		// overlay/highlight layer
-		GlStateManager.color(1f, 1f, 1f)
+		GL11.glColor3f(1f, 1f, 1f)
 		this.drawHeartsLayer(
 			xBase, yBase, fullHearts, halfHeart,
 			baseLayerUV + (if (highlight) this.highlightOffset else this.overlayOffset)

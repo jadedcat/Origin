@@ -1,10 +1,10 @@
 package com.temportalist.origin.library.common.utility
 
+import cpw.mods.fml.relauncher.{SideOnly, Side}
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.ChatComponentText
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  *

@@ -10,6 +10,10 @@ import com.temportalist.origin.library.server.command.CommandOrigin
 import com.temportalist.origin.test.{PacketUpdateMode, Sonic}
 import com.temportalist.origin.wrapper.common.ModWrapper
 import com.temportalist.origin.wrapper.common.item.ItemPlacer
+import cpw.mods.fml.common.event.{FMLServerStartingEvent, FMLPostInitializationEvent, FMLInitializationEvent, FMLPreInitializationEvent}
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
+import cpw.mods.fml.common.{SidedProxy, Mod}
 import net.minecraft.block.Block
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.enchantment.Enchantment
@@ -19,10 +23,6 @@ import net.minecraft.util._
 import net.minecraft.world.WorldServer
 import net.minecraftforge.common.DimensionManager
 import net.minecraftforge.event.ServerChatEvent
-import net.minecraftforge.fml.common.event._
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
-import net.minecraftforge.fml.common.{Mod, SidedProxy}
 
 /**
  *
@@ -121,7 +121,7 @@ object Origin extends ModWrapper {
 		val temp: util.HashMap[String, Integer] = new util.HashMap[String, Integer]
 
 		for (i <- 0 until allWS.length) {
-			temp.put(allWS(i).provider.getDimensionName, allWS(i).provider.getDimensionId)
+			temp.put(allWS(i).provider.getDimensionName, allWS(i).provider.dimensionId)
 		}
 
 		Origin.dimensions.clear

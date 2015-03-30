@@ -8,6 +8,7 @@ import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.util._
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraft.world.World
+import net.minecraftforge.common.util.ForgeDirection
 
 /**
  *
@@ -69,10 +70,10 @@ object Cursor {
 		var blockZ: Int = 0
 		var side: Int = 0
 		if (mop.typeOfHit == MovingObjectType.BLOCK) {
-			blockX = mop.getBlockPos().getX
-			blockY = mop.getBlockPos().getY
-			blockZ = mop.getBlockPos().getZ
-			side = mop.sideHit.getIndex()
+			blockX = mop.blockX
+			blockY = mop.blockY
+			blockZ = mop.blockZ
+			side = mop.sideHit
 		}
 		else {
 			blockX = mop.hitVec.xCoord.asInstanceOf[Int]
@@ -80,7 +81,7 @@ object Cursor {
 			blockZ = mop.hitVec.zCoord.asInstanceOf[Int]
 			side = 1
 		}
-		new V3O(blockX, blockY, blockZ) + EnumFacing.getFront(side)
+		new V3O(blockX, blockY, blockZ) + ForgeDirection.getOrientation(side)
 	}
 
 	def raytraceWorld(world: World, player: EntityPlayer): MovingObjectPosition = {
@@ -98,7 +99,7 @@ object Cursor {
 
 		val expansion: Float = 1f
 		val entities: util.List[Entity] = world.getEntitiesWithinAABBExcludingEntity(
-			player, player.getEntityBoundingBox.addCoord(lookReach.x, lookReach.y, lookReach.z)
+			player, player.getBoundingBox.addCoord(lookReach.x, lookReach.y, lookReach.z)
 					.expand(expansion, expansion, expansion)
 		).asInstanceOf[util.List[Entity]]
 		var lastDistance: Double = reach
@@ -111,7 +112,7 @@ object Cursor {
 			if (entity.canBeCollidedWith) {
 
 				val entityExpansion: Double = entity.getCollisionBorderSize
-				val aabb: AxisAlignedBB = entity.getEntityBoundingBox
+				val aabb: AxisAlignedBB = entity.getBoundingBox
 						.expand(entityExpansion, entityExpansion, entityExpansion)
 				val mop: MovingObjectPosition = aabb
 						.calculateIntercept(head.toVec3(), cursorPos.toVec3())

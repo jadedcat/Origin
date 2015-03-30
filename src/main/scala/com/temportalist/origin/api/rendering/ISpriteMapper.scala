@@ -1,7 +1,7 @@
 package com.temportalist.origin.api.rendering
 
+import cpw.mods.fml.relauncher.{SideOnly, Side}
 import net.minecraft.util.ResourceLocation
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  *

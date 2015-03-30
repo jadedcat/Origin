@@ -1,14 +1,14 @@
 package com.temportalist.origin.library.common
 
-import scala.collection.mutable
-
 import com.temportalist.origin.library.client.gui.config.GuiConfig
 import com.temportalist.origin.library.client.utility.Rendering
 import com.temportalist.origin.library.common.register.OptionRegister
 import com.temportalist.origin.library.common.utility.WorldHelper
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.audio.SoundCategory
 import net.minecraft.client.gui.GuiScreen
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+
+import scala.collection.mutable
 
 /**
  *

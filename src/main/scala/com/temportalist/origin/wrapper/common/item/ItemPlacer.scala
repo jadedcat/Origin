@@ -4,18 +4,18 @@ import java.util
 
 import com.temportalist.origin.library.common.lib.vec.V3O
 import com.temportalist.origin.library.common.utility.{Generic, WorldHelper}
-import net.minecraft.block.BlockFence
-import net.minecraft.block.state.IBlockState
+import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraft.block.{Block, BlockFence}
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity._
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.{MobSpawnerBaseLogic, TileEntityMobSpawner}
-import net.minecraft.util.{MathHelper, BlockPos, EnumFacing, StatCollector}
+import net.minecraft.util.{MathHelper, StatCollector}
 import net.minecraft.world.World
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.common.util.ForgeDirection
 
 /**
  *
@@ -63,41 +63,46 @@ class ItemPlacer(modid: String, name: String) extends ItemWrapper(modid, name) {
 		16777215
 	}
 
-	override def onItemUse(stack: ItemStack, playerIn: EntityPlayer, worldIn: World, pos: BlockPos,
-			side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
-		if (WorldHelper.isClient() || !playerIn.canPlayerEdit(pos.offset(side), side, stack))
+	override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int,
+			z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+		val pos: V3O = new V3O(x, y, z)
+		val pos_side: V3O = pos + ForgeDirection.getOrientation(side)
+		if (WorldHelper.isClient() ||
+				!player.canPlayerEdit(pos_side.x_i(), pos_side.y_i(), pos_side.z_i(), side, stack))
 			return false
 		if (!stack.hasTagCompound) return false
 		val entityName: String = stack.getTagCompound.getString("EntityName")
-		val state: IBlockState = worldIn.getBlockState(pos)
+		val state: Block = pos.getBlock(world)
 
-		if (state.getBlock == Blocks.mob_spawner) {
-			worldIn.getTileEntity(pos) match {
+		if (state == Blocks.mob_spawner) {
+			pos.getTile(world) match {
 				case spawner: TileEntityMobSpawner =>
-					val logic: MobSpawnerBaseLogic = spawner.getSpawnerBaseLogic
+					val logic: MobSpawnerBaseLogic = spawner.func_145881_a()
 					logic.setEntityName(entityName)
 					spawner.markDirty()
-					worldIn.markBlockForUpdate(pos)
-					if (!playerIn.capabilities.isCreativeMode)
+					pos.markForUpdate(world)
+					if (!player.capabilities.isCreativeMode)
 						stack.stackSize -= 1
 					return true
 				case _ =>
 			}
 		}
 
-		val placePos: V3O = new V3O(pos) + side + new V3O(
+		val placePos: V3O = pos_side + new V3O(
 			0.5,
-			if (side == EnumFacing.UP && state.isInstanceOf[BlockFence]) 0.5 else 0,
+			if (side == 1 && state.isInstanceOf[BlockFence]) 0.5 else 0,
 			0.5
 		)
 
-		val entity: Entity = this.spawnEntity(worldIn, entityName, placePos)
+		val entity: Entity = this.spawnEntity(world, entityName, placePos)
 
 		if (entity != null) {
+			/* todo fix the name tagging
 			if (entity.isInstanceOf[EntityLivingBase] && stack.hasDisplayName) {
 				entity.setCustomNameTag(stack.getDisplayName)
 			}
-			if (!playerIn.capabilities.isCreativeMode) {
+			*/
+			if (!player.capabilities.isCreativeMode) {
 				stack.stackSize -= 1
 			}
 			return true
@@ -125,7 +130,7 @@ class ItemPlacer(modid: String, name: String) extends ItemWrapper(modid, name) {
 				entity match {
 					case ageable: EntityAgeable =>
 						return this.spawnEntity(
-							ageable.createChild(null), new V3O(entity.getPositionVector)
+							ageable.createChild(null), new V3O(entity)
 						)
 				}
 			}
@@ -144,16 +149,18 @@ class ItemPlacer(modid: String, name: String) extends ItemWrapper(modid, name) {
 			case living: EntityLivingBase =>
 				living.setLocationAndAngles(
 					pos.x, pos.y, pos.z,
-					MathHelper.wrapAngleTo180_float(entity.getEntityWorld.rand.nextFloat * 360.0F),
+					MathHelper.wrapAngleTo180_float(entity.worldObj.rand.nextFloat * 360.0F),
 					0.0F
 				)
 				living.rotationYawHead = living.rotationYaw
 				living.renderYawOffset = living.rotationYaw
+				/*
 				living.asInstanceOf[EntityLiving].onInitialSpawn(
-					entity.getEntityWorld.getDifficultyForLocation(pos.toBlockPos()),
+					entity.worldObj.getDifficultyForLocation(pos.toBlockPos()),
 					null
 				)
-				entity.getEntityWorld.spawnEntityInWorld(entity)
+				*/
+				entity.worldObj.spawnEntityInWorld(entity)
 				living.asInstanceOf[EntityLiving].playLivingSound()
 				true
 			case _ =>

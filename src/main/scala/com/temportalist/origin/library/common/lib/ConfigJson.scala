@@ -7,8 +7,8 @@ import java.util.Map.Entry
 import com.google.gson.{JsonArray, JsonElement, JsonObject, JsonPrimitive}
 import com.temportalist.origin.library.common.utility.Json.Config
 import com.temportalist.origin.library.common.utility.{Json, Scala}
+import cpw.mods.fml.common.ObfuscationReflectionHelper
 import net.minecraftforge.common.config.{ConfigCategory, Configuration, Property}
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper
 
 /**
  *

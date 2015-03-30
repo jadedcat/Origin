@@ -1,7 +1,7 @@
 package com.temportalist.origin.library.common.lib
 
+import cpw.mods.fml.relauncher.{SideOnly, Side}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 
 /**

@@ -2,14 +2,12 @@ package com.temportalist.origin.wrapper.common.item
 
 import java.util
 import com.temportalist.origin.api.rendering.IRenderingObject
-import com.temportalist.origin.library.common.utility.ItemRenderingHelper
+import cpw.mods.fml.common.registry.GameRegistry
+import cpw.mods.fml.relauncher.{SideOnly, Side}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{Item, ItemStack}
-import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.World
-import net.minecraftforge.fml.common.registry.GameRegistry
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  * A wrapper for Minecraft's Item
@@ -25,9 +23,6 @@ class ItemWrapper(val modid: String, name: String) extends Item with IRenderingO
 
 	this.setUnlocalizedName(name)
 	GameRegistry.registerItem(this, name)
-	ItemRenderingHelper.register(this)
-
-	override def getItem(): Item = this
 
 	override def getCompoundName(): String = this.modid + ":" + this.name
 
@@ -65,16 +60,9 @@ class ItemWrapper(val modid: String, name: String) extends Item with IRenderingO
 		super.onItemRightClick(itemStack, world, player)
 	}
 
-	/**
-	 * Callback for item usage. If the item does something special on right clicking,
-	 * it will have one of these. Return true if something happens and false if it doesn't.
-	 * This is for ITEMS, not BLOCKS!
-	 *
-	 * @return
-	 */
-	override def onItemUse(stack: ItemStack, playerIn: EntityPlayer, worldIn: World, pos: BlockPos,
-			side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
-		super.onItemUse(stack, playerIn, worldIn, pos, side, hitX, hitY, hitZ)
+	override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int,
+			z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+		super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ)
 	}
 
 	/**

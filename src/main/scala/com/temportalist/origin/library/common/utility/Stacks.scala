@@ -3,11 +3,11 @@ package com.temportalist.origin.library.common.utility
 import java.util
 import java.util.Random
 
-import net.minecraft.block.state.IBlockState
+import com.temportalist.origin.library.common.lib.BlockState
+import com.temportalist.origin.library.common.lib.vec.BlockPos
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.BlockPos
 import net.minecraft.world.World
 
 /**
@@ -48,7 +48,7 @@ object Stacks {
 			entityitem.motionY = (random.nextGaussian.asInstanceOf[Float] * f3 + 0.2F)
 					.asInstanceOf[Double]
 			entityitem.motionZ = (random.nextGaussian.asInstanceOf[Float] * f3).asInstanceOf[Double]
-			entityitem.setPickupDelay(delay)
+			entityitem.delayBeforeCanPickup = delay
 			if (itemStack.hasTagCompound) {
 				entityitem.getEntityItem
 						.setTagCompound(itemStack.getTagCompound.copy.asInstanceOf[NBTTagCompound])
@@ -57,7 +57,7 @@ object Stacks {
 		}
 	}
 
-	def spawnItemStack(world: World, pos: BlockPos, state: IBlockState, random: Random,
+	def spawnItemStack(world: World, pos: BlockPos, state: BlockState, random: Random,
 			delay: Int): Unit = {
 		this.spawnItemStack(world, pos, States.getStack(state), random, delay)
 	}
@@ -67,7 +67,7 @@ object Stacks {
 
 	def areStacksMatching(a: ItemStack, b: ItemStack, checkSize: Boolean,
 			checkNBT: Boolean): Boolean = {
-		a.getItem == b.getItem && a.getItemDamage == b.getItemDamage &&
+		a.getItem == b.getItem && a.getMetadata == b.getMetadata &&
 				(!checkSize || a.stackSize == b.stackSize) &&
 				(!checkNBT || ItemStack.areItemStackTagsEqual(a, b))
 	}

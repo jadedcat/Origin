@@ -2,12 +2,11 @@ package com.temportalist.origin.library.common.lib
 
 import java.util
 
+import cpw.mods.fml.common.registry.{GameData, GameRegistry}
+import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier
 import net.minecraft.block.Block
-import net.minecraft.block.state.IBlockState
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.util.ResourceLocation
-import net.minecraftforge.fml.common.registry.GameRegistry.UniqueIdentifier
-import net.minecraftforge.fml.common.registry.{GameData, GameRegistry}
 import net.minecraftforge.oredict.OreDictionary
 
 /**
@@ -37,14 +36,11 @@ object NameParser {
 			}
 		val ui: UniqueIdentifier = new UniqueIdentifier(fullname)
 		(if (hasID) ui.modId + ":" else "") + ui.name +
-				(if (hasMeta) ":" + itemStack.getItemDamage else "")
+				(if (hasMeta) ":" + itemStack.getMetadata else "")
 	}
 
-	def getName(state: IBlockState, hasID: Boolean, hasMeta: Boolean): String = {
-		this.getName(
-			new ItemStack(state.getBlock, 1, state.getBlock.getMetaFromState(state)),
-			hasID, hasMeta
-		)
+	def getName(state: BlockState, hasID: Boolean, hasMeta: Boolean): String = {
+		this.getName(new ItemStack(state.getBlock, 1, state.getMeta()), hasID, hasMeta)
 	}
 
 	def getItemStack(name: String): ItemStack = {
@@ -66,11 +62,11 @@ object NameParser {
 		itemStack
 	}
 
-	def getState(name: String): IBlockState = {
+	def getState(name: String): BlockState = {
 		val stack: ItemStack = this.getItemStack(name)
 		if (stack == null) return null
 		val block: Block = Block.getBlockFromItem(stack.getItem)
-		if (block != null) block.getStateFromMeta(stack.getItemDamage)
+		if (block != null) new BlockState(block, stack.getMetadata)
 		else null
 	}
 

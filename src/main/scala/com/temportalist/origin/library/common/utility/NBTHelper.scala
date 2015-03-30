@@ -1,10 +1,13 @@
 package com.temportalist.origin.library.common.utility
 
-import scala.reflect.runtime.universe._
+import java.util
 
 import com.temportalist.origin.api.INBTSaver
+import cpw.mods.fml.common.ObfuscationReflectionHelper
 import net.minecraft.nbt.NBTBase.NBTPrimitive
 import net.minecraft.nbt._
+
+import scala.reflect.runtime.universe._
 
 /**
  *
@@ -42,7 +45,9 @@ object NBTHelper {
 	}
 
 	def getTagValueAt(nbtList: NBTTagList, index: Int): Any = {
-		val base: NBTBase = nbtList.get(index)
+		val base: NBTBase = ObfuscationReflectionHelper
+				.getPrivateValue(classOf[NBTTagList], nbtList, 0).asInstanceOf[util.List[NBTBase]]
+				.get(index)
 		base.getId match {
 			case 1 => base.asInstanceOf[NBTPrimitive].getByte
 			case 2 => base.asInstanceOf[NBTPrimitive].getShort

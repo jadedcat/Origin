@@ -7,11 +7,11 @@ import com.temportalist.origin.library.common.handlers.RegisterHelper
 import com.temportalist.origin.library.common.lib.IRadialSelection
 import com.temportalist.origin.library.common.nethandler.PacketHandler
 import com.temportalist.origin.test.{ScrewdriverMode, PacketUpdateMode, Sonic}
+import cpw.mods.fml.client.registry.ClientRegistry
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.common.gameevent.InputEvent.{MouseInputEvent, KeyInputEvent}
 import net.minecraft.client.settings.KeyBinding
 import net.minecraft.item.ItemStack
-import net.minecraftforge.fml.client.registry.ClientRegistry
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.fml.common.gameevent.InputEvent.{MouseInputEvent, KeyInputEvent}
 import org.lwjgl.input.Keyboard
 
 /**

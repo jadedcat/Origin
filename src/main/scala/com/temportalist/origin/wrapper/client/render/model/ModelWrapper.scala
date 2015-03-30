@@ -1,12 +1,10 @@
 package com.temportalist.origin.wrapper.client.render.model
 
-import com.temportalist.origin.library.common.lib.vec.{V3O, V3O$}
-import net.minecraft.block.state.{IBlockState, BlockState}
+import com.temportalist.origin.library.common.lib.vec.{V3O}
+import cpw.mods.fml.relauncher.{SideOnly, Side}
 import net.minecraft.client.model.{ModelBase, ModelRenderer}
 import net.minecraft.entity.Entity
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.BlockPos
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  *

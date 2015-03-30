@@ -7,10 +7,10 @@ import java.util.Map.Entry
 import com.google.common.io.Files
 import com.google.gson._
 import com.temportalist.origin.library.common.lib.NameParser
+import cpw.mods.fml.common.registry.GameRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt._
 import net.minecraftforge.common.config.Property
-import net.minecraftforge.fml.common.registry.GameRegistry
 
 /**
  *

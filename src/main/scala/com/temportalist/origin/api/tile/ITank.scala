@@ -4,7 +4,7 @@ import java.util
 
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumFacing
+import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
 
 /**
@@ -28,7 +28,7 @@ trait ITank extends TileEntity with IFluidHandler {
 	protected def addTank(fluid: Fluid, amount: Int, capacity: Int): Unit =
 		this.addTank(new FluidTank(new FluidStack(fluid, amount), capacity))
 
-	def getTankForDirection(fluid: Fluid, from: EnumFacing): IFluidTank = null
+	def getTankForDirection(fluid: Fluid, from: ForgeDirection): IFluidTank = null
 
 	/**
 	 *
@@ -36,7 +36,7 @@ trait ITank extends TileEntity with IFluidHandler {
 	 * @param from
 	 * @return
 	 */
-	def getTank(fluid: Fluid, from: EnumFacing): IFluidTank = {
+	def getTank(fluid: Fluid, from: ForgeDirection): IFluidTank = {
 		val facingTank: IFluidTank = this.getTankForDirection(fluid, from)
 		if (facingTank != null && (fluid == null || facingTank.getFluid.getFluid == fluid))
 			return facingTank
@@ -52,24 +52,24 @@ trait ITank extends TileEntity with IFluidHandler {
 		null
 	}
 
-	def hasTank(fluid: Fluid, from: EnumFacing): Boolean = this.getTank(fluid, from) != null
+	def hasTank(fluid: Fluid, from: ForgeDirection): Boolean = this.getTank(fluid, from) != null
 
 	def clearTanks(): Unit = {
 		for (i <- 0 until this.tanks.size())
 			this.tanks.set(i, new FluidTank(this.tanks.get(i).getCapacity))
 	}
 
-	override def canFill(from: EnumFacing, fluid: Fluid): Boolean = {
+	override def canFill(from: ForgeDirection, fluid: Fluid): Boolean = {
 		val tank: IFluidTank = this.getTank(fluid, from)
 		tank.getFluidAmount < tank.getCapacity
 	}
 
-	override def canDrain(from: EnumFacing, fluid: Fluid): Boolean = {
+	override def canDrain(from: ForgeDirection, fluid: Fluid): Boolean = {
 		val tank: IFluidTank = this.getTank(fluid, from)
 		tank.getFluidAmount > 0
 	}
 
-	override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
+	override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int = {
 		val tank: IFluidTank = this.getTank(resource.getFluid, from)
 		if (tank != null) {
 			val amount: Int = tank.fill(resource, doFill)
@@ -81,14 +81,14 @@ trait ITank extends TileEntity with IFluidHandler {
 			0
 	}
 
-	override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean): FluidStack = {
+	override def drain(from: ForgeDirection, maxDrain: Int, doDrain: Boolean): FluidStack = {
 		if (this.hasTank(null, from)) {
 			this.drain(from, new FluidStack(null.asInstanceOf[Fluid], maxDrain), doDrain)
 		}
 		else null
 	}
 
-	override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean): FluidStack = {
+	override def drain(from: ForgeDirection, resource: FluidStack, doDrain: Boolean): FluidStack = {
 		val tank: IFluidTank = this.getTank(resource.getFluid, from)
 		if (tank != null) {
 			val stack: FluidStack = tank.drain(resource.amount, doDrain)
@@ -101,7 +101,7 @@ trait ITank extends TileEntity with IFluidHandler {
 
 	def updateTile(): Unit
 
-	override def getTankInfo(from: EnumFacing): Array[FluidTankInfo] = {
+	override def getTankInfo(from: ForgeDirection): Array[FluidTankInfo] = {
 		val info: Array[FluidTankInfo] = new Array[FluidTankInfo](this.tanks.size())
 		for (i <- 0 until this.tanks.size()) {
 			info(i) = this.tanks.get(i).getInfo

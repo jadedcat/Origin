@@ -1,9 +1,9 @@
 package com.temportalist.origin.library.common.network
 
+import com.temportalist.origin.library.common.lib.vec.BlockPos
 import com.temportalist.origin.library.common.nethandler.IPacket
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.BlockPos
 
 /**
  *
@@ -18,7 +18,7 @@ abstract class PacketTile() extends IPacket {
 	}
 
 	override def handle(player: EntityPlayer, isServer: Boolean): Unit = {
-		val tile: TileEntity = player.worldObj.getTileEntity(this.get[BlockPos])
+		val tile: TileEntity = this.get[BlockPos].getTile(player.getEntityWorld)
 		if (tile != null) this.handle(player, tile, isServer)
 	}
 

@@ -72,12 +72,12 @@ object Teleport {
 
 	def toPointRandom(player: EntityPlayer, minRange: Int, maxRange: Int): Boolean = {
 		this.toPointRandom(
-			player, new Vec3i(player.posX, player.posY, player.posZ),
+			player, Vec3.createVectorHelper(player.posX, player.posY, player.posZ),
 			minRange, maxRange
 		)
 	}
 
-	def toPointRandom(player: EntityPlayer, center: Vec3i, minRadius: Int,
+	def toPointRandom(player: EntityPlayer, center: Vec3, minRadius: Int,
 			maxRadius: Int): Boolean = {
 		val world: World = player.worldObj
 		val random: Random = new Random
@@ -99,7 +99,7 @@ object Teleport {
 				MathFuncs.getRandomBetweenBounds(minRadius, maxRadius) +
 						MathHelper.floor_double(player.posZ) + 0.5
 			)
-			playerNewBB = AxisAlignedBB.fromBounds(
+			playerNewBB = AxisAlignedBB.getBoundingBox(
 				point.x - halfWidth,
 				point.y + heightOffset,
 				point.z - halfWidth,

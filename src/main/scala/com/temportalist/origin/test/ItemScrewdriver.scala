@@ -5,13 +5,12 @@ import java.util
 import com.temportalist.origin.library.common.Origin
 import com.temportalist.origin.library.common.utility._
 import com.temportalist.origin.wrapper.common.item.ItemWrapper
-import net.minecraft.client.resources.model.ModelResourceLocation
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{EnumAction, Item, ItemStack}
 import net.minecraft.nbt.NBTTagList
 import net.minecraft.world.World
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  *
@@ -25,14 +24,6 @@ class ItemScrewdriver(n: String) extends ItemWrapper(Origin.MODID, n) {
 	@SideOnly(Side.CLIENT)
 	override def getSubItems(itemIn: Item, tab: CreativeTabs, subItems: util.List[_]): Unit = {
 		for (stack: ItemStack <- Sonic.screwdrivers.toList) Generic.addToList(subItems, stack)
-	}
-
-	@SideOnly(Side.CLIENT)
-	override def getModelLoc(isItem: Boolean, stack: ItemStack): ModelResourceLocation = {
-		new ModelResourceLocation(this.getCompoundName() +
-				(if (stack != null) stack.getItemDamage else ""),
-			if (isItem) "inventory" else "normal"
-		)
 	}
 
 	override def addInformation(stack: ItemStack, player: EntityPlayer, list: util.List[_],

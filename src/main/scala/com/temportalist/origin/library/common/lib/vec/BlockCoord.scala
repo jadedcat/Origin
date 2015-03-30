@@ -1,11 +1,10 @@
 package com.temportalist.origin.library.common.lib.vec
 
 import com.google.common.base.Objects
+import com.temportalist.origin.library.common.lib.BlockState
 import com.temportalist.origin.library.common.utility.WorldHelper
 import net.minecraft.block.Block
-import net.minecraft.block.state.IBlockState
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.BlockPos
 import net.minecraft.world.World
 import net.minecraft.world.chunk.Chunk
 
@@ -25,7 +24,7 @@ class BlockCoord(_x: Int, _y: Int, _z: Int, var dim: Int) extends BlockPos(_x, _
 	}
 
 	def this(tile: TileEntity) {
-		this(tile.getPos, tile.getWorld.provider.getDimensionId)
+		this(tile.xCoord, tile.yCoord, tile.zCoord, tile.getWorld.provider.dimensionId)
 	}
 
 	override def toString: String = {
@@ -49,45 +48,41 @@ class BlockCoord(_x: Int, _y: Int, _z: Int, var dim: Int) extends BlockPos(_x, _
 		WorldHelper.getWorld(this.dim)
 	}
 
-	def getBlockState(): IBlockState = this.getWorld().getBlockState(this)
+	def getBlockState(): BlockState = new BlockState(this.getBlock(), this.getBlockMeta(this.getWorld()))
 
-	def getBlock(): Block = this.getBlockState().getBlock
+	def getBlock(): Block = this.getWorld().getBlock(this.getX(), this.getY(), this.getZ())
 
-	def getTile(): TileEntity = this.getWorld().getTileEntity(this)
+	def getTile(): TileEntity = this.getWorld().getTileEntity(this.getX(), this.getY(), this.getZ())
 
 	def getChunk(): Chunk = {
-		val world: World = this.getWorld()
-		if (world.isBlockLoaded(this)) {
-			world.getChunkFromBlockCoords(this)
-		}
-		else null
+		this.getWorld().getChunkFromBlockCoords(this.getX(), this.getZ())
 	}
 
-	def setBlock(blockState: IBlockState, notify: Int): Unit = {
-		this.getWorld().setBlockState(this, blockState, notify)
+	def setBlock(blockState: BlockState, notify: Int): Unit = {
+		this.setBlock(blockState.getBlock(), blockState.getMeta(), notify)
 	}
 
 	def setBlock(block: Block, meta: Int, notify: Int): Unit = {
-		this.setBlock(block.getStateFromMeta(meta), notify)
+		this.getWorld().setBlock(this.getX(), this.getY(), this.getZ(), block, meta, notify)
 	}
 
 	def toCoord(x: Int, y: Int, z: Int): BlockCoord =
 		new BlockCoord(this.getX, this.getY, this.getZ, this.dim)
 
 	def notifyAllOfStateChange(): Unit = {
-		this.getWorld().notifyNeighborsOfStateChange(this, this.getBlock())
+		this.getWorld().notifyBlocksOfNeighborChange(this.getX(), this.getY(), this.getZ(), this.getBlock())
 	}
 
 	def notifyStateChange(): Unit = {
-		this.getWorld().notifyBlockOfStateChange(this, this.getBlock())
+		this.getWorld().notifyBlockOfNeighborChange(this.getX(), this.getY(), this.getZ(), this.getBlock())
 	}
 
 	def scheduleUpdate(delay: Int): Unit = {
-		this.getWorld().scheduleUpdate(this, this.getBlock(), delay)
+		this.getWorld().scheduleBlockUpdate(this.getX(), this.getY(), this.getZ(), this.getBlock(), delay)
 	}
 
 	def scheduleUpdate(): Unit = this.scheduleUpdate(10)
 
-	def markForUpdate(): Unit = this.getWorld().markBlockForUpdate(this)
+	def markForUpdate(): Unit = this.getWorld().markBlockForUpdate(this.getX(), this.getY(), this.getZ())
 
 }
