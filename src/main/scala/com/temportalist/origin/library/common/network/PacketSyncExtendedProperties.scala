@@ -2,7 +2,6 @@ package com.temportalist.origin.library.common.network
 
 import java.util
 
-import com.temportalist.origin.library.common.nethandler.IPacket
 import com.temportalist.origin.wrapper.common.extended.{ExtendedEntity, ExtendedEntityHandler}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
@@ -12,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound
  *
  * @author TheTemportalist
  */
-class PacketSyncExtendedProperties() extends IPacket {
+class PacketSyncExtendedProperties() extends IPacketOrigin {
 
 	def this(extendedClass: Class[_ <: ExtendedEntity], data: NBTTagCompound) {
 		this()

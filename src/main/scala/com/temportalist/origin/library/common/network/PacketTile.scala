@@ -1,7 +1,6 @@
 package com.temportalist.origin.library.common.network
 
 import com.temportalist.origin.library.common.lib.vec.BlockPos
-import com.temportalist.origin.library.common.nethandler.IPacket
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
 
@@ -10,7 +9,7 @@ import net.minecraft.tileentity.TileEntity
  *
  * @author TheTemportalist
  */
-abstract class PacketTile() extends IPacket {
+abstract class PacketTile() extends IPacketOrigin {
 
 	def this(tile: TileEntity) {
 		this()

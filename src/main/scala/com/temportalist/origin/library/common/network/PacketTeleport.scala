@@ -1,6 +1,5 @@
 package com.temportalist.origin.library.common.network
 
-import com.temportalist.origin.library.common.nethandler.IPacket
 import com.temportalist.origin.library.common.utility.Teleport
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 
@@ -9,7 +8,7 @@ import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
  *
  * @author TheTemportalist
  */
-class PacketTeleport() extends IPacket {
+class PacketTeleport() extends IPacketOrigin {
 
 	def this(dimId: Int, coords: Array[Double], fall: Boolean, particles: Boolean) {
 		this()

@@ -15,7 +15,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util._
 import net.minecraft.world.chunk.Chunk
 import net.minecraft.world.{ChunkCoordIntPair, World}
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraftforge.common.util.{BlockSnapshot, ForgeDirection}
 
 /**
  *
@@ -50,6 +50,14 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 
 	def this(chunk: ChunkCoordIntPair) {
 		this(chunk.chunkXPos, 0, chunk.chunkZPos)
+	}
+
+	def this(chunk: Chunk) {
+		this(chunk.getChunkCoordIntPair)
+	}
+
+	def this(snap: BlockSnapshot) {
+		this(snap.x, snap.y, snap.z)
 	}
 
 	def this(dir: ForgeDirection) {
@@ -135,6 +143,8 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 
 	def getTile(world: World): TileEntity = this.toBlockCoord(world).getTile()
 
+	def getLightBrightnes(world: World): Float = world.getLightBrightness(this.x_i(), this.y_i(), this.z_i())
+
 	def setBlock(world: World, block: Block, meta: Int, notify: Int): Unit =
 		this.toBlockCoord(world).setBlock(block, meta, notify)
 
@@ -197,29 +207,47 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 
 	def +=(dir: ForgeDirection): Unit = this.add(dir, 1)
 
-	def down(amount: Double): Unit = this.add(ForgeDirection.DOWN, amount)
+	def down(amount: Double): V3O = {
+		this.add(ForgeDirection.DOWN, amount)
+		this
+	}
 
-	def down(): Unit = this.down(1)
+	def down(): V3O = this.down(1)
 
-	def up(amount: Double): Unit = this.add(ForgeDirection.UP, amount)
+	def up(amount: Double): V3O = {
+		this.add(ForgeDirection.UP, amount)
+		this
+	}
 
-	def up(): Unit = this.up(1)
+	def up(): V3O = this.up(1)
 
-	def north(amount: Double): Unit = this.add(ForgeDirection.NORTH, amount)
+	def north(amount: Double): V3O = {
+		this.add(ForgeDirection.NORTH, amount)
+		this
+	}
 
-	def north(): Unit = this.north(1)
+	def north(): V3O = this.north(1)
 
-	def south(amount: Double): Unit = this.add(ForgeDirection.SOUTH, amount)
+	def south(amount: Double): V3O = {
+		this.add(ForgeDirection.SOUTH, amount)
+		this
+	}
 
-	def south(): Unit = this.south(1)
+	def south(): V3O = this.south(1)
 
-	def east(amount: Double): Unit = this.add(ForgeDirection.EAST, amount)
+	def east(amount: Double): V3O = {
+		this.add(ForgeDirection.EAST, amount)
+		this
+	}
 
-	def east(): Unit = this.east(1)
+	def east(): V3O = this.east(1)
 
-	def west(amount: Double): Unit = this.add(ForgeDirection.WEST, amount)
+	def west(amount: Double): V3O = {
+		this.add(ForgeDirection.WEST, amount)
+		this
+	}
 
-	def west(): Unit = this.west(1)
+	def west(): V3O = this.west(1)
 
 	// Subtractive +, does not modify
 

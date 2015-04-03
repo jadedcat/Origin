@@ -5,12 +5,12 @@ import java.util.UUID
 
 import com.temportalist.origin.library.common.extended.ExtendedSync
 import com.temportalist.origin.library.common.handlers.{OptionHandler, RegisterHelper}
+import com.temportalist.origin.library.common.item.ItemPlacer
 import com.temportalist.origin.library.common.network._
 import com.temportalist.origin.library.common.utility.Players
 import com.temportalist.origin.library.server.command.CommandOrigin
 import com.temportalist.origin.test.{PacketUpdateMode, Sonic}
 import com.temportalist.origin.wrapper.common.ModWrapper
-import com.temportalist.origin.wrapper.common.item.ItemPlacer
 import cpw.mods.fml.common.event.{FMLServerStartingEvent, FMLPostInitializationEvent, FMLInitializationEvent, FMLPreInitializationEvent}
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
@@ -73,7 +73,8 @@ object Origin extends ModWrapper {
 			classOf[PacketSyncExtendedProperties],
 			classOf[PacketTeleport],
 			classOf[PacketRedstoneUpdate],
-			classOf[PacketActionUpdate], classOf[PacketUpdateMode]
+			classOf[PacketActionUpdate], classOf[PacketUpdateMode],
+			classOf[PacketTileCallback]
 		)
 
 		this.placer = new ItemPlacer(Origin.MODID, "placer")

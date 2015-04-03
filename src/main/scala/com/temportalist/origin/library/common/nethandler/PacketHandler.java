@@ -26,7 +26,9 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<IPacket> {
 
 	public static boolean registerHandler(String pluginID,
 			List<Class<? extends IPacket>> packetClasses) {
-		return PacketHandler.registerHandler(pluginID, packetClasses);
+		return PacketHandler.registerHandler(pluginID,
+				packetClasses.toArray(new Class[0])
+		);
 	}
 
 	public static boolean registerHandler(String pluginID,

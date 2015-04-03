@@ -1,6 +1,6 @@
 package com.temportalist.origin.test
 
-import com.temportalist.origin.library.common.nethandler.IPacket
+import com.temportalist.origin.library.common.network.IPacketOrigin
 import net.minecraft.entity.player.EntityPlayer
 
 /**
@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayer
  *
  * @author TheTemportalist
  */
-class PacketUpdateMode() extends IPacket {
+class PacketUpdateMode() extends IPacketOrigin {
 
 	def this(newMode: ScrewdriverMode) {
 		this()

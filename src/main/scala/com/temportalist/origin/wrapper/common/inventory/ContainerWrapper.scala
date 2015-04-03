@@ -59,63 +59,22 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 
 	protected def registerPlayerSlots(offsetX: Int, offsetY: Int,
 			finalSlotIDs: Array[Int]): Unit = {
-		var row: Int = 0
-		for (row <- 0 to 2) {
-			var col: Int = 0
-			for (col <- 0 to 9) {
-				val slotID: Int = col + row * 9 + 9
-				val x: Int = (8 + col * 18) + offsetX
-				val y: Int = (84 + row * 18) + offsetY
-
-				var setSlot: Boolean = false
-				if (finalSlotIDs.length > 0) {
-					var slotIndex = 0
-					breakable {
-						for (slotIndex <- 0 to finalSlotIDs.length) {
-							if (finalSlotIDs(slotIndex) == slotID) {
-								this.addSlotToContainer(
-									new SlotFinal(this.player.inventory, slotID, x, y))
-								setSlot = true
-								break()
-							}
-						}
-					}
-				}
-
-				if (!setSlot) {
-					this.addSlotToContainer(new Slot(this.player.inventory, slotID, x, y))
-				}
-
+		val slotSize: Int = 18
+		val startX: Int = 12 + offsetX
+		val startY: Int = 84 + offsetY
+		for (col <- 0 until 9) {
+			val x: Int = col * slotSize + startX
+			var y: Int = startY
+			this.addSlotToContainer(new Slot(this.player.inventory,
+				col, x, startY + 67
+			))
+			for (row <- 0 until 3) {
+				y = (startY + row * slotSize) + 9
+				this.addSlotToContainer(new Slot(this.player.inventory,
+					(row + 1) * 9 + col, x, y
+				))
 			}
 		}
-
-		row = 0
-		var col: Int = 0
-		for (col <- 0 to 9) {
-			val slotID: Int = col
-			val x: Int = (8 + col * 18) + offsetX
-			val y: Int = 142 + offsetY
-
-			var setSlot: Boolean = false
-			if (finalSlotIDs.length > 0) {
-				breakable {
-					for (slotIndex <- 0 to finalSlotIDs.length) {
-						if (finalSlotIDs(slotIndex) == slotID) {
-							this.addSlotToContainer(
-								new SlotFinal(this.player.inventory, slotID, x, y))
-							setSlot = true
-							break()
-						}
-					}
-				}
-			}
-
-			if (!setSlot) {
-				this.addSlotToContainer(new Slot(this.player.inventory, slotID, x, y))
-			}
-
-		}
-
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~ Get Inventory !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -185,73 +144,44 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 	 * Used to move item stacks about when a player shiftclicks
 	 */
 	///*
-	override def transferStackInSlot(player: EntityPlayer, slotiD: Int): ItemStack = {
-		val slot: Slot = this.inventorySlots.get(slotiD).asInstanceOf[Slot]
+	override def transferStackInSlot(player: EntityPlayer, slotID: Int): ItemStack = {
+		val slot: Slot = this.inventorySlots.get(slotID).asInstanceOf[Slot]
 		var stackInSlot: ItemStack = null
 		if (slot != null && slot.getHasStack) {
-			val stackInSlotCopy: ItemStack = slot.getStack.copy
-			stackInSlot = stackInSlotCopy.copy
-			val inventorySize: Int = this.getIInventory.getSizeInventory()
-			val playerInventoryEnd: Int = inventorySize + 36
-			val playerHotBarStartID: Int = playerInventoryEnd - 9
-			if (slotiD < inventorySize) {
-				if (slot.isInstanceOf[SlotGhost]) {
+			stackInSlot = slot.getStack
+			val stackInSlotCopy: ItemStack = stackInSlot.copy()
+
+			val extraSlotsStart: Int = 0
+			val playerInvEnd: Int = extraSlotsStart + 27 // length of player inventory
+			val playerHotBarEnd: Int = playerInvEnd + 9 // length of hotbar
+			val thisInvEnd: Int = playerHotBarEnd + this.getIInventory().getSizeInventory
+
+			if (slotID < extraSlotsStart) {
+				if (!this.mergeItemStack(
+					stackInSlotCopy, extraSlotsStart, playerHotBarEnd, isBackwards = true))
 					return null
-				}
-				else if (!this.mergeItemStack(stackInSlotCopy, inventorySize, playerInventoryEnd,
-					false)) {
-					return null
-				}
-				slot.onSlotChange(stackInSlotCopy, stackInSlot)
 			}
-			else {
-				val targetSlotID: Int = this.getSlotIDForItemStack(stackInSlotCopy)
-				if (targetSlotID >= 0) {
-					{
-						var slotID: Int = targetSlotID
-						while (slotID <
-								this.getExcludedMaximumSlotIDForItemStack(stackInSlotCopy)) {
-							{
-								val targetSlot: Slot = this.inventorySlots.get(slotID)
-										.asInstanceOf[Slot]
-								if (this.isItemValidForSlotOnShift(targetSlot, stackInSlotCopy)) {
-									if (!this.mergeItemStack(stackInSlotCopy, slotID, slotID + 1,
-										false)) return null
-								}
-							}
-							{slotID += 1; slotID - 1}
-						}
-					}
-				}
-				else {
-					if (slotiD < playerHotBarStartID) {
-						if (!this.mergeItemStack(stackInSlotCopy, playerHotBarStartID,
-							playerHotBarStartID + 9, false)) {
-							return null
-						}
-					}
-					else {
-						if (!this
-								.mergeItemStack(stackInSlotCopy, inventorySize, playerHotBarStartID,
-						            false)) {
-							return null
-						}
-					}
-				}
+			else if (slotID < playerHotBarEnd) {
+				/*
+				if (i > 0 && ...) // can insert into extra slots
+					if (!this.mergeItemStack(stackInSlotCopy, 0, i, isBackwards = false))
+						return null
+				else
+				*/
+				if (!this.mergeItemStack(
+					stackInSlotCopy, playerHotBarEnd, thisInvEnd, isBackwards = false)) return null
 			}
-			if (stackInSlotCopy.stackSize == 0) {
-				slot.putStack(null.asInstanceOf[ItemStack])
-			}
-			else {
-				slot.onSlotChanged
-			}
-			if (stackInSlotCopy.stackSize == stackInSlot.stackSize) {
+			else if (!this.mergeItemStack(
+				stackInSlotCopy, extraSlotsStart, playerHotBarEnd, isBackwards = true))
 				return null
-			}
-			slot.onPickupFromSlot(player, stackInSlotCopy)
+			if (stackInSlotCopy.stackSize <= 0) slot.putStack(null)
+			else slot.onSlotChanged()
+			if (stackInSlotCopy.stackSize == stackInSlot.stackSize)
+				return null
 		}
 		stackInSlot
 	}
+
 	//*/
 	/*
 	override def transferStackInSlot(player: EntityPlayer, slotIndex: Int): ItemStack = {
@@ -296,14 +226,18 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 	}
 	*/
 
-	override def mergeItemStack(stack: ItemStack, i1: Int, i2: Int, b: Boolean): Boolean = {
-		var ret: Boolean = false
-		var j: Int = if (b) i2 - 1 else i1
+	override def mergeItemStack(stack: ItemStack, minSlotID: Int, maxSlotID: Int,
+			isBackwards: Boolean): Boolean = {
+		var retStack: Boolean = false
+		var slotID: Int = if (isBackwards) maxSlotID - 1 else minSlotID
 		var slot: Slot = null
 		var local: ItemStack = null
 		if (stack.isStackable) {
-			while (stack.stackSize > 0 && ((!b && j < i2) || (b && j >= i1))) {
-				slot = this.inventorySlots.get(j).asInstanceOf[Slot]
+			while (stack.stackSize > 0 && (
+					(!isBackwards && slotID < maxSlotID) ||
+							(isBackwards && slotID >= minSlotID)
+					)) {
+				slot = this.inventorySlots.get(slotID).asInstanceOf[Slot]
 				local = slot.getStack
 				if (slot.isItemValid(stack) && Stacks.doStacksMatch(stack, local,
 					meta = true, size = false, nbt = true, nil = false
@@ -314,24 +248,25 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 						stack.stackSize = 0
 						local.stackSize = k
 						slot.onSlotChanged()
-						ret = true
+						retStack = true
 					}
 					else if (local.stackSize < m) {
 						stack.stackSize -= m - local.stackSize
 						local.stackSize = m
 						slot.onSlotChanged()
-						ret = true
+						retStack = true
 					}
 				}
-				j += (if (b) -1 else 1)
+				slotID += (if (isBackwards) -1 else 1)
 			}
 		}
 		if (stack.stackSize > 0) {
-			j = if (b) i2 - 1 else i1
+			slotID = if (isBackwards) maxSlotID - 1 else minSlotID
 
 			breakable {
-				while ((!b && j < i2) || (b && j >= i1)) {
-					slot = this.inventorySlots.get(j).asInstanceOf[Slot]
+				while ((!isBackwards && slotID < maxSlotID) ||
+						(isBackwards && slotID >= minSlotID)) {
+					slot = this.inventorySlots.get(slotID).asInstanceOf[Slot]
 					local = slot.getStack
 					if (slot.isItemValid(stack) && local == null) {
 						val nextStack: ItemStack = stack.copy()
@@ -340,16 +275,16 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 						slot.onSlotChanged()
 						if (slot.getStack != null) {
 							stack.stackSize -= slot.getStack.stackSize
-							ret = true
+							retStack = true
 						}
 						break
 					}
-					j += (if (b) -1 else 1)
+					slotID += (if (isBackwards) -1 else 1)
 				}
 			}
 		}
 
-		ret
+		retStack
 	}
 
 	protected def getSlotIDForItemStack(stackToProcess: ItemStack): Int = {

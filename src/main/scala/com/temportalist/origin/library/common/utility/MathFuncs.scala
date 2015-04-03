@@ -24,7 +24,7 @@ object MathFuncs {
 	 * @return
 	 */
 	def between(a: Double, n: Double, b: Double): Boolean = {
-		a < n && b < b
+		a < n && n < b
 	}
 
 	/**

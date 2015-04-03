@@ -1,11 +1,14 @@
-package com.temportalist.origin.wrapper.common.item
+package com.temportalist.origin.library.common.item
 
 import java.util
 
+import net.minecraft.init.Items
 import com.temportalist.origin.library.common.lib.vec.V3O
 import com.temportalist.origin.library.common.utility.{Generic, WorldHelper}
+import com.temportalist.origin.wrapper.common.item.ItemWrapper
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.{Block, BlockFence}
+import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity._
 import net.minecraft.entity.player.EntityPlayer
@@ -13,7 +16,7 @@ import net.minecraft.init.Blocks
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.{MobSpawnerBaseLogic, TileEntityMobSpawner}
-import net.minecraft.util.{MathHelper, StatCollector}
+import net.minecraft.util.{IIcon, MathHelper, StatCollector}
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 
@@ -28,6 +31,9 @@ class ItemPlacer(modid: String, name: String) extends ItemWrapper(modid, name) {
 	this.setHasSubtypes(true)
 
 	@SideOnly(Side.CLIENT)
+	var overlayIcon: IIcon = null
+
+	@SideOnly(Side.CLIENT)
 	override def getSubItems(itemIn: Item, tab: CreativeTabs, subItems: util.List[_]): Unit = {
 		for (i <- 0 until ItemPlacer.classes.size()) {
 			val stack: ItemStack = new ItemStack(itemIn)
@@ -38,6 +44,23 @@ class ItemPlacer(modid: String, name: String) extends ItemWrapper(modid, name) {
 			stack.setTagCompound(tag)
 			Generic.addToList(subItems, stack)
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	override def requiresMultipleRenderPasses: Boolean = true
+
+	/**
+	 * Gets an icon index based on an item's damage value and the given render pass
+	 */
+	@SideOnly(Side.CLIENT)
+	override def getIconFromDamageForRenderPass(damage: Int, pass: Int): IIcon = {
+		if (pass > 0) this.overlayIcon else this.itemIcon
+	}
+
+	@SideOnly(Side.CLIENT)
+	override def registerIcons(reg: IIconRegister): Unit = {
+		this.itemIcon = Items.spawn_egg.getIconFromDamageForRenderPass(0, 0)
+		this.overlayIcon = Items.spawn_egg.getIconFromDamageForRenderPass(0, 1)
 	}
 
 	override def getItemStackDisplayName(stack: ItemStack): String = {

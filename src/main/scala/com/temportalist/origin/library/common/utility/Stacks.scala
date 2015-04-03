@@ -4,7 +4,7 @@ import java.util
 import java.util.Random
 
 import com.temportalist.origin.library.common.lib.BlockState
-import com.temportalist.origin.library.common.lib.vec.BlockPos
+import com.temportalist.origin.library.common.lib.vec.{V3O, BlockPos}
 import net.minecraft.block.Block
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.{Item, ItemStack}
@@ -31,17 +31,13 @@ object Stacks {
 		}
 	}
 
-	def spawnItemStack(world: World, pos: BlockPos, itemStack: ItemStack, random: Random,
+	def spawnItemStack(world: World, pos: V3O, itemStack: ItemStack, random: Random,
 			delay: Int): Unit = {
 		if (itemStack != null) {
-			val f: Float = random.nextFloat * 0.8F + 0.1F
-			val f1: Float = random.nextFloat * 0.8F + 0.1F
-			val f2: Float = random.nextFloat * 0.8F + 0.1F
-			var entityitem: EntityItem = null
-			entityitem = new EntityItem(world,
-				(pos.getX.asInstanceOf[Float] + f).asInstanceOf[Double],
-				(pos.getY.asInstanceOf[Float] + f1).asInstanceOf[Double],
-				(pos.getZ.asInstanceOf[Float] + f2).asInstanceOf[Double],
+			val entityitem: EntityItem = new EntityItem(world,
+				pos.x + random.nextFloat * 0.8F + 0.1F,
+				pos.y + random.nextFloat * 0.8F + 0.1F,
+				pos.z + random.nextFloat * 0.8F + 0.1F,
 				itemStack.copy
 			)
 			val f3: Float = 0.05F
@@ -58,7 +54,7 @@ object Stacks {
 		}
 	}
 
-	def spawnItemStack(world: World, pos: BlockPos, state: BlockState, random: Random,
+	def spawnItemStack(world: World, pos: V3O, state: BlockState, random: Random,
 			delay: Int): Unit = {
 		this.spawnItemStack(world, pos, States.getStack(state), random, delay)
 	}

@@ -12,5 +12,5 @@ class SlotValidate(inv: IInventory, index: Int, x: Int, y: Int) extends Slot(inv
 
 	override def isItemValid(stack: ItemStack): Boolean =
 		this.inventory.isItemValidForSlot(this.getSlotIndex, stack)
-
+	
 }

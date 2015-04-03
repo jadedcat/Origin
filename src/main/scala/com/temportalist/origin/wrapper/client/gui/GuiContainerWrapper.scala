@@ -58,7 +58,6 @@ class GuiContainerWrapper(c: Container) extends GuiContainer(c) with IGuiScreen 
 
 	override def drawGuiContainerForegroundLayer(mouseX: Int, mouseY: Int): Unit = {
 		this.drawGuiForegroundLayer(mouseX, mouseY, 1F)
-		this.drawHoverInformation(mouseX, mouseY, 1F)
 	}
 
 }

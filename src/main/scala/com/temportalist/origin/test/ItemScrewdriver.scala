@@ -6,10 +6,12 @@ import com.temportalist.origin.library.common.Origin
 import com.temportalist.origin.library.common.utility._
 import com.temportalist.origin.wrapper.common.item.ItemWrapper
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{EnumAction, Item, ItemStack}
 import net.minecraft.nbt.NBTTagList
+import net.minecraft.util.IIcon
 import net.minecraft.world.World
 
 /**
@@ -20,6 +22,9 @@ import net.minecraft.world.World
 class ItemScrewdriver(n: String) extends ItemWrapper(Origin.MODID, n) {
 
 	this.setHasSubtypes(true)
+
+	@SideOnly(Side.CLIENT)
+	var icons: Array[IIcon] = null
 
 	@SideOnly(Side.CLIENT)
 	override def getSubItems(itemIn: Item, tab: CreativeTabs, subItems: util.List[_]): Unit = {
@@ -37,6 +42,16 @@ class ItemScrewdriver(n: String) extends ItemWrapper(Origin.MODID, n) {
 		})
 
 	}
+
+	@SideOnly(Side.CLIENT) override
+	def registerIcons(reg: IIconRegister): Unit = {
+		this.icons = new Array[IIcon](3)
+		for (i <- 0 until this.icons.length)
+			this.icons(i) = reg.registerIcon(this.modid + ":screwdriver/" + i)
+	}
+
+	@SideOnly(Side.CLIENT)
+	override def getIconFromDamage(i: Int): IIcon = this.icons(i)
 
 	// Interaction things
 
@@ -65,9 +80,10 @@ class ItemScrewdriver(n: String) extends ItemWrapper(Origin.MODID, n) {
 		this.getMode(stack).getUseAction(stack)
 
 	override def onPlayerStoppedUsing(stack: ItemStack, worldIn: World,
-			playerIn: EntityPlayer, itemInUseCount: Int): Unit =
+			playerIn: EntityPlayer, itemInUseCount: Int): Unit = {
 		if (this.getMaxItemUseDuration(stack) == itemInUseCount)
 			this.getMode(stack).onUseFinish(stack, worldIn, playerIn,
 				Cursor.raytraceWorld(worldIn, playerIn))
+	}
 
 }

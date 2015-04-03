@@ -3,6 +3,8 @@ package com.temportalist.origin.library.common.nethandler
 import java.io._
 import java.util.UUID
 
+import cpw.mods.fml.common.network.NetworkRegistry
+
 import scala.reflect.runtime.universe._
 
 import com.temportalist.origin.api.INBTSaver
@@ -24,6 +26,41 @@ trait IPacket {
 	val writeStream: ByteArrayOutputStream = new ByteArrayOutputStream()
 	val writeData: DataOutputStream = new DataOutputStream(this.writeStream)
 	var readData: DataInputStream = null
+
+	def getChannel(): String
+
+	def sendTo(dest: EnumPacketDestination, args: Any*): Unit = {
+		dest match {
+			case EnumPacketDestination.CLIENTS =>
+				PacketHandler.sendToClients(this.getChannel(), this)
+			case EnumPacketDestination.PLAYER =>
+				PacketHandler.sendToPlayer(this.getChannel(), this,
+					args(0).asInstanceOf[EntityPlayer])
+			case EnumPacketDestination.ALL_AROUND =>
+				PacketHandler.sendToAllAround(this.getChannel(), this,
+					args(0).asInstanceOf[NetworkRegistry.TargetPoint])
+			case EnumPacketDestination.DIMENSION =>
+				PacketHandler.sendToDimension(this.getChannel(), this, args(0).asInstanceOf[Int])
+			case EnumPacketDestination.SERVER =>
+				PacketHandler.sendToServer(this.getChannel(), this)
+			case EnumPacketDestination.BOTH =>
+				PacketHandler.sendToServerAndClients(this.getChannel(), this)
+			case _ =>
+		}
+	}
+
+	def sendToClients(): Unit = this.sendTo(EnumPacketDestination.CLIENTS)
+
+	def sendToPlayer(player: EntityPlayer): Unit = this.sendTo(EnumPacketDestination.PLAYER, player)
+
+	def sendToAll(p: NetworkRegistry.TargetPoint): Unit =
+		this.sendTo(EnumPacketDestination.ALL_AROUND, p)
+
+	def sendToDimension(d: Int): Unit = this.sendTo(EnumPacketDestination.DIMENSION, d)
+
+	def sendToServer(): Unit = this.sendTo(EnumPacketDestination.SERVER)
+
+	def sendToBoth(): Unit = this.sendTo(EnumPacketDestination.BOTH)
 
 	final def writeTo(buffer: ByteBuf): Unit = {
 		buffer.writeBytes(this.writeStream.toByteArray)

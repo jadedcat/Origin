@@ -1,6 +1,5 @@
 package com.temportalist.origin.api.inventory
 
-import com.temportalist.origin.library.common.utility.MathFuncs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.{IInventory, ISidedInventory}
 import net.minecraft.item.ItemStack
@@ -36,7 +35,7 @@ trait IInv extends IInventory with ISidedInventory {
 	def hasInventory(): Boolean = this.slots != null
 
 	def isValidSlot(index: Int): Boolean =
-		this.hasInventory() && MathFuncs.between(0, index, this.getSizeInventory)
+		true //this.hasInventory() && MathFuncs.between(0, index, this.getSizeInventory)
 
 	override def getStackInSlot(index: Int): ItemStack = {
 		if (this.isValidSlot(index)) {
@@ -48,13 +47,11 @@ trait IInv extends IInventory with ISidedInventory {
 	override def getStackInSlotOnClosing(index: Int): ItemStack = this.getStackInSlot(index)
 
 	override def setInventorySlotContents(slot: Int, stack: ItemStack): Unit = {
-		if (this.isValidSlot(slot)) {
-			this.slots(slot) = stack
-			if ((stack != null) && (stack.stackSize > getInventoryStackLimit))
-				stack.stackSize = getInventoryStackLimit
-			this.onStackChange(slot)
-			this.markChunkModified()
-		}
+		this.slots(slot) = stack
+		if (stack != null && stack.stackSize > getInventoryStackLimit)
+			stack.stackSize = getInventoryStackLimit
+		this.onStackChange(slot)
+		this.markChunkModified()
 	}
 
 	override def decrStackSize(slot: Int, decrement: Int): ItemStack = {
@@ -120,7 +117,7 @@ trait IInv extends IInventory with ISidedInventory {
 			tagCom.setInteger("size", this.getSizeInventory)
 
 			val tagList: NBTTagList = new NBTTagList()
-			for (slotID <- 0 to this.getSizeInventory) {
+			for (slotID <- 0 until this.getSizeInventory) {
 				if (this.getStackInSlot(slotID) != null) {
 					val stackTagCom: NBTTagCompound = new NBTTagCompound()
 					stackTagCom.setInteger("slot", slotID.asInstanceOf[Byte])
