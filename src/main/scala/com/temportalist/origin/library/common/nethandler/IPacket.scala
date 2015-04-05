@@ -3,18 +3,18 @@ package com.temportalist.origin.library.common.nethandler
 import java.io._
 import java.util.UUID
 
-import cpw.mods.fml.common.network.NetworkRegistry
-
-import scala.reflect.runtime.universe._
-
 import com.temportalist.origin.api.INBTSaver
-import com.temportalist.origin.library.common.lib.NameParser
-import com.temportalist.origin.library.common.lib.vec.{BlockPos, V3O}
+import com.temportalist.origin.library.common.Origin
+import com.temportalist.origin.library.common.lib.vec.V3O
+import com.temportalist.origin.library.common.lib.{LogHelper, NameParser}
+import cpw.mods.fml.common.network.NetworkRegistry
 import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt._
 import net.minecraft.tileentity.TileEntity
+
+import scala.reflect.runtime.universe._
 
 /**
  *
@@ -81,24 +81,15 @@ trait IPacket {
 		for (any: Any <- all) if (any != null) {
 			try {
 				any match {
-					case bool: Boolean =>
-						this.writeData.writeBoolean(bool)
-					case byte: Byte =>
-						this.writeData.writeByte(byte)
-					case short: Short =>
-						this.writeData.writeShort(short)
-					case int: Int =>
-						this.writeData.writeInt(int)
-					case char: Char =>
-						this.writeData.writeChar(char)
-					case float: Float =>
-						this.writeData.writeFloat(float)
-					case double: Double =>
-						this.writeData.writeDouble(double)
-					case long: Long =>
-						this.writeData.writeLong(long)
-					case str: String =>
-						this.writeData.writeUTF(str)
+					case bool: Boolean => this.writeData.writeBoolean(bool)
+					case byte: Byte => this.writeData.writeByte(byte)
+					case short: Short => this.writeData.writeShort(short)
+					case int: Int => this.writeData.writeInt(int)
+					case char: Char => this.writeData.writeChar(char)
+					case float: Float => this.writeData.writeFloat(float)
+					case double: Double => this.writeData.writeDouble(double)
+					case long: Long => this.writeData.writeLong(long)
+					case str: String => this.writeData.writeUTF(str)
 					case array: Array[Double] =>
 						this.add(array.length)
 						for (d: Double <- array)
@@ -107,15 +98,13 @@ trait IPacket {
 						this.add(uuid.getMostSignificantBits)
 						this.add(uuid.getLeastSignificantBits)
 					case nbt: NBTTagCompound =>
-						CompressedStreamTools.writeCompressed(nbt, this.writeData)
+						//CompressedStreamTools.writeCompressed(nbt, this.writeData)
+						if (nbt == null) this.add((-1).toShort)
+						else this.add(CompressedStreamTools.compress(nbt))
 					case stack: ItemStack =>
 						this.add(NameParser.getName(stack))
 						this.add(stack.hasTagCompound)
 						if (stack.hasTagCompound) this.add(stack.getTagCompound)
-					case pos: BlockPos =>
-						this.add(pos.getX)
-						this.add(pos.getY)
-						this.add(pos.getZ)
 					case v: V3O =>
 						this.add(v.x)
 						this.add(v.y)
@@ -126,7 +115,12 @@ trait IPacket {
 						val tag: NBTTagCompound = new NBTTagCompound
 						saver.writeTo(tag)
 						this.add(tag)
+					case array: Array[Byte] =>
+						this.add(array.length.toShort)
+						this.writeData.write(array)
 					case _ =>
+						LogHelper.error(Origin.MODID,
+							"Packets cannot add " + any.getClass.getCanonicalName + " objects")
 				}
 			}
 			catch {
@@ -165,16 +159,30 @@ trait IPacket {
 				case t if t =:= typeOf[UUID] =>
 					new UUID(this.get[Long], this.get[Long])
 				case t if t =:= typeOf[NBTTagCompound] =>
-					CompressedStreamTools.read(this.readData)
+					//CompressedStreamTools.read(this.readData)
+					val array: Array[Byte] = this.get[Array[Byte]]
+					if (array != null) {
+						CompressedStreamTools.func_152457_a(array,
+							new NBTSizeTracker(2097152L)
+						)
+					}
+					else null
 				case t if t =:= typeOf[ItemStack] =>
 					val stack: ItemStack = NameParser.getItemStack(this.get[String])
 					if (this.get[Boolean]) stack.setTagCompound(this.get[NBTTagCompound])
 					stack
-				case t if t =:= typeOf[BlockPos] =>
-					new BlockPos(this.get[Int], this.get[Int], this.get[Int])
 				case t if t =:= typeOf[V3O] =>
 					new V3O(this.get[Double], this.get[Double], this.get[Double])
+				case t if t =:= typeOf[Array[Byte]] =>
+					val length: Short = this.get[Short]
+					if (length < 0) null
+					else {
+						val array: Array[Byte] = new Array[Byte](length)
+						this.readData.read(array)
+						array
+					}
 				case _ =>
+					LogHelper.error(Origin.MODID, "Packets cannot get type: " + typeOf[T])
 					null
 			}
 		}

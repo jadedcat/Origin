@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity
  *
  * @author TheTemportalist
  */
-class PacketTileCallback(tile: TileEntity) extends PacketTile(tile) {
+class PacketTileCallback(tile: TileEntity) extends PacketTile(tile) with IPacketOrigin {
 
 	def this() {
 		this(null)

@@ -148,83 +148,29 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 		val slot: Slot = this.inventorySlots.get(slotID).asInstanceOf[Slot]
 		var stackInSlot: ItemStack = null
 		if (slot != null && slot.getHasStack) {
-			stackInSlot = slot.getStack
-			val stackInSlotCopy: ItemStack = stackInSlot.copy()
+			val slotStack: ItemStack = slot.getStack
+			stackInSlot = slotStack.copy()
 
-			val extraSlotsStart: Int = 0
-			val playerInvEnd: Int = extraSlotsStart + 27 // length of player inventory
-			val playerHotBarEnd: Int = playerInvEnd + 9 // length of hotbar
-			val thisInvEnd: Int = playerHotBarEnd + this.getIInventory().getSizeInventory
+			val invSize: Int = this.getInventorySlotSize()
+			val maxSlots: Int = this.inventorySlots.size()
 
-			if (slotID < extraSlotsStart) {
-				if (!this.mergeItemStack(
-					stackInSlotCopy, extraSlotsStart, playerHotBarEnd, isBackwards = true))
+			if (slotID < invSize) {
+				if (!this.mergeItemStack(slotStack, invSize, maxSlots, isBackwards = true))
 					return null
 			}
-			else if (slotID < playerHotBarEnd) {
-				/*
-				if (i > 0 && ...) // can insert into extra slots
-					if (!this.mergeItemStack(stackInSlotCopy, 0, i, isBackwards = false))
-						return null
-				else
-				*/
-				if (!this.mergeItemStack(
-					stackInSlotCopy, playerHotBarEnd, thisInvEnd, isBackwards = false)) return null
-			}
-			else if (!this.mergeItemStack(
-				stackInSlotCopy, extraSlotsStart, playerHotBarEnd, isBackwards = true))
+			else if (!this.mergeItemStack(slotStack, 0, invSize, isBackwards = false))
 				return null
-			if (stackInSlotCopy.stackSize <= 0) slot.putStack(null)
+			if (slotStack.stackSize == 0)
+				slot.putStack(null)
 			else slot.onSlotChanged()
-			if (stackInSlotCopy.stackSize == stackInSlot.stackSize)
-				return null
 		}
 		stackInSlot
 	}
 
-	//*/
-	/*
-	override def transferStackInSlot(player: EntityPlayer, slotIndex: Int): ItemStack = {
-		var local: ItemStack = null
-		val slot: Slot = this.inventorySlots.get(slotIndex).asInstanceOf[Slot]
-		val altSize: Int = 0
-		val altMax: Int = altSize + 27
-		val k: Int = altMax + 9
-		val m: Int = k + 3 // k + local slot inventory size
-		if (slot != null && slot.getHasStack) {
-			val local2: ItemStack = slot.getStack
-			local = local2.copy()
-			if (slotIndex < altSize) {
-				if (!mergeItemStack(local2, altSize, k, true)) return null
-			}
-			else if (slotIndex < k) {
-				// this section checked augments:
-				/*
-				if ((!this.augmentLock) && (i > 0) &&
-						(AugmentHelper.isAugmentItem(localItemStack2))) {
-					if (!mergeItemStack(localItemStack2, 0, i, false))
-						return null;
-				}
-				else if (!mergeItemStack(localItemStack2, k, m, false))
-					return null;
-				 */
-				if (altSize > 0) {
-					if (!mergeItemStack(local2, 0, altSize, false))
-						return null
-				}
-				else if (!mergeItemStack(local2, k, m, false))
-					return null
-			}
-			else if (!mergeItemStack(local2, altSize, k, true)) return null
-
-			if (local2.stackSize <= 0) slot.putStack(null)
-			else slot.onSlotChanged()
-
-			if (local2.stackSize == local.stackSize) return null
-		}
-		local
-	}
-	*/
+	/**
+	 * @return the number of slots that are present and connected to this inventory
+	 */
+	def getInventorySlotSize(): Int = 0
 
 	override def mergeItemStack(stack: ItemStack, minSlotID: Int, maxSlotID: Int,
 			isBackwards: Boolean): Boolean = {

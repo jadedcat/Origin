@@ -141,7 +141,7 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 
 	def getBlockMeta(world: World): Int = this.getBlockState(world).getMeta()
 
-	def getTile(world: World): TileEntity = this.toBlockCoord(world).getTile()
+	def getTile(world: World): TileEntity = world.getTileEntity(this.x_i(), this.y_i(), this.z_i())
 
 	def getLightBrightnes(world: World): Float = world.getLightBrightness(this.x_i(), this.y_i(), this.z_i())
 

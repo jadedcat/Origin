@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity
  *
  * @author TheTemportalist
  */
-class PacketActionUpdate(tile: TileEntity, state: ActivatedAction) extends PacketTile(tile) {
+class PacketActionUpdate(tile: TileEntity, state: ActivatedAction) extends PacketTile(tile) with IPacketOrigin {
 
 	if (state != null)
 		this.add(state.ordinal())

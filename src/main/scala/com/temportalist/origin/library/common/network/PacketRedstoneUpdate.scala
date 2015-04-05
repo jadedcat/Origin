@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity
  *
  * @author TheTemportalist
  */
-class PacketRedstoneUpdate(tile: TileEntity, state: RedstoneState) extends PacketTile(tile) {
+class PacketRedstoneUpdate(tile: TileEntity, state: RedstoneState) extends PacketTile(tile) with IPacketOrigin {
 
 	if (state != null)
 		this.add(state.ordinal())
