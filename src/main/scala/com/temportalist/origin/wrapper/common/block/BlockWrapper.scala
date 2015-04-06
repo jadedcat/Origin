@@ -4,7 +4,7 @@ import java.util
 
 import com.temportalist.origin.api.rendering.IRenderingObject
 import com.temportalist.origin.library.common.lib.BlockState
-import com.temportalist.origin.library.common.lib.vec.BlockPos
+import com.temportalist.origin.library.common.lib.vec.V3O
 import com.temportalist.origin.library.common.utility.Stacks
 import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.{Side, SideOnly}
@@ -82,7 +82,7 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 
 	override def removedByPlayer(world: World, player: EntityPlayer, x: Int, y: Int, z: Int,
 			willHarvest: Boolean): Boolean = {
-		val pos: BlockPos = new BlockPos(x, y, z)
+		val pos: V3O = new V3O(x, y, z)
 		if (!player.capabilities.isCreativeMode)
 			Stacks.spawnDrops(world, pos,
 				this.getDrops_Pre(world, pos, pos.getBlockState(world), pos.getTile(world))
@@ -90,9 +90,9 @@ class BlockWrapper(material: Material, val modid: String, name: String,
 		super.removedByPlayer(world, player, x, y, z, willHarvest)
 	}
 
-	def getDrops_Pre(world: World, pos: BlockPos, state: BlockState,
+	def getDrops_Pre(world: World, pos: V3O, state: BlockState,
 			tile: TileEntity): util.List[ItemStack] = {
-		super.getDrops(world, pos.getX(), pos.getY(), pos.getZ(), state.getMeta(), 0)
+		super.getDrops(world, pos.x_i(), pos.y_i(), pos.z_i(), state.getMeta(), 0)
 	}
 
 	/* Runs on POST block destruction */

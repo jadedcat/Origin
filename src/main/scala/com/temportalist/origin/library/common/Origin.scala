@@ -78,7 +78,7 @@ object Origin extends ModWrapper {
 		)
 
 		this.placer = new ItemPlacer(Origin.MODID, "placer")
-		Sonic.preInit(event.getModConfigurationDirectory)
+		// todo Sonic.preInit(event.getModConfigurationDirectory)
 
 	}
 
@@ -108,7 +108,7 @@ object Origin extends ModWrapper {
 
 		}
 
-		Sonic.postInit()
+		// todo Sonic.postInit()
 
 	}
 

@@ -4,7 +4,7 @@ import java.util
 import java.util.Random
 
 import com.temportalist.origin.library.common.lib.BlockState
-import com.temportalist.origin.library.common.lib.vec.{V3O, BlockPos}
+import com.temportalist.origin.library.common.lib.vec.V3O
 import net.minecraft.block.Block
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.{Item, ItemStack}
@@ -18,7 +18,7 @@ import net.minecraft.world.World
  */
 object Stacks {
 
-	def spawnDrops(world: World, pos: BlockPos, drops: util.List[ItemStack]): Unit = {
+	def spawnDrops(world: World, pos: V3O, drops: util.List[ItemStack]): Unit = {
 		if (!drops.isEmpty) {
 			val random: Random = new Random
 			var drop: ItemStack = null

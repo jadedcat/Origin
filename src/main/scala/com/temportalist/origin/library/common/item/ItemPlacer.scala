@@ -31,7 +31,7 @@ class ItemPlacer(modid: String, name: String) extends ItemWrapper(modid, name) {
 	this.setHasSubtypes(true)
 
 	@SideOnly(Side.CLIENT)
-	var overlayIcon: IIcon = null
+	private var overlayIcon: IIcon = _
 
 	@SideOnly(Side.CLIENT)
 	override def getSubItems(itemIn: Item, tab: CreativeTabs, subItems: util.List[_]): Unit = {

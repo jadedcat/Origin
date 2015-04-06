@@ -1,12 +1,11 @@
 package com.temportalist.origin.library.common.utility
 
-import com.temportalist.origin.library.common.lib.BlockState
 import com.temportalist.origin.library.common.lib.vec.V3O
 import cpw.mods.fml.common.FMLCommonHandler
-import cpw.mods.fml.relauncher.{SideOnly, Side}
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
-import net.minecraft.entity.{EntityLivingBase, Entity}
+import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.Item
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.Vec3
@@ -43,10 +42,6 @@ object WorldHelper {
 
 	def getBlock(world: World, x: Int, y: Int, z: Int, dir: ForgeDirection): Block = {
 		V3O.from(x, y, z, dir).getBlock(world)
-	}
-
-	def getBlockState(world: World, x: Int, y: Int, z: Int, dir: ForgeDirection): BlockState = {
-		V3O.from(x, y, z, dir).getBlockState(world)
 	}
 
 	def getTileEntity(world: World, x: Int, y: Int, z: Int, dir: ForgeDirection): TileEntity = {

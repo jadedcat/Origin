@@ -24,7 +24,7 @@ class ItemScrewdriver(n: String) extends ItemWrapper(Origin.MODID, n) {
 	this.setHasSubtypes(true)
 
 	@SideOnly(Side.CLIENT)
-	var icons: Array[IIcon] = null
+	var icons: Array[IIcon] = _
 
 	@SideOnly(Side.CLIENT)
 	override def getSubItems(itemIn: Item, tab: CreativeTabs, subItems: util.List[_]): Unit = {

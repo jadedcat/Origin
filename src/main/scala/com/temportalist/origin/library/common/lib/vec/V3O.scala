@@ -124,6 +124,9 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 
 	def toBlockCoord(world: World): BlockCoord = new BlockCoord(this, world.provider.dimensionId)
 
+	def getBlockState(world: World): BlockState =
+		new BlockState(this.getBlock(world), this.getBlockMeta(world))
+
 	def markForUpdate(world: World): Unit = this.toBlockCoord(world).markForUpdate()
 
 	def markChunkModified(tile: TileEntity): Unit =
@@ -133,20 +136,21 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 
 	def toChunkPair(): ChunkCoordIntPair = new ChunkCoordIntPair(this.x_i(), this.z_i())
 
-	def getChunk(world: World): Chunk = this.toBlockCoord(world).getChunk()
+	def getChunk(world: World): Chunk = world.getChunkFromChunkCoords(this.x_i(), this.z_i())
 
-	def getBlockState(world: World): BlockState = this.toBlockCoord(world).getBlockState()
+	def getChunkAsBlock(world: World): Chunk = world.getChunkFromBlockCoords(this.x_i(), this.z_i())
 
-	def getBlock(world: World): Block = this.getBlockState(world).getBlock
+	def getBlock(world: World): Block = world.getBlock(this.x_i(), this.y_i(), this.z_i())
 
-	def getBlockMeta(world: World): Int = this.getBlockState(world).getMeta()
+	def getBlockMeta(world: World): Int = world.getBlockMetadata(this.x_i(), this.y_i(), this.z_i())
 
 	def getTile(world: World): TileEntity = world.getTileEntity(this.x_i(), this.y_i(), this.z_i())
 
-	def getLightBrightnes(world: World): Float = world.getLightBrightness(this.x_i(), this.y_i(), this.z_i())
+	def getLightBrightnes(world: World): Float = world
+			.getLightBrightness(this.x_i(), this.y_i(), this.z_i())
 
 	def setBlock(world: World, block: Block, meta: Int, notify: Int): Unit =
-		this.toBlockCoord(world).setBlock(block, meta, notify)
+		world.setBlock(this.x_i(), this.y_i(), this.z_i(), block, meta, notify)
 
 	def setBlock(world: World, block: Block, meta: Int): Unit =
 		this.setBlock(world, block, meta, 3)
@@ -158,6 +162,15 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 	def setBlockToAir(world: World): Unit = {
 		this.setBlock(world, Blocks.air)
 	}
+
+	def getDir(): ForgeDirection =
+		if (this.x_i() < 0) ForgeDirection.WEST
+		else if (this.x_i() > 0) ForgeDirection.EAST
+		else if (this.y_i() < 0) ForgeDirection.DOWN
+		else if (this.y_i() > 0) ForgeDirection.UP
+		else if (this.z_i() < 0) ForgeDirection.NORTH
+		else if (this.z_i() > 0) ForgeDirection.SOUTH
+		else ForgeDirection.UNKNOWN
 
 	def toNBT(nbt: NBTTagCompound) {
 		nbt.setDouble("x", this.x)
