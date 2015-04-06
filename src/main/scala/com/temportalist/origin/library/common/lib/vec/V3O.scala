@@ -9,12 +9,13 @@ import cpw.mods.fml.relauncher.{Side, SideOnly}
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util._
 import net.minecraft.world.chunk.Chunk
-import net.minecraft.world.{ChunkCoordIntPair, World}
+import net.minecraft.world.{EnumSkyBlock, ChunkCoordIntPair, World}
 import net.minecraftforge.common.util.{BlockSnapshot, ForgeDirection}
 
 /**
@@ -146,8 +147,12 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 
 	def getTile(world: World): TileEntity = world.getTileEntity(this.x_i(), this.y_i(), this.z_i())
 
-	def getLightBrightnes(world: World): Float = world
-			.getLightBrightness(this.x_i(), this.y_i(), this.z_i())
+	def getLightBrightnes(world: World): Float =
+		world.getLightBrightness(this.x_i(), this.y_i(), this.z_i())
+
+	def getSavedLightValue(world: World, skyBlock: EnumSkyBlock): Int = {
+		world.getSavedLightValue(skyBlock, this.x_i(), this.y_i(), this.z_i())
+	}
 
 	def setBlock(world: World, block: Block, meta: Int, notify: Int): Unit =
 		world.setBlock(this.x_i(), this.y_i(), this.z_i(), block, meta, notify)
@@ -183,10 +188,19 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 		TessRenderer.addVertex(this.x, this.y, this.z, u, v)
 	}
 
+	@SideOnly(Side.CLIENT)
+	def setTranslation(): Unit = {
+		TessRenderer.getTess().setTranslation(this.x, this.y, this.z)
+	}
+
+	def openGui(mod: AnyRef, id: Int, player: EntityPlayer): Unit = {
+		player.openGui(mod, id, player.getEntityWorld, this.x_i(), this.y_i(), this.z_i())
+	}
+
 	def set(x1: Double, y1: Double, z1: Double): Unit = {
 		this.x = x1
-		this.y = y
-		this.z = z
+		this.y = y1
+		this.z = z1
 	}
 
 	def set(vec: V3O): Unit = this.set(vec.x, vec.y, vec.z)
@@ -216,7 +230,7 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 	def +=(d: Double): Unit = this.add(d, d, d)
 
 	def add(dir: ForgeDirection, amount: Double): Unit =
-		this += new V3O(dir) * amount
+		this.+=(new V3O(dir) * amount)
 
 	def +=(dir: ForgeDirection): Unit = this.add(dir, 1)
 
