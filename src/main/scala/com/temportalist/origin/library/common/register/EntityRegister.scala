@@ -1,7 +1,8 @@
 package com.temportalist.origin.library.common.register
 
 import java.util
-import com.temportalist.origin.library.common.item.ItemPlacer
+
+import com.temportalist.origin.library.common.item.ItemEgg
 import cpw.mods.fml.common.registry.EntityRegistry
 import net.minecraft.entity._
 
@@ -42,7 +43,7 @@ trait EntityRegister extends Register {
 	protected final def addEgg(
 			entityClass: Class[_ <: Entity], primary: Int, secondary: Int
 			): Unit = {
-		ItemPlacer.register(entityClass, primary, secondary)
+		ItemEgg.register(entityClass, primary, secondary)
 	}
 
 	def addEntitySpawns(): Unit = {}

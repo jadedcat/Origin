@@ -45,7 +45,7 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 		this(tile.xCoord, tile.yCoord, tile.zCoord)
 	}
 
-	def this(mop: MovingObjectPosition, isBlock: Boolean) {
+	def this(mop: MovingObjectPosition) {
 		this(mop.hitVec)
 	}
 
@@ -137,6 +137,8 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 
 	def toChunkPair(): ChunkCoordIntPair = new ChunkCoordIntPair(this.x_i(), this.z_i())
 
+	def toChunkCoords(): ChunkCoordinates = new ChunkCoordinates(this.x_i(), this.y_i(), this.z_i())
+
 	def getChunk(world: World): Chunk = world.getChunkFromChunkCoords(this.x_i(), this.z_i())
 
 	def getChunkAsBlock(world: World): Chunk = world.getChunkFromBlockCoords(this.x_i(), this.z_i())
@@ -167,6 +169,9 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 	def setBlockToAir(world: World): Unit = {
 		this.setBlock(world, Blocks.air)
 	}
+
+	def setBlockMeta(world: World, meta: Int, notify: Int): Unit =
+		world.setBlockMetadataWithNotify(this.x_i(), this.y_i(), this.z_i(), meta, notify)
 
 	def getDir(): ForgeDirection =
 		if (this.x_i() < 0) ForgeDirection.WEST

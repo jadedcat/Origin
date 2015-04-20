@@ -5,7 +5,7 @@ import cpw.mods.fml.common.FMLCommonHandler
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
-import net.minecraft.entity.{Entity, EntityLivingBase}
+import net.minecraft.entity.Entity
 import net.minecraft.item.Item
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.Vec3
@@ -28,6 +28,10 @@ object WorldHelper {
 		FMLCommonHandler.instance().getEffectiveSide.isServer
 	}
 
+	def isClient(ent: Entity): Boolean = ent.worldObj.isRemote
+
+	def isServer(ent: Entity): Boolean = !this.isClient(ent)
+
 	def getWorld(dim: Int): World = {
 		if (this.isServer()) DimensionManager.getWorld(dim)
 		else this.getWorld_client()
@@ -48,8 +52,10 @@ object WorldHelper {
 		V3O.from(x, y, z, dir).getTile(world)
 	}
 
-	def isInFieldOfView(viewer: EntityLivingBase, viewee: EntityLivingBase): Boolean = {
-		val entityLookVec: V3O = new V3O(viewer.getLook(1.0F)) //.normalize()
+	def isInFieldOfView(viewer: Entity, viewee: Entity): Boolean = {
+		val look: Vec3 = viewer.getLookVec
+		if (look == null) return false
+		val entityLookVec: V3O = new V3O(look) //.normalize()
 		val differenceVec: V3O = new V3O(
 				viewee.posX - viewer.posX,
 				viewee.posY + viewee.height.asInstanceOf[Double] -

@@ -1,11 +1,18 @@
 package com.temportalist.origin.library.client.utility
 
+import cpw.mods.fml.client.registry.{ClientRegistry, RenderingRegistry}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
-import net.minecraft.client.renderer.entity.RenderManager
+import net.minecraft.client.renderer.entity.{RenderEntity, RenderManager}
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
+import net.minecraft.entity.Entity
+import net.minecraft.item.Item
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ResourceLocation
+import net.minecraftforge.client.{IItemRenderer, MinecraftForgeClient}
 
 /**
  *
@@ -148,5 +155,17 @@ object Rendering {
 
 	def getScaledResoultion(): ScaledResolution =
 		new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight)
+
+	def registerRender(entity: Class[_ <: Entity], renderer: RenderEntity): Unit =
+		RenderingRegistry.registerEntityRenderingHandler(entity, renderer)
+
+	def registerRender(tile: Class[_ <: TileEntity], renderer: TileEntitySpecialRenderer): Unit =
+		ClientRegistry.bindTileEntitySpecialRenderer(tile, renderer)
+
+	def registerRender(item: Item, renderer: IItemRenderer): Unit =
+		MinecraftForgeClient.registerItemRenderer(item, renderer)
+
+	def registerRender(block: Block, renderer: IItemRenderer): Unit =
+		this.registerRender(Item.getItemFromBlock(block), renderer)
 
 }

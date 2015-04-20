@@ -5,7 +5,7 @@ import java.util.UUID
 
 import com.temportalist.origin.library.common.extended.ExtendedSync
 import com.temportalist.origin.library.common.handlers.{OptionHandler, RegisterHelper}
-import com.temportalist.origin.library.common.item.ItemPlacer
+import com.temportalist.origin.library.common.item.{ItemEgg, ItemPlacer}
 import com.temportalist.origin.library.common.network._
 import com.temportalist.origin.library.common.utility.Players
 import com.temportalist.origin.library.server.command.CommandOrigin
@@ -77,7 +77,7 @@ object Origin extends ModWrapper {
 			classOf[PacketTileCallback]
 		)
 
-		this.placer = new ItemPlacer(Origin.MODID, "placer")
+		this.placer = new ItemEgg(Origin.MODID, "placer")
 		// todo Sonic.preInit(event.getModConfigurationDirectory)
 
 	}

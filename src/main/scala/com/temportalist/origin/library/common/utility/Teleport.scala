@@ -175,7 +175,13 @@ object Teleport {
 			//player.getEntityWorld.getChunkProvider.loadChunk(chunk.xPosition, chunk.zPosition)
 		//}
 
-		player.setPositionAndUpdate(point.x_i(), point.y_i(), point.z_i())
+		player.setPositionAndUpdate(point.x, point.y, point.z)
+		player match {
+			case mp: EntityPlayerMP =>
+				mp.playerNetServerHandler.setPlayerLocation(point.x, point.y, point.z,
+				mp.rotationYaw, mp.rotationPitch)
+			case _ =>
+		}
 
 		// todo particles
 

@@ -1,90 +1,34 @@
 package com.temportalist.origin.library.common.item
 
-import java.util
-
-import net.minecraft.init.Items
 import com.temportalist.origin.library.common.lib.vec.V3O
-import com.temportalist.origin.library.common.utility.{Generic, WorldHelper}
+import com.temportalist.origin.library.common.utility.WorldHelper
 import com.temportalist.origin.wrapper.common.item.ItemWrapper
-import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.block.{Block, BlockFence}
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity._
+import net.minecraft.block.{BlockFence, Block}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity._
 import net.minecraft.init.Blocks
-import net.minecraft.item.{Item, ItemStack}
-import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.{MobSpawnerBaseLogic, TileEntityMobSpawner}
-import net.minecraft.util.{IIcon, MathHelper, StatCollector}
+import net.minecraft.util.{MathHelper, StatCollector}
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 
 /**
  *
  *
- * @author TheTemportalist 1/26/15
+ * @author TheTemportalist
  */
-class ItemPlacer(modid: String, name: String) extends ItemWrapper(modid, name) {
-
-	this.setCreativeTab(CreativeTabs.tabMisc)
-	this.setHasSubtypes(true)
-
-	@SideOnly(Side.CLIENT)
-	private var overlayIcon: IIcon = _
-
-	@SideOnly(Side.CLIENT)
-	override def getSubItems(itemIn: Item, tab: CreativeTabs, subItems: util.List[_]): Unit = {
-		for (i <- 0 until ItemPlacer.classes.size()) {
-			val stack: ItemStack = new ItemStack(itemIn)
-			val tag: NBTTagCompound = new NBTTagCompound
-			tag.setString("EntityName",
-				EntityList.classToStringMapping.get(ItemPlacer.classes.get(i)).toString
-			)
-			stack.setTagCompound(tag)
-			Generic.addToList(subItems, stack)
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	override def requiresMultipleRenderPasses: Boolean = true
-
-	/**
-	 * Gets an icon index based on an item's damage value and the given render pass
-	 */
-	@SideOnly(Side.CLIENT)
-	override def getIconFromDamageForRenderPass(damage: Int, pass: Int): IIcon = {
-		if (pass > 0) this.overlayIcon else this.itemIcon
-	}
-
-	@SideOnly(Side.CLIENT)
-	override def registerIcons(reg: IIconRegister): Unit = {
-		this.itemIcon = Items.spawn_egg.getIconFromDamageForRenderPass(0, 0)
-		this.overlayIcon = Items.spawn_egg.getIconFromDamageForRenderPass(0, 1)
-	}
+class ItemPlacer(id: String, n: String, private var entClass: Class[_ <: Entity])
+		extends ItemWrapper(id, n) {
 
 	override def getItemStackDisplayName(stack: ItemStack): String = {
-		"Spawn " + (if (stack.hasTagCompound)
-			StatCollector.translateToLocal(
-				"entity." + stack.getTagCompound.getString("EntityName") + ".name"
-			)
-		else "Unknown Entity")
+		"Spawn " + StatCollector.translateToLocal(
+			"entity." + this.getEntityName(stack) + ".name"
+		)
 	}
 
-	@SideOnly(Side.CLIENT)
-	override def getColorFromItemStack(stack: ItemStack, renderPass: Int): Int = {
-		if (stack.hasTagCompound) {
-			val entity: Class[_ <: Entity] =
-				EntityList.stringToClassMapping.get(
-					stack.getTagCompound.getString("EntityName")
-				).asInstanceOf[Class[_ <: Entity]]
-			renderPass match {
-				case 0 => return ItemPlacer.primary.get(entity)
-				case _ => return ItemPlacer.secondary.get(entity)
-			}
-		}
-		16777215
-	}
+	def getEntityName(stack: ItemStack): String =
+		EntityList.classToStringMapping.get(this.entClass).asInstanceOf[String]
 
 	override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int,
 			z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
@@ -93,8 +37,7 @@ class ItemPlacer(modid: String, name: String) extends ItemWrapper(modid, name) {
 		if (WorldHelper.isClient() ||
 				!player.canPlayerEdit(pos_side.x_i(), pos_side.y_i(), pos_side.z_i(), side, stack))
 			return false
-		if (!stack.hasTagCompound) return false
-		val entityName: String = stack.getTagCompound.getString("EntityName")
+		val entityName: String = this.getEntityName(stack)
 		val state: Block = pos.getBlock(world)
 
 		if (state == Blocks.mob_spawner) {
@@ -134,18 +77,54 @@ class ItemPlacer(modid: String, name: String) extends ItemWrapper(modid, name) {
 		false
 	}
 
+	def spawnEntity(world: World, name: String, pos: V3O): Entity = {
+		val entity: Entity = EntityList.createEntityByName(name, world)
+		this.spawnEntity(entity, pos)
+		entity
+	}
+
+	def spawnEntity(entity: Entity, pos: V3O): Boolean = {
+		entity.setLocationAndAngles(
+			pos.x, pos.y, pos.z,
+			MathHelper.wrapAngleTo180_float(entity.worldObj.rand.nextFloat * 360.0F),
+			0.0F
+		)
+		entity match {
+			case living: EntityLivingBase =>
+
+				living.rotationYawHead = living.rotationYaw
+				living.renderYawOffset = living.rotationYaw
+				/*
+				living.asInstanceOf[EntityLiving].onInitialSpawn(
+					entity.worldObj.getDifficultyForLocation(pos.toBlockPos()),
+					null
+				)
+				*/
+				living.asInstanceOf[EntityLiving].playLivingSound()
+			case _ =>
+		}
+		this.preSpawn(entity)
+		entity.worldObj.spawnEntityInWorld(entity)
+		this.playSummonSound(pos, entity)
+		true
+	}
+
+	def playSummonSound(pos: V3O, entity: Entity): Unit = {}
+
+	def preSpawn(entity: Entity): Unit = {}
+
 	/**
 	 * Returns true if the item can be used on the given entity, e.g. shears on sheep.
 	 *
-	 * @param itemStack
+	 * @param stack
 	 * @param player
 	 * @param entity
 	 * @return
 	 */
-	override def itemInteractionForEntity(itemStack: ItemStack, player: EntityPlayer,
+	override def itemInteractionForEntity(stack: ItemStack, player: EntityPlayer,
 			entity: EntityLivingBase): Boolean = {
-		if (itemStack.hasTagCompound) {
-			val entityName: String = itemStack.getTagCompound.getString("EntityName")
+		if (stack.hasTagCompound) {
+			val entityName: String = this.getEntityName(stack)
 			val thatEntityName: String = EntityList.classToStringMapping.get(
 				entity.getClass
 			).asInstanceOf[String]
@@ -161,51 +140,23 @@ class ItemPlacer(modid: String, name: String) extends ItemWrapper(modid, name) {
 		false
 	}
 
-	def spawnEntity(world: World, name: String, pos: V3O): Entity = {
-		val entity: Entity = EntityList.createEntityByName(name, world)
-		this.spawnEntity(entity, pos)
-		entity
-	}
-
-	def spawnEntity(entity: Entity, pos: V3O): Boolean = {
-		entity match {
-			case living: EntityLivingBase =>
-				living.setLocationAndAngles(
-					pos.x, pos.y, pos.z,
-					MathHelper.wrapAngleTo180_float(entity.worldObj.rand.nextFloat * 360.0F),
-					0.0F
-				)
-				living.rotationYawHead = living.rotationYaw
-				living.renderYawOffset = living.rotationYaw
-				/*
-				living.asInstanceOf[EntityLiving].onInitialSpawn(
-					entity.worldObj.getDifficultyForLocation(pos.toBlockPos()),
-					null
-				)
-				*/
-				entity.worldObj.spawnEntityInWorld(entity)
-				living.asInstanceOf[EntityLiving].playLivingSound()
-				true
-			case _ =>
-				false
-		}
-	}
-
 }
 
 object ItemPlacer {
 
-	private val classes: util.List[Class[_ <: Entity]] = new
-					util.ArrayList[Class[_ <: Entity]]()
-	private val primary: util.HashMap[Class[_ <: Entity], Int] =
-		new util.HashMap[Class[_ <: Entity], Int]()
-	private val secondary: util.HashMap[Class[_ <: Entity], Int] =
-		new util.HashMap[Class[_ <: Entity], Int]()
-
-	def register(entity: Class[_ <: Entity], primary: Int, secondary: Int): Unit = {
-		this.classes.add(entity)
-		this.primary.put(entity, primary)
-		this.secondary.put(entity, secondary)
+	def createEntity(entClass: Class[_ <: Entity], world: World, pos: V3O, rotZ: Float): Entity = {
+		var entity: Entity = null
+		try {
+			if (entClass != null) {
+				entity = entClass.getConstructor(classOf[World]).newInstance(world)
+				entity.setLocationAndAngles(pos.x, pos.y, pos.z, rotZ, 0.0F)
+			}
+		}
+		catch {
+			case e: Exception =>
+				e.printStackTrace()
+		}
+		entity
 	}
 
 }
