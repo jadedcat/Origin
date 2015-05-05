@@ -8,4 +8,6 @@ Under this section, you will learn about:
 * Dependencies
 * Libraries
 
+[ForgeGradle cookbook][]
+
 [forgegradle cookbook]: https://forgegradle.readthedocs.org/en/latest/cookbook/ "The ForgeGradle cookbook"
