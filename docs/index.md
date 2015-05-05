@@ -1,4 +1,12 @@
-Getting Started with Forge
+Learning how to Origin
 ==========================
 
-This is a simple guide to get you from nothing to a basic mod. The rest of this documentation is about where to go from here.
+Here, the docs will explain how Origin works. Origin is a library mod, commonly used for TheTemportalist's mods.
+That said, you are welcome to use it as the basis of your own mods!
+
+Docs site
+--------------------
+
+On the left is a sidebar with all the possible topics covered thus far in Origin's ReadTheDocs (from now on referred to as TheDocs).
+To start understanding Origin, you must understand the versioning.
+Begin with the top of the list on the left and work your way steadily through the topics until you become the master of the Origin itself.
