@@ -1,15 +1,15 @@
 package com.temportalist.origin.test.client
 
-import com.temportalist.origin.library.client.gui.{GuiRadialMenuHandler, GuiRadialMenu}
-import com.temportalist.origin.library.client.utility.Rendering
-import com.temportalist.origin.library.common.Origin
-import com.temportalist.origin.library.common.handlers.RegisterHelper
-import com.temportalist.origin.library.common.lib.IRadialSelection
-import com.temportalist.origin.library.common.nethandler.PacketHandler
-import com.temportalist.origin.test.{ScrewdriverMode, PacketUpdateMode, Sonic}
+import com.temportalist.origin.api.client.utility.Rendering
+import com.temportalist.origin.foundation.client.gui.GuiRadialMenu
+import com.temportalist.origin.foundation.common.lib.IRadialSelection
+import com.temportalist.origin.internal.client.gui.GuiRadialMenuHandler
+import com.temportalist.origin.internal.common.handlers.RegisterHelper
+import com.temportalist.origin.internal.common.network.handler.Network
+import com.temportalist.origin.test.{PacketUpdateMode, ScrewdriverMode, Sonic}
 import cpw.mods.fml.client.registry.ClientRegistry
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.common.gameevent.InputEvent.{MouseInputEvent, KeyInputEvent}
+import cpw.mods.fml.common.gameevent.InputEvent.{KeyInputEvent, MouseInputEvent}
 import net.minecraft.client.settings.KeyBinding
 import net.minecraft.item.ItemStack
 import org.lwjgl.input.Keyboard
@@ -28,7 +28,7 @@ class GuiScrewdriverModes(stack: ItemStack)
 	override def onSelectionOf(index: Int, item: IRadialSelection): Unit = {
 		// todo do this inheirently, calling IRadialSelection.onSelection
 		//println("Selected: " + item.asInstanceOf[ScrewdriverMode].getName())
-		PacketHandler.sendToServerAndClients(Origin.MODID, new PacketUpdateMode(
+		Network.sendToServerAndClients(new PacketUpdateMode(
 			item.asInstanceOf[ScrewdriverMode]
 		))
 	}

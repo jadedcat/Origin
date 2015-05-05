@@ -1,11 +1,10 @@
 package com.temportalist.origin.test.client
 
 import java.util
-
-import com.temportalist.origin.library.client.utility.Rendering
-import com.temportalist.origin.library.common.utility.Scala
+import com.temportalist.origin.api.client.utility.Rendering
+import com.temportalist.origin.api.common.utility.Scala
+import com.temportalist.origin.foundation.client.gui.GuiScreenBase
 import com.temportalist.origin.test._
-import com.temportalist.origin.wrapper.client.gui.GuiScreenWrapper
 import net.minecraft.client.renderer.{OpenGlHelper, RenderHelper}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.boss.EntityDragon
@@ -19,7 +18,7 @@ import org.lwjgl.opengl.GL11
  *
  * @author TheTemportalist
  */
-class GuiDataCore(player: EntityPlayer) extends GuiScreenWrapper {
+class GuiDataCore(player: EntityPlayer) extends GuiScreenBase {
 
 	val sonicStack: ItemStack = player.getCurrentEquippedItem
 	var index: util.List[Pair[String, EntityState]] = null

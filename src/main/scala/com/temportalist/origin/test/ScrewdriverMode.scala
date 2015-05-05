@@ -3,18 +3,14 @@ package com.temportalist.origin.test
 import java.util
 import java.util.UUID
 
-import com.temportalist.origin.library.common.lib.vec.V3O
-import cpw.mods.fml.relauncher.{SideOnly, Side}
-import org.lwjgl.opengl.GL11
-
-import scala.collection.mutable
-
-import com.temportalist.origin.api.rendering.ISpriteMapper
-import com.temportalist.origin.library.client.utility.Rendering
-import com.temportalist.origin.library.common.Origin
-import com.temportalist.origin.library.common.handlers.RegisterHelper
-import com.temportalist.origin.library.common.lib.IRadialSelection
-import com.temportalist.origin.library.common.utility.{WorldHelper, Scala, NBTHelper}
+import com.temportalist.origin.api.client.utility.Rendering
+import com.temportalist.origin.api.common.lib.V3O
+import com.temportalist.origin.api.common.rendering.ISpriteMapper
+import com.temportalist.origin.api.common.utility.{NBTHelper, Scala, WorldHelper}
+import com.temportalist.origin.foundation.common.lib.IRadialSelection
+import com.temportalist.origin.internal.common.Origin
+import com.temportalist.origin.internal.common.handlers.RegisterHelper
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.{TextureAtlasSprite, TextureMap}
 import net.minecraft.entity.player.EntityPlayer
@@ -24,6 +20,9 @@ import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraft.util.{MovingObjectPosition, ResourceLocation}
 import net.minecraft.world.World
+import org.lwjgl.opengl.GL11
+
+import scala.collection.mutable
 
 /**
  *
@@ -212,7 +211,7 @@ object ScrewdriverMode {
 				//val tag = new NBTTagCompound
 				//mop.entityHit.writeToNBTOptional(tag)
 				//println(tag)
-				println("Click on " + WorldHelper.isServer())
+				println("Click on " + WorldHelper.isServer)
 				return ScrewdriverMode.addEntityToDataCore(stack,
 					mop.entityHit.asInstanceOf[EntityLivingBase], player.getGameProfile.getId)
 			}

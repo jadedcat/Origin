@@ -1,0 +1,4 @@
+site_name: Origin Documentation
+pages:
+	- [index.md, Home]
+	- [about.md, What is Origin]

@@ -5,9 +5,9 @@ import java.net.{URL, URLConnection}
 import java.util.{Random, UUID}
 
 import com.google.gson.{JsonArray, JsonElement, JsonObject}
-import com.temportalist.origin.library.common.Origin
-import com.temportalist.origin.library.common.handlers.RegisterHelper
-import com.temportalist.origin.library.common.utility._
+import com.temportalist.origin.api.common.utility.{Json, NBTHelper, Scala, WorldHelper}
+import com.temportalist.origin.internal.common.Origin
+import com.temportalist.origin.internal.common.handlers.RegisterHelper
 import cpw.mods.fml.common.FMLCommonHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.entity.Entity

@@ -2,9 +2,9 @@ package com.temportalist.origin.test
 
 import java.util
 
-import com.temportalist.origin.library.common.Origin
-import com.temportalist.origin.library.common.utility._
-import com.temportalist.origin.wrapper.common.item.ItemWrapper
+import com.temportalist.origin.api.common.utility.{Cursor, Generic, Scala, Stacks}
+import com.temportalist.origin.foundation.common.item.ItemBase
+import com.temportalist.origin.internal.common.Origin
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
@@ -19,7 +19,7 @@ import net.minecraft.world.World
  *
  * @author TheTemportalist
  */
-class ItemScrewdriver(n: String) extends ItemWrapper(Origin.MODID, n) {
+class ItemScrewdriver(n: String) extends ItemBase(Origin.MODID, n) {
 
 	this.setHasSubtypes(true)
 
@@ -62,7 +62,8 @@ class ItemScrewdriver(n: String) extends ItemWrapper(Origin.MODID, n) {
 		val retStack: ItemStack = this.getMode(stack).onRightClick(
 			stack.copy(), world, player, Cursor.raytraceWorld(world, player)
 		)
-		if (!Stacks.areStacksMatching(stack, retStack, checkSize = true, checkNBT = true)) {
+		if (!Stacks.doStacksMatch(
+			stack, retStack, meta = true, size = true, nbt = true, nil = true)) {
 			player.setCurrentItemOrArmor(0, retStack)
 		}
 		/* todo: warning: this is a working loading of the entity NBT!
