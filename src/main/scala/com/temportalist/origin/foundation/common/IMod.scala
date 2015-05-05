@@ -4,7 +4,7 @@ import com.temportalist.origin.api.common.IModDetails
 import com.temportalist.origin.api.common.proxy.IProxy
 import com.temportalist.origin.api.common.register._
 import com.temportalist.origin.foundation.common.register.OptionRegister
-import com.temportalist.origin.internal.common.handlers.RegisterHelper
+import com.temportalist.origin.internal.common.handlers.{OptionHandler, RegisterHelper}
 import cpw.mods.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
 import cpw.mods.fml.common.network.NetworkRegistry
 
@@ -26,7 +26,11 @@ trait IMod {
 			event: FMLPreInitializationEvent, proxy: IProxy, options: OptionRegister,
 			registers: Register*): Unit = {
 
-		this.options = options
+		if (options != null) {
+			this.options = options
+			OptionHandler.handleConfiguration(modid, modname, this.options, event)
+		}
+
 		this.sortedRegisters = Sorting.stableSort(registers)(classTag[Register], Register.Order)
 
 		RegisterPhase.PREINIT_ORDER.foreach(phase => {
