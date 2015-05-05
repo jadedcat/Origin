@@ -1,3 +1,4 @@
 site_name: Origin Documentation
 pages:
   - [index.md, Home]
+  - [docs/index.md, About, Home]
