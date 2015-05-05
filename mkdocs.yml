@@ -2,7 +2,7 @@ site_name: Origin Documentation
 pages:
   - [index.md, Home]
   - [format/index.md, Format, Home]
-  - [format/javadocs.md
+  - [format/javadocs.md, Format, JavaDocs]
   - [format/versioning.md, Format, Semantic Versioning]
   - [format/depending.md, Format, Depending on Origin]
   - [format/installing.md, Format, Adding the Library]
