@@ -10,5 +10,5 @@ Under this section, you will learn about:
 
 [origin's javadocs]: https://origin.readthedocs.org/en/latest/format/javadocs/ "Origin's JavaDocs"
 [semantic versioning]: https://origin.readthedocs.org/en/latest/format/versioning/ "Semantic Versioning"
-[dependancies]: https://origin.readthedocs.org/en/latest/format/depending/ "Dependencies"
+[dependencies]: https://origin.readthedocs.org/en/latest/format/depending/ "Dependencies"
 [libraries]: https://origin.readthedocs.org/en/latest/format/installing/ "Libraries"
