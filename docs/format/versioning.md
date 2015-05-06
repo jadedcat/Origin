@@ -1,6 +1,8 @@
 Semantic Versioning
 ===
 
+The Semantic Versioning documentation can be found at their site. http://semver.org/
+
 Versions are formatted as follows:
 
    `MCVERSION`-`MAJOR`-`MINOR`-`PATCH`-`BUILD`
