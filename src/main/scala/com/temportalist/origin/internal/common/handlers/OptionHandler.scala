@@ -2,6 +2,7 @@ package com.temportalist.origin.internal.common.handlers
 
 import java.io.File
 import java.util
+import com.temportalist.origin.api.common.IModDetails
 import com.temportalist.origin.api.common.lib.ConfigJson
 import com.temportalist.origin.foundation.common.register.OptionRegister
 import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent
@@ -19,7 +20,7 @@ object OptionHandler {
 	private val handlers: util.HashMap[String, OptionRegister] = new
 					util.HashMap[String, OptionRegister]()
 
-	def handleConfiguration(pluginID: String, pluginName: String, options: OptionRegister,
+	def handleConfiguration(mod: IModDetails, options: OptionRegister,
 			event: FMLPreInitializationEvent): Unit = {
 		if (options.config == null) {
 			val dir: File = options.getConfigDirectory(event.getModConfigurationDirectory)
@@ -29,16 +30,16 @@ object OptionHandler {
 			else
 				options.getExtension() match {
 					case "cfg" =>
-						cfgFile = new File(dir, pluginName + ".cfg")
+						cfgFile = new File(dir, mod.getModName + ".cfg")
 						options.config = new Configuration(cfgFile, true)
 					case "json" =>
-						cfgFile = new File(dir, pluginName + ".json")
+						cfgFile = new File(dir, mod.getModName + ".json")
 						options.config = new ConfigJson(cfgFile)
 					case _ =>
 				}
 		}
 		options.loadConfiguration()
-		this.handlers.put(pluginID, options)
+		this.handlers.put(mod.getModid, options)
 	}
 
 	@SubscribeEvent

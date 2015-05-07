@@ -22,13 +22,12 @@ trait IMod {
 	var options: OptionRegister = null
 	private var sortedRegisters: Array[Register] = null
 
-	protected def preInitialize(modid: String, modname: String,
-			event: FMLPreInitializationEvent, proxy: IProxy, options: OptionRegister,
-			registers: Register*): Unit = {
+	protected def preInitialize(mod: IModDetails, event: FMLPreInitializationEvent, proxy: IProxy,
+			options: OptionRegister, registers: Register*): Unit = {
 
 		if (options != null) {
 			this.options = options
-			OptionHandler.handleConfiguration(modid, modname, this.options, event)
+			OptionHandler.handleConfiguration(mod, this.options, event)
 		}
 
 		this.sortedRegisters = Sorting.stableSort(registers)(classTag[Register], Register.Order)
