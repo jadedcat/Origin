@@ -75,7 +75,7 @@ object Origin extends IMod with IModDetails {
 	@Mod.EventHandler
 	def preInit(event: FMLPreInitializationEvent): Unit = {
 		RegisterHelper.registerHandler(ExtendedSync, OptionHandler, Players)
-		super.preInitialize(this.MODID, this.MODNAME, event, this.proxy, CGOOptions)
+		super.preInitialize(this, event, this.proxy, CGOOptions)
 
 		RegisterHelper.registerCommand(CommandOrigin)
 

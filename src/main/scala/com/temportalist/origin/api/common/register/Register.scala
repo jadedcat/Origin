@@ -96,7 +96,7 @@ object Register {
 		if (reg.isInstanceOf[Register.Unusual]) return
 		reg match {
 			case r: OptionRegister =>
-				OptionHandler.handleConfiguration(details.getModid, details.getModName, r,
+				OptionHandler.handleConfiguration(details, r,
 					event.asInstanceOf[FMLPreInitializationEvent])
 			case _ =>
 				if (this.registerFunctions.contains(reg.getClass))
