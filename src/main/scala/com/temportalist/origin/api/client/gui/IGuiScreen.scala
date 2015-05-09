@@ -1,6 +1,7 @@
 package com.temportalist.origin.api.client.gui
 
 import java.util
+
 import com.temportalist.origin.api.client.utility.Rendering
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import io.netty.buffer.Unpooled
@@ -85,9 +86,9 @@ trait IGuiScreen extends GuiScreen {
 		this.guiY
 	}
 
-	def getCenterX(): Int = (this.getX() + this.width) / 2
+	def getCenterX(): Int = this.getX() + (this.getWidth() / 2)
 
-	def getCenterY(): Int = (this.getY() + this.height) / 2
+	def getCenterY(): Int = this.getY() + (this.getHeight() / 2)
 
 	override def initGui(): Unit = {
 		super.initGui()
@@ -182,11 +183,12 @@ trait IGuiScreen extends GuiScreen {
 	}
 
 	protected def drawGuiBackground(): Unit = {
-		if (this.hasBackground)
-		Rendering.bindResource(this.getBackgound())
-		this.drawTexturedModalRect(
-			this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight()
-		)
+		if (this.hasBackground) {
+			Rendering.bindResource(this.getBackgound())
+			this.drawTexturedModalRect(
+				this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight()
+			)
+		}
 	}
 
 	protected def hasBackground: Boolean = this.background != null
@@ -239,7 +241,14 @@ trait IGuiScreen extends GuiScreen {
 		(x <= mouseX) && (mouseX <= x + w) && (y <= mouseY) && (mouseY <= y + h)
 	}
 
-	protected def bindTexture(rl: ResourceLocation): Unit = this.mc.renderEngine.bindTexture(rl)
+	protected def bindTexture(rl: ResourceLocation): Unit = Rendering.bindResource(rl)
+
+	def drawTexturedModalRect(xy: (Int, Int), wh: (Int, Int), uv: (Int, Int)): Unit =
+		this.drawTexturedModalRect(xy._1, xy._2, uv._1, uv._2, wh._1, wh._2)
+
+	def drawModularRect(pos: (Int, Int), uv: (Float, Float), actualSize: (Int, Int),
+			renderedSize: (Int, Int), imgSize: (Float, Float)): Unit =
+		Rendering.drawTextureWithSizes(pos, uv, actualSize, renderedSize, imgSize)
 
 	protected def drawLine(x1: Int, y1: Int, x2: Int, y2: Int, thickness: Int, color: Int): Unit = {
 		GL11.glDisable(3553)
