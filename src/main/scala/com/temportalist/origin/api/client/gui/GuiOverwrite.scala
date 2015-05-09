@@ -36,16 +36,35 @@ object GuiOverwrite {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	def guiInitPost(event: GuiScreenEvent.InitGuiEvent.Post): Unit = {
-		this.guiOverwritingObjects.foreach(f => if (f._1.isAssignableFrom(event.gui.getClass)) {
-			Scala.foreach(f._2, (obj: GuiOverwriter) => obj.overwriteGui(event.gui, event.buttonList))
+		this.iterateOverAllOverwriters(event.gui.getClass, (obj: GuiOverwriter) => {
+			obj.overwriteGui(event.gui, event.buttonList)
+		})
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	def guiActionPre(event: GuiScreenEvent.ActionPerformedEvent.Pre): Unit = {
+		this.iterateOverAllOverwriters(event.gui.getClass, (obj: GuiOverwriter) => {
+			if (!obj.canClickButton(event.gui, event.button)) {
+				event.setCanceled(true)
+				return
+			}
 		})
 	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	def guiActionPost(event: GuiScreenEvent.ActionPerformedEvent.Post): Unit = {
-		this.guiOverwritingObjects.foreach(f => if (f._1.isAssignableFrom(event.gui.getClass)) {
-			Scala.foreach(f._2, (obj: GuiOverwriter) => obj.onAction(event.gui, event.button))
+		this.iterateOverAllOverwriters(event.gui.getClass, (obj: GuiOverwriter) => {
+			obj.onAction(event.gui, event.button)
+		})
+	}
+
+	@SideOnly(Side.CLIENT)
+	private def iterateOverAllOverwriters(guiClass: Class[_ <: GuiScreen],
+			func: (GuiOverwriter) => Unit): Unit = {
+		this.guiOverwritingObjects.foreach(f => if (f._1.isAssignableFrom(guiClass)) {
+			Scala.foreach(f._2, (obj: GuiOverwriter) => func(obj))
 		})
 	}
 

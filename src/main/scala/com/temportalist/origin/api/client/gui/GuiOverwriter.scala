@@ -14,6 +14,8 @@ trait GuiOverwriter {
 
 	def overwriteGui(gui: GuiScreen, list: util.List[_]): Unit
 
+	def canClickButton(gui: GuiScreen, button: GuiButton): Boolean = true
+
 	def onAction(gui: GuiScreen, button: GuiButton): Unit
 
 }
