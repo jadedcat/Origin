@@ -2,8 +2,8 @@ package com.temportalist.origin.test
 
 import java.util
 
+import com.temportalist.origin.api.common.item.ItemBase
 import com.temportalist.origin.api.common.utility.{Cursor, Generic, Scala, Stacks}
-import com.temportalist.origin.foundation.common.item.ItemBase
 import com.temportalist.origin.internal.common.Origin
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.texture.IIconRegister

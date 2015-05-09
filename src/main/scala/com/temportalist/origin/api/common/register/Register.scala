@@ -1,6 +1,6 @@
 package com.temportalist.origin.api.common.register
 
-import com.temportalist.origin.api.common.IModDetails
+import com.temportalist.origin.api.common.resource.IModDetails
 import com.temportalist.origin.foundation.common.register.{BlockRegister, EntityRegister, ItemRegister, OptionRegister}
 import com.temportalist.origin.internal.common.handlers.OptionHandler
 import cpw.mods.fml.common.event.{FMLPreInitializationEvent, FMLStateEvent}

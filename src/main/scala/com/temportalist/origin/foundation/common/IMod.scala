@@ -1,8 +1,9 @@
 package com.temportalist.origin.foundation.common
 
-import com.temportalist.origin.api.common.IModDetails
+import com.temportalist.origin.api.common.lib.LogHelper
 import com.temportalist.origin.api.common.proxy.IProxy
 import com.temportalist.origin.api.common.register._
+import com.temportalist.origin.api.common.resource.IModDetails
 import com.temportalist.origin.foundation.common.register.OptionRegister
 import com.temportalist.origin.internal.common.handlers.{OptionHandler, RegisterHelper}
 import cpw.mods.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
@@ -18,6 +19,8 @@ import scala.util.Sorting
 trait IMod {
 
 	def getDetails: IModDetails
+
+	def log(message: String): Unit = LogHelper.info(this.getDetails.getModid, message)
 
 	var options: OptionRegister = null
 	private var sortedRegisters: Array[Register] = null

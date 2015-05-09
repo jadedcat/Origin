@@ -4,10 +4,9 @@ import java.util
 import java.util.UUID
 
 import com.temportalist.origin.api.client.utility.Rendering
-import com.temportalist.origin.api.common.lib.V3O
+import com.temportalist.origin.api.common.lib.{IRadialSelection, V3O}
 import com.temportalist.origin.api.common.rendering.ISpriteMapper
 import com.temportalist.origin.api.common.utility.{NBTHelper, Scala, WorldHelper}
-import com.temportalist.origin.foundation.common.lib.IRadialSelection
 import com.temportalist.origin.internal.common.Origin
 import com.temportalist.origin.internal.common.handlers.RegisterHelper
 import cpw.mods.fml.relauncher.{Side, SideOnly}

@@ -4,7 +4,8 @@ import cpw.mods.fml.client.registry.{ClientRegistry, RenderingRegistry}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.{GuiScreen, ScaledResolution}
+import net.minecraft.client.gui.{Gui, GuiScreen, ScaledResolution}
+import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.client.renderer.entity.{RenderEntity, RenderManager}
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
@@ -13,6 +14,7 @@ import net.minecraft.item.Item
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.{IItemRenderer, MinecraftForgeClient}
+import org.lwjgl.opengl.GL11
 
 /**
  *
@@ -38,6 +40,16 @@ object Rendering {
 
 	def bindResource(rl: ResourceLocation): Unit = {
 		Rendering.mc.getTextureManager.bindTexture(rl)
+	}
+
+	def drawTextureAtSize(pos: (Int, Int), texDim: (Int, Int), uv: (Int, Int), imgDim: (Int, Int)): Unit = {
+		Gui.func_146110_a(pos._1, pos._2, uv._1, uv._2, imgDim._1, imgDim._2, texDim._1, texDim._2)
+	}
+
+	def drawTextureWithSizes(pos: (Int, Int), uv: (Float, Float), actualSize: (Int, Int),
+			renderedSize: (Int, Int), imgSize: (Float, Float)): Unit = {
+		Gui.func_152125_a(pos._1, pos._2, uv._1, uv._2, actualSize._1, actualSize._2,
+			renderedSize._1, renderedSize._2, imgSize._1, imgSize._2)
 	}
 
 	def drawTextureRect(x: Int, y: Int, u: Int, v: Int, width: Int, height: Int): Unit = {
@@ -169,5 +181,29 @@ object Rendering {
 
 	def registerRender(block: Block, renderer: IItemRenderer): Unit =
 		this.registerRender(Item.getItemFromBlock(block), renderer)
+
+	object Gl {
+
+		def color(r: Float, g: Float, b: Float): Unit = GL11.glColor3f(r, g, b)
+
+		def color(r: Double, g: Double, b: Double): Unit = GL11.glColor3d(r, g, b)
+
+		def color(r: Float, g: Float, b: Float, a: Float): Unit = GL11.glColor4f(r, g, b, a)
+
+		def color(r: Double, g: Double, b: Double, a: Double): Unit = GL11.glColor4d(r, g, b, a)
+
+		def colorFull(): Unit = this.color(1, 1, 1, 1)
+
+		def enable(i: Int, isOn: Boolean): Unit = if (isOn) GL11.glEnable(i) else GL11.glDisable(i)
+
+		def blend(isOn: Boolean): Unit = this.enable(GL11.GL_BLEND, isOn)
+
+		def blendFunc(a: Int, b: Int, c: Int, d: Int): Unit = OpenGlHelper.glBlendFunc(a, b, c, d)
+
+		def blendFunc(typeA: Int, typeB: Int): Unit = GL11.glBlendFunc(typeA, typeB)
+
+		def blendSrcAlpha(): Unit = this.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+
+	}
 
 }

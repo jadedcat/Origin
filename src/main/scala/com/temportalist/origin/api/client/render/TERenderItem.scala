@@ -1,6 +1,5 @@
-package com.temportalist.origin.foundation.client.render
+package com.temportalist.origin.api.client.render
 
-import com.temportalist.origin.api.client.render.ItemRender
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ResourceLocation
@@ -21,11 +20,11 @@ abstract class TERenderItem(rl: ResourceLocation) extends TERenderer(rl) with It
 		else if (iType == ItemRenderType.EQUIPPED_FIRST_PERSON) GL11.glTranslated(0.5, 0.5, 0.5)
 		else if (iType == ItemRenderType.EQUIPPED) GL11.glTranslated(0.5, 0.5, 0.5)
 
-		this.renderTileEntityAt(this.getRenderingTileItem(), -0.5, -0.5, -0.5, 0)
+		this.renderTileEntityAt(this.getRenderingTileItem, -0.5, -0.5, -0.5, 0)
 
 		GL11.glPopMatrix()
 	}
 
-	def getRenderingTileItem(): TileEntity
+	def getRenderingTileItem: TileEntity
 
 }

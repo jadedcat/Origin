@@ -2,8 +2,8 @@ package com.temportalist.origin.internal.common.handlers
 
 import java.io.File
 import java.util
-import com.temportalist.origin.api.common.IModDetails
 import com.temportalist.origin.api.common.lib.ConfigJson
+import com.temportalist.origin.api.common.resource.IModDetails
 import com.temportalist.origin.foundation.common.register.OptionRegister
 import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent
 import cpw.mods.fml.common.event.FMLPreInitializationEvent

@@ -1,4 +1,4 @@
-package com.temportalist.origin.foundation.client.render
+package com.temportalist.origin.api.client.render
 
 import com.temportalist.origin.api.client.utility.Rendering
 import cpw.mods.fml.relauncher.{Side, SideOnly}

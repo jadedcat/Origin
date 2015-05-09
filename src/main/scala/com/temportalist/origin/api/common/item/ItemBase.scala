@@ -1,4 +1,4 @@
-package com.temportalist.origin.foundation.common.item
+package com.temportalist.origin.api.common.item
 
 import java.util
 
@@ -26,11 +26,11 @@ class ItemBase(val modid: String, name: String) extends Item with IRenderingObje
 	this.setUnlocalizedName(name)
 	GameRegistry.registerItem(this, name)
 
-	override def getCompoundName(): String = this.modid + ":" + this.name
+	override def getCompoundName: String = this.modid + ":" + this.name
 
 	@SideOnly(Side.CLIENT)
 	override def registerIcons(reg: IIconRegister): Unit = {
-		this.itemIcon = reg.registerIcon(this.getCompoundName())
+		this.itemIcon = reg.registerIcon(this.getCompoundName)
 	}
 
 	/**
@@ -40,7 +40,7 @@ class ItemBase(val modid: String, name: String) extends Item with IRenderingObje
 	override def getUnlocalizedName: String = {
 		// return a formatted string using the format:
 		//   item.{pluginID}:{itemName}
-		"item." + this.getCompoundName()
+		"item." + this.getCompoundName
 	}
 
 	/**

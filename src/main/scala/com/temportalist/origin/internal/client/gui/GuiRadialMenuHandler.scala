@@ -1,7 +1,7 @@
 package com.temportalist.origin.internal.client.gui
 
+import com.temportalist.origin.api.client.gui.GuiRadialMenu
 import com.temportalist.origin.api.client.utility.Rendering
-import com.temportalist.origin.foundation.client.gui.GuiRadialMenu
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.gameevent.TickEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}

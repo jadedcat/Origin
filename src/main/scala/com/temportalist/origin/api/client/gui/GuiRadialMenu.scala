@@ -1,10 +1,9 @@
-package com.temportalist.origin.foundation.client.gui
+package com.temportalist.origin.api.client.gui
 
 import java.util
 
-import com.temportalist.origin.api.client.gui.IGuiScreen
 import com.temportalist.origin.api.client.utility.TessRenderer
-import com.temportalist.origin.foundation.common.lib.IRadialSelection
+import com.temportalist.origin.api.common.lib.IRadialSelection
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.gui.{GuiButton, ScaledResolution}
 import org.lwjgl.input.Mouse

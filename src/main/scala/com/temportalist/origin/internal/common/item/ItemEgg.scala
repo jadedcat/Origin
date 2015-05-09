@@ -2,8 +2,8 @@ package com.temportalist.origin.internal.common.item
 
 import java.util
 
+import com.temportalist.origin.api.common.item.ItemPlacer
 import com.temportalist.origin.api.common.utility.Generic
-import com.temportalist.origin.foundation.common.item.ItemPlacer
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs

@@ -20,13 +20,11 @@ import net.minecraftforge.common.util.ForgeDirection
  */
 object WorldHelper {
 
-	def isClient: Boolean = {
-		FMLCommonHandler.instance().getEffectiveSide.isClient
-	}
+	def getSide: Side = FMLCommonHandler.instance().getEffectiveSide
 
-	def isServer: Boolean = {
-		FMLCommonHandler.instance().getEffectiveSide.isServer
-	}
+	def isClient: Boolean = this.getSide.isClient
+
+	def isServer: Boolean = this.getSide.isServer
 
 	def isClient(ent: Entity): Boolean = ent.worldObj.isRemote
 

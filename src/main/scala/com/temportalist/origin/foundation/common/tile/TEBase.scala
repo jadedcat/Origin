@@ -2,10 +2,8 @@ package com.temportalist.origin.foundation.common.tile
 
 import com.temportalist.origin.api.common.inventory.IInv
 import com.temportalist.origin.api.common.lib.{BlockCoord, V3O}
-import com.temportalist.origin.api.common.tile.{IPowerable, ITank}
+import com.temportalist.origin.api.common.tile.{IPowerable, ITank, ITileSaver}
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity
-import net.minecraft.network.{NetworkManager, Packet}
 import net.minecraft.tileentity.TileEntity
 
 /**
@@ -16,7 +14,7 @@ import net.minecraft.tileentity.TileEntity
  *
  * @author TheTemportalist
  */
-class TEBase(var name: String) extends TileEntity() with IInv with ITank with IPowerable {
+class TEBase(var name: String) extends TileEntity() with IInv with ITank with IPowerable with ITileSaver {
 
 	def this() {
 		this("")
@@ -63,16 +61,6 @@ class TEBase(var name: String) extends TileEntity() with IInv with ITank with IP
 	}
 
 	override def markChunkModified(): Unit = new V3O(this).markChunkModified(this)
-
-	override def onDataPacket(net: NetworkManager, pkt: S35PacketUpdateTileEntity) {
-		this.readFromNBT(pkt.func_148857_g())
-	}
-
-	override def getDescriptionPacket: Packet = {
-		val tagCom: NBTTagCompound = new NBTTagCompound
-		this.writeToNBT(tagCom)
-		new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, this.getBlockMetadata, tagCom)
-	}
 
 	def markforUpdate(): Unit = {
 		new V3O(this).markForUpdate(this.getWorldObj)

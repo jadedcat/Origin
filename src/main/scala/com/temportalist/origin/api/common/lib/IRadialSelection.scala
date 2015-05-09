@@ -1,4 +1,4 @@
-package com.temportalist.origin.foundation.common.lib
+package com.temportalist.origin.api.common.lib
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft

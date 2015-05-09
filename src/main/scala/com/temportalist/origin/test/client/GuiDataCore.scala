@@ -1,9 +1,9 @@
 package com.temportalist.origin.test.client
 
 import java.util
+import com.temportalist.origin.api.client.gui.GuiScreenBase
 import com.temportalist.origin.api.client.utility.Rendering
 import com.temportalist.origin.api.common.utility.Scala
-import com.temportalist.origin.foundation.client.gui.GuiScreenBase
 import com.temportalist.origin.test._
 import net.minecraft.client.renderer.{OpenGlHelper, RenderHelper}
 import net.minecraft.entity.Entity

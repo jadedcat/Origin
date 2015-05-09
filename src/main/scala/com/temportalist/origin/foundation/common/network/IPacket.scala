@@ -187,6 +187,11 @@ trait IPacket extends IMessage {
 
 	def sendToBoth(): Unit = this.sendTo(EnumPacketDestination.SERVERANDCLIENTS)
 
+	def sendToOpposite(side: Side): Unit = {
+		if (side.isClient) this.sendToServer()
+		else if (side.isServer) this.sendToClients()
+	}
+
 	override final def toBytes(buf: ByteBuf): Unit = buf.writeBytes(this.writeStream.toByteArray)
 
 	override final def fromBytes(buf: ByteBuf): Unit = {

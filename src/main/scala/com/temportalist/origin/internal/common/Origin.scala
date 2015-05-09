@@ -3,12 +3,13 @@ package com.temportalist.origin.internal.common
 import java.util
 import java.util.UUID
 
-import com.temportalist.origin.api.common.IModDetails
+import com.temportalist.origin.api.common.item.ItemPlacer
+import com.temportalist.origin.api.common.register.Registry
+import com.temportalist.origin.api.common.resource.IModDetails
 import com.temportalist.origin.foundation.common.IMod
-import com.temportalist.origin.foundation.common.item.ItemPlacer
 import com.temportalist.origin.foundation.common.network._
 import com.temportalist.origin.foundation.common.utility.Players
-import com.temportalist.origin.internal.common.extended.ExtendedSync
+import com.temportalist.origin.internal.common.extended.ExtendedEntityHandler
 import com.temportalist.origin.internal.common.handlers.{OptionHandler, RegisterHelper}
 import com.temportalist.origin.internal.common.item.ItemEgg
 import com.temportalist.origin.internal.server.command.CommandOrigin
@@ -42,8 +43,8 @@ object Origin extends IMod with IModDetails {
 	final val MODNAME = "Origin"
 	final val VERSION = "4.0"
 	//todo"@PLUGIN_VERSION@"
-	final val clientProxy = "com.temportalist.origin.library.client.ProxyClient"
-	final val serverProxy = "com.temportalist.origin.library.server.ProxyServer"
+	final val clientProxy = "com.temportalist.origin.internal.client.ProxyClient"
+	final val serverProxy = "com.temportalist.origin.internal.server.ProxyServer"
 
 	override def getModid: String = this.MODID
 
@@ -74,7 +75,7 @@ object Origin extends IMod with IModDetails {
 
 	@Mod.EventHandler
 	def preInit(event: FMLPreInitializationEvent): Unit = {
-		RegisterHelper.registerHandler(ExtendedSync, OptionHandler, Players)
+		Registry.registerHandler(ExtendedEntityHandler, OptionHandler, Players)
 		super.preInitialize(this, event, this.proxy, CGOOptions)
 
 		RegisterHelper.registerCommand(CommandOrigin)
@@ -125,7 +126,7 @@ object Origin extends IMod with IModDetails {
 	@Mod.EventHandler
 	def serverLoad(event: FMLServerStartingEvent): Unit = {
 
-		for (command <- RegisterHelper.getCommands()) {
+		for (command <- RegisterHelper.getCommands) {
 			event.registerServerCommand(command)
 		}
 
@@ -136,8 +137,8 @@ object Origin extends IMod with IModDetails {
 			temp.put(allWS(i).provider.getDimensionName, allWS(i).provider.dimensionId)
 		}
 
-		Origin.dimensions.clear
-		Origin.dimensions1.clear
+		Origin.dimensions.clear()
+		Origin.dimensions1.clear()
 		val keys: util.SortedSet[String] = new util.TreeSet[String](temp.keySet)
 		val iterator: util.Iterator[String] = keys.iterator()
 		while (iterator.hasNext) {

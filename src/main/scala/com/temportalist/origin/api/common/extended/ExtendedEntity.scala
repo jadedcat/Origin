@@ -1,8 +1,8 @@
 package com.temportalist.origin.api.common.extended
 
-import com.temportalist.origin.api.common.lib.LogHelper
-import com.temportalist.origin.foundation.common.network.PacketSyncExtendedProperties
-import com.temportalist.origin.internal.common.Origin
+import com.temportalist.origin.api.common.utility.WorldHelper
+import com.temportalist.origin.foundation.common.network.{IPacket, PacketSyncExtendedProperties}
+import cpw.mods.fml.relauncher.Side
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
@@ -14,32 +14,24 @@ import net.minecraftforge.common.IExtendedEntityProperties
  *
  * @author TheTemportalist
  */
-abstract class ExtendedEntity(var player: EntityPlayer) extends IExtendedEntityProperties {
+abstract class ExtendedEntity(private var entity: EntityPlayer)
+		extends IExtendedEntityProperties {
 
-	// Default Constructor
-
-	// End Constructor
-
-	// Other Constructors
-
-	// End Constructors
-
-	override def init(entity: Entity, world: World): Unit = {
-	}
+	override def init(entity: Entity, world: World): Unit = {}
 
 	def saveNBTData(tagCom: NBTTagCompound): Unit
 
 	def loadNBTData(tagCom: NBTTagCompound): Unit
 
-	def syncEntity(): Unit = {
+	def syncEntity(): Unit = this.getSyncPacket.sendToOpposite(WorldHelper.getSide)
+
+	def syncEntity(side: Side): Unit =
+		if (side.isClient) this.getSyncPacket.sendToClients() else this.getSyncPacket.sendToServer()
+
+	private def getSyncPacket: IPacket = {
 		val tagCom: NBTTagCompound = new NBTTagCompound()
 		this.saveNBTData(tagCom)
-		val syncMessage: PacketSyncExtendedProperties =
-			new PacketSyncExtendedProperties(this.getClass, tagCom)
-		if (this.player != null)
-			Origin.proxy.syncPacket(syncMessage, this.player)
-		else
-			LogHelper.info(Origin.MODNAME, "Error: Null player in extended entity")
+		new PacketSyncExtendedProperties(this.getClass, tagCom)
 	}
 
 }

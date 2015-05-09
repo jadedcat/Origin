@@ -1,13 +1,17 @@
 package com.temportalist.origin.internal.common.extended
 
-import java.lang.reflect.InvocationTargetException
-import java.util
+import java.util.UUID
 
 import com.temportalist.origin.api.common.extended.ExtendedEntity
-import com.temportalist.origin.api.common.lib.LogHelper
+import com.temportalist.origin.api.common.utility.WorldHelper
 import com.temportalist.origin.internal.common.Origin
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraftforge.common.IExtendedEntityProperties
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.event.entity.living.LivingDeathEvent
+import net.minecraftforge.event.entity.{EntityEvent, EntityJoinWorldEvent}
+
+import scala.collection.mutable
 
 /**
  * A handler class for the ExtendedEntity wrapper class.
@@ -16,116 +20,133 @@ import net.minecraftforge.common.IExtendedEntityProperties
  */
 object ExtendedEntityHandler {
 
-	/**
-	 * Holds data in respect for the IExtendedEntityProperties.
-	 * The key is the IExtendedEntityProperties class (ExtendedEntity wrapper class).
-	 * The value it returns holds 2 string objects. The first (index 0) is the class key which
-	 * is what IExtendedEntityProperties uses track it's classes. The second (index 1) is a boolean
-	 * in string object format declaring whether this class has data that should persist past death.
-	 */
-	private val extendedProperties: util.HashMap[Class[_ <: ExtendedEntity], Array[String]] =
-		new util.HashMap[Class[_ <: ExtendedEntity], Array[String]]
+	private val extendedProperties = mutable.Map[Class[_ <: ExtendedEntity], (String, Boolean)]()
+	private val extendedKeys = mutable.Map[String, Class[_ <: ExtendedEntity]]()
+	private val persistenceTags = mutable.Map[UUID,
+			mutable.Map[Class[_ <: ExtendedEntity], NBTTagCompound]]()
+
+	def getClassKey(extendedClass: Class[_ <: ExtendedEntity]): String =
+		this.extendedProperties(extendedClass)._1
+
+	def shouldSaveOnDeath(extendedClass: Class[_ <: ExtendedEntity]): Boolean =
+		this.extendedProperties(extendedClass)._2
 
 	/**
 	 * Register an ExtendedEntity with a class key and a notice saying whether or not there is data
 	 * that persists past death.
-	 * @param classKey
-	 * @param extendedClass
-	 * @param persistPastDeath
 	 */
 	def registerExtended(classKey: String, extendedClass: Class[_ <: ExtendedEntity],
 			persistPastDeath: Boolean): Unit = {
-		ExtendedEntityHandler.extendedProperties
-				.put(extendedClass, Array[String](classKey, persistPastDeath + ""))
+		this.extendedProperties(extendedClass) = (classKey, persistPastDeath)
+		this.extendedKeys(classKey) = extendedClass
 	}
 
-	/**
-	 * Get the map of ExtendedEntities and data regarding the class usage
-	 * @return
-	 */
-	def getExtendedProperties: util.HashMap[Class[_ <: ExtendedEntity], Array[String]] = {
-		ExtendedEntityHandler.extendedProperties
+	final def getExtended[T <: ExtendedEntity](living: EntityPlayer,
+			extendedClass: Class[T]): T = {
+		if (living == null || !this.extendedProperties.contains(extendedClass))
+			return null.asInstanceOf[T]
+		living.getExtendedProperties(this.getClassKey(extendedClass)) match {
+			case ext: T => ext
+			case _ =>
+				this.register(living, extendedClass)
+				this.getExtended(living, extendedClass)
+		}
 	}
 
-	/**
-	 * Get IExtendedEntityProperties from a player instance and an ExtendedEntity class.
-	 * @param player
-	 * @param extendedClass
-	 * @return
-	 * null if no mapping
-	 */
-	final def getExtended(player: EntityPlayer,
-			extendedClass: Class[_ <: ExtendedEntity]): IExtendedEntityProperties = {
-		if (player == null) {
-			LogHelper.info(Origin.MODNAME, "Passed player was null in " + this.getClass + ".getExtended")
-			return null
-		}
-		if (ExtendedEntityHandler.extendedProperties.containsKey(extendedClass)) {
-			try {
-				val props: IExtendedEntityProperties = player.getExtendedProperties(
-					ExtendedEntityHandler.extendedProperties.get(extendedClass)(0)
-				)
-				if (props != null) return props
-				else if (ExtendedEntityHandler.registerPlayer(player, extendedClass)) {
-					return this.getExtended(player, extendedClass)
-				}
-			}
-			catch {
-				case e: Exception =>
-					LogHelper.info(Origin.MODNAME,
-						"\n   Player null: " + (player == null) +
-						"\n   EnProp null: " + (ExtendedEntityHandler.extendedProperties == null) +
-						"\n   EClass null: " + (extendedClass == null)
-					)
-					e.printStackTrace()
-				case _: Throwable =>
-			}
-		}
-		else {
-			System.out.println(
-				"ERROR: No ExtendedEntity class with the name of " + extendedClass.getSimpleName +
-						" registered.")
-		}
-		null
+	final def getExtendedByKey(living: EntityPlayer, key: String): ExtendedEntity = {
+		this.getExtended(living, this.extendedKeys(key))
 	}
 
-	/**
-	 * Register an EntityPlayer instance with an ExtendedEntity class
-	 * @param player
-	 * @param extendedClass
-	 * @return
-	 * true if registration was completed, false if otherwise
-	 */
-	final def registerPlayer(player: EntityPlayer,
-			extendedClass: Class[_ <: ExtendedEntity]): Boolean = {
-		var ent: ExtendedEntity = null
-		try {
-			ent = extendedClass.getConstructor(classOf[EntityPlayer]).newInstance(player)
-		}
-		catch {
-			case e: IllegalArgumentException =>
-				e.printStackTrace
-			case e: SecurityException =>
-				e.printStackTrace
-			case e: InstantiationException =>
-				e.printStackTrace
-			case e: IllegalAccessException =>
-				e.printStackTrace
-			case e: InvocationTargetException =>
-				e.printStackTrace
-			case e: NoSuchMethodException =>
-				e.printStackTrace
+	final def register(entity: EntityPlayer, extendedClass: Class[_ <: ExtendedEntity]): Unit =
+		this.register(entity, this.getClassKey(extendedClass), extendedClass)
+
+	final def register(entity: EntityPlayer, classKey: String,
+			extendedClass: Class[_ <: ExtendedEntity]): Unit = {
+		if (entity.getExtendedProperties(classKey) != null) return
+		val ent: ExtendedEntity = try {
+			extendedClass.getConstructor(classOf[EntityPlayer]).newInstance(entity)
+		} catch {
+			case e: Exception => null
 		}
 		if (ent != null) {
-			player.registerExtendedProperties(
-				ExtendedEntityHandler.extendedProperties.get(extendedClass)(0), ent)
-			return true
+			entity.registerExtendedProperties(classKey, ent)
 		}
-		false
 	}
 
-	def syncEntity(extendedPlayer: ExtendedEntity) {
-		extendedPlayer.syncEntity()
+	def updatePersistenceFor(uuid: UUID): Unit = {
+		if (!this.persistenceTags.contains(uuid))
+			this.persistenceTags(uuid) = mutable.Map[Class[_ <: ExtendedEntity], NBTTagCompound]()
+	}
+
+	def storeEntityData[T <: ExtendedEntity](extendedClass: Class[T], player: EntityPlayer,
+			data: NBTTagCompound) {
+		val uuid = player.getGameProfile.getId
+		this.updatePersistenceFor(uuid)
+		this.persistenceTags(uuid)(extendedClass) = data
+	}
+
+	def getDataAndRemove[T <: ExtendedEntity](
+			extendedClass: Class[T], player: EntityPlayer): NBTTagCompound = {
+		val uuid: UUID = player.getGameProfile.getId
+		this.updatePersistenceFor(uuid)
+		if (this.persistenceTags(uuid).contains(extendedClass))
+			this.persistenceTags(uuid).remove(extendedClass).get
+		else null
+	}
+
+	/**
+	 * Control the creation of ExtendedEntities for each player (only if they do not already have
+	 * that ExtendedEntity)
+	 */
+	@SubscribeEvent
+	def onEntityConstructing(event: EntityEvent.EntityConstructing) {
+		event.entity match {
+			case living: EntityPlayer =>
+				this.extendedProperties.foreach(seq => {
+					Origin.log("Checking registration of " + living.getCommandSenderName +
+							" as a " + seq._2._1 + " extended entity")
+					this.register(living, seq._2._1, seq._1)
+				})
+			case _ =>
+		}
+	}
+
+	@SubscribeEvent
+	def onLivingDeath(event: LivingDeathEvent): Unit = {
+		event.entityLiving match {
+			case player: EntityPlayer => if (WorldHelper.isServer) {
+				this.extendedProperties.foreach(seq => if (seq._2._2) {
+					Origin.log("Saving " + player.getCommandSenderName + "\'s " + seq._2._1 +
+							" data for death persistance")
+					val data = new NBTTagCompound
+					this.getExtended(player, seq._1).saveNBTData(data)
+					this.storeEntityData(seq._1, player, data)
+				})
+			}
+			case _ =>
+		}
+	}
+
+	@SubscribeEvent
+	def onEntityJoinWorld(event: EntityJoinWorldEvent): Unit = {
+		event.entity match {
+			case player: EntityPlayer => if (WorldHelper.isServer) {
+				this.extendedProperties.foreach(seq => if (seq._2._2) {
+					this.getExtended(player, seq._1) match {
+						case extended: ExtendedEntity =>
+							val data = this.getDataAndRemove(seq._1, player)
+							if (data != null) {
+								Origin.log("Loading data for " + player.getCommandSenderName +
+										" as a " + seq._2._1 + " extended entity")
+								extended.loadNBTData(data)
+							}
+							extended.syncEntity()
+						case _ =>
+					}
+				})
+			}
+			case _ =>
+		}
 	}
 
 }

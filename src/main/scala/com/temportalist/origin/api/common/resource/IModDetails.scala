@@ -1,4 +1,4 @@
-package com.temportalist.origin.api.common
+package com.temportalist.origin.api.common.resource
 
 import com.temportalist.origin.api.common.utility.{Scala, WorldHelper}
 import com.temportalist.origin.foundation.common.network.IPacket

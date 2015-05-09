@@ -1,4 +1,4 @@
-package com.temportalist.origin.foundation.common.block
+package com.temportalist.origin.api.common.block
 
 import java.util.Random
 

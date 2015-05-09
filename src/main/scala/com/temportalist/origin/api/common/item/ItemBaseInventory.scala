@@ -1,4 +1,4 @@
-package com.temportalist.origin.foundation.common.item
+package com.temportalist.origin.api.common.item
 
 import com.temportalist.origin.api.common.inventory.ContainerWrapper
 import net.minecraft.entity.Entity
