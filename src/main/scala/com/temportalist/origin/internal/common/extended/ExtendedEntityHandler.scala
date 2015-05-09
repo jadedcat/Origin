@@ -4,7 +4,6 @@ import java.util.UUID
 
 import com.temportalist.origin.api.common.extended.ExtendedEntity
 import com.temportalist.origin.api.common.utility.WorldHelper
-import com.temportalist.origin.internal.common.Origin
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
@@ -103,8 +102,6 @@ object ExtendedEntityHandler {
 		event.entity match {
 			case living: EntityPlayer =>
 				this.extendedProperties.foreach(seq => {
-					Origin.log("Checking registration of " + living.getCommandSenderName +
-							" as a " + seq._2._1 + " extended entity")
 					this.register(living, seq._2._1, seq._1)
 				})
 			case _ =>
@@ -116,8 +113,6 @@ object ExtendedEntityHandler {
 		event.entityLiving match {
 			case player: EntityPlayer => if (WorldHelper.isServer) {
 				this.extendedProperties.foreach(seq => if (seq._2._2) {
-					Origin.log("Saving " + player.getCommandSenderName + "\'s " + seq._2._1 +
-							" data for death persistance")
 					val data = new NBTTagCompound
 					this.getExtended(player, seq._1).saveNBTData(data)
 					this.storeEntityData(seq._1, player, data)
@@ -136,8 +131,6 @@ object ExtendedEntityHandler {
 						case extended: ExtendedEntity =>
 							val data = this.getDataAndRemove(seq._1, player)
 							if (data != null) {
-								Origin.log("Loading data for " + player.getCommandSenderName +
-										" as a " + seq._2._1 + " extended entity")
 								extended.loadNBTData(data)
 							}
 							extended.syncEntity()
