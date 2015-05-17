@@ -16,6 +16,8 @@ trait Register {
 
 	def priority: Int
 
+	def getRegFuncType: Class[_ <: Register]
+
 	def register(): Unit
 
 }
@@ -28,6 +30,7 @@ object Register {
 
 	trait Unusual extends Register {
 		override final def priority: Int = -1
+		override final def getRegFuncType: Class[_ <: Register] = classOf[Register.Unusual]
 	}
 
 	private val registerFunctions = mutable.Map[Class[_ <: Register],
@@ -99,9 +102,11 @@ object Register {
 				OptionHandler.handleConfiguration(details, r,
 					event.asInstanceOf[FMLPreInitializationEvent])
 			case _ =>
-				if (this.registerFunctions.contains(reg.getClass))
-					this.registerFunctions(reg.getClass)(phase).apply(reg)
-				else reg.register()
+				val regClassType = reg.getRegFuncType
+				if (this.registerFunctions.contains(regClassType)) {
+					val funcs = this.registerFunctions(regClassType)
+					if (funcs.contains(phase)) funcs(phase).apply(reg)
+				}
 		}
 	}
 

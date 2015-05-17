@@ -7,6 +7,7 @@ package com.temportalist.origin.api.common.rendering
  */
 trait IRenderingObject {
 
+
 	def getCompoundName: String
 
 }

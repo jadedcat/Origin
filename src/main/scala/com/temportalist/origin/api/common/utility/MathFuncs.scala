@@ -42,6 +42,12 @@ object MathFuncs {
 			n
 	}
 
+	def bound(min: Double, n: Double, max: Double): Double = {
+		if (n < min) min
+		else if (n > max) max
+		else n
+	}
+
 	def getColor(prefix: String, hexstring: String): Color = {
 		val r_Start: Int = prefix.length
 		val g_Start: Int = r_Start + 2

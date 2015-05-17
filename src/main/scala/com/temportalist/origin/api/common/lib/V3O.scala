@@ -114,7 +114,7 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 		this.z = tag.getInteger("z")
 	}
 
-	def toBlockPos(): BlockPos = {
+	def toBlockPos: BlockPos = {
 		new BlockPos(
 			MathHelper.floor_double(this.x),
 			MathHelper.floor_double(this.y),
@@ -132,11 +132,11 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 	def markChunkModified(tile: TileEntity): Unit =
 		tile.getWorldObj.markTileEntityChunkModified(this.x_i(), this.y_i(), this.z_i(), tile)
 
-	def toVec3(): Vec3 = Vec3.createVectorHelper(this.x, this.y, this.z)
+	def toVec3: Vec3 = Vec3.createVectorHelper(this.x, this.y, this.z)
 
-	def toChunkPair(): ChunkCoordIntPair = new ChunkCoordIntPair(this.x_i(), this.z_i())
+	def toChunkPair: ChunkCoordIntPair = new ChunkCoordIntPair(this.x_i(), this.z_i())
 
-	def toChunkCoords(): ChunkCoordinates = new ChunkCoordinates(this.x_i(), this.y_i(), this.z_i())
+	def toChunkCoords: ChunkCoordinates = new ChunkCoordinates(this.x_i(), this.y_i(), this.z_i())
 
 	def getChunk(world: World): Chunk = world.getChunkFromChunkCoords(this.x_i(), this.z_i())
 
@@ -172,7 +172,7 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 	def setBlockMeta(world: World, meta: Int, notify: Int): Unit =
 		world.setBlockMetadataWithNotify(this.x_i(), this.y_i(), this.z_i(), meta, notify)
 
-	def getDir(): ForgeDirection =
+	def getDir: ForgeDirection =
 		if (this.x_i() < 0) ForgeDirection.WEST
 		else if (this.x_i() > 0) ForgeDirection.EAST
 		else if (this.y_i() < 0) ForgeDirection.DOWN

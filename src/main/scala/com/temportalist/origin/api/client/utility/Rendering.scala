@@ -28,6 +28,8 @@ object Rendering {
 
 	def renderManager: RenderManager = RenderManager.instance
 
+	def thePlayer = this.mc.thePlayer
+
 	//def blockDispatcher: BlockRendererDispatcher = this.mc.getBlockRendererDispatcher
 
 	//def blockShapes: BlockModelShapes = this.blockDispatcher.getBlockModelShapes
@@ -167,7 +169,7 @@ object Rendering {
 	}
 	*/
 
-	def getScaledResoultion(): ScaledResolution =
+	def getScaledResoultion: ScaledResolution =
 		new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight)
 
 	def registerRender(entity: Class[_ <: Entity], renderer: RenderEntity): Unit =

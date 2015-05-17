@@ -13,6 +13,8 @@ trait BlockRegister extends Register {
 
 	override final def priority: Int = 1
 
+	override final def getRegFuncType: Class[_ <: Register] = classOf[BlockRegister]
+
 	/**
 	 * This method is used to register TileEntities.
 	 * Recommendation: Use GameRegistry.registerTileEntity

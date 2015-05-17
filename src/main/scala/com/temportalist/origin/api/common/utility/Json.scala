@@ -176,7 +176,7 @@ object Json {
 				else data.asInstanceOf[NBTTagList]
 			case obj: JsonObject =>
 				val tag: NBTTagCompound = new NBTTagCompound
-				Scala.foreach(obj.entrySet(), (entry: Entry[String, JsonElement]) => {
+				Scala.iterate(obj.entrySet(), (entry: Entry[String, JsonElement]) => {
 					tag.setTag(entry.getKey, this.jsonToNBT(entry.getValue))
 				})
 				ret = tag

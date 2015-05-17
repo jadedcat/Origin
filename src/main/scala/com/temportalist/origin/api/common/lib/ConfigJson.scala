@@ -49,7 +49,7 @@ class ConfigJson(file: File) extends Configuration(file, true) {
 				val categories: util.HashMap[String, util.HashMap[String, JsonElement]] =
 					new util.HashMap[String, util.HashMap[String, JsonElement]]
 				val comments: util.HashMap[String, String] = new util.HashMap[String, String]
-				Scala.foreach(this.getCategoryNames, (categoryName: String) => {
+				Scala.iterate(this.getCategoryNames, (categoryName: String) => {
 					val cate: ConfigCategory = this.getCategory(categoryName)
 					val options: util.HashMap[String, JsonElement] =
 						new util.HashMap[String, JsonElement]
@@ -57,7 +57,7 @@ class ConfigJson(file: File) extends Configuration(file, true) {
 					if (cate.getComment != null && !cate.getComment.isEmpty)
 						comments.put(categoryName, cate.getComment)
 
-					Scala.foreach(cate.getValues.entrySet(), (entry: Entry[String, Property]) => {
+					Scala.iterate(cate.getValues.entrySet(), (entry: Entry[String, Property]) => {
 						val prop: Property = entry.getValue
 						val element: JsonElement = Config.toJson(prop)
 						if (element != null) {
@@ -109,9 +109,9 @@ class ConfigJson(file: File) extends Configuration(file, true) {
 				catch {
 					case e: Exception => json = new JsonObject
 				}
-				Scala.foreach(json.entrySet(), (entry: Entry[String, JsonElement]) => {
+				Scala.iterate(json.entrySet(), (entry: Entry[String, JsonElement]) => {
 					val cate: ConfigCategory = this.getCategory(entry.getKey)
-					Scala.foreach(entry.getValue.getAsJsonObject.entrySet(),
+					Scala.iterate(entry.getValue.getAsJsonObject.entrySet(),
 						(propEntry: Entry[String, JsonElement]) => {
 							val name: String = propEntry.getKey
 							val jsonElement: JsonElement = propEntry.getValue

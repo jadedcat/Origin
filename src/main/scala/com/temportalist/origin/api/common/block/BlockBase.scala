@@ -55,11 +55,11 @@ class BlockBase(material: Material, val modid: String, name: String,
 
 	// End Constructors
 
-	override def getCompoundName(): String = this.modid + ":" + this.name
+	override def getCompoundName: String = this.modid + ":" + this.name
 
 	@SideOnly(Side.CLIENT)
 	override def registerBlockIcons(reg: IIconRegister): Unit = {
-		this.blockIcon = reg.registerIcon(this.getCompoundName())
+		this.blockIcon = reg.registerIcon(this.getCompoundName)
 	}
 
 	/**
@@ -69,7 +69,7 @@ class BlockBase(material: Material, val modid: String, name: String,
 	override def getUnlocalizedName: String = {
 		// return a formatted string using the format:
 		//   tile.{pluginID}:{blockName}
-		"tile." + this.getCompoundName()
+		"tile." + this.getCompoundName
 	}
 
 	// ~~~~~~~~~~~~~~~ Start supered wrappers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

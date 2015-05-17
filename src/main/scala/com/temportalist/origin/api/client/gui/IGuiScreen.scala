@@ -11,7 +11,7 @@ import net.minecraft.network.PacketBuffer
 import net.minecraft.network.play.client.C17PacketCustomPayload
 import net.minecraft.util.ResourceLocation
 import org.apache.logging.log4j.LogManager
-import org.lwjgl.input.Keyboard
+import org.lwjgl.input.{Keyboard, Mouse}
 import org.lwjgl.opengl.GL11
 
 /**
@@ -140,6 +140,7 @@ trait IGuiScreen extends GuiScreen {
 
 	override def mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int): Unit = {
 		super.mouseClicked(mouseX, mouseY, mouseButton)
+
 		for (i <- 0 until this.textFieldList.size()) {
 			val textField: GuiTextField = this.textFieldList.get(i)
 			textField.mouseClicked(mouseX, mouseY, mouseButton)
@@ -169,9 +170,30 @@ trait IGuiScreen extends GuiScreen {
 		super.drawScreen(mouseX, mouseY, renderPartialTicks)
 	}
 
+	private var mouseOffset_full: (Float, Float) = (0, 0)
+	private var mouseDrag_startOffset: (Float, Float) = null
+	private var mouseDrag_start: (Int, Int) = null
+
+	protected def getMouseDraggedOffset: (Float, Float) = (this.mouseOffset_full._1, this.mouseOffset_full._2)
+
 	protected def drawGuiBackgroundLayer(mouseX: Int, mouseY: Int,
 			renderPartialTicks: Float): Unit = {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F)
+
+		if (Mouse.isButtonDown(0)) {
+			if (this.mouseDrag_start == null) {
+				this.mouseDrag_start = (mouseX, mouseY)
+				this.mouseDrag_startOffset = this.mouseOffset_full
+			} else {
+				val offsetX_sinceStart = mouseX - this.mouseDrag_start._1
+				val offsetY_sinceStart = mouseY - this.mouseDrag_start._2
+				this.mouseOffset_full = (this.mouseDrag_startOffset._1 + offsetX_sinceStart,
+						this.mouseDrag_startOffset._2 + offsetY_sinceStart)
+			}
+		} else if (this.mouseDrag_start != null) {
+			this.mouseDrag_start = null
+			this.mouseDrag_startOffset = null
+		}
 
 		this.drawGuiBackground()
 
@@ -235,6 +257,9 @@ trait IGuiScreen extends GuiScreen {
 	def drawString(string: String, x: Int, y: Int, color: Int): Unit
 
 	def getStringWidth(string: String): Int
+
+	def isMouseInArea(xywh: (Int, Int, Int, Int), mouseX: Int, mouseY: Int): Boolean =
+		this.isMouseInArea(xywh._1, xywh._2, xywh._3, xywh._4, mouseX, mouseY)
 
 	def isMouseInArea(x: Int, y: Int, w: Int, h: Int, mouseX: Int,
 			mouseY: Int): Boolean = {

@@ -7,7 +7,8 @@ import cpw.mods.fml.common.ObfuscationReflectionHelper
 import net.minecraft.nbt.NBTBase.NBTPrimitive
 import net.minecraft.nbt._
 
-import reflect.runtime.universe._
+import scala.collection.mutable
+import scala.reflect.runtime.universe._
 
 /**
  *
@@ -75,6 +76,10 @@ object NBTHelper {
 			case ab: Array[Byte] => new NBTTagByteArray(ab)
 			case s: String => new NBTTagString(s)
 			case ai: Array[Int] => new NBTTagIntArray(ai)
+			case map: mutable.Map[_, _] =>
+				val tag = new NBTTagCompound
+				map.foreach(f => tag.setTag(f._1.toString, this.asTag(f._2)))
+				tag
 			case saver: INBTSaver =>
 				val tag: NBTTagCompound = new NBTTagCompound()
 				saver.writeTo(tag)

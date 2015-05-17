@@ -1,6 +1,6 @@
 package com.temportalist.origin.api.common.utility
 
-import java.{lang, util}
+import java.{util, lang}
 
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
@@ -15,16 +15,16 @@ import scala.collection.{JavaConversions, mutable}
  */
 object Scala {
 
-	def foreach[T](collection: util.Collection[T], callback:(T) => Unit): Unit = {
+	def iterate[T, U](collection: util.Collection[T], f: T => U): Unit = {
 		if (collection == null) return
 		collection match {
 			case list: util.List[T] =>
-				for (item <- JavaConversions.asScalaBuffer(list)) callback(item)
+				for (item <- JavaConversions.asScalaBuffer(list)) f(item)
 			case set: util.Set[T] =>
-				for (item <- JavaConversions.asScalaSet(set)) callback(item)
+				for (item <- JavaConversions.asScalaSet(set)) f(item)
 			case _ =>
 				val iter: util.Iterator[T] = collection.iterator()
-				while (iter.hasNext) callback(iter.next())
+				while (iter.hasNext) f(iter.next())
 		}
 	}
 
@@ -33,19 +33,19 @@ object Scala {
 		for (i <- 0 until inv.getSizeInventory) callback(i, inv.getStackInSlot(i))
 	}
 
-	def foreach[T](data: Array[T], callback: (Int, T) => Unit): Unit = {
+	def foreach[T, U](data: Array[T], callback: (Int, T) => U): Unit = {
 		if (data == null) return
 		for (i <- 0 until data.length) {
 			callback(i, data(i))
 		}
 	}
 
-	def foreach[T](iter: lang.Iterable[T], callback: (Int, T) => Unit): Unit = {
+	def foreach[T, U](iter: lang.Iterable[T], callback: (Int, T) => U): Unit = {
 		if (iter == null) return
 		this.foreach(iter.iterator(), callback)
 	}
 
-	def foreach[T](iter: util.Iterator[T], callback: (Int, T) => Unit): Unit = {
+	def foreach[T, U](iter: util.Iterator[T], callback: (Int, T) => U): Unit = {
 		if (iter == null) return
 		var i: Int = 0
 		JavaConversions.asScalaIterator(iter).foreach(
@@ -56,7 +56,7 @@ object Scala {
 		)
 	}
 
-	def foreach[T](tagList: NBTTagList, callback: (Int, Any) => Unit): Unit = {
+	def foreach[T, U](tagList: NBTTagList, callback: (Int, Any) => U): Unit = {
 		for (i <- 0 until tagList.tagCount()) {
 			callback(i, NBTHelper.getTagValueAt(tagList, i))
 		}

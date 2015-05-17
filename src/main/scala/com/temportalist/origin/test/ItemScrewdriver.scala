@@ -60,7 +60,7 @@ class ItemScrewdriver(n: String) extends ItemBase(Origin.MODID, n) {
 	override def onItemRightClick(stack: ItemStack, world: World,
 			player: EntityPlayer): ItemStack = {
 		val retStack: ItemStack = this.getMode(stack).onRightClick(
-			stack.copy(), world, player, Cursor.raytraceWorld(world, player)
+			stack.copy(), world, player, Cursor.raytraceWorld(player)
 		)
 		if (!Stacks.doStacksMatch(
 			stack, retStack, meta = true, size = true, nbt = true, nil = true)) {
@@ -84,7 +84,7 @@ class ItemScrewdriver(n: String) extends ItemBase(Origin.MODID, n) {
 			playerIn: EntityPlayer, itemInUseCount: Int): Unit = {
 		if (this.getMaxItemUseDuration(stack) == itemInUseCount)
 			this.getMode(stack).onUseFinish(stack, worldIn, playerIn,
-				Cursor.raytraceWorld(worldIn, playerIn))
+				Cursor.raytraceWorld(playerIn))
 	}
 
 }

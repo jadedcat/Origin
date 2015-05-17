@@ -16,6 +16,8 @@ trait EntityRegister extends Register {
 
 	override final def priority: Int = 2
 
+	override final def getRegFuncType: Class[_ <: Register] = classOf[EntityRegister]
+
 	var entID: Int = 0
 	private val idMap: util.HashMap[Class[_ <: Entity], Int] =
 		new util.HashMap[Class[_ <: Entity], Int]()

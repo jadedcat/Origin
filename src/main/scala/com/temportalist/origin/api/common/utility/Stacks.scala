@@ -31,7 +31,7 @@ object Stacks {
 	}
 
 	def spawnItemStack(world: World, pos: V3O, itemStack: ItemStack, random: Random,
-			delay: Int): Unit = {
+			delay: Int): EntityItem = {
 		if (itemStack != null) {
 			val entityitem: EntityItem = new EntityItem(world,
 				pos.x + random.nextFloat * 0.8F + 0.1F,
@@ -50,11 +50,12 @@ object Stacks {
 						.setTagCompound(itemStack.getTagCompound.copy.asInstanceOf[NBTTagCompound])
 			}
 			if (!world.isRemote) world.spawnEntityInWorld(entityitem)
-		}
+			entityitem
+		} else null
 	}
 
 	def spawnItemStack(world: World, pos: V3O, state: BlockState, random: Random,
-			delay: Int): Unit = {
+			delay: Int): EntityItem = {
 		this.spawnItemStack(world, pos, state.toStack, random, delay)
 	}
 

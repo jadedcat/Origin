@@ -11,6 +11,8 @@ trait ItemRegister extends Register {
 
 	override final def priority: Int = 0
 
+	override final def getRegFuncType: Class[_ <: Register] = classOf[ItemRegister]
+
 	def registerItemsPostBlock(): Unit = {}
 
 	def registerCrafting(): Unit = {}
