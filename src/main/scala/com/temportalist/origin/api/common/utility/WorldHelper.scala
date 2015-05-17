@@ -61,11 +61,11 @@ object WorldHelper {
 				viewee.posZ - viewer.posZ
 			)
 
-		val lengthVec: Double = differenceVec.toVec3().lengthVector()
+		val lengthVec: Double = differenceVec.toVec3.lengthVector()
 
-		val differenceVec_normal: Vec3 = differenceVec.toVec3().normalize()
+		val differenceVec_normal: Vec3 = differenceVec.toVec3.normalize()
 
-		val d1: Double = entityLookVec.toVec3().dotProduct(differenceVec_normal)
+		val d1: Double = entityLookVec.toVec3.dotProduct(differenceVec_normal)
 
 		if (d1 > (1.0D - 0.025D) / lengthVec && WorldHelper.canEntityBeSeen(viewer, viewee)) {
 			true

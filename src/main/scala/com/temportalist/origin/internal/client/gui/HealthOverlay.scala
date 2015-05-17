@@ -44,7 +44,7 @@ object HealthOverlay extends GuiIngame(Rendering.mc) {
 		if (event.`type` != ElementType.HEALTH) return
 
 		// calculate various variables for display
-		val reso: ScaledResolution = Rendering.getScaledResoultion()
+		val reso: ScaledResolution = Rendering.getScaledResoultion
 		val width: Int = reso.getScaledWidth
 		val height: Int = reso.getScaledHeight
 		val xHearts: Int = width / 2 - 91
