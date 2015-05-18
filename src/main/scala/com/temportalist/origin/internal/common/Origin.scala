@@ -41,8 +41,7 @@ object Origin extends IMod with IModDetails {
 
 	final val MODID = "origin"
 	final val MODNAME = "Origin"
-	final val VERSION = "4.0"
-	//todo"@PLUGIN_VERSION@"
+	final val VERSION = "@PLUGIN_VERSION@"
 	final val clientProxy = "com.temportalist.origin.internal.client.ProxyClient"
 	final val serverProxy = "com.temportalist.origin.internal.server.ProxyServer"
 
