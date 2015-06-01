@@ -53,7 +53,7 @@ class GuiDataCore(player: EntityPlayer) extends GuiScreenBase {
 	}
 
 	def drawEntityState(state: EntityState, scale: Float): Unit = {
-		val entity: Entity = state.getEntity()
+		val entity: Entity = state.getEntity
 		if (entity == null) return
 
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL)

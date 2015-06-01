@@ -44,7 +44,7 @@ object ExtendedEntityHandler {
 		if (living == null || !this.extendedProperties.contains(extendedClass))
 			return null.asInstanceOf[T]
 		living.getExtendedProperties(this.getClassKey(extendedClass)) match {
-			case ext: T => ext
+			case ext: ExtendedEntity => ext.asInstanceOf[T]
 			case _ =>
 				this.register(living, extendedClass)
 				this.getExtended(living, extendedClass)
