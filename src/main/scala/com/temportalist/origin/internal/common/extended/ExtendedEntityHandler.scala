@@ -1,9 +1,8 @@
 package com.temportalist.origin.internal.common.extended
 
 import java.util.UUID
-
-import com.temportalist.origin.api.common.extended.ExtendedEntity
 import com.temportalist.origin.api.common.utility.WorldHelper
+import com.temportalist.origin.foundation.common.extended.ExtendedEntity
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
@@ -130,10 +129,8 @@ object ExtendedEntityHandler {
 					this.getExtended(player, seq._1) match {
 						case extended: ExtendedEntity =>
 							val data = this.getDataAndRemove(seq._1, player)
-							if (data != null) {
-								extended.loadNBTData(data)
-							}
-							extended.syncEntity()
+							if (data != null) extended.loadNBTData(data)
+							extended.syncEntityFull()
 						case _ =>
 					}
 				})

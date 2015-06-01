@@ -1,10 +1,9 @@
 package com.temportalist.origin.internal.common.handlers
 
 import java.util
-
-import com.temportalist.origin.api.common.extended.ExtendedEntity
 import com.temportalist.origin.api.common.register.Registry
 import com.temportalist.origin.api.common.rendering.ISpriteMapper
+import com.temportalist.origin.foundation.common.extended.ExtendedEntity
 import com.temportalist.origin.internal.common.Origin
 import com.temportalist.origin.internal.common.extended.ExtendedEntityHandler
 import cpw.mods.fml.common.IFuelHandler

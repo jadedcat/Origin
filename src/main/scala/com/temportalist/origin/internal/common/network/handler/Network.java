@@ -27,11 +27,10 @@ public class Network extends FMLIndexedMessageToMessageCodec<IPacket> {
 	private static final Map<Class<? extends IPacket>, String> packetToChannel =
 			new HashMap<Class<? extends IPacket>, String>();
 
+	@SuppressWarnings("unchecked")
 	public static boolean registerHandler(String modid,
 			List<Class<? extends IPacket>> packetClasses) {
-		return Network.registerHandler(modid,
-				packetClasses.toArray(new Class[0])
-		);
+		return Network.registerHandler(modid, packetClasses.toArray(new Class[0]));
 	}
 
 	public static boolean registerHandler(String modid,

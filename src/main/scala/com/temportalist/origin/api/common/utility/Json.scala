@@ -80,7 +80,7 @@ object Json {
 					objs(j) = NameParser.getItemStack(comp)
 				}
 				else if (comp.length == 1 && j > 1) {
-					objs(j) = (comp.charAt(0) + "")
+					objs(j) = comp.charAt(0) + ""
 				}
 				else {
 					objs(j) = comp
@@ -176,7 +176,7 @@ object Json {
 				else data.asInstanceOf[NBTTagList]
 			case obj: JsonObject =>
 				val tag: NBTTagCompound = new NBTTagCompound
-				Scala.iterate(obj.entrySet(), (entry: Entry[String, JsonElement]) => {
+				Scala.iterateCol(obj.entrySet(), (entry: Entry[String, JsonElement]) => {
 					tag.setTag(entry.getKey, this.jsonToNBT(entry.getValue))
 				})
 				ret = tag

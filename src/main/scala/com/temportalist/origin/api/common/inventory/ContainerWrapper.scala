@@ -222,7 +222,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 							stack.stackSize -= slot.getStack.stackSize
 							retStack = true
 						}
-						break
+						break()
 					}
 					slotID += (if (isBackwards) -1 else 1)
 				}
@@ -237,7 +237,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 	}
 
 	protected def getExcludedMaximumSlotIDForItemStack(stackToProcess: ItemStack): Int = {
-		this.getIInventory.getSizeInventory()
+		this.getIInventory().getSizeInventory
 	}
 
 	protected def isItemValidForSlotOnShift(slot: Slot, stackToProcess: ItemStack): Boolean = {

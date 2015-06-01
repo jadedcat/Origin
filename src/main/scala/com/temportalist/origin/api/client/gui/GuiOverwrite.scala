@@ -64,7 +64,7 @@ object GuiOverwrite {
 	private def iterateOverAllOverwriters(guiClass: Class[_ <: GuiScreen],
 			func: (GuiOverwriter) => Unit): Unit = {
 		this.guiOverwritingObjects.foreach(f => if (f._1.isAssignableFrom(guiClass)) {
-			Scala.iterate(f._2, func)
+			Scala.iterateCol(f._2, func)
 		})
 	}
 

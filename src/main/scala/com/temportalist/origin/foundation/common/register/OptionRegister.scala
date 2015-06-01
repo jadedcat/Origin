@@ -49,12 +49,12 @@ class OptionRegister() extends Register.Unusual with IModGuiFactory {
 		}
 		finally {
 			if (this.config != null && this.config.hasChanged) {
-				this.config.save
+				this.config.save()
 			}
 		}
 	}
 
-	def hasDefaultConfig(): Boolean = {
+	def hasDefaultConfig: Boolean = {
 		true
 	}
 

@@ -17,32 +17,30 @@ import scala.reflect.runtime.universe._
  */
 object NBTHelper {
 
-	def getNBTType[T: TypeTag]: Int = {
-		try {
-			typeOf[T] match {
-				case t if t =:= typeOf[Byte] => 1
-				case t if t =:= typeOf[Short] => 2
-				case t if t =:= typeOf[Int] => 3
-				case t if t =:= typeOf[Long] => 4
-				case t if t =:= typeOf[Float] => 5
-				case t if t =:= typeOf[Double] => 6
-				case t if t =:= typeOf[Array[Byte]] => 7
-				case t if t =:= typeOf[String] => 8
-				case t if t =:= typeOf[NBTTagList] => 9
-				case t if t =:= typeOf[NBTTagCompound] => 10
-				case t if t =:= typeOf[Array[Int]] => 11
-				case _ => -1
-			}
-		}
-		catch {
-			case e: Exception =>
-				e.printStackTrace()
-				-1
-		}
-	}
+	private val nbtTypes = Map[Type, Int](
+		typeOf[Byte] -> 1,
+		typeOf[Short] -> 2,
+		typeOf[Int] -> 3,
+		typeOf[Long] -> 4,
+		typeOf[Float] -> 5,
+		typeOf[Double] -> 6,
+		typeOf[Array[Byte]] -> 7,
+		typeOf[String] -> 8,
+		typeOf[NBTTagList] -> 9,
+		typeOf[NBTTagCompound] -> 10,
+		typeOf[Array[Int]] -> 11
+	)
+
+	def getNBTType[T: TypeTag]: Int = this.nbtTypes(typeOf[T])
 
 	def getTagList[T: TypeTag](nbt: NBTTagCompound, key: String): NBTTagList = {
 		nbt.getTagList(key, this.getNBTType[T])
+	}
+
+	def getTagList[T](nbt: NBTTagCompound, key: String, f: T => Unit)
+			(implicit t: TypeTag[T]): Unit = {
+		val list = nbt.getTagList(key, this.nbtTypes(t.tpe))
+		for (i <- 0 until list.tagCount()) f(this.getTagValueAt(list, i).asInstanceOf[T])
 	}
 
 	def getTagValueAt(nbtList: NBTTagList, index: Int): Any = {

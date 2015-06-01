@@ -52,7 +52,7 @@ class TEBase(var name: String) extends TileEntity() with IInv with ITank with IP
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Other ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	override def markDirty: Unit = {
+	override def markDirty(): Unit = {
 
 		val thisCoord: BlockCoord = new BlockCoord(this)
 		thisCoord.scheduleUpdate()

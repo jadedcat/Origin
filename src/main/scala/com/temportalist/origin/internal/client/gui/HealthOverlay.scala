@@ -66,13 +66,13 @@ object HealthOverlay extends GuiIngame(Rendering.mc) {
 		if (tier <= 0) {
 			// render background
 			// only render the base background if we are going to see it
-			this.drawHearts(-1, 20, xHearts, yHearts, false, this.background)
+			this.drawHearts(-1, 20, xHearts, yHearts, highlight = false, this.background)
 		}
 		else {
 			// render background
 			// if not going to see base background, only render the edge part
 			this.drawHeartsLayer(
-				xHearts, yHearts, 10, false,
+				xHearts, yHearts, 10, halfHeart = false,
 				this.background + (if (highlight) this.highlightOffset else this.overlayOffset)
 			)
 

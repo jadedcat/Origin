@@ -89,7 +89,7 @@ class FakeInventory(var holderStack: ItemStack, var inventorySize: Int, var stac
 		this.stackLimit
 	}
 
-	def markDirty {
+	def markDirty() {
 	}
 
 	def isUseableByPlayer(var1: EntityPlayer): Boolean = {

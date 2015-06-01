@@ -30,7 +30,7 @@ class BlockState(private var block: Block, private var meta: Int) {
 
 	def toStack: ItemStack = new ItemStack(this.getBlock, 1, this.getMeta)
 
-	def toName: String = NameParser.getName(this, true, true)
+	def toName: String = NameParser.getName(this, hasID = true, hasMeta = true)
 
 }
 object BlockState {

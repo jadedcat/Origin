@@ -21,14 +21,14 @@ class EntityState() {
 		this.entityNBT = nbt
 	}
 
-	def getEntityNBT(): NBTTagCompound = this.entityNBT
+	def getEntityNBT: NBTTagCompound = this.entityNBT
 
-	def hasCreatedEntity(): Boolean = this.entityInstance != null
+	def hasCreatedEntity: Boolean = this.entityInstance != null
 
 	def createEntity(world: World): Unit = if (this.entityNBT != null)
 		this.entityInstance = EntityList.createEntityFromNBT(this.entityNBT, world)
 
-	def getEntity(): Entity = this.entityInstance
+	def getEntity: Entity = this.entityInstance
 
 	def setEntity(e: Entity): Unit = this.entityInstance = e
 

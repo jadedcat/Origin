@@ -67,9 +67,9 @@ class ScrewdriverMode(private val name: String, private val textureName: String,
 			val aScale: Float = 1.0F / scale
 			GL11.glScaled(scale, scale, scale)
 			mc.fontRenderer.drawStringWithShadow(
-				this.getName(),
+				this.getName,
 				(x * aScale).toInt -
-						(mc.fontRenderer.getStringWidth(this.getName()) / 2.0F).toInt,
+						(mc.fontRenderer.getStringWidth(this.getName) / 2.0F).toInt,
 				((y + (h / 2)) * aScale).toInt + 2,
 				16777215
 			)
@@ -90,7 +90,7 @@ class ScrewdriverMode(private val name: String, private val textureName: String,
 
 	// Functionality
 
-	def getName(): String = this.name
+	def getName: String = this.name
 
 	def canEnableOn(stack: ItemStack): Boolean = {
 		this.minTier <= stack.getItemDamage
@@ -128,7 +128,7 @@ object ScrewdriverMode {
 	def getMode(name: String): ScrewdriverMode = this.modes(name)
 
 	def setMode(stack: ItemStack, mode: ScrewdriverMode): Unit = {
-		stack.getTagCompound.setString("modeName", mode.getName())
+		stack.getTagCompound.setString("modeName", mode.getName)
 	}
 
 	def initModes(stack: ItemStack): Unit = {
@@ -161,7 +161,7 @@ object ScrewdriverMode {
 	}
 
 	def toggleMode(stack: ItemStack, mode: ScrewdriverMode, isEnabled: Boolean): Unit = {
-		stack.getTagCompound.getCompoundTag("modes").setBoolean(mode.getName(), isEnabled)
+		stack.getTagCompound.getCompoundTag("modes").setBoolean(mode.getName, isEnabled)
 	}
 
 	def getDataCore(stack: ItemStack): NBTTagList = {

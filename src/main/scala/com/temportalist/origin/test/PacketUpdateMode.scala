@@ -13,7 +13,7 @@ class PacketUpdateMode() extends IPacket {
 
 	def this(newMode: ScrewdriverMode) {
 		this()
-		this.add(newMode.getName())
+		this.add(newMode.getName)
 		//println ("Added mode " + newMode.getName())
 	}
 

@@ -9,20 +9,21 @@ import net.minecraft.nbt.NBTTagCompound
 /**
  *
  *
- * @author TheTemportalist
+ * @author  TheTemportalist  5/21/15
  */
-@Deprecated
-class PacketSyncExtendedProperties() extends IPacket {
+class PacketExtendedSync() extends IPacket {
 
-	def this(extendedClass: Class[_ <: ExtendedEntity], data: NBTTagCompound) {
+	def this(extendedClass: Class[_ <: ExtendedEntity], uniqueID: String) {
 		this()
 		this.add(ExtendedEntityHandler.getClassKey(extendedClass))
-		this.add(data)
+		this.add(uniqueID)
 	}
 
 	override def handle(player: EntityPlayer, side: Side): Unit = {
-		ExtendedEntityHandler.getExtendedByKey(
-			player, this.get[String]).loadNBTData(this.get[NBTTagCompound])
+		val extended = ExtendedEntityHandler.getExtendedByKey(player, this.get[String])
+		val id = this.get[String]
+		if (!id.isEmpty) extended.handleSyncPacketData(id, this, side)
+		else extended.loadNBTData(this.get[NBTTagCompound])
 	}
 
 }

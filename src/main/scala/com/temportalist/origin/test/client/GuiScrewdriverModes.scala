@@ -3,8 +3,8 @@ package com.temportalist.origin.test.client
 import com.temportalist.origin.api.client.gui.GuiRadialMenu
 import com.temportalist.origin.api.client.utility.Rendering
 import com.temportalist.origin.api.common.lib.IRadialSelection
+import com.temportalist.origin.api.common.register.Registry
 import com.temportalist.origin.internal.client.gui.GuiRadialMenuHandler
-import com.temportalist.origin.internal.common.handlers.RegisterHelper
 import com.temportalist.origin.internal.common.network.handler.Network
 import com.temportalist.origin.test.{PacketUpdateMode, ScrewdriverMode, Sonic}
 import cpw.mods.fml.client.registry.ClientRegistry
@@ -42,7 +42,7 @@ object GuiScrewdriverModes {
 	)
 
 	def register(): Unit = {
-		RegisterHelper.registerHandler(this)
+		Registry.registerHandler(this)
 		ClientRegistry.registerKeyBinding(this.openRadial)
 	}
 

@@ -57,7 +57,7 @@ object WorldHelper {
 		val differenceVec: V3O = new V3O(
 				viewee.posX - viewer.posX,
 				viewee.posY + viewee.height.asInstanceOf[Double] -
-						(viewer.posY + viewer.getEyeHeight().asInstanceOf[Double]),
+						(viewer.posY + viewer.getEyeHeight.asInstanceOf[Double]),
 				viewee.posZ - viewer.posZ
 			)
 

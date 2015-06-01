@@ -26,7 +26,7 @@ class InventoryWrapper(var name: String, var inventorySize: Int, var ownerStack:
 		this.ownerStack != null
 	}
 
-	def markDirty {
+	def markDirty() {
 		for (i <- 0 until this.getSizeInventory) {
 			if (this.getStackInSlot(i) != null && this.getStackInSlot(i).stackSize == 0)
 				this.setInventorySlotContents(i, null)

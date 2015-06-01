@@ -5,9 +5,9 @@ import java.net.{URL, URLConnection}
 import java.util.{Random, UUID}
 
 import com.google.gson.{JsonArray, JsonElement, JsonObject}
+import com.temportalist.origin.api.common.register.Registry
 import com.temportalist.origin.api.common.utility.{Json, NBTHelper, Scala, WorldHelper}
 import com.temportalist.origin.internal.common.Origin
-import com.temportalist.origin.internal.common.handlers.RegisterHelper
 import cpw.mods.fml.common.FMLCommonHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.entity.Entity
@@ -33,7 +33,7 @@ object Sonic {
 
 	def preInit(configDir: File): Unit = {
 
-		RegisterHelper.registerHandler(this)
+		Registry.registerHandler(this)
 
 		this.screwdriver = new ItemScrewdriver("screwdriver")
 		Origin.addItemToTab(this.screwdriver)
@@ -155,7 +155,7 @@ object Sonic {
 	def worldLoad(event: WorldEvent.Load): Unit = {
 		if (WorldHelper.isOverworld(event.world)) {
 			for (state: EntityState <- this.entityStates.values) {
-				if (!state.hasCreatedEntity()) state.createEntity(event.world)
+				if (!state.hasCreatedEntity) state.createEntity(event.world)
 			}
 		}
 	}
@@ -184,9 +184,9 @@ object Sonic {
 		val uuid: String = id.toString
 		val modid: String = "Unknown"
 		val entityID: String = state.name
-		val className: String = state.getEntity().getClass.getCanonicalName
+		val className: String = state.getEntity.getClass.getCanonicalName
 
-		val jsonNBT: JsonObject = Json.nbtToJson(state.getEntityNBT()).getAsJsonObject
+		val jsonNBT: JsonObject = Json.nbtToJson(state.getEntityNBT).getAsJsonObject
 		jsonNBT.addProperty("entityClass", className)
 		val data: String = "uuid=" + uuid + "&modid=" + modid + "&file=" + entityID + "&data=" +
 			Json.toReadableString(jsonNBT.toString)

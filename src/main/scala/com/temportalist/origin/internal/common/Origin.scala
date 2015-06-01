@@ -80,7 +80,7 @@ object Origin extends IMod with IModDetails {
 		RegisterHelper.registerCommand(CommandOrigin)
 
 		this.registerPackets(
-			classOf[PacketSyncExtendedProperties],
+			classOf[PacketExtendedSync],
 			classOf[PacketTeleport],
 			classOf[PacketRedstoneUpdate],
 			classOf[PacketActionUpdate], classOf[PacketUpdateMode],

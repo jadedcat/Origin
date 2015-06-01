@@ -49,7 +49,7 @@ class ConfigJson(file: File) extends Configuration(file, true) {
 				val categories: util.HashMap[String, util.HashMap[String, JsonElement]] =
 					new util.HashMap[String, util.HashMap[String, JsonElement]]
 				val comments: util.HashMap[String, String] = new util.HashMap[String, String]
-				Scala.iterate(this.getCategoryNames, (categoryName: String) => {
+				Scala.iterateCol(this.getCategoryNames, (categoryName: String) => {
 					val cate: ConfigCategory = this.getCategory(categoryName)
 					val options: util.HashMap[String, JsonElement] =
 						new util.HashMap[String, JsonElement]
@@ -57,7 +57,7 @@ class ConfigJson(file: File) extends Configuration(file, true) {
 					if (cate.getComment != null && !cate.getComment.isEmpty)
 						comments.put(categoryName, cate.getComment)
 
-					Scala.iterate(cate.getValues.entrySet(), (entry: Entry[String, Property]) => {
+					Scala.iterateCol(cate.getValues.entrySet(), (entry: Entry[String, Property]) => {
 						val prop: Property = entry.getValue
 						val element: JsonElement = Config.toJson(prop)
 						if (element != null) {
@@ -109,9 +109,9 @@ class ConfigJson(file: File) extends Configuration(file, true) {
 				catch {
 					case e: Exception => json = new JsonObject
 				}
-				Scala.iterate(json.entrySet(), (entry: Entry[String, JsonElement]) => {
+				Scala.iterateCol(json.entrySet(), (entry: Entry[String, JsonElement]) => {
 					val cate: ConfigCategory = this.getCategory(entry.getKey)
-					Scala.iterate(entry.getValue.getAsJsonObject.entrySet(),
+					Scala.iterateCol(entry.getValue.getAsJsonObject.entrySet(),
 						(propEntry: Entry[String, JsonElement]) => {
 							val name: String = propEntry.getKey
 							val jsonElement: JsonElement = propEntry.getValue
@@ -157,7 +157,7 @@ class ConfigJson(file: File) extends Configuration(file, true) {
 				con.setAccessible(true)
 				con.newInstance(
 					name, this.fromJson(array).asInstanceOf[AnyRef], datatype,
-					Boolean.box(true)
+					Boolean.box(x = true)
 				)
 			case obj: JsonObject =>
 				new Property(name, element.getAsString, datatype, true)

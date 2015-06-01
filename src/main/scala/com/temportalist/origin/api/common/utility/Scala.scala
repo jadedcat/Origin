@@ -1,6 +1,6 @@
 package com.temportalist.origin.api.common.utility
 
-import java.{util, lang}
+import java.{lang, util}
 
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
@@ -15,7 +15,7 @@ import scala.collection.{JavaConversions, mutable}
  */
 object Scala {
 
-	def iterate[T, U](collection: util.Collection[T], f: T => U): Unit = {
+	def iterateCol[T, U](collection: util.Collection[T], f: T => U): Unit = {
 		if (collection == null) return
 		collection match {
 			case list: util.List[T] =>
@@ -26,6 +26,11 @@ object Scala {
 				val iter: util.Iterator[T] = collection.iterator()
 				while (iter.hasNext) f(iter.next())
 		}
+	}
+
+	def iterate[T](data: Array[T], f: ((Int, T)) => Unit): Unit = {
+		var i: Int = 0
+		data.foreach(cell => {f(i, cell); i += 1})
 	}
 
 	def foreach(inv: IInventory, callback: (Int, ItemStack) => Unit): Unit = {
@@ -70,7 +75,7 @@ object Scala {
 
 	def fill[B](size: Int, obj: B): Map[Int, B] = {
 		val map: mutable.Map[Int, B] = mutable.Map[Int, B]()
-		for(i <- 0 until size)
+		for (i <- 0 until size)
 			map(i) = obj
 		map.toMap
 	}

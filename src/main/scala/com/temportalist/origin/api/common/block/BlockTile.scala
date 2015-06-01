@@ -52,9 +52,9 @@ class BlockTile(material: Material, pluginID: String, name: String,
 			}
 			catch {
 				case e: InstantiationException =>
-					e.printStackTrace
+					e.printStackTrace()
 				case e: IllegalAccessException =>
-					e.printStackTrace
+					e.printStackTrace()
 			}
 		}
 		null

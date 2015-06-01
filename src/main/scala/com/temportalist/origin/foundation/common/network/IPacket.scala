@@ -4,18 +4,18 @@ import java.io.{ByteArrayInputStream, ByteArrayOutputStream, DataInputStream, Da
 import java.util.UUID
 
 import com.temportalist.origin.api.common.general.INBTSaver
-import com.temportalist.origin.api.common.lib.{LogHelper, V3O, NameParser}
+import com.temportalist.origin.api.common.lib.{LogHelper, NameParser, V3O}
 import com.temportalist.origin.internal.common.network.handler.Network
 import cpw.mods.fml.common.network.NetworkRegistry
 import cpw.mods.fml.common.network.simpleimpl.IMessage
 import cpw.mods.fml.relauncher.Side
 import io.netty.buffer.ByteBuf
-import net.minecraft.entity.player.{EntityPlayerMP, EntityPlayer}
+import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.{NBTSizeTracker, CompressedStreamTools, NBTTagCompound}
+import net.minecraft.nbt.{CompressedStreamTools, NBTSizeTracker, NBTTagCompound}
 import net.minecraft.tileentity.TileEntity
 
-import reflect.runtime.universe._
+import scala.reflect.runtime.universe._
 
 /**
  *
@@ -28,58 +28,57 @@ trait IPacket extends IMessage {
 	private val writeData: DataOutputStream = new DataOutputStream(this.writeStream)
 	private var readData: DataInputStream = null
 
+	final def addAny(any: Any): IPacket = {
+		any match {
+			case bool: Boolean => this.writeData.writeBoolean(bool)
+			case byte: Byte => this.writeData.writeByte(byte)
+			case short: Short => this.writeData.writeShort(short)
+			case int: Int => this.writeData.writeInt(int)
+			case char: Char => this.writeData.writeChar(char)
+			case float: Float => this.writeData.writeFloat(float)
+			case double: Double => this.writeData.writeDouble(double)
+			case long: Long => this.writeData.writeLong(long)
+			case str: String => this.writeData.writeUTF(str)
+			case array: Array[Double] =>
+				this.add(array.length)
+				for (d: Double <- array)
+					this.add(d)
+			case uuid: UUID =>
+				this.add(uuid.getMostSignificantBits)
+				this.add(uuid.getLeastSignificantBits)
+			case nbt: NBTTagCompound =>
+				//CompressedStreamTools.writeCompressed(nbt, this.writeData)
+				if (nbt == null) this.add((-1).toShort)
+				else this.add(CompressedStreamTools.compress(nbt))
+			case stack: ItemStack =>
+				this.add(NameParser.getName(stack))
+				this.add(stack.hasTagCompound)
+				if (stack.hasTagCompound) this.add(stack.getTagCompound)
+			case v: V3O =>
+				this.add(v.x)
+				this.add(v.y)
+				this.add(v.z)
+			case tile: TileEntity =>
+				this.add(new V3O(tile))
+			case saver: INBTSaver =>
+				val tag: NBTTagCompound = new NBTTagCompound
+				saver.writeTo(tag)
+				this.add(tag)
+			case array: Array[Byte] =>
+				this.add(array.length.toShort)
+				this.writeData.write(array)
+			case _ =>
+				throw new IllegalArgumentException("Origin|API: Packets cannot add " +
+						any.getClass.getCanonicalName + " objects")
+		}
+		this
+	}
+
 	final def add(all: Any*): IPacket = {
 		if (all == null) return this
-		for (any: Any <- all) if (any != null) {
-			try {
-				any match {
-					case bool: Boolean => this.writeData.writeBoolean(bool)
-					case byte: Byte => this.writeData.writeByte(byte)
-					case short: Short => this.writeData.writeShort(short)
-					case int: Int => this.writeData.writeInt(int)
-					case char: Char => this.writeData.writeChar(char)
-					case float: Float => this.writeData.writeFloat(float)
-					case double: Double => this.writeData.writeDouble(double)
-					case long: Long => this.writeData.writeLong(long)
-					case str: String => this.writeData.writeUTF(str)
-					case array: Array[Double] =>
-						this.add(array.length)
-						for (d: Double <- array)
-							this.add(d)
-					case uuid: UUID =>
-						this.add(uuid.getMostSignificantBits)
-						this.add(uuid.getLeastSignificantBits)
-					case nbt: NBTTagCompound =>
-						//CompressedStreamTools.writeCompressed(nbt, this.writeData)
-						if (nbt == null) this.add((-1).toShort)
-						else this.add(CompressedStreamTools.compress(nbt))
-					case stack: ItemStack =>
-						this.add(NameParser.getName(stack))
-						this.add(stack.hasTagCompound)
-						if (stack.hasTagCompound) this.add(stack.getTagCompound)
-					case v: V3O =>
-						this.add(v.x)
-						this.add(v.y)
-						this.add(v.z)
-					case tile: TileEntity =>
-						this.add(new V3O(tile))
-					case saver: INBTSaver =>
-						val tag: NBTTagCompound = new NBTTagCompound
-						saver.writeTo(tag)
-						this.add(tag)
-					case array: Array[Byte] =>
-						this.add(array.length.toShort)
-						this.writeData.write(array)
-					case _ =>
-						LogHelper.error("Origin|API",
-							"Packets cannot add " + any.getClass.getCanonicalName + " objects")
-				}
-			}
-			catch {
-				case e: Exception =>
-					e.printStackTrace()
-			}
-		}
+		all.foreach(any => { if (any != null) {
+			this.addAny(any)
+		}})
 		this
 	}
 
@@ -142,7 +141,7 @@ trait IPacket extends IMessage {
 			case e: Exception =>
 				e.printStackTrace()
 				null
-		}).asInstanceOf[T] // wrap what ever returns to make compielr ahppy
+		}).asInstanceOf[T] // wrap what ever returns to make compiler happy
 	}
 
 	/**

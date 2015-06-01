@@ -44,15 +44,18 @@ object Rendering {
 		Rendering.mc.getTextureManager.bindTexture(rl)
 	}
 
-	def drawTextureAtSize(pos: (Int, Int), texDim: (Int, Int), uv: (Int, Int), imgDim: (Int, Int)): Unit = {
-		Gui.func_146110_a(pos._1, pos._2, uv._1, uv._2, imgDim._1, imgDim._2, texDim._1, texDim._2)
-	}
-
 	def drawTextureWithSizes(pos: (Int, Int), uv: (Float, Float), actualSize: (Int, Int),
 			renderedSize: (Int, Int), imgSize: (Float, Float)): Unit = {
 		Gui.func_152125_a(pos._1, pos._2, uv._1, uv._2, actualSize._1, actualSize._2,
 			renderedSize._1, renderedSize._2, imgSize._1, imgSize._2)
 	}
+
+	def drawTexture(pos: (Int, Int), uv: (Float, Float), size: (Int, Int), imgSize: (Float, Float)): Unit = {
+		this.drawTextureWithSizes(pos, uv, size, size, imgSize)
+	}
+
+	def drawTexture(pos: (Int, Int), uv: (Float, Float), size: (Int, Int)): Unit =
+		this.drawTexture(pos, uv, size, (256, 256))
 
 	def drawTextureRect(x: Int, y: Int, u: Int, v: Int, width: Int, height: Int): Unit = {
 		// todo this is super bugged
@@ -185,6 +188,10 @@ object Rendering {
 		this.registerRender(Item.getItemFromBlock(block), renderer)
 
 	object Gl {
+
+		def push() = GL11.glPushMatrix()
+
+		def pop() = GL11.glPopMatrix()
 
 		def color(r: Float, g: Float, b: Float): Unit = GL11.glColor3f(r, g, b)
 

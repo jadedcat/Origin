@@ -4,16 +4,13 @@ import java.util
 
 import com.temportalist.origin.api.client.utility.Rendering
 import com.temportalist.origin.api.common.lib.LogHelper
+import com.temportalist.origin.api.common.register.Registry
 import com.temportalist.origin.api.common.rendering.ISpriteMapper
-import com.temportalist.origin.foundation.common.network.PacketSyncExtendedProperties
-import com.temportalist.origin.internal.client.gui.{HealthOverlay, GuiRadialMenuHandler, GuiConfig}
-import com.temportalist.origin.internal.common.handlers.RegisterHelper
-import com.temportalist.origin.internal.common.network.handler.Network
+import com.temportalist.origin.internal.client.gui.{GuiConfig, GuiRadialMenuHandler, HealthOverlay}
 import com.temportalist.origin.internal.common.{CGOOptions, Origin, ProxyCommon}
 import com.temportalist.origin.test.client.{GuiDataCore, GuiScrewdriverModes}
 import cpw.mods.fml.client.IModGuiFactory
 import cpw.mods.fml.client.IModGuiFactory.{RuntimeOptionCategoryElement, RuntimeOptionGuiHandler}
-import cpw.mods.fml.common.FMLCommonHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.client.Minecraft
 import net.minecraft.client.audio.SoundCategory
@@ -33,7 +30,7 @@ import scala.collection.mutable.ListBuffer
 class ProxyClient() extends ProxyCommon with IModGuiFactory {
 
 	override def register(): Unit = {
-		RegisterHelper.registerHandler(GuiRadialMenuHandler, HealthOverlay)
+		Registry.registerHandler(GuiRadialMenuHandler, HealthOverlay)
 
 		//ModelBakery.addVariantName(Sonic.screwdriver,
 		//	"origin:screwdriver0", "origin:screwdriver1", "origin:screwdriver2"
@@ -78,15 +75,6 @@ class ProxyClient() extends ProxyCommon with IModGuiFactory {
 			return new GuiDataCore(player)
 		}
 		null
-	}
-
-	override def syncPacket(message: PacketSyncExtendedProperties, player: EntityPlayer) {
-		if (FMLCommonHandler.instance.getEffectiveSide.isClient) {
-			Network.sendToServer(message)
-		}
-		else {
-			super.syncPacket(message, player)
-		}
 	}
 
 	override def addArmor(armor: String): Int = {

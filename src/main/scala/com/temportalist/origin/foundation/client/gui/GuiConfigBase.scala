@@ -37,7 +37,7 @@ object GuiConfigBase {
 	def getConfigElements(configuration: Configuration): util.List[IConfigElement[_]] = {
 		val elements: util.List[IConfigElement[_]] = new util.ArrayList[IConfigElement[_]]()
 
-		Scala.iterate(configuration.getCategoryNames, (categoryName: String) => {
+		Scala.iterateCol(configuration.getCategoryNames, (categoryName: String) => {
 			val category: ConfigElement[_] = new ConfigElement(configuration.getCategory(categoryName))
 			if (categoryName.equals(Configuration.CATEGORY_GENERAL)) {
 				elements.addAll(category.getChildElements)

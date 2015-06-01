@@ -29,7 +29,7 @@ trait IPowerable extends TileEntity {
 	def setPowered(isRecievingPower: Boolean): Unit = {
 		if (this.isRecievingPower != isRecievingPower) {
 			this.isRecievingPower = isRecievingPower
-			this.onPowerChanged
+			this.onPowerChanged()
 		}
 	}
 

@@ -133,13 +133,13 @@ abstract class GuiRadialMenu(
 				Math.sin(currAngle) * outerR, 0
 			)
 			TessRenderer.addVertex(
-				Math.cos(nextAngle) * resolution.getScaledHeight_double() /
-						resolution.getScaledWidth_double() * outerR,
+				Math.cos(nextAngle) * resolution.getScaledHeight_double /
+						resolution.getScaledWidth_double * outerR,
 				Math.sin(nextAngle) * outerR, 0
 			)
 			TessRenderer.addVertex(
-				Math.cos(nextAngle) * resolution.getScaledHeight_double() /
-						resolution.getScaledWidth_double() * innerR,
+				Math.cos(nextAngle) * resolution.getScaledHeight_double /
+						resolution.getScaledWidth_double * innerR,
 				Math.sin(nextAngle) * innerR, 0
 			)
 

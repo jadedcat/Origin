@@ -5,7 +5,7 @@ import com.temportalist.origin.api.common.proxy.IProxy
 import com.temportalist.origin.api.common.register._
 import com.temportalist.origin.api.common.resource.IModDetails
 import com.temportalist.origin.foundation.common.register.OptionRegister
-import com.temportalist.origin.internal.common.handlers.{OptionHandler, RegisterHelper}
+import com.temportalist.origin.internal.common.handlers.OptionHandler
 import cpw.mods.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
 import cpw.mods.fml.common.network.NetworkRegistry
 
@@ -41,7 +41,7 @@ trait IMod {
 			}: Unit)
 		}: Unit)
 
-		RegisterHelper.registerHandler(this, proxy)
+		Registry.registerHandler(this, proxy)
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy)
 
