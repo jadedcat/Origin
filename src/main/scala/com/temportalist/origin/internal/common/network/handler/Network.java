@@ -145,6 +145,9 @@ public class Network extends FMLIndexedMessageToMessageCodec<IPacket> {
 	}
 
 	public static String getChannel(Class<? extends IPacket> packet) {
+		if (!Network.packetToChannel.containsKey(packet))
+			throw new NoSuchElementException("Packet type " + packet.getCanonicalName()
+					+ " is not registered! This is an issue!");
 		return Network.packetToChannel.get(packet);
 	}
 
@@ -210,8 +213,10 @@ public class Network extends FMLIndexedMessageToMessageCodec<IPacket> {
 				player = this.getClientPlayer();
 			}
 
-			if (side.isClient()) msg.handleOnClient(player);
-			else if (side.isServer()) msg.handleOnServer(player);
+			if (side.isClient())
+				msg.handleOnClient(player);
+			else if (side.isServer())
+				msg.handleOnServer(player);
 
 		}
 
