@@ -12,7 +12,7 @@ import org.lwjgl.util.Color
 object MathFuncs {
 
 	def getRandomBetweenBounds(min: Int, max: Int): Int = {
-		new Random().nextInt(Math.abs(max - min)) + min
+		new Random().nextInt(max - min) + min
 	}
 
 	def chance(percent: Int): Boolean = {
