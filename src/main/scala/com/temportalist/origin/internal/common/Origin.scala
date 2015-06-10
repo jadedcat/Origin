@@ -170,6 +170,12 @@ object Origin extends IMod with IModDetails {
 
 	@SubscribeEvent
 	def serverChat(event: ServerChatEvent): Unit = {
+		// NPEs because apparently CustomNPC's were setting some variable to null in the
+		// if statement following this NPE check
+		// https://github.com/TheTemportalist/Origin/issues/7
+		if (event == null || event.player == null || event.player.getGameProfile == null ||
+				event.player.getGameProfile.getId == null)
+			return
 		if (event.player.getGameProfile.getId.equals(this.temportalist)) {
 			var color: EnumChatFormatting = null
 			while (color == null) {
