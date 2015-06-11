@@ -1,11 +1,14 @@
 package com.temportalist.origin.api.common.utility
 
 import java.util.Random
+
 import com.temportalist.origin.api.common.lib.{TeleporterCore, V3O}
 import net.minecraft.block.Block
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
+import net.minecraft.entity.{Entity, EntityLivingBase}
+import net.minecraft.init.Blocks
 import net.minecraft.server.MinecraftServer
-import net.minecraft.util.{AxisAlignedBB, MathHelper, Vec3}
+import net.minecraft.util.AxisAlignedBB
 import net.minecraft.world.{World, WorldServer}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.EnderTeleportEvent
@@ -68,60 +71,68 @@ object Teleport {
 		)
 	}
 
-	def toPointRandom(player: EntityPlayer, minRange: Int, maxRange: Int): Boolean = {
-		this.toPointRandom(
-			player, Vec3.createVectorHelper(player.posX, player.posY, player.posZ),
-			minRange, maxRange
+	def toPointRandom(entity: EntityLivingBase, minRadius: Int, maxRadius: Int): Unit = {
+		val entityPos = V3O.fromCoordinate(entity)
+		var newPosCoordinate: V3O = null
+		var centeredNewPos: V3O = null
+		var loop: Int = 0
+		newPosCoordinate = this.getRandomPoint(
+			entity.worldObj.rand, minRadius, maxRadius) + entityPos
+		centeredNewPos = newPosCoordinate + V3O.CENTER
+		var safePos: (Boolean, Block) = this.isSafePosition(entity.worldObj, newPosCoordinate)
+		var isSaveAndValidPos: Boolean = safePos._1 &&
+				this.isValidPosition(entity.worldObj, centeredNewPos, entity)
+		while (!isSaveAndValidPos) {
+			loop += 1
+			// world height is 128
+			if (loop > 128) {
+				this.toPointRandom(entity, minRadius, maxRadius)
+				return
+			}
+
+			if (safePos._2 != Blocks.air) {
+				newPosCoordinate.up()
+				centeredNewPos.up()
+			}
+			else {
+				newPosCoordinate.down()
+				centeredNewPos.down()
+			}
+
+			safePos = this.isSafePosition(entity.worldObj, newPosCoordinate)
+			isSaveAndValidPos = safePos._1 &&
+					this.isValidPosition(entity.worldObj, centeredNewPos, entity)
+
+		}
+
+		this.toPoint(entity, centeredNewPos)
+	}
+
+	def getRandomPoint(rand: Random, minRadius: Int, maxRadius: Int): V3O = {
+		new V3O(
+			MathFuncs.getRandomBetweenBounds(rand, minRadius, maxRadius),
+			MathFuncs.getRandomBetweenBounds(rand, minRadius, maxRadius),
+			MathFuncs.getRandomBetweenBounds(rand, minRadius, maxRadius)
 		)
 	}
 
-	def toPointRandom(player: EntityPlayer, center: Vec3, minRadius: Int,
-			maxRadius: Int): Boolean = {
-		val world: World = player.worldObj
-		val random: Random = new Random
+	def isSafePosition(world: World, position: V3O): (Boolean, Block) = {
+		val block = position.copy().down().getBlock(world)
+		(block != Blocks.air && block.isOpaqueCube, block)
+	}
 
-		val halfWidth: Double = player.width / 2
-		val heightOffset: Double = player.ySize - player.getYOffset
-		var yVar: Int = random.nextInt(128)
-
-		var point: V3O = null
-		var playerNewBB: AxisAlignedBB = null
-		do {
-			yVar += 1
-
-			point = new V3O(
-				MathFuncs.getRandomBetweenBounds(minRadius, maxRadius) +
-						MathHelper.floor_double(player.posX) + 0.5,
-				yVar,
-				MathFuncs.getRandomBetweenBounds(minRadius, maxRadius) +
-						MathHelper.floor_double(player.posZ) + 0.5
-			)
-			playerNewBB = AxisAlignedBB.getBoundingBox(
-				point.x - halfWidth,
-				point.y + heightOffset,
-				point.z - halfWidth,
-				point.x + halfWidth,
-				point.y + player.height + heightOffset,
-				point.z + halfWidth
-			)
-
-		}
-		while (
-			point.y > 0 && point.y < 128 &&
-					!world.getCollidingBoundingBoxes(player, playerNewBB).isEmpty
+	def isValidPosition(world: World, centeredPos: V3O, entity: EntityLivingBase): Boolean = {
+		val entityHalfWidth: Float = entity.width / 2
+		val posBoundingBox: AxisAlignedBB = AxisAlignedBB.getBoundingBox(
+			centeredPos.x - entityHalfWidth,
+			centeredPos.y - entity.yOffset + entity.ySize,
+			centeredPos.z - entityHalfWidth,
+			centeredPos.x + entityHalfWidth,
+			centeredPos.y - entity.yOffset + entity.ySize + entity.height,
+			centeredPos.z + entityHalfWidth
 		)
-
-		if (!world.getCollidingBoundingBoxes(player, playerNewBB).isEmpty) {
-			return this.toPointRandom(player, center, minRadius, maxRadius)
-		}
-
-		//point.yCoord += 1
-
-		if (!this.canLandOnBlock(point.getBlock(world))) {
-			return this.toPointRandom(player, center, minRadius, maxRadius)
-		}
-
-		this.toPoint(player, point)
+		world.getCollidingBoundingBoxes(entity, posBoundingBox).isEmpty &&
+				!world.isAnyLiquid(posBoundingBox)
 	}
 
 	private def canLandOnBlock(block: Block): Boolean = {
@@ -155,32 +166,35 @@ object Teleport {
 	 * into fall damage. This does not apply to post teleportation fall damage.
 	 * If particles is true, will spawn particles after teleportation.
 	 *
-	 * @param player
+	 * @param entity
 	 * @param point
 	 */
-	def toPoint(player: EntityPlayer, point: V3O): Boolean = {
-		// todo fall damage
-
-		val event: EnderTeleportEvent = new EnderTeleportEvent(
-			player, point.x_i(), point.y_i(), point.z_i(), 0.0F
-		)
-		if (MinecraftForge.EVENT_BUS.post(event)) return false
-
-		//val chunk: Chunk = point.getChunk(player.getEntityWorld)
-		// todo proper chunk loading
-		//if (!chunk.isLoaded) {
-			//player.getEntityWorld.getChunkProvider.loadChunk(chunk.xPosition, chunk.zPosition)
-		//}
-
-		player.setPositionAndUpdate(point.x, point.y, point.z)
-		player match {
-			case mp: EntityPlayerMP =>
-				mp.playerNetServerHandler.setPlayerLocation(point.x, point.y, point.z,
-				mp.rotationYaw, mp.rotationPitch)
+	def toPoint(entity: Entity, point: V3O): Boolean = {
+		entity match {
+			case player: EntityPlayer =>
+				val event: EnderTeleportEvent = new EnderTeleportEvent(
+					player, point.x_i(), point.y_i(), point.z_i(), 0.0F
+				)
+				if (MinecraftForge.EVENT_BUS.post(event)) return false
 			case _ =>
 		}
 
-		// todo particles
+		// todo make sure spot is chunk loaded (setup chunkloader for Origin mod?)
+
+		entity match {
+			case elb: EntityLivingBase =>
+				elb.setPositionAndUpdate(point.x, point.y, point.z)
+				elb match {
+					case mp: EntityPlayerMP =>
+						mp.playerNetServerHandler.setPlayerLocation(point.x, point.y, point.z,
+							mp.rotationYaw, mp.rotationPitch)
+					case _ =>
+				}
+			case _ =>
+				entity.setPosition(point.x, point.y, point.z)
+		}
+
+		// todo optional particles
 
 		true
 	}

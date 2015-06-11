@@ -153,7 +153,7 @@ object Sonic {
 
 	@SubscribeEvent
 	def worldLoad(event: WorldEvent.Load): Unit = {
-		if (WorldHelper.isOverworld(event.world)) {
+		if (WorldHelper.isOverWorld(event.world)) {
 			for (state: EntityState <- this.entityStates.values) {
 				if (!state.hasCreatedEntity) state.createEntity(event.world)
 			}

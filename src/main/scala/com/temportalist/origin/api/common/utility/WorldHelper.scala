@@ -9,7 +9,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.item.Item
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.Vec3
-import net.minecraft.world.World
+import net.minecraft.world.{EnumSkyBlock, World}
 import net.minecraftforge.common.DimensionManager
 import net.minecraftforge.common.util.ForgeDirection
 
@@ -35,7 +35,7 @@ object WorldHelper {
 		else this.getWorld_client
 	}
 
-	def isOverworld(world: World): Boolean = world.provider.dimensionId == 0
+	def isOverWorld(world: World): Boolean = world.provider.dimensionId == 0
 
 	@SideOnly(Side.CLIENT)
 	def getWorld_client: World = Minecraft.getMinecraft.theWorld
@@ -84,6 +84,32 @@ object WorldHelper {
 				viewer.posX, viewer.posY + viewer.getEyeHeight.asInstanceOf[Double], viewer.posZ
 			)
 		) == null
+	}
+
+	def getVectorForEntity(entity: Entity): V3O =
+		new V3O(entity.posX, entity.boundingBox.minY, entity.posZ)
+
+	def getLightLevel(entity: Entity): Int =
+		this.getLightLevel(entity.worldObj, this.getVectorForEntity(entity))
+
+	def getLightLevel(world: World, pos: V3O): Int = {
+		val isThundering = world.isThundering
+		val skylightSubtracted = world.skylightSubtracted
+		if (isThundering) world.skylightSubtracted = 10
+		val blockLightLevel = pos.getLightValue(world)
+		if (isThundering) world.skylightSubtracted = skylightSubtracted
+		blockLightLevel
+	}
+
+	def isValidLightLevelForMobSpawn(entity: Entity, minLightLevel: Int): Boolean =
+		this.isValidLightLevelForMobSpawn(
+			entity.worldObj, this.getVectorForEntity(entity), minLightLevel)
+
+	def isValidLightLevelForMobSpawn(world: World, pos: V3O, minLightLevel: Int): Boolean = {
+		if (pos.getSavedLightValue(world, EnumSkyBlock.Sky) > world.rand.nextInt(32)) false
+		else {
+			this.getLightLevel(world, pos) <= world.rand.nextInt(minLightLevel)
+		}
 	}
 
 }

@@ -155,6 +155,10 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 		world.getSavedLightValue(skyBlock, this.x_i(), this.y_i(), this.z_i())
 	}
 
+	def getLightValue(world: World): Int = {
+		world.getBlockLightValue(this.x_i(), this.y_i(), this.z_i())
+	}
+
 	def setBlock(world: World, block: Block, meta: Int, notify: Int): Unit =
 		world.setBlock(this.x_i(), this.y_i(), this.z_i(), block, meta, notify)
 
@@ -492,6 +496,14 @@ object V3O {
 		val vec: V3O = V3O.ZERO
 		vec.readFrom(tag, key)
 		vec
+	}
+
+	def fromCoordinate(entity: Entity): V3O = {
+		new V3O(
+			MathHelper.floor_double(entity.posX),
+			MathHelper.floor_double(entity.posY),
+			MathHelper.floor_double(entity.posZ)
+		)
 	}
 
 	def UP: V3O = new V3O(ForgeDirection.UP)

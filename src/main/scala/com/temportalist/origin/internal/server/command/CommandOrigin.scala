@@ -27,7 +27,7 @@ object CommandOrigin extends CommandBase {
 	}
 
 	override def getCommandUsage(sender: ICommandSender): String =
-		"origin < tp < [x] [y] [z] <Dimension Name:_> > >|< set <player> <health|hunger|sat> <number> >|< setMaxHealth <player> <amount> >"
+		"origin < tp < [x] [y] [z] <Dimension Name:_> > >|< tpr <Player Name:_> <radius> >|< set <player> <health|hunger|sat> <number> >|< setMaxHealth <player> <amount> >"
 
 	override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
 		if (args.length == 0) {
@@ -118,6 +118,45 @@ object CommandOrigin extends CommandBase {
 
 				case _ =>
 			}
+		}
+		else if (commandType.equals("tpr")) {
+			// origin tpr TheTemportalist 10
+			// origin tpr 10
+			// origin tpr TheTemportalist
+			// origin tpr
+
+			var player: EntityPlayer = null
+			var radius: Int = 1000
+
+			if (args.length == 3) {
+				player = Players.getPlayer(args(1))
+				radius =
+						try {
+							args(2).toInt
+						}
+						catch {
+							case e: Exception => radius
+						}
+			}
+			else if (args.length == 2) {
+				radius =
+						try {
+							args(1).toInt
+						}
+						catch {
+							case e: Exception =>
+								player = Players.getPlayer(args(1))
+								radius
+						}
+			}
+			else sender match {
+				case player1: EntityPlayer =>
+					player = player1
+				case _ => return
+			}
+
+			// todo Teleport clas object call
+
 		}
 		else if (commandType.equals("set") && args.length == 4) {
 			val player: EntityPlayer = Players.getPlayer(args(1))
