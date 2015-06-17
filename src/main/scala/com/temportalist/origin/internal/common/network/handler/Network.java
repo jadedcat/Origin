@@ -37,8 +37,16 @@ public class Network extends FMLIndexedMessageToMessageCodec<IPacket> {
 			Class<? extends IPacket>... packetClasses) {
 		if (!Network.TRACKER.containsKey(modid.toLowerCase())) {
 			Network handler = new Network(modid, packetClasses);
-			for (Class<? extends IPacket> packet : packetClasses)
+			for (Class<? extends IPacket> packet : packetClasses) {
 				Network.packetToChannel.put(packet, modid);
+			}
+
+			/*
+			Origin.log("\tRegistered Packets:");
+			for (Class<? extends IPacket> packet : Network.packetToChannel.keySet()) {
+				Origin.log("\t\t" + packet.getCanonicalName());
+			}
+			*/
 
 			handler.channels = NetworkRegistry.INSTANCE.newChannel(modid.toLowerCase(), handler);
 
@@ -55,9 +63,8 @@ public class Network extends FMLIndexedMessageToMessageCodec<IPacket> {
 			return true;
 		}
 		else {
-			System.err.println("There is already a channel/handler for key/channel "
-					+ modid.toLowerCase());
-			return false;
+			throw new UnsupportedOperationException(
+					"There is already a channel/handler for key/channel " + modid.toLowerCase());
 		}
 	}
 
