@@ -159,10 +159,10 @@ class V3O(var x: Double, var y: Double, var z: Double) extends INBTSaver {
 		world.getBlockLightValue(this.x_i(), this.y_i(), this.z_i())
 	}
 
-	def setBlock(world: World, block: Block, meta: Int, notify: Int): Unit =
+	def setBlock(world: World, block: Block, meta: Int, notify: Int): Boolean =
 		world.setBlock(this.x_i(), this.y_i(), this.z_i(), block, meta, notify)
 
-	def setBlock(world: World, block: Block, meta: Int): Unit =
+	def setBlock(world: World, block: Block, meta: Int): Boolean =
 		this.setBlock(world, block, meta, 3)
 
 	def setBlock(world: World, block: Block): Unit = {

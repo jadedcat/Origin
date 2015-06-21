@@ -1,11 +1,12 @@
 package com.temportalist.origin.api.common.lib
 
 import java.util
+
+import com.temportalist.origin.api.common.utility.WorldHelper
 import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier
 import cpw.mods.fml.common.registry.{GameData, GameRegistry}
 import net.minecraft.block.Block
 import net.minecraft.item.{Item, ItemStack}
-import net.minecraft.util.ResourceLocation
 import net.minecraftforge.oredict.OreDictionary
 
 /**
@@ -23,15 +24,15 @@ object NameParser {
 		}
 
 		val fullname: String =
-			if (Block.getBlockFromItem(itemStack.getItem) == null) {
+			if (!WorldHelper.isBlock(itemStack.getItem)) {
 				GameData.getItemRegistry.getNameForObject(
 					itemStack.getItem
-				).asInstanceOf[ResourceLocation].toString
+				)
 			}
 			else {
 				GameData.getBlockRegistry.getNameForObject(
 					Block.getBlockFromItem(itemStack.getItem)
-				).asInstanceOf[ResourceLocation].toString
+				)
 			}
 		val ui: UniqueIdentifier = new UniqueIdentifier(fullname)
 		(if (hasID) ui.modId + ":" else "") + ui.name +
@@ -42,7 +43,7 @@ object NameParser {
 		this.getName(new ItemStack(state.getBlock, 1, state.getMeta), hasID, hasMeta)
 	}
 
-	def getItemStack(name: String): ItemStack = {
+	def getQualifiers(name: String): (String, String, Int) = {
 		if (!name.matches("(.*):(.*)")) return null
 		var endNameIndex: Int = name.length
 		var metadata: Int = OreDictionary.WILDCARD_VALUE
@@ -54,11 +55,20 @@ object NameParser {
 
 		val modid: String = name.substring(0, name.indexOf(':'))
 		val itemName: String = name.substring(name.indexOf(':') + 1, endNameIndex)
-		val block: Block = GameRegistry.findBlock(modid, itemName)
-		val item: Item = GameRegistry.findItem(modid, itemName)
-		val itemStack: ItemStack = if (block != null) new ItemStack(block, 1, metadata)
-		else if (item != null) new ItemStack(item, 1, metadata) else null
-		itemStack
+		(modid, itemName, metadata)
+	}
+
+	def getItemStack(name: String): ItemStack = {
+		this.getItemStack(this.getQualifiers(name))
+	}
+
+	def getItemStack(qualifiers: (String, String, Int)): ItemStack = {
+		val block: Block = GameRegistry.findBlock(qualifiers._1, qualifiers._2)
+		val item: Item = GameRegistry.findItem(qualifiers._1, qualifiers._2)
+		if (block != null && Item.getItemFromBlock(block) != null)
+			new ItemStack(block, 1, qualifiers._3)
+		else if (item != null) new ItemStack(item, 1, qualifiers._3)
+		else null
 	}
 
 	def getState(name: String): BlockState = {

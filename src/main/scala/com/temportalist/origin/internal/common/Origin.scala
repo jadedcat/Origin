@@ -13,7 +13,7 @@ import com.temportalist.origin.internal.common.extended.ExtendedEntityHandler
 import com.temportalist.origin.internal.common.handlers.{OptionHandler, RegisterHelper}
 import com.temportalist.origin.internal.common.item.ItemEgg
 import com.temportalist.origin.internal.server.command.CommandOrigin
-import com.temportalist.origin.test.{PacketUpdateMode, Sonic}
+import com.temportalist.origin.test.PacketUpdateMode
 import cpw.mods.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent, FMLServerStartingEvent}
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
@@ -41,7 +41,7 @@ object Origin extends IMod with IModDetails {
 
 	final val MODID = "origin"
 	final val MODNAME = "Origin"
-	final val VERSION = "@PLUGIN_VERSION@"
+	final val VERSION = "5.0.0"//"@PLUGIN_VERSION@"
 	final val clientProxy = "com.temportalist.origin.internal.client.ProxyClient"
 	final val serverProxy = "com.temportalist.origin.internal.server.ProxyServer"
 
@@ -95,7 +95,6 @@ object Origin extends IMod with IModDetails {
 	@Mod.EventHandler
 	def init(event: FMLInitializationEvent): Unit = {
 		super.initialize(event, this.proxy)
-		println(Sonic.entityStates)
 	}
 
 	@Mod.EventHandler

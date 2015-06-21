@@ -17,6 +17,10 @@ object TessRenderer {
 
 	def startQuads(): Unit = this.getTess().startDrawingQuads()
 
+	def setNormal(x: Float, y: Float, z: Float): Unit = {
+		this.getTess().setNormal(x, y, z)
+	}
+
 	def draw(): Unit = this.getTess().draw()
 
 	def addVertex(x: Double, y: Double, z: Double, u: Double, v: Double): Unit =

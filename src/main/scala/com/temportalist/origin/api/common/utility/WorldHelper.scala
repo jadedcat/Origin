@@ -6,6 +6,7 @@ import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.Entity
+import net.minecraft.init.Blocks
 import net.minecraft.item.Item
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.Vec3
@@ -40,7 +41,7 @@ object WorldHelper {
 	@SideOnly(Side.CLIENT)
 	def getWorld_client: World = Minecraft.getMinecraft.theWorld
 
-	def isBlock(item: Item): Boolean = Block.getBlockFromItem(item) != null
+	def isBlock(item: Item): Boolean = Block.getBlockFromItem(item) != Blocks.air
 
 	def getBlock(world: World, x: Int, y: Int, z: Int, dir: ForgeDirection): Block = {
 		V3O.from(x, y, z, dir).getBlock(world)

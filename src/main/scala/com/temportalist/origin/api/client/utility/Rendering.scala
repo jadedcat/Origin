@@ -5,8 +5,8 @@ import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.{Gui, GuiScreen, ScaledResolution}
-import net.minecraft.client.renderer.OpenGlHelper
-import net.minecraft.client.renderer.entity.{RenderEntity, RenderManager}
+import net.minecraft.client.renderer.{RenderBlocks, OpenGlHelper}
+import net.minecraft.client.renderer.entity.{RenderItem, RenderEntity, RenderManager}
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.entity.Entity
@@ -29,6 +29,15 @@ object Rendering {
 	def renderManager: RenderManager = RenderManager.instance
 
 	def thePlayer = this.mc.thePlayer
+
+	private val renderBlocks = new RenderBlocks
+
+	def getRenderBlocks: RenderBlocks = this.renderBlocks
+
+	private val renderItem = new RenderItem
+	this.renderItem.setRenderManager(RenderManager.instance)
+
+	def getRenderItem: RenderItem = this.renderItem
 
 	//def blockDispatcher: BlockRendererDispatcher = this.mc.getBlockRendererDispatcher
 
@@ -212,6 +221,14 @@ object Rendering {
 		def blendFunc(typeA: Int, typeB: Int): Unit = GL11.glBlendFunc(typeA, typeB)
 
 		def blendSrcAlpha(): Unit = this.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+
+		def pushAttribute(attr: Int): Unit = {
+			GL11.glPushAttrib(attr)
+		}
+
+		def popAttribute(): Unit = {
+			GL11.glPopAttrib()
+		}
 
 	}
 

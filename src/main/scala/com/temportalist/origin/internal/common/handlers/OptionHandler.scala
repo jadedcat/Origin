@@ -28,7 +28,7 @@ object OptionHandler {
 			if (!options.hasDefaultConfig)
 				options.customizeConfiguration(event)
 			else
-				options.getExtension() match {
+				options.getExtension match {
 					case "cfg" =>
 						cfgFile = new File(dir, mod.getModName + ".cfg")
 						options.config = new Configuration(cfgFile, true)

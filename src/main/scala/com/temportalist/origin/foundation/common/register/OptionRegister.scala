@@ -26,7 +26,7 @@ class OptionRegister() extends Register.Unusual with IModGuiFactory {
 	 */
 	var config: Configuration = null
 
-	def getExtension(): String = "cfg"
+	def getExtension: String = "cfg"
 
 	def getConfigDirectory(configDir: File): File = {
 		configDir
