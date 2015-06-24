@@ -33,8 +33,6 @@ class InventoryWrapper(var name: String, var inventorySize: Int, var ownerStack:
 		}
 	}
 
-	override def markChunkModified(): Unit = {}
-
 	/**
 	 * A custom method to read our inventory from an ItemStack's NBT compound
 	 */

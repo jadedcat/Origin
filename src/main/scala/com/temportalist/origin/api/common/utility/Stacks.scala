@@ -86,8 +86,8 @@ object Stacks {
 		stack
 	}
 
-	def doStacksMatch(a: ItemStack, b: ItemStack,
-			meta: Boolean, size: Boolean, nbt: Boolean, nil: Boolean): Boolean = {
+	def doStacksMatch(a: ItemStack, b: ItemStack, meta: Boolean = true, size: Boolean = false,
+			nbt: Boolean = false, nil: Boolean = true): Boolean = {
 		if ((a == null && b != null) || (b == null && a != null)) nil
 		else if (a != null && b != null) {
 			a.getItem == b.getItem &&

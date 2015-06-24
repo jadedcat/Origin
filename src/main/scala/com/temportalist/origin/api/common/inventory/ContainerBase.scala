@@ -15,19 +15,10 @@ import scala.util.control.Breaks._
  *
  * @author TheTemportalist
  */
-class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) extends Container() {
+class ContainerBase(var player: EntityPlayer, var inventory: IInventory) extends Container() {
 
-	// Default Constructor
 	this.registerSlots()
 	var needsUpdate = false
-
-	// End Constructor
-
-	// Other Constructors
-
-	// End Constructors
-
-	// ~~~~~~~~~~~~~~~~~~~~ Register Slots ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	/**
 	 * Used to register slots for this container
@@ -64,14 +55,16 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 		for (col <- 0 until 9) {
 			val x: Int = col * slotSize + startX
 			var y: Int = startY
-			this.addSlotToContainer(new Slot(this.player.inventory,
-				col, x, startY + 67
-			))
+			if (finalSlotIDs.contains(col))
+				this.addSlotToContainer(new SlotFinal(this.player.inventory, col, x, startY + 67))
+			else this.addSlotToContainer(new Slot(this.player.inventory, col, x, startY + 67))
 			for (row <- 0 until 3) {
 				y = (startY + row * slotSize) + 9
-				this.addSlotToContainer(new Slot(this.player.inventory,
-					(row + 1) * 9 + col, x, y
-				))
+				val id = (row + 1) * 9 + col
+				if (finalSlotIDs.contains(id))
+					this.addSlotToContainer(new SlotFinal(this.player.inventory, id, x, y))
+				else this.addSlotToContainer(new Slot(this.player.inventory, id, x, y))
+
 			}
 		}
 	}
@@ -83,7 +76,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 	 *
 	 * @return
 	 */
-	def getIInventory(): IInventory = {
+	def getIInventory: IInventory = {
 		this.inventory
 	}
 
@@ -92,7 +85,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 	 *
 	 * @return
 	 */
-	def isAttachedToTileEntity(): Boolean = {
+	def isAttachedToTileEntity: Boolean = {
 		this.inventory.isInstanceOf[TileEntity]
 	}
 
@@ -101,8 +94,8 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 	 *
 	 * @return
 	 */
-	def getTileEntity(): TileEntity = {
-		if (this.isAttachedToTileEntity()) {
+	def getTileEntity: TileEntity = {
+		if (this.isAttachedToTileEntity) {
 			return this.inventory.asInstanceOf[TileEntity]
 		}
 		null
@@ -113,7 +106,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 	 *
 	 * @return
 	 */
-	def isAttachedToItem(): Boolean = {
+	def isAttachedToItem: Boolean = {
 		this.inventory.isInstanceOf[InventoryWrapper] &&
 				this.inventory.asInstanceOf[InventoryWrapper].isItemInventory
 	}
@@ -123,8 +116,8 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 	 *
 	 * @return
 	 */
-	def getItemInventory(): InventoryWrapper = {
-		if (this.isAttachedToItem()) {
+	def getItemInventory: InventoryWrapper = {
+		if (this.isAttachedToItem) {
 			return this.inventory.asInstanceOf[InventoryWrapper]
 		}
 		null
@@ -237,7 +230,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 	}
 
 	protected def getExcludedMaximumSlotIDForItemStack(stackToProcess: ItemStack): Int = {
-		this.getIInventory().getSizeInventory
+		this.getIInventory.getSizeInventory
 	}
 
 	protected def isItemValidForSlotOnShift(slot: Slot, stackToProcess: ItemStack): Boolean = {
@@ -251,7 +244,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 
 	override def slotClick(slotID: Int, mouseButton: Int, flag: Int,
 			player: EntityPlayer): ItemStack = {
-		if (this.isAttachedToItem()) {
+		if (this.isAttachedToItem) {
 			this.needsUpdate = true
 		}
 		if (slotID >= 0 && slotID < this.inventorySlots.size() &&
@@ -264,7 +257,7 @@ class ContainerWrapper(var player: EntityPlayer, var inventory: IInventory) exte
 
 	// ~~~~~~~~~~~~~~~~~~~~ Item NBT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	def writeToNBT(): Unit = {
-		if (this.isAttachedToItem()) {
+		if (this.isAttachedToItem) {
 			val itemStack: ItemStack = this.player.getHeldItem
 			if (itemStack != null) {
 				val tagCom: NBTTagCompound = itemStack.getTagCompound

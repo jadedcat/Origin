@@ -44,7 +44,7 @@ class GuiButtonArrow(id: Int, x: Int, y: Int, buttonType: ArrowButtonType)
 			val isHoveredOn: Boolean = mouseX >= this.xPosition && mouseY >= this.yPosition &&
 					mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height
 			val u: Int = 0
-			var v: Int = 0
+			var v: Int = 60
 
 			if (this.buttonType eq ArrowButtonType.UP)
 				v += 0

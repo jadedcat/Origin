@@ -51,7 +51,7 @@ trait IInv extends IInventory with ISidedInventory {
 		if (stack != null && stack.stackSize > getInventoryStackLimit)
 			stack.stackSize = getInventoryStackLimit
 		this.onStackChange(slot)
-		this.markChunkModified()
+		this.markDirty()
 	}
 
 	override def decrStackSize(slot: Int, decrement: Int): ItemStack = {
@@ -72,8 +72,6 @@ trait IInv extends IInventory with ISidedInventory {
 	}
 
 	def onStackChange(slot: Int): Unit = {}
-
-	def markChunkModified(): Unit
 
 	override def openInventory(): Unit = {}
 

@@ -1,6 +1,6 @@
 package com.temportalist.origin.api.common.item
 
-import com.temportalist.origin.api.common.inventory.ContainerWrapper
+import com.temportalist.origin.api.common.inventory.ContainerBase
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -51,12 +51,12 @@ class ItemBaseInventory(pluginID: String, name: String) extends ItemBase(pluginI
 			// if player has a container open and it is of the type ContainerBase, and it requires
 			// and update
 			if (player.openContainer != null &&
-					player.openContainer.isInstanceOf[ContainerWrapper] &&
-					player.openContainer.asInstanceOf[ContainerWrapper].needsUpdate) {
+					player.openContainer.isInstanceOf[ContainerBase] &&
+					player.openContainer.asInstanceOf[ContainerBase].needsUpdate) {
 				// save the nbt data from the container to the itemstack
-				player.openContainer.asInstanceOf[ContainerWrapper].writeToNBT()
+				player.openContainer.asInstanceOf[ContainerBase].writeToNBT()
 				// reset the status of the container requiring an update
-				player.openContainer.asInstanceOf[ContainerWrapper].needsUpdate = false
+				player.openContainer.asInstanceOf[ContainerBase].needsUpdate = false
 			}
 		}
 

@@ -60,8 +60,6 @@ class TEBase(var name: String) extends TileEntity() with IInv with ITank with IP
 
 	}
 
-	override def markChunkModified(): Unit = new V3O(this).markChunkModified(this)
-
 	def markforUpdate(): Unit = {
 		new V3O(this).markForUpdate(this.getWorldObj)
 	}
