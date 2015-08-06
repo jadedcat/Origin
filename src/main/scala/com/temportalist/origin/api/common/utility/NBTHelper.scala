@@ -37,34 +37,65 @@ object NBTHelper {
 		nbt.getTagList(key, this.getNBTType[T])
 	}
 
+	@Deprecated
 	def getTagList[T](nbt: NBTTagCompound, key: String, f: T => Unit)
 			(implicit t: TypeTag[T]): Unit = {
 		val list = nbt.getTagList(key, this.nbtTypes(t.tpe))
 		for (i <- 0 until list.tagCount()) f(this.getTagValueAt(list, i).asInstanceOf[T])
 	}
 
+	def getTagList[T: TypeTag](nbt: NBTTagCompound, key: String, f: Any => Unit)
+			(implicit t: TypeTag[T]): Unit = {
+		val list = nbt.getTagList(key, this.nbtTypes(t.tpe))
+		for (i <- 0 until list.tagCount()) f(this.getTagValueAt(list, i))
+	}
+
 	def getTagValueAt(nbtList: NBTTagList, index: Int): Any = {
-		val base: NBTBase = ObfuscationReflectionHelper
+		this.getTagValue(ObfuscationReflectionHelper
 				.getPrivateValue(classOf[NBTTagList], nbtList, 0).asInstanceOf[util.List[NBTBase]]
-				.get(index)
-		base.getId match {
-			case 1 => base.asInstanceOf[NBTPrimitive].func_150290_f
-			case 2 => base.asInstanceOf[NBTPrimitive].func_150289_e
-			case 3 => base.asInstanceOf[NBTPrimitive].func_150287_d
-			case 4 => base.asInstanceOf[NBTPrimitive].func_150291_c
-			case 5 => base.asInstanceOf[NBTPrimitive].func_150288_h
-			case 6 => base.asInstanceOf[NBTPrimitive].func_150286_g
-			case 7 => base.asInstanceOf[NBTTagByteArray].func_150292_c
-			case 8 => base.asInstanceOf[NBTTagString].func_150285_a_
-			case 9 => base.asInstanceOf[NBTTagList]
-			case 10 => base.asInstanceOf[NBTTagCompound]
-			case 11 => base.asInstanceOf[NBTTagIntArray].func_150302_c
-			case _ => base
+				.get(index))
+	}
+
+	def getTagValue(tag: NBTBase): Any = {
+		if (tag == null) return null
+		tag.getId match {
+			case 1 => tag.asInstanceOf[NBTPrimitive].func_150290_f
+			case 2 => tag.asInstanceOf[NBTPrimitive].func_150289_e
+			case 3 => tag.asInstanceOf[NBTPrimitive].func_150287_d
+			case 4 => tag.asInstanceOf[NBTPrimitive].func_150291_c
+			case 5 => tag.asInstanceOf[NBTPrimitive].func_150288_h
+			case 6 => tag.asInstanceOf[NBTPrimitive].func_150286_g
+			case 7 => tag.asInstanceOf[NBTTagByteArray].func_150292_c
+			case 8 => tag.asInstanceOf[NBTTagString].func_150285_a_
+			case 9 =>
+				val list = tag.asInstanceOf[NBTTagList]
+				val byteType = list.func_150303_d()
+				val retList = new util.ArrayList[Any]()
+				for (i <- 0 until list.tagCount())
+					retList.add(byteType match {
+						case 5 => list.func_150308_e(i)
+						case 6 => list.func_150309_d(i)
+						case 8 => list.getStringTagAt(i)
+						case 10 => list.getCompoundTagAt(i)
+						case 11 => list.func_150306_c(i)
+						case _ => null
+					})
+				retList
+			case 10 =>
+				val compound = tag.asInstanceOf[NBTTagCompound]
+				val map = mutable.Map[String, Any]()
+				compound.func_150296_c().toArray.foreach({
+					case key: String => map(key) = this.getTagValue(compound.getTag(key))
+				})
+				map
+			case 11 => tag.asInstanceOf[NBTTagIntArray].func_150302_c
+			case _ => tag
 		}
 	}
 
 	def asTag(any: Any): NBTBase = {
 		any match {
+			case b: Boolean => new NBTTagByte(if (b) 1 else 0)
 			case b: Byte => new NBTTagByte(b)
 			case s: Short => new NBTTagShort(s)
 			case i: Int => new NBTTagInt(i)

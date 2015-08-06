@@ -20,6 +20,8 @@ class ContainerBase(var player: EntityPlayer, var inventory: IInventory) extends
 	this.registerSlots()
 	var needsUpdate = false
 
+	private var countedSlots: Int = 0
+
 	/**
 	 * Used to register slots for this container
 	 * Subclasses SHOULD use this method (that is the reason we have containers),
@@ -35,6 +37,7 @@ class ContainerBase(var player: EntityPlayer, var inventory: IInventory) extends
 		else {
 			this.addSlotToContainer(new Slot(this.inventory, slotID, slotX, slotY))
 		}
+		this.countedSlots += 1
 	}
 
 	/**
@@ -61,6 +64,7 @@ class ContainerBase(var player: EntityPlayer, var inventory: IInventory) extends
 			for (row <- 0 until 3) {
 				y = (startY + row * slotSize) + 9
 				val id = (row + 1) * 9 + col
+				println("added slot with id " + id)
 				if (finalSlotIDs.contains(id))
 					this.addSlotToContainer(new SlotFinal(this.player.inventory, id, x, y))
 				else this.addSlotToContainer(new Slot(this.player.inventory, id, x, y))
@@ -143,7 +147,7 @@ class ContainerBase(var player: EntityPlayer, var inventory: IInventory) extends
 			val slotStack: ItemStack = slot.getStack
 			stackInSlot = slotStack.copy()
 
-			val invSize: Int = this.getInventorySlotSize()
+			val invSize: Int = this.getInventorySlotSize
 			val maxSlots: Int = this.inventorySlots.size()
 
 			if (slotID < invSize) {
@@ -162,7 +166,7 @@ class ContainerBase(var player: EntityPlayer, var inventory: IInventory) extends
 	/**
 	 * @return the number of slots that are present and connected to this inventory
 	 */
-	def getInventorySlotSize(): Int = 0
+	private def getInventorySlotSize: Int = 0//this.countedSlots
 
 	override def mergeItemStack(stack: ItemStack, minSlotID: Int, maxSlotID: Int,
 			isBackwards: Boolean): Boolean = {

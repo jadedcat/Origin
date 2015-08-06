@@ -206,12 +206,15 @@ trait IGuiScreen extends GuiScreen {
 
 	protected def drawGuiBackground(): Unit = {
 		if (this.hasBackground) {
-			Rendering.bindResource(this.getBackgound())
+			this.bindBackground()
 			this.drawTexturedModalRect(
 				this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight()
 			)
 		}
 	}
+
+	protected def bindBackground(): Unit =
+		if (this.hasBackground) Rendering.bindResource(this.getBackgound())
 
 	protected def hasBackground: Boolean = this.background != null
 

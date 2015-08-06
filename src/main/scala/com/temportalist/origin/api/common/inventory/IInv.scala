@@ -99,13 +99,17 @@ trait IInv extends IInventory with ISidedInventory {
 	override def canExtractItem(index: Int, stack: ItemStack, direction: Int): Boolean =
 		this.isValidSlot(index)
 
-	protected def writeNBT_Inv(nbt: NBTTagCompound, key: String): Unit = {
+	def writeNBT_Inv(): NBTTagCompound = {
 		val tagCom: NBTTagCompound = new NBTTagCompound
 		this.writeNBT_IInv(tagCom)
-		nbt.setTag(key, tagCom)
+		tagCom
 	}
 
-	protected def readNBT_Inv(nbt: NBTTagCompound, key: String): Unit = {
+	def writeNBT_Inv(nbt: NBTTagCompound, key: String): Unit = {
+		nbt.setTag(key, this.writeNBT_Inv())
+	}
+
+	def readNBT_Inv(nbt: NBTTagCompound, key: String): Unit = {
 		this.readNBT_IInv(nbt.getCompoundTag(key))
 	}
 
@@ -129,7 +133,7 @@ trait IInv extends IInventory with ISidedInventory {
 		}
 	}
 
-	private def readNBT_IInv(tagCom: NBTTagCompound): Unit = {
+	def readNBT_IInv(tagCom: NBTTagCompound): Unit = {
 		if (tagCom.getBoolean("has")) {
 			this.slots = new Array[ItemStack](tagCom.getInteger("size"))
 

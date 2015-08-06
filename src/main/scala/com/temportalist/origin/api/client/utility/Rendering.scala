@@ -53,6 +53,46 @@ object Rendering {
 		Rendering.mc.getTextureManager.bindTexture(rl)
 	}
 
+	/**
+	 * Will draw the currently bound resource using parameters
+	 * @param pos The position on the screen
+	 * @param uv The XY value in the texture (upper-left corner)
+	 * @param actualSize The width and height of the image inside the texture
+	 * @param renderedSize The width and height to be scaled to for rendering
+	 * @param imgSize The size of the resource location in Width by Height
+	 * @param offsets The offsets to draw the image. Each offset represents
+	 *                X pixels from that side to the center. LEft by Right by Top by Bottom
+	 */
+	def drawTextureScaledWithOffsets(pos: (Int, Int), uv: (Float, Float), actualSize: (Int, Int),
+			renderedSize: (Int, Int), imgSize: (Float, Float),
+			offsets: (Int, Int, Int, Int)): Unit = {
+		/*
+		Rendering.drawTextureRect(
+			x + leftOffset,
+			y + topOffset,
+			u + leftOffset,
+			v + topOffset,
+			w - rightOffset - leftOffset,
+			h - bottomOffset - topOffset
+		)
+		*/
+		val renderToActual: Float = renderedSize._1.toFloat / actualSize._1
+
+		val offsetLeft_A: Int = (offsets._1 * renderToActual).toInt
+		val offsetRight_A: Int = (offsets._2 * renderToActual).toInt
+		val offsetTop_A: Int = (offsets._3 * renderToActual).toInt
+		val offsetBottom_A: Int = (offsets._4 * renderToActual).toInt
+
+		Rendering.drawTextureWithSizes(
+			(pos._1 + offsetLeft_A, pos._2 + offsetTop_A),
+			(uv._1 + offsetLeft_A, uv._2 + offsetTop_A),
+			(actualSize._1 - offsetLeft_A - offsetRight_A,
+					actualSize._2 - offsetTop_A - offsetBottom_A),
+			(renderedSize._1 - offsets._1 - offsets._2, renderedSize._2 - offsets._3 - offsets._4),
+			imgSize
+		)
+	}
+
 	def drawTextureWithSizes(pos: (Int, Int), uv: (Float, Float), actualSize: (Int, Int),
 			renderedSize: (Int, Int), imgSize: (Float, Float)): Unit = {
 		Gui.func_152125_a(pos._1, pos._2, uv._1, uv._2, actualSize._1, actualSize._2,
@@ -66,6 +106,7 @@ object Rendering {
 	def drawTexture(pos: (Int, Int), uv: (Float, Float), size: (Int, Int)): Unit =
 		this.drawTexture(pos, uv, size, (256, 256))
 
+	@Deprecated
 	def drawTextureRect(x: Int, y: Int, u: Int, v: Int, width: Int, height: Int): Unit = {
 		// todo this is super bugged
 		val f: Float = 0.00390625F
@@ -105,6 +146,7 @@ object Rendering {
 		TessRenderer.draw()
 	}
 
+	@Deprecated
 	def drawTextureWithOffsets(x: Int, y: Int, u: Int, v: Int, w: Int, h: Int,
 			leftOffset: Int, rightOffset: Int, topOffset: Int, bottomOffset: Int): Unit = {
 		Rendering.drawTextureRect(
