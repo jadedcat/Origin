@@ -18,7 +18,7 @@ trait IModDetails {
 	def getModVersion: String
 
 	final def registerPackets(messages: Class[_ <: IPacket]*): Unit = {
-		if (WorldHelper.isClient)
+		//if (WorldHelper.isClient)
 			Network.registerHandler(this.getModid, Scala.toArrayList(messages.seq))
 	}
 
