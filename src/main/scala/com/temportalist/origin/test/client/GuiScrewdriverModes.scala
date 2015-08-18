@@ -60,7 +60,7 @@ object GuiScrewdriverModes {
 		if (Keyboard.isKeyDown(GuiScrewdriverModes.openRadial.getKeyCode) &&
 				Rendering.mc.currentScreen == null) {
 			val stack: ItemStack = Rendering.mc.thePlayer.getCurrentEquippedItem
-			if (stack.getItem == Sonic.screwdriver)
+			if (stack != null && stack.getItem == Sonic.screwdriver)
 				GuiRadialMenuHandler.display(new GuiScrewdriverModes(stack))
 		}
 	}
